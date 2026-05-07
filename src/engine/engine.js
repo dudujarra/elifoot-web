@@ -12,6 +12,7 @@ import { shouldTriggerPress, generateQuestion, applyPressEffect } from './PressC
 import { StaffManager, getStadiumInfo, calculateTicketRevenue, STAFF_ROLES, SCOUT_REGIONS, scoutRegion } from './StadiumSystem';
 import { evaluateSponsor, getCalendarEvent, processPromoRelegation, ManagerLegacy } from './SeasonSystem';
 import { processPlayerDevelopment, ageSquad, updateForm, processDressingRoom, generateRenewalOffer, acceptRenewal, TACTIC_COUNTERS, TACTIC_NARRATION, getFormModifier } from './PlayerDevelopment';
+import { rollTraits, getTraitMatchModifier, hasTrait, initCareerStats, recordMatchStats, closeSeasonStats, calculateSeasonAwards, processMoraleEvents, processMentoring, isRivalry } from './PlayerTraits';
 
 export class Engine {
     constructor() {
@@ -44,6 +45,7 @@ export class Engine {
         this.legacy = null;
         this.currentSponsor = null;
         this.seasonNumber = 1;
+        this.seasonAwards = [];
     }
 
     initGame(name, teamId, mode = 'manager', scenario = 'livre', playerPosition = 'ATA') {
@@ -64,6 +66,8 @@ export class Engine {
                         p.contract = { weeksLeft: 38 + Math.floor(Math.random() * 76), salary: p.salary || 5000 };
                         p.injury = null;
                         p.moral = 50 + Math.floor(Math.random() * 20);
+                        rollTraits(p);
+                        initCareerStats(p);
                     });
                     this.teams.push({
                         id: idCounter++,
@@ -442,7 +446,8 @@ export class Engine {
 
                 const scorer = pickRandom(attackers);
                 const formMod = scorer ? getFormModifier(scorer.form?.trend) : 1.0;
-                const shotPower = atkSectors.attack * cond.ataModifier * Math.random() * formMod;
+                const traitMod = scorer ? getTraitMatchModifier(scorer, minute, isManagerHome ? homeTactic : awayTactic, false) : 1.0;
+                const shotPower = atkSectors.attack * cond.ataModifier * Math.random() * formMod * traitMod;
                 const saveChance = defSectors.goalkeeper * Math.random() * 0.6;
 
                 // Chance narration
@@ -533,11 +538,48 @@ export class Engine {
         // Match stats
         events.stats = { homeShots, awayShots, homeSaves, awaySaves };
 
-        // Energy drain
+        // Energy drain (trait: workhorse saves 30%)
         const energyDrain = Math.floor(15 + Math.random() * 10) * (cond.energyModifier || 1);
         [...(homeTeam.squad || []), ...(awayTeam.squad || [])].filter(p => p.isTitular).forEach(p => {
-            p.energy = Math.max(0, p.energy - energyDrain);
+            const saveMod = hasTrait(p, 'workhorse') ? 0.7 : 1.0;
+            p.energy = Math.max(0, p.energy - Math.floor(energyDrain * saveMod));
         });
+
+        // Record career stats for manager's team
+        const managerTeam = this.getTeam(this.manager.teamId);
+        if (managerTeam) {
+            managerTeam.squad.forEach(p => {
+                if (!p.isTitular) return;
+                initCareerStats(p);
+                const goals = p._matchGoals || 0;
+                const assists = 0; // tracked via scorers
+                const cards = events.cards?.filter(c => c.player === p.name).length || 0;
+                const isMotm = events.motm?.name === p.name;
+                recordMatchStats(p, goals, assists, cards, isMotm);
+                delete p._matchGoals;
+            });
+            // Record assists from scorers
+            (events.scorers || []).forEach(s => {
+                if (s.assist) {
+                    const assistP = managerTeam.squad.find(p => p.name === s.assist);
+                    if (assistP) {
+                        initCareerStats(assistP);
+                        assistP.career.totalAssists++;
+                        assistP.career.seasonAssists++;
+                    }
+                }
+            });
+            // Leader trait: +3 moral on win
+            if (homeGoals !== awayGoals) {
+                const isWin = (homeId === this.manager.teamId && homeGoals > awayGoals) || (awayId === this.manager.teamId && awayGoals > homeGoals);
+                if (isWin) {
+                    managerTeam.squad.filter(p => hasTrait(p, 'leader')).forEach(leader => {
+                        managerTeam.squad.forEach(p => { p.moral = Math.min(100, (p.moral || 50) + 2); });
+                        events.textLog.push({ minute: 90, text: `👔 ${leader.name} inspira o vestiário!` });
+                    });
+                }
+            }
+        }
 
         // Reset team talk modifiers after match
         this.teamTalkModifiers = { ata: 1.0, def: 1.0 };
@@ -667,6 +709,14 @@ export class Engine {
                 const dressingRoom = processDressingRoom(team.squad);
                 dressingRoom.events.forEach(e => this.weekEvents.push(e));
 
+                // Morale Events (narrative)
+                const moraleEvts = processMoraleEvents(team.squad, this.board);
+                moraleEvts.forEach(e => this.weekEvents.push(e));
+
+                // Mentoring (veteran teaches youth)
+                const mentorEvts = processMentoring(team.squad);
+                mentorEvts.forEach(e => this.weekEvents.push(e));
+
                 // Remove retired players
                 const retired = team.squad.filter(p => p._retired);
                 retired.forEach(p => {
@@ -732,6 +782,15 @@ export class Engine {
                     // Reset season stats
                     this.managerStats = { wins: 0, draws: 0, losses: 0, streak: 0 };
                     this.seasonNumber++;
+
+                    // Season Awards
+                    this.seasonAwards = calculateSeasonAwards(team.squad, team.name, this.seasonNumber);
+                    this.seasonAwards.forEach(a => {
+                        this.weekEvents.push(`${a.emoji} ${a.name}: ${a.player} (${a.value})`);
+                    });
+
+                    // Close season stats for each player
+                    team.squad.forEach(p => closeSeasonStats(p, this.seasonNumber, team.name));
 
                     // Age all players
                     const ageEvents = ageSquad(team.squad);

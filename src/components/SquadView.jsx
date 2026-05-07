@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGame } from '../context/GameContext';
 import { getFormEmoji } from '../engine/PlayerDevelopment';
+import { getPlayerTraits } from '../engine/PlayerTraits';
 
 export function SquadView() {
     const { gameState, changeView, getEngine, forceUpdate } = useGame();
@@ -68,7 +69,14 @@ export function SquadView() {
                                     {p.name}
                                     {p._isCaptain && <span style={{marginLeft:'3px'}} title="Capitão">©️</span>}
                                     {p.isYouth && <span style={{color:'var(--accent)',fontSize:'0.7rem',marginLeft:'4px'}}>🎓</span>}
-                                    {p.personality && <span style={{color:'var(--text-muted)',fontSize:'0.65rem',marginLeft:'4px'}}>({p.personality})</span>}
+                                    {getPlayerTraits(p).map(t => (
+                                        <span key={t.id} style={{fontSize:'0.6rem',marginLeft:'2px'}} title={`${t.name}: ${t.description}`}>{t.name.split(' ')[0]}</span>
+                                    ))}
+                                    {p.career && (p.career.seasonGoals > 0 || p.career.seasonAssists > 0) && (
+                                        <span style={{fontSize:'0.6rem',color:'var(--primary)',marginLeft:'4px'}}>
+                                            {p.career.seasonGoals > 0 ? `${p.career.seasonGoals}G` : ''}{p.career.seasonAssists > 0 ? ` ${p.career.seasonAssists}A` : ''}
+                                        </span>
+                                    )}
                                 </td>
                                 <td>{p.position}</td>
                                 <td><strong>{p.ovr}</strong></td>
