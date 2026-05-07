@@ -10,6 +10,7 @@ import { processMatchInjuries, processTrainingInjuries, healInjury } from './Inj
 import { generateYouthIntake, getAcademyUpgradeCost, loanPlayerOut, processLoans } from './YouthAcademy';
 import { shouldTriggerPress, generateQuestion, applyPressEffect } from './PressConference';
 import { StaffManager, getStadiumInfo, calculateTicketRevenue, STAFF_ROLES, SCOUT_REGIONS, scoutRegion } from './StadiumSystem';
+import { evaluateSponsor, getCalendarEvent, processPromoRelegation, ManagerLegacy } from './SeasonSystem';
 
 export class Engine {
     constructor() {
@@ -39,6 +40,9 @@ export class Engine {
         this.stadiumLevel = 1;
         this.staff = new StaffManager();
         this.scoutedPlayers = [];
+        this.legacy = null;
+        this.currentSponsor = null;
+        this.seasonNumber = 1;
     }
 
     initGame(name, teamId, mode = 'manager', scenario = 'livre', playerPosition = 'ATA') {
@@ -80,10 +84,14 @@ export class Engine {
             if (team) team.balance = Math.floor(team.balance * 0.1);
         }
 
-        // Init Board System
+        // Init Board System + Legacy + Sponsor
         if (mode === 'manager') {
             const team = this.getTeam(this.manager.teamId);
-            if (team) this.board = new BoardSystem(team.division, team.balance);
+            if (team) {
+                this.board = new BoardSystem(team.division, team.balance);
+                this.legacy = new ManagerLegacy(name);
+                this.currentSponsor = evaluateSponsor(team.division, 10);
+            }
         }
 
         // Create leagues for each zone/division
@@ -510,12 +518,69 @@ export class Engine {
                     this.loanedOut = this.loanedOut.filter(l => l.weeksLeft > 0);
                 }
 
-                // Youth intake (1x por temporada, semana 1)
+                // Youth intake (1x por temporada, semana 38)
                 if (this.currentWeek > 0 && this.currentWeek % 38 === 0) {
                     const youths = this.triggerYouthIntake();
                     youths.forEach(y => {
                         this.weekEvents.push(`🎓 ${y.name} (${y.position}, ${y.age} anos, OVR ${y.ovr}) promovido da base!`);
                     });
+                }
+
+                // Calendar events
+                const seasonWeek = ((this.currentWeek - 1) % 38) + 1;
+                const calEvent = getCalendarEvent(seasonWeek);
+                if (calEvent) {
+                    this.weekEvents.push(`📅 ${calEvent.name}: ${calEvent.msg}`);
+                    if (calEvent.effect) {
+                        if (calEvent.effect.moral) team.squad.forEach(p => { p.moral = Math.max(0, Math.min(100, (p.moral || 50) + calEvent.effect.moral)); });
+                        if (calEvent.effect.energy) team.squad.forEach(p => { p.energy = Math.max(0, Math.min(100, p.energy + calEvent.effect.energy)); });
+                    }
+                }
+
+                // Sponsor income
+                if (this.currentSponsor) {
+                    team.balance += this.currentSponsor.weeklyPay;
+                    if (this.weeklyFinance) {
+                        this.weeklyFinance.income += this.currentSponsor.weeklyPay;
+                        this.weeklyFinance.details.push({ label: `Patrocínio (${this.currentSponsor.name})`, amount: this.currentSponsor.weeklyPay, type: 'income' });
+                    }
+                }
+
+                // SEASON END: Promoção/Rebaixamento + Legado
+                if (seasonWeek === 38) {
+                    const standings = this.getStandings(team.zone, team.division);
+                    const pos = standings.findIndex(s => s.teamId === team.id) + 1;
+
+                    // Legacy
+                    if (this.legacy) {
+                        const season = this.legacy.closeSeason(
+                            team.name, team.division, pos,
+                            this.managerStats.wins, this.managerStats.draws, this.managerStats.losses
+                        );
+                        this.weekEvents.push(`🏆 Temporada ${this.seasonNumber} encerrada: ${season.record} (${pos}º lugar)`);
+                        if (season.title) this.weekEvents.push(`🎉 ${season.title}!`);
+                    }
+
+                    // Promo/Relegation
+                    const changes = processPromoRelegation(this.teams, standings.map(s => s), team.zone, team.division);
+                    changes.forEach(c => {
+                        const emoji = c.action === 'promoted' ? '⬆️' : '⬇️';
+                        this.weekEvents.push(`${emoji} ${c.name} ${c.action === 'promoted' ? 'subiu' : 'caiu'} para Série ${['A','B','C','D'][c.to - 1]}`);
+                    });
+
+                    // Update sponsor
+                    const newStandings = this.getStandings(team.zone, team.division);
+                    const newPos = newStandings.findIndex(s => s.teamId === team.id) + 1;
+                    this.currentSponsor = evaluateSponsor(team.division, newPos);
+
+                    // Reset season stats
+                    this.managerStats = { wins: 0, draws: 0, losses: 0, streak: 0 };
+                    this.seasonNumber++;
+
+                    // Reset board for new season
+                    if (this.board && !this.board.isFired) {
+                        this.board = new BoardSystem(team.division, team.balance);
+                    }
                 }
             }
         }
