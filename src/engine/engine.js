@@ -7,6 +7,7 @@ import { ProPlayer } from './PlayerCareer';
 import { FORMATIONS, TACTICS, rollMatchCondition, calculateWeeklyFinances, generateTransferOffers, applyTraining, applyTeamTalk } from './ManagerSystems';
 import { BoardSystem } from './BoardSystem';
 import { processMatchInjuries, processTrainingInjuries, healInjury } from './InjurySystem';
+import { generateYouthIntake, getAcademyUpgradeCost, loanPlayerOut, processLoans } from './YouthAcademy';
 
 export class Engine {
     constructor() {
@@ -30,6 +31,8 @@ export class Engine {
         this.board = null;
         this.weekInjuries = [];
         this.weekEvents = [];
+        this.academyLevel = 1;
+        this.loanedOut = [];
     }
 
     initGame(name, teamId, mode = 'manager', scenario = 'livre', playerPosition = 'ATA') {
@@ -224,6 +227,34 @@ export class Engine {
         return { success: true, msg: 'Oferta recusada.' };
     }
 
+    // === YOUTH ACADEMY ===
+    triggerYouthIntake() {
+        const team = this.getTeam(this.manager.teamId);
+        if (!team) return [];
+        const youths = generateYouthIntake(this.academyLevel, team.division === 1 ? 80 : team.division === 2 ? 50 : 30);
+        youths.forEach(y => team.squad.push(y));
+        return youths;
+    }
+
+    upgradeAcademy() {
+        const team = this.getTeam(this.manager.teamId);
+        if (!team || this.academyLevel >= 5) return { success: false, msg: 'Nível máximo atingido.' };
+        const cost = getAcademyUpgradeCost(this.academyLevel);
+        if (team.balance < cost) return { success: false, msg: `Saldo insuficiente. Custo: R$ ${(cost/1000000).toFixed(0)}M` };
+        team.balance -= cost;
+        this.academyLevel++;
+        return { success: true, msg: `Base melhorada para nível ${this.academyLevel}! Custo: R$ ${(cost/1000000).toFixed(0)}M` };
+    }
+
+    // === EMPRÉSTIMOS ===
+    loanPlayer(playerId, weeks = 20) {
+        const team = this.getTeam(this.manager.teamId);
+        if (!team) return { success: false, msg: 'Time não encontrado.' };
+        const result = loanPlayerOut(team, playerId, weeks);
+        if (result.success) this.loanedOut.push(result.loan);
+        return result;
+    }
+
     playMatch(homeId, awayId, isCup = false) {
         const homeTeam = this.getTeam(homeId);
         const awayTeam = this.getTeam(awayId);
@@ -394,6 +425,23 @@ export class Engine {
                     const pos = standings.findIndex(s => s.teamId === team.id) + 1;
                     const avgMorale = team.squad.reduce((s, p) => s + (p.moral || 50), 0) / team.squad.length;
                     this.board.updateConfidence(pos, standings.length, this.managerStats.streak, avgMorale, team.balance, this.currentWeek);
+                }
+
+                // Process loans
+                if (this.loanedOut.length > 0) {
+                    const returned = processLoans(this.loanedOut, team);
+                    returned.forEach(p => {
+                        this.weekEvents.push(p.loanResult || `${p.name} voltou do empréstimo.`);
+                    });
+                    this.loanedOut = this.loanedOut.filter(l => l.weeksLeft > 0);
+                }
+
+                // Youth intake (1x por temporada, semana 1)
+                if (this.currentWeek > 0 && this.currentWeek % 38 === 0) {
+                    const youths = this.triggerYouthIntake();
+                    youths.forEach(y => {
+                        this.weekEvents.push(`🎓 ${y.name} (${y.position}, ${y.age} anos, OVR ${y.ovr}) promovido da base!`);
+                    });
                 }
             }
         }
