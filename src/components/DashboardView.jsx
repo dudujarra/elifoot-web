@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { FORMATIONS, TACTICS, TEAM_TALKS, TRAINING_TYPES } from '../engine/ManagerSystems';
+import { BOARD_MEMBERS } from '../engine/BoardSystem';
 
 export function DashboardView() {
     const { gameState, changeView, getEngine, forceUpdate } = useGame();
@@ -18,6 +19,9 @@ export function DashboardView() {
     const avgEnergy = team.squad.reduce((s, p) => s + p.energy, 0) / team.squad.length;
     const stats = engine.managerStats;
     const cond = engine.matchCondition;
+    const boardStatus = engine.board ? engine.board.getStatus() : null;
+    const injured = team.squad.filter(p => p.injury);
+    const expiringContracts = team.squad.filter(p => p.contract && p.contract.weeksLeft <= 8);
 
     const handleTrain = (id) => {
         const result = engine.doTraining(id);
@@ -60,6 +64,7 @@ export function DashboardView() {
                             R$ {(team.balance / 1000000).toFixed(1)}M
                         </div>
                         <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{pos}º lugar • Série {['A','B','C','D'][team.division - 1]}</div>
+                        {boardStatus && <div style={{ fontSize: '0.7rem', color: boardStatus.color, marginTop: '2px' }}>{boardStatus.emoji} Diretoria: {boardStatus.label} ({engine.board.confidence}%)</div>}
                     </div>
                 </div>
                 <div className="grid-3">
@@ -88,25 +93,104 @@ export function DashboardView() {
                 <button className={`nav-tab ${tab === 'tactics' ? 'active' : ''}`} onClick={() => setTab('tactics')}>⚔️ Táticas</button>
                 <button className={`nav-tab ${tab === 'training' ? 'active' : ''}`} onClick={() => setTab('training')}>🏃 Treino</button>
                 <button className={`nav-tab ${tab === 'teamtalk' ? 'active' : ''}`} onClick={() => setTab('teamtalk')}>📢 Preleção</button>
+                <button className={`nav-tab ${tab === 'board' ? 'active' : ''}`} onClick={() => setTab('board')}>🏛️ Diretoria</button>
                 {engine.transferOffers.length > 0 && <button className={`nav-tab ${tab === 'transfers' ? 'active' : ''}`} onClick={() => setTab('transfers')}>📬 Ofertas ({engine.transferOffers.length})</button>}
             </div>
 
             {/* Tab Content */}
             {tab === 'overview' && (
-                <div className="card">
-                    <h3 style={{marginBottom: '0.75rem'}}>Finanças da Semana</h3>
-                    {engine.weeklyFinance ? (
-                        <ul className="stats-list">
-                            {engine.weeklyFinance.details.map((d, i) => (
-                                <li key={i}>
-                                    <span>{d.label}</span>
-                                    <strong style={{color: d.type === 'income' ? 'var(--primary)' : 'var(--danger)'}}>
-                                        {d.type === 'income' ? '+' : '-'}R$ {(d.amount / 1000).toFixed(0)}K
-                                    </strong>
-                                </li>
+                <>
+                    <div className="card">
+                        <h3 style={{marginBottom: '0.75rem'}}>Finanças da Semana</h3>
+                        {engine.weeklyFinance ? (
+                            <ul className="stats-list">
+                                {engine.weeklyFinance.details.map((d, i) => (
+                                    <li key={i}>
+                                        <span>{d.label}</span>
+                                        <strong style={{color: d.type === 'income' ? 'var(--primary)' : 'var(--danger)'}}>
+                                            {d.type === 'income' ? '+' : '-'}R$ {(d.amount / 1000).toFixed(0)}K
+                                        </strong>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : <p style={{color: 'var(--text-muted)', fontSize: '0.85rem'}}>Avance a semana para ver o relatório.</p>}
+                    </div>
+
+                    {/* Injuries */}
+                    {injured.length > 0 && (
+                        <div className="card">
+                            <h3 style={{marginBottom: '0.75rem'}}>🏥 Departamento Médico ({injured.length})</h3>
+                            <ul className="stats-list">
+                                {injured.map((p, i) => (
+                                    <li key={i}>
+                                        <span>{p.injury.emoji} {p.name} — {p.injury.name}</span>
+                                        <strong style={{color: 'var(--danger)'}}>{p.injury.weeksLeft} sem</strong>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Expiring Contracts */}
+                    {expiringContracts.length > 0 && (
+                        <div className="card">
+                            <h3 style={{marginBottom: '0.75rem'}}>📋 Contratos Vencendo</h3>
+                            <ul className="stats-list">
+                                {expiringContracts.map((p, i) => (
+                                    <li key={i}>
+                                        <span>{p.name} (OVR {p.ovr})</span>
+                                        <strong style={{color: p.contract.weeksLeft <= 4 ? 'var(--danger)' : 'var(--accent)'}}>{p.contract.weeksLeft} sem</strong>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {/* Week Events */}
+                    {engine.weekEvents.length > 0 && (
+                        <div className="card">
+                            <h3 style={{marginBottom: '0.75rem'}}>📰 Eventos da Semana</h3>
+                            {engine.weekEvents.map((ev, i) => (
+                                <p key={i} style={{color: 'var(--text-muted)', fontSize: '0.85rem'}}>{ev}</p>
                             ))}
-                        </ul>
-                    ) : <p style={{color: 'var(--text-muted)', fontSize: '0.85rem'}}>Avance a semana para ver o relatório.</p>}
+                        </div>
+                    )}
+                </>
+            )}
+
+            {tab === 'board' && engine.board && (
+                <div className="card">
+                    <h3 style={{marginBottom: '0.75rem'}}>🏛️ Diretoria</h3>
+                    <div style={{display:'flex',gap:'1.5rem',marginBottom:'1rem'}}>
+                        <div>
+                            <div style={{fontSize:'0.75rem',color:'var(--text-muted)'}}>{BOARD_MEMBERS.president.emoji} {BOARD_MEMBERS.president.role}</div>
+                            <strong>{BOARD_MEMBERS.president.name}</strong>
+                        </div>
+                        <div>
+                            <div style={{fontSize:'0.75rem',color:'var(--text-muted)'}}>{BOARD_MEMBERS.director.emoji} {BOARD_MEMBERS.director.role}</div>
+                            <strong>{BOARD_MEMBERS.director.name}</strong>
+                        </div>
+                    </div>
+                    <div className="rel-bar" style={{marginBottom:'1rem'}}>
+                        <label><span>Confiança</span><span style={{color: boardStatus?.color}}>{engine.board.confidence}%</span></label>
+                        <div className="bar"><div className="bar-fill boss" style={{width: `${engine.board.confidence}%`, background: boardStatus?.color}}/></div>
+                    </div>
+                    <h4 style={{fontSize:'0.85rem',marginBottom:'0.5rem'}}>Objetivos da Temporada</h4>
+                    <ul className="stats-list">
+                        {engine.board.objectives.map((o, i) => (
+                            <li key={i}><span>{o.text}</span><strong style={{color:'var(--text-muted)'}}>{o.weight}%</strong></li>
+                        ))}
+                    </ul>
+                    {engine.board.warningGiven && (
+                        <div className="bench-warning" style={{marginTop:'1rem'}}>
+                            ⚠️ A diretoria está insatisfeita com os resultados. Melhore ou será demitido.
+                        </div>
+                    )}
+                    {engine.board.isFired && (
+                        <div className="bench-warning" style={{marginTop:'1rem',background:'rgba(239,68,68,0.3)'}}>
+                            🔴 VOCÊ FOI DEMITIDO. A diretoria perdeu a confiança na sua gestão.
+                        </div>
+                    )}
                 </div>
             )}
 

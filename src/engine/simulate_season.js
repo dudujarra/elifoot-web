@@ -1,75 +1,60 @@
 import { Engine } from './engine.js';
-import { FORMATIONS, TACTICS, TEAM_TALKS, TRAINING_TYPES, MATCH_CONDITIONS } from './ManagerSystems.js';
+import { BOARD_MEMBERS } from './BoardSystem.js';
 
-console.log("=== AKITA: TESTE MODO TREINADOR EXPANDIDO ===\n");
+console.log("=== AKITA-007: Board + Contratos + Lesões ===\n");
 
-// 1. Init
 const engine = new Engine();
-engine.initGame("Guardiola", 1, "manager", "livre");
+engine.initGame("Mourinho", 1, "manager", "livre");
 const team = engine.getTeam(1);
-console.log(`--- Time: ${team.name} | Squad: ${team.squad.length} | Balance: R$ ${team.balance} ---`);
 
-// 2. Formações
-console.log("\n--- #1 Formações ---");
-Object.entries(FORMATIONS).forEach(([k, v]) => {
-    console.log(`  ${k}: DEF=${v.DEF} MEI=${v.MEI} ATA=${v.ATA} (${v.style})`);
-});
-engine.setFormation("3-5-2");
-console.log(`  Formação aplicada: ${team.formation}`);
+// 1. Board
+console.log("--- #1 Board System ---");
+console.log(`  ${BOARD_MEMBERS.president.emoji} ${BOARD_MEMBERS.president.name} (${BOARD_MEMBERS.president.role})`);
+console.log(`  ${BOARD_MEMBERS.director.emoji} ${BOARD_MEMBERS.director.name} (${BOARD_MEMBERS.director.role})`);
+console.log(`  Confiança: ${engine.board.confidence}%`);
+console.log(`  Objetivos: ${engine.board.objectives.map(o => o.text).join(', ')}`);
 
-// 3. Táticas
-console.log("\n--- #2 Táticas ---");
-Object.entries(TACTICS).forEach(([k, v]) => {
-    console.log(`  ${v.name}: ATA=${v.ataModifier}x DEF=${v.defModifier}x`);
-});
-engine.setTactic("pressing");
-console.log(`  Tática ativa: ${engine.currentTactic}`);
+// 2. Contratos
+console.log("\n--- #2 Contratos ---");
+const contracts = team.squad.map(p => `${p.name}: ${p.contract.weeksLeft}sem`);
+console.log(`  ${contracts.slice(0, 3).join(' | ')} ...`);
 
-// 4. Team Talk
-console.log("\n--- #3 Team Talks ---");
-TEAM_TALKS.forEach(tt => {
-    console.log(`  ${tt.name}: moral=${tt.effect.moralBoost} energy=${-tt.effect.energyCost} ata=${tt.effect.ataModifier}x`);
-});
-const ttResult = engine.doTeamTalk("aggressive");
-console.log(`  Preleção aplicada: ${ttResult.talk.name} | Modifiers: ata=${engine.teamTalkModifiers.ata}x def=${engine.teamTalkModifiers.def}x`);
-
-// 5. Treino
-console.log("\n--- #4 Treinos ---");
-TRAINING_TYPES.forEach(t => {
-    console.log(`  ${t.name}: energyRec=${t.effect.energyRecovery} boost=${t.effect.attrBoost}`);
-});
-const trainResult = engine.doTraining("tactical");
-console.log(`  Treino: ${trainResult.msg}`);
-
-// 6. Condições de jogo
-console.log("\n--- #5 Match Conditions ---");
-MATCH_CONDITIONS.forEach(c => {
-    console.log(`  ${c.name}: ata=${c.ataModifier}x def=${c.defModifier}x energy=${c.energyModifier}x (${c.probability*100}%)`);
-});
-
-// 7. Simulate 10 weeks
-console.log("\n--- #6 Simulação 10 semanas ---");
-for (let w = 0; w < 10; w++) {
-    engine.doTraining(w % 3 === 0 ? 'rest' : 'fitness');
-    engine.setTactic(w % 4 === 0 ? 'offensive' : 'normal');
-    const results = engine.advanceWeek();
-    const fin = engine.weeklyFinance;
-    const cond = engine.matchCondition;
-    console.log(`  Sem ${w+1}: Bal=R$${(team.balance/1000).toFixed(0)}K | ${cond?.name} | ${engine.managerStats.wins}W-${engine.managerStats.draws}D-${engine.managerStats.losses}L`);
+// 3. Simulate 20 weeks
+console.log("\n--- #3 Simulação 20 semanas ---");
+let totalInjuries = 0;
+let expiredContracts = 0;
+for (let w = 0; w < 20; w++) {
+    engine.weekEvents = [];
+    engine.doTraining(w % 5 === 0 ? 'double' : 'fitness');
+    engine.advanceWeek();
+    totalInjuries += engine.weekInjuries.length;
+    if (engine.weekEvents.length > 0) {
+        expiredContracts += engine.weekEvents.length;
+        engine.weekEvents.forEach(e => console.log(`  Sem ${w+1}: ${e}`));
+    }
+    if (engine.weekInjuries.length > 0) {
+        engine.weekInjuries.forEach(inj => {
+            console.log(`  Sem ${w+1}: ${inj.emoji} ${inj.player} — ${inj.name} (${inj.weeksLeft} sem)`);
+        });
+    }
 }
 
-// 8. Transfer offers
-console.log(`\n--- #7 Transfer Offers: ${engine.transferOffers.length} ofertas ---`);
-engine.transferOffers.forEach(o => {
-    console.log(`  ${o.playerName} (OVR ${o.playerOvr}) → ${o.buyerClub} R$${(o.offerAmount/1000000).toFixed(1)}M`);
-});
+// 4. Board status
+const status = engine.board.getStatus();
+console.log(`\n--- #4 Board Status ---`);
+console.log(`  Confiança: ${engine.board.confidence}% ${status.emoji} ${status.label}`);
+console.log(`  Demitido: ${engine.board.isFired}`);
+console.log(`  Warning: ${engine.board.warningGiven}`);
 
-// 9. Moral check
-const avgMoral = team.squad.reduce((s, p) => s + (p.moral || 50), 0) / team.squad.length;
-console.log(`\n--- #8 Squad Moral: ${avgMoral.toFixed(1)}% ---`);
+// 5. Injury summary
+const injured = team.squad.filter(p => p.injury);
+console.log(`\n--- #5 Lesões ---`);
+console.log(`  Total lesões no período: ${totalInjuries}`);
+console.log(`  Atualmente lesionados: ${injured.length}`);
+injured.forEach(p => console.log(`    ${p.injury.emoji} ${p.name}: ${p.injury.name} (${p.injury.weeksLeft} sem restantes)`));
 
-// 10. Squad energy
-const avgEnergy = team.squad.reduce((s, p) => s + (p.energy || 50), 0) / team.squad.length;
-console.log(`--- #9 Squad Energy: ${avgEnergy.toFixed(1)}% ---`);
+// 6. Contract summary
+console.log(`\n--- #6 Contratos expirados: ${expiredContracts} ---`);
+console.log(`  Squad size: ${team.squad.length}`);
 
 console.log("\n=== TODOS OS TESTES PASSARAM ===");

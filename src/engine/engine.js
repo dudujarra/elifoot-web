@@ -5,6 +5,8 @@ import { ContinentalCup } from './tournaments/ContinentalCup';
 import { KnockoutCup } from './tournaments/KnockoutCup';
 import { ProPlayer } from './PlayerCareer';
 import { FORMATIONS, TACTICS, rollMatchCondition, calculateWeeklyFinances, generateTransferOffers, applyTraining, applyTeamTalk } from './ManagerSystems';
+import { BoardSystem } from './BoardSystem';
+import { processMatchInjuries, processTrainingInjuries, healInjury } from './InjurySystem';
 
 export class Engine {
     constructor() {
@@ -25,6 +27,9 @@ export class Engine {
         this.transferOffers = [];
         this.weeklyFinance = null;
         this.managerStats = { wins: 0, draws: 0, losses: 0, streak: 0 };
+        this.board = null;
+        this.weekInjuries = [];
+        this.weekEvents = [];
     }
 
     initGame(name, teamId, mode = 'manager', scenario = 'livre', playerPosition = 'ATA') {
@@ -40,6 +45,12 @@ export class Engine {
                 RealDB[zone][div].forEach(club => {
                     const tier = zone === 'BRA' ? div : (zone === 'ARG' || zone === 'COL' ? 1.5 : 2);
                     const squad = Data.generateSquad(tier);
+                    // Add contracts to each player
+                    squad.forEach(p => {
+                        p.contract = { weeksLeft: 38 + Math.floor(Math.random() * 76), salary: p.salary || 5000 };
+                        p.injury = null;
+                        p.moral = 50 + Math.floor(Math.random() * 20);
+                    });
                     this.teams.push({
                         id: idCounter++,
                         name: club.name,
@@ -58,6 +69,12 @@ export class Engine {
         if (scenario === 'fallen') {
             const team = this.getTeam(this.manager.teamId);
             if (team) team.balance = Math.floor(team.balance * 0.1);
+        }
+
+        // Init Board System
+        if (mode === 'manager') {
+            const team = this.getTeam(this.manager.teamId);
+            if (team) this.board = new BoardSystem(team.division, team.balance);
         }
 
         // Create leagues for each zone/division
@@ -349,6 +366,34 @@ export class Engine {
                         }
                         break;
                     }
+                }
+
+                // Lesões pós-partida
+                this.weekInjuries = processMatchInjuries(team.squad);
+
+                // Curar lesões em andamento
+                team.squad.forEach(p => {
+                    if (p.injury) healInjury(p);
+                });
+
+                // Contratos: reduzir semanas
+                team.squad.forEach(p => {
+                    if (p.contract) p.contract.weeksLeft--;
+                });
+
+                // Remover jogadores com contrato vencido (exceto titulares)
+                const expiredPlayers = team.squad.filter(p => p.contract && p.contract.weeksLeft <= 0 && !p.isTitular);
+                if (expiredPlayers.length > 0) {
+                    this.weekEvents.push(...expiredPlayers.map(p => `📋 ${p.name} saiu: contrato encerrado.`));
+                    team.squad = team.squad.filter(p => !(p.contract && p.contract.weeksLeft <= 0 && !p.isTitular));
+                }
+
+                // Board confidence
+                if (this.board) {
+                    const standings = this.getStandings(team.zone, team.division);
+                    const pos = standings.findIndex(s => s.teamId === team.id) + 1;
+                    const avgMorale = team.squad.reduce((s, p) => s + (p.moral || 50), 0) / team.squad.length;
+                    this.board.updateConfidence(pos, standings.length, this.managerStats.streak, avgMorale, team.balance, this.currentWeek);
                 }
             }
         }
