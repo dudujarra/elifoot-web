@@ -281,9 +281,34 @@ export function DashboardView() {
             {/* Log */}
             {log && <p style={{ color: 'var(--accent)', fontSize: '0.8rem', margin: '0.5rem 0' }}>📰 {log}</p>}
 
+            {/* Press Conference Modal */}
+            {engine.pressQuestion && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>🎙️ Coletiva de Imprensa</h3>
+                        <p>{engine.pressQuestion.text}</p>
+                        <div className="modal-options">
+                            {engine.pressQuestion.options.map(opt => (
+                                <button key={opt.id} className="btn btn-secondary" onClick={() => {
+                                    const result = engine.answerPress(opt.id);
+                                    if (result) setLog(`Coletiva: ${result.answer}`);
+                                    forceUpdate();
+                                }} style={{textAlign:'left'}}>
+                                    {opt.text}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Action Bar */}
             <div className="action-bar">
-                <button className="btn btn-primary" onClick={() => changeView('match')}>⚽ Jogar Partida</button>
+                <button className="btn btn-primary" onClick={() => {
+                    engine.checkPressConference();
+                    if (!engine.pressQuestion) changeView('match');
+                    else forceUpdate();
+                }}>⚽ Jogar Partida</button>
                 <button className="btn btn-secondary" onClick={() => changeView('squad')}>👥 Plantel</button>
                 <button className="btn btn-secondary" onClick={() => changeView('market')}>🛒 Mercado</button>
                 <button className="btn btn-secondary" onClick={() => changeView('standings')}>📊 Tabela</button>

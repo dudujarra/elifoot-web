@@ -8,6 +8,7 @@ import { FORMATIONS, TACTICS, rollMatchCondition, calculateWeeklyFinances, gener
 import { BoardSystem } from './BoardSystem';
 import { processMatchInjuries, processTrainingInjuries, healInjury } from './InjurySystem';
 import { generateYouthIntake, getAcademyUpgradeCost, loanPlayerOut, processLoans } from './YouthAcademy';
+import { shouldTriggerPress, generateQuestion, applyPressEffect } from './PressConference';
 
 export class Engine {
     constructor() {
@@ -33,6 +34,7 @@ export class Engine {
         this.weekEvents = [];
         this.academyLevel = 1;
         this.loanedOut = [];
+        this.pressQuestion = null;
     }
 
     initGame(name, teamId, mode = 'manager', scenario = 'livre', playerPosition = 'ATA') {
@@ -252,6 +254,32 @@ export class Engine {
         if (!team) return { success: false, msg: 'Time não encontrado.' };
         const result = loanPlayerOut(team, playerId, weeks);
         if (result.success) this.loanedOut.push(result.loan);
+        return result;
+    }
+
+    // === COLETIVA DE IMPRENSA ===
+    checkPressConference() {
+        if (this.mode !== 'manager') return null;
+        const team = this.getTeam(this.manager.teamId);
+        if (!team) return null;
+        const standings = this.getStandings(team.zone, team.division);
+        const pos = standings.findIndex(s => s.teamId === team.id) + 1;
+        if (shouldTriggerPress(this.managerStats.streak, this.currentWeek, pos, standings.length)) {
+            const avgMorale = team.squad.reduce((s, p) => s + (p.moral || 50), 0) / team.squad.length;
+            this.pressQuestion = generateQuestion(this.managerStats.streak, pos, standings.length, avgMorale);
+            return this.pressQuestion;
+        }
+        return null;
+    }
+
+    answerPress(optionId) {
+        if (!this.pressQuestion) return null;
+        const option = this.pressQuestion.options.find(o => o.id === optionId);
+        if (!option) return null;
+        const team = this.getTeam(this.manager.teamId);
+        applyPressEffect(team, this.board, option.effect);
+        const result = { answer: option.text, effect: option.effect };
+        this.pressQuestion = null;
         return result;
     }
 
