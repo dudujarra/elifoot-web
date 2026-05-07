@@ -49,7 +49,7 @@ export function SquadView() {
                     <thead>
                         <tr>
                             <th>Status</th><th>Nome</th><th>Pos</th><th>OVR</th>
-                            <th>⚡</th><th>😊</th><th>🔥</th><th>Idade</th><th>📋</th><th>🏥</th>
+                            <th className="hide-mobile">⚡</th><th className="hide-mobile">😊</th><th className="hide-mobile">🔥</th><th className="hide-mobile">Idade</th><th className="hide-mobile">📋</th><th className="hide-mobile">🏥</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -80,14 +80,14 @@ export function SquadView() {
                                 </td>
                                 <td>{p.position}</td>
                                 <td><strong>{p.ovr}</strong></td>
-                                <td style={{ color: getEnergyColor(p.energy) }}>{p.energy}%</td>
-                                <td>{getMoralEmoji(p.moral || 50)} {(p.moral || 50)}%</td>
-                                <td>{getFormEmoji(p.form?.trend)}</td>
-                                <td>{p.age}</td>
-                                <td style={{color: p.contract?.weeksLeft <= 8 ? 'var(--danger)' : 'var(--text-muted)', fontSize: '0.75rem'}}>
+                                <td className="hide-mobile" style={{ color: getEnergyColor(p.energy) }}>{p.energy}%</td>
+                                <td className="hide-mobile">{getMoralEmoji(p.moral || 50)} {(p.moral || 50)}%</td>
+                                <td className="hide-mobile">{getFormEmoji(p.form?.trend)}</td>
+                                <td className="hide-mobile">{p.age}</td>
+                                <td className="hide-mobile" style={{color: p.contract?.weeksLeft <= 8 ? 'var(--danger)' : 'var(--text-muted)', fontSize: '0.75rem'}}>
                                     {p.contract ? `${p.contract.weeksLeft}sem` : '-'}
                                 </td>
-                                <td style={{fontSize: '0.75rem'}}>
+                                <td className="hide-mobile" style={{fontSize: '0.75rem'}}>
                                     {p.injury ? (
                                         <span style={{color:'var(--danger)'}}>{p.injury.emoji} {p.injury.weeksLeft}sem</span>
                                     ) : '-'}

@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
+import { SCOUT_REGIONS } from '../engine/StadiumSystem';
+import { getPlayerTraits } from '../engine/PlayerTraits';
+import { generateCounterOffer } from '../engine/PlayerTraits';
 
 export function MarketView() {
     const { gameState, changeView, getEngine, forceUpdate } = useGame();
@@ -7,47 +10,183 @@ export function MarketView() {
     const team = engine.getTeam(gameState.teamId);
     if (!team) return null;
 
+    const [tab, setTab] = useState('buy');
+    const [log, setLog] = useState('');
+    const [negotiation, setNegotiation] = useState(null); // {playerId, round, counterAmount}
+
     const handleBuy = (player) => {
         if (team.balance < player.value) return;
         team.balance -= player.value;
+        player.contract = { weeksLeft: 76, salary: Math.floor(player.value * 0.001) };
+        player.moral = 60;
+        player.energy = 100;
         team.squad.push({ ...player, isTitular: false });
         engine.marketPlayers = engine.marketPlayers.filter(p => p.id !== player.id);
+        setLog(`✅ ${player.name} contratado por R$ ${(player.value / 1000000).toFixed(1)}M!`);
         forceUpdate();
     };
 
+    const handleSell = (player) => {
+        const value = player.ovr * 100000;
+        setNegotiation({ player, round: 0, counterAmount: value, msg: `Valor de mercado: R$ ${(value / 1000000).toFixed(1)}M. Deseja vender?` });
+    };
+
+    const confirmSell = () => {
+        if (!negotiation) return;
+        const p = negotiation.player;
+        team.balance += negotiation.counterAmount;
+        team.squad = team.squad.filter(sq => sq.id !== p.id);
+        setLog(`💰 ${p.name} vendido por R$ ${(negotiation.counterAmount / 1000000).toFixed(1)}M!`);
+        setNegotiation(null);
+        forceUpdate();
+    };
+
+    const handleScout = (regionId) => {
+        const result = engine.scoutRegionAction(regionId);
+        setLog(result.msg || `Scout encontrou ${result.players?.length || 0} jogadores!`);
+        forceUpdate();
+    };
+
+    const sellable = team.squad.filter(p => !p.isTitular && !p.injury);
+
     return (
         <div className="main-content fade-in">
-            <div className="card-header" style={{ marginBottom: '1rem' }}>
-                <h2>🛒 Mercado de Transferências</h2>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'0.75rem'}}>
+                <h2 style={{fontSize:'1.2rem'}}>🛒 Mercado</h2>
                 <button className="btn btn-secondary btn-sm" onClick={() => changeView('dashboard')}>← Voltar</button>
             </div>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.85rem' }}>
-                Saldo: <strong style={{ color: 'var(--primary)' }}>R$ {(team.balance / 1000000).toFixed(1)}M</strong>
-            </p>
 
-            <div style={{ overflowX: 'auto' }}>
-                <table className="standings-table">
-                    <thead>
-                        <tr><th>Nome</th><th>Pos</th><th>OVR</th><th>Idade</th><th>Valor</th><th></th></tr>
-                    </thead>
-                    <tbody>
-                        {engine.marketPlayers.map(p => (
-                            <tr key={p.id}>
-                                <td>{p.name}</td>
-                                <td>{p.position}</td>
-                                <td><strong>{p.ovr}</strong></td>
-                                <td>{p.age}</td>
-                                <td>R$ {(p.value / 1000000).toFixed(1)}M</td>
-                                <td>
-                                    <button className="btn btn-primary btn-sm" onClick={() => handleBuy(p)} disabled={team.balance < p.value}>
-                                        Contratar
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div className="card card-compact" style={{marginBottom:'0.5rem'}}>
+                <div className="inline-stats" style={{justifyContent:'center'}}>
+                    <div className="inline-stat">
+                        <span className="stat-value" style={{fontSize:'1rem',color: team.balance > 0 ? 'var(--primary)' : 'var(--danger)'}}>R$ {(team.balance / 1000000).toFixed(1)}M</span>
+                        <span className="stat-label">SALDO</span>
+                    </div>
+                    <div className="inline-stat">
+                        <span className="stat-value" style={{fontSize:'1rem'}}>{team.squad.length}</span>
+                        <span className="stat-label">ELENCO</span>
+                    </div>
+                </div>
             </div>
+
+            {log && <div className="event-toast success" onClick={() => setLog('')}>{log}</div>}
+
+            <div className="nav-tabs">
+                <button className={`nav-tab ${tab === 'buy' ? 'active' : ''}`} onClick={() => setTab('buy')}>Comprar</button>
+                <button className={`nav-tab ${tab === 'sell' ? 'active' : ''}`} onClick={() => setTab('sell')}>Vender</button>
+                <button className={`nav-tab ${tab === 'scout' ? 'active' : ''}`} onClick={() => setTab('scout')}>Scouting</button>
+            </div>
+
+            {/* === BUY TAB === */}
+            {tab === 'buy' && (
+                <div className="card card-compact">
+                    <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>JOGADORES DISPONÍVEIS ({engine.marketPlayers.length})</h4>
+                    {engine.marketPlayers.length === 0 ? (
+                        <p style={{fontSize:'0.78rem',color:'var(--text-muted)'}}>Nenhum jogador no mercado. Scout novas regiões!</p>
+                    ) : (
+                        <div style={{display:'flex',flexDirection:'column',gap:'0.15rem'}}>
+                            {engine.marketPlayers.map(p => (
+                                <div key={p.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.3rem 0',borderBottom:'1px solid var(--border-subtle)',fontSize:'0.78rem'}}>
+                                    <div>
+                                        <strong>{p.name}</strong>
+                                        <span style={{color:'var(--text-muted)',marginLeft:'0.3rem'}}>{p.position} • OVR {p.ovr} • {p.age}a</span>
+                                        {getPlayerTraits(p).map(t => (
+                                            <span key={t.id} style={{fontSize:'0.6rem',marginLeft:'2px'}} title={t.description}>{t.name.split(' ')[0]}</span>
+                                        ))}
+                                    </div>
+                                    <div style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                                        <span style={{fontSize:'0.72rem',color:'var(--accent)'}}>R$ {(p.value / 1000000).toFixed(1)}M</span>
+                                        <button className="btn btn-primary btn-sm" onClick={() => handleBuy(p)} disabled={team.balance < p.value}>
+                                            Contratar
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* === SELL TAB === */}
+            {tab === 'sell' && (
+                <div className="card card-compact">
+                    <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>JOGADORES VENDÁVEIS ({sellable.length})</h4>
+                    {sellable.length === 0 ? (
+                        <p style={{fontSize:'0.78rem',color:'var(--text-muted)'}}>Tire jogadores da titularidade para poder vendê-los.</p>
+                    ) : (
+                        <div style={{display:'flex',flexDirection:'column',gap:'0.15rem'}}>
+                            {sellable.sort((a,b) => b.ovr - a.ovr).map(p => (
+                                <div key={p.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.3rem 0',borderBottom:'1px solid var(--border-subtle)',fontSize:'0.78rem'}}>
+                                    <div>
+                                        <strong>{p.name}</strong>
+                                        <span style={{color:'var(--text-muted)',marginLeft:'0.3rem'}}>{p.position} • OVR {p.ovr} • {p.age}a</span>
+                                    </div>
+                                    <div style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                                        <span style={{fontSize:'0.72rem',color:'var(--accent)'}}>~R$ {((p.ovr * 100000) / 1000000).toFixed(1)}M</span>
+                                        <button className="btn btn-danger btn-sm" onClick={() => handleSell(p)}>Vender</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Negotiation modal */}
+                    {negotiation && (
+                        <div style={{marginTop:'0.75rem',padding:'0.75rem',background:'rgba(245,158,11,0.08)',borderRadius:'var(--radius-sm)',border:'1px solid rgba(245,158,11,0.2)'}}>
+                            <p style={{fontSize:'0.8rem',color:'var(--accent)',marginBottom:'0.3rem'}}>💬 {negotiation.msg}</p>
+                            <p style={{fontSize:'0.85rem',fontWeight:600}}>R$ {(negotiation.counterAmount / 1000000).toFixed(1)}M</p>
+                            <div style={{display:'flex',gap:'0.3rem',marginTop:'0.4rem'}}>
+                                <button className="btn btn-primary btn-sm" onClick={confirmSell}>✓ Aceitar</button>
+                                <button className="btn btn-secondary btn-sm" onClick={() => {
+                                    // Counter-offer: increase price
+                                    const newAmount = Math.floor(negotiation.counterAmount * 1.15);
+                                    if (negotiation.round >= 2) {
+                                        setLog(`❌ ${negotiation.player.name}: negociação encerrada.`);
+                                        setNegotiation(null);
+                                    } else {
+                                        setNegotiation({
+                                            ...negotiation,
+                                            round: negotiation.round + 1,
+                                            counterAmount: newAmount,
+                                            msg: `Contra-proposta: R$ ${(newAmount / 1000000).toFixed(1)}M (rodada ${negotiation.round + 2}/3)`,
+                                        });
+                                    }
+                                }}>📈 Pedir mais</button>
+                                <button className="btn btn-secondary btn-sm" onClick={() => setNegotiation(null)}>✗ Cancelar</button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* === SCOUT TAB === */}
+            {tab === 'scout' && (
+                <div className="card card-compact">
+                    <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>🔎 REGIÕES DE SCOUTING</h4>
+                    <div className="action-bar">
+                        {SCOUT_REGIONS.map(r => (
+                            <button key={r.id} className="btn btn-sm btn-secondary" onClick={() => handleScout(r.id)}>
+                                {r.emoji} {r.name} (R$ {(r.cost/1000).toFixed(0)}K)
+                            </button>
+                        ))}
+                    </div>
+                    {engine.scoutedPlayers?.length > 0 && (
+                        <div style={{marginTop:'0.5rem'}}>
+                            <h4 style={{fontSize:'0.75rem',color:'var(--text-muted)',marginBottom:'0.2rem'}}>ENCONTRADOS</h4>
+                            {engine.scoutedPlayers.map((p, i) => (
+                                <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:'0.78rem',padding:'0.25rem 0',borderBottom:'1px solid var(--border-subtle)'}}>
+                                    <span>{p.name} ({p.position}, {p.age}a, OVR {p.ovr})</span>
+                                    <button className="btn btn-sm btn-primary" onClick={() => {
+                                        const result = engine.signScoutedPlayer(i);
+                                        setLog(result?.msg || 'Contratado!');
+                                        forceUpdate();
+                                    }}>Contratar</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

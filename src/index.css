@@ -337,4 +337,5 @@ h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
   .nav-tabs { gap: 0.15rem; }
   .nav-tab { padding: 0.3rem 0.5rem; font-size: 0.72rem; }
   .inline-stats { gap: 0.5rem; }
+  .hide-mobile { display: none !important; }
 }

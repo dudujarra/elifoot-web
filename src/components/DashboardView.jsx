@@ -117,6 +117,33 @@ export function DashboardView() {
             {/* === TAB: OVERVIEW === */}
             {tab === 'overview' && (
                 <>
+                    {/* Onboarding hints — only show for first weeks */}
+                    {seasonWeek <= 2 && engine.seasonNumber === 1 && (
+                        <div className="card card-compact" style={{background:'rgba(59,130,246,0.08)',borderColor:'rgba(59,130,246,0.2)'}}>
+                            <h4 style={{fontSize:'0.8rem',color:'var(--info)',marginBottom:'0.3rem'}}>💡 DICAS DO TREINADOR</h4>
+                            <div style={{fontSize:'0.75rem',color:'var(--text-muted)',lineHeight:1.6}}>
+                                <p>1️⃣ <strong>Táticas:</strong> escolha formação e tática antes de jogar</p>
+                                <p>2️⃣ <strong>Treino:</strong> treine o plantel toda semana para melhorar atributos</p>
+                                <p>3️⃣ <strong>Plantel:</strong> escale seus melhores 11 e monitore energia</p>
+                                <p>4️⃣ <strong>Clube:</strong> upgrade estádio e base para crescer</p>
+                                <p>5️⃣ <strong>Jogo:</strong> no intervalo, ajuste tática e faça substituições</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Season Awards (if any) */}
+                    {engine.seasonAwards && engine.seasonAwards.length > 0 && (
+                        <div className="card card-compact" style={{background:'rgba(245,158,11,0.08)',borderColor:'rgba(245,158,11,0.2)'}}>
+                            <h4 style={{fontSize:'0.8rem',color:'var(--accent)',marginBottom:'0.3rem'}}>🏆 PRÊMIOS DA TEMPORADA</h4>
+                            {engine.seasonAwards.map((a, i) => (
+                                <div key={i} style={{display:'flex',justifyContent:'space-between',fontSize:'0.78rem',padding:'0.2rem 0',borderBottom:'1px solid var(--border-subtle)'}}>
+                                    <span>{a.emoji} {a.name}</span>
+                                    <strong style={{color:'var(--accent)'}}>{a.player} ({a.value})</strong>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                     {engine.weekEvents.length > 0 && (
                         <div className="card card-compact">
                             <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>📰 EVENTOS DA SEMANA</h4>
@@ -225,12 +252,16 @@ export function DashboardView() {
             {/* === TAB: CLUB === */}
             {tab === 'club' && (
                 <>
-                    {/* Stadium */}
+                    {/* Stadium + Progress */}
                     <div className="card card-compact">
                         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                            <div>
+                            <div style={{flex:1}}>
                                 <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)'}}>🏟️ {stadiumInfo.name}</h4>
                                 <span style={{fontSize:'0.72rem',color:'var(--text-muted)'}}>Cap: {stadiumInfo.capacity.toLocaleString()} • R$ {stadiumInfo.ticketPrice}/ingresso</span>
+                                <div className="progress-bar" style={{marginTop:'0.3rem'}}>
+                                    <div className="progress-bar-fill" style={{width:`${(engine.stadiumLevel / 5) * 100}%`}}></div>
+                                </div>
+                                <span style={{fontSize:'0.6rem',color:'var(--text-muted)'}}>Nível {engine.stadiumLevel}/5</span>
                             </div>
                             {engine.stadiumLevel < 5 && (
                                 <button className="btn btn-sm btn-primary" onClick={() => {
@@ -244,7 +275,7 @@ export function DashboardView() {
 
                     {/* Staff */}
                     <div className="card card-compact">
-                        <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>👥 STAFF</h4>
+                        <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>👥 STAFF ({STAFF_ROLES.filter(r => engine.staff?.getStaff(r.id)).length}/{STAFF_ROLES.length})</h4>
                         {STAFF_ROLES.map(role => {
                             const member = engine.staff?.getStaff(role.id);
                             return (
@@ -262,12 +293,16 @@ export function DashboardView() {
                         })}
                     </div>
 
-                    {/* Youth Academy */}
+                    {/* Youth Academy + Progress */}
                     <div className="card card-compact">
                         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                            <div>
+                            <div style={{flex:1}}>
                                 <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)'}}>🎓 BASE Nv.{engine.academyLevel}</h4>
                                 <span style={{fontSize:'0.72rem',color:'var(--text-muted)'}}>Produz {engine.academyLevel + 1} jovens/temporada</span>
+                                <div className="progress-bar" style={{marginTop:'0.3rem'}}>
+                                    <div className="progress-bar-fill" style={{width:`${(engine.academyLevel / 5) * 100}%`,background:'var(--accent)'}}></div>
+                                </div>
+                                <span style={{fontSize:'0.6rem',color:'var(--text-muted)'}}>Nível {engine.academyLevel}/5</span>
                             </div>
                             {engine.academyLevel < 5 && (
                                 <button className="btn btn-sm btn-primary" onClick={() => {

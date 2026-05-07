@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
-import { TACTICS } from '../engine/ManagerSystems';
+import { TACTICS, FORMATIONS, TEAM_TALKS } from '../engine/ManagerSystems';
 import { getFormEmoji } from '../engine/PlayerDevelopment';
 import { getPlayerTraits } from '../engine/PlayerTraits';
 
@@ -18,6 +18,8 @@ export function MatchView() {
     const [subUsed, setSubUsed] = useState(false);
     const [tacticChanged, setTacticChanged] = useState(false);
     const [matchStats, setMatchStats] = useState(null);
+    const [preStep, setPreStep] = useState(1); // 1=squad, 2=tactics, 3=confirm
+    const [talkDone, setTalkDone] = useState(false);
     const [speed, setSpeed] = useState(200); // ms per tick
     const logRef = useRef(null);
     const timerRef = useRef(null);
@@ -86,121 +88,182 @@ export function MatchView() {
         return { home: h, away: a };
     };
 
-    // === PRE-MATCH ===
+    // === PRE-MATCH (3-step wizard) ===
     if (phase === 'prematch') {
         const titulares = team.squad.filter(p => p.isTitular && !p.injury);
-        const reservas = team.squad.filter(p => !p.isTitular && !p.injury).slice(0, 7);
         const lowEnergy = titulares.filter(p => p.energy < 40);
         const sectors = engine.getTeamSectors(team.id);
 
+        const launchMatch = () => {
+            const weekResults = engine.advanceWeek();
+            let myMatch = null;
+            for (const tId in weekResults) {
+                const match = weekResults[tId].find(m => (m.home === team.id || m.away === team.id) && m.score);
+                if (match) { myMatch = match; break; }
+            }
+
+            if (myMatch && myMatch.score) {
+                const isHome = myMatch.home === team.id;
+                const opponent = engine.getTeam(isHome ? myMatch.away : myMatch.home);
+                const allEvents = myMatch.score.events?.textLog || [];
+
+                const htHomeGoals = myMatch.score.events?.home?.filter(e => e.minute <= 45).length || 0;
+                const htAwayGoals = myMatch.score.events?.away?.filter(e => e.minute <= 45).length || 0;
+
+                setResult({
+                    home: isHome ? team.name : opponent.name,
+                    away: isHome ? opponent.name : team.name,
+                    homeGoals: myMatch.score.homeGoals,
+                    awayGoals: myMatch.score.awayGoals,
+                });
+                setNarration(allEvents);
+                setHalfTimeData({
+                    homeGoals: isHome ? htHomeGoals : htAwayGoals,
+                    awayGoals: isHome ? htAwayGoals : htHomeGoals,
+                });
+
+                const totalChances = allEvents.filter(e => e.text && (e.text.includes('⚽') || e.text.includes('Defesa') || e.text.includes('salva'))).length;
+                const goals = allEvents.filter(e => e.text && e.text.includes('⚽')).length;
+                setMatchStats({ totalChances, goals, injuries: engine.weekInjuries.length });
+
+                setDisplayedEvents([]);
+                setCurrentMinute(0);
+                setPhase('firsthalf');
+                setTimeout(() => startLiveTicker(allEvents, 0, 45, null), 300);
+            } else {
+                setResult({ home: team.name, away: 'Sem Jogo', homeGoals: '-', awayGoals: '-' });
+                setPhase('fulltime');
+            }
+            forceUpdate();
+        };
+
+        const stepLabels = ['Escalação', 'Tática', 'Confirmar'];
+
         return (
             <div className="main-content fade-in">
-                <div className="card" style={{ textAlign: 'center' }}>
-                    <h2 style={{fontSize:'1.3rem'}}>⚽ Pré-Jogo — Semana {engine.currentWeek + 1}</h2>
-                    <div style={{fontSize:'0.85rem',color:'var(--text-muted)',margin:'0.3rem 0'}}>
-                        {team.name} • {team.formation} • {tactic?.name}
-                    </div>
-                    {cond && <div className="alert-badge info" style={{display:'inline-flex',margin:'0.3rem 0'}}>{cond.name}</div>}
-                </div>
-
-                {/* Sector summary */}
-                <div className="card card-compact">
-                    <div className="inline-stats" style={{justifyContent:'center'}}>
-                        <div className="inline-stat"><span className="stat-value">{sectors.goalkeeper}</span><span className="stat-label">GOL</span></div>
-                        <div className="inline-stat"><span className="stat-value">{sectors.defense}</span><span className="stat-label">DEF</span></div>
-                        <div className="inline-stat"><span className="stat-value">{sectors.midfield}</span><span className="stat-label">MEI</span></div>
-                        <div className="inline-stat"><span className="stat-value">{sectors.attack}</span><span className="stat-label">ATA</span></div>
-                    </div>
-                </div>
-
-                {/* Titulares */}
-                <div className="card card-compact">
-                    <h4 style={{fontSize:'0.8rem',marginBottom:'0.5rem',color:'var(--text-muted)'}}>TITULARES ({titulares.length})</h4>
-                    <div style={{display:'flex',flexDirection:'column',gap:'0.2rem'}}>
-                        {titulares.map(p => (
-                            <div key={p.id} style={{
-                                display:'flex', justifyContent:'space-between', alignItems:'center',
-                                padding:'0.25rem 0.4rem', borderRadius:'var(--radius-xs)',
-                                background: p.energy < 40 ? 'rgba(239,68,68,0.1)' : 'transparent',
-                                fontSize:'0.78rem'
-                            }}>
-                                <span>
-                                    <strong style={{color:'var(--text-muted)',marginRight:'0.3rem',fontSize:'0.7rem'}}>{p.position}</strong>
-                                    {p.name}
-                                    {p._isCaptain && <span title="Capitão" style={{marginLeft:'3px'}}>©️</span>}
-                                    {getFormEmoji(p.form?.trend) && <span style={{marginLeft:'3px'}}>{getFormEmoji(p.form?.trend)}</span>}
-                                    {getPlayerTraits(p).map(t => (
-                                        <span key={t.id} style={{fontSize:'0.6rem',marginLeft:'3px'}} title={t.description}>{t.name.split(' ')[0]}</span>
-                                    ))}
-                                </span>
-                                <span style={{display:'flex',gap:'0.5rem',alignItems:'center'}}>
-                                    <span style={{fontWeight:600}}>{p.ovr}</span>
-                                    <span style={{color: p.energy < 40 ? 'var(--danger)' : p.energy < 70 ? 'var(--accent)' : 'var(--primary)', fontSize:'0.72rem'}}>
-                                        ⚡{p.energy}%
-                                    </span>
-                                </span>
+                {/* Step indicator */}
+                <div className="card card-compact" style={{textAlign:'center'}}>
+                    <h2 style={{fontSize:'1.2rem',margin:0}}>⚽ Pré-Jogo — Semana {engine.currentWeek + 1}</h2>
+                    <div style={{display:'flex',justifyContent:'center',gap:'0.5rem',marginTop:'0.4rem'}}>
+                        {stepLabels.map((label, i) => (
+                            <div key={i} style={{display:'flex',alignItems:'center',gap:'0.2rem',fontSize:'0.7rem',
+                                color: preStep === i + 1 ? 'var(--primary)' : 'var(--text-muted)',
+                                fontWeight: preStep === i + 1 ? 700 : 400}}>
+                                <span style={{
+                                    width:'18px',height:'18px',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',
+                                    fontSize:'0.6rem',background: preStep > i + 1 ? 'var(--primary)' : preStep === i + 1 ? 'rgba(16,185,129,0.2)' : 'var(--bg-panel-hover)',
+                                    color: preStep > i + 1 ? 'var(--bg-base)' : preStep === i + 1 ? 'var(--primary)' : 'var(--text-muted)'
+                                }}>{preStep > i + 1 ? '✓' : i + 1}</span>
+                                {label}
                             </div>
                         ))}
                     </div>
-                    {lowEnergy.length > 0 && (
-                        <div className="alert-badge danger" style={{marginTop:'0.4rem'}}>
-                            ⚠️ {lowEnergy.length} jogador(es) com energia baixa
-                        </div>
-                    )}
                 </div>
 
-                <button className="btn-cta" onClick={() => {
-                    const weekResults = engine.advanceWeek();
-                    let myMatch = null;
-                    for (const tId in weekResults) {
-                        const match = weekResults[tId].find(m => (m.home === team.id || m.away === team.id) && m.score);
-                        if (match) { myMatch = match; break; }
-                    }
+                {/* STEP 1: Squad Review */}
+                {preStep === 1 && (
+                    <>
+                        <div className="card card-compact">
+                            <div className="inline-stats" style={{justifyContent:'center'}}>
+                                <div className="inline-stat"><span className="stat-value">{sectors.goalkeeper}</span><span className="stat-label">GOL</span></div>
+                                <div className="inline-stat"><span className="stat-value">{sectors.defense}</span><span className="stat-label">DEF</span></div>
+                                <div className="inline-stat"><span className="stat-value">{sectors.midfield}</span><span className="stat-label">MEI</span></div>
+                                <div className="inline-stat"><span className="stat-value">{sectors.attack}</span><span className="stat-label">ATA</span></div>
+                            </div>
+                        </div>
+                        <div className="card card-compact">
+                            <h4 style={{fontSize:'0.8rem',marginBottom:'0.4rem',color:'var(--text-muted)'}}>TITULARES ({titulares.length})</h4>
+                            <div style={{display:'flex',flexDirection:'column',gap:'0.15rem'}}>
+                                {titulares.map(p => (
+                                    <div key={p.id} style={{
+                                        display:'flex', justifyContent:'space-between', alignItems:'center',
+                                        padding:'0.2rem 0.4rem', borderRadius:'var(--radius-xs)',
+                                        background: p.energy < 40 ? 'rgba(239,68,68,0.1)' : 'transparent', fontSize:'0.78rem'
+                                    }}>
+                                        <span>
+                                            <strong style={{color:'var(--text-muted)',marginRight:'0.3rem',fontSize:'0.7rem'}}>{p.position}</strong>
+                                            {p.name}
+                                            {p._isCaptain && <span style={{marginLeft:'3px'}}>©️</span>}
+                                            {getFormEmoji(p.form?.trend) && <span style={{marginLeft:'3px'}}>{getFormEmoji(p.form?.trend)}</span>}
+                                        </span>
+                                        <span style={{display:'flex',gap:'0.5rem',alignItems:'center'}}>
+                                            <span style={{fontWeight:600}}>{p.ovr}</span>
+                                            <span style={{color: p.energy < 40 ? 'var(--danger)' : p.energy < 70 ? 'var(--accent)' : 'var(--primary)', fontSize:'0.72rem'}}>⚡{p.energy}%</span>
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                            {lowEnergy.length > 0 && <div className="alert-badge danger" style={{marginTop:'0.3rem'}}>⚠️ {lowEnergy.length} com energia baixa</div>}
+                        </div>
+                        <button className="btn btn-primary" style={{width:'100%'}} onClick={() => setPreStep(2)}>Próximo: Tática →</button>
+                    </>
+                )}
 
-                    if (myMatch && myMatch.score) {
-                        const isHome = myMatch.home === team.id;
-                        const opponent = engine.getTeam(isHome ? myMatch.away : myMatch.home);
-                        const allEvents = myMatch.score.events?.textLog || [];
+                {/* STEP 2: Tactics + Team Talk */}
+                {preStep === 2 && (
+                    <>
+                        <div className="card card-compact">
+                            <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>FORMAÇÃO</h4>
+                            <div className="action-bar">
+                                {Object.keys(FORMATIONS).map(f => (
+                                    <button key={f} className={`btn btn-sm ${team.formation === f ? 'btn-primary' : 'btn-secondary'}`}
+                                        onClick={() => { engine.setFormation(f); forceUpdate(); }}>{f}</button>
+                                ))}
+                            </div>
+                            <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',margin:'0.5rem 0 0.3rem'}}>TÁTICA</h4>
+                            <div className="action-bar">
+                                {Object.entries(TACTICS).map(([k, v]) => (
+                                    <button key={k} className={`btn btn-sm ${engine.currentTactic === k ? 'btn-primary' : 'btn-secondary'}`}
+                                        onClick={() => { engine.setTactic(k); forceUpdate(); }}>{v.name}</button>
+                                ))}
+                            </div>
+                            <p style={{fontSize:'0.72rem',color:'var(--text-muted)',marginTop:'0.2rem'}}>{TACTICS[engine.currentTactic]?.description}</p>
+                        </div>
+                        <div className="card card-compact">
+                            <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>📢 PRELEÇÃO</h4>
+                            {talkDone ? (
+                                <div className="alert-badge success">✅ Preleção feita!</div>
+                            ) : (
+                                <div style={{display:'flex',flexWrap:'wrap',gap:'0.3rem'}}>
+                                    {TEAM_TALKS.map(t => (
+                                        <button key={t.id} className="btn btn-secondary btn-sm"
+                                            onClick={() => { engine.doTeamTalk(t.id); setTalkDone(true); forceUpdate(); }}>{t.name}</button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div style={{display:'flex',gap:'0.5rem'}}>
+                            <button className="btn btn-secondary" style={{flex:1}} onClick={() => setPreStep(1)}>← Voltar</button>
+                            <button className="btn btn-primary" style={{flex:2}} onClick={() => setPreStep(3)}>Confirmar →</button>
+                        </div>
+                    </>
+                )}
 
-                        const htHomeGoals = myMatch.score.events?.home?.filter(e => e.minute <= 45).length || 0;
-                        const htAwayGoals = myMatch.score.events?.away?.filter(e => e.minute <= 45).length || 0;
+                {/* STEP 3: Confirmation */}
+                {preStep === 3 && (
+                    <>
+                        <div className="card card-compact" style={{textAlign:'center'}}>
+                            <div style={{fontSize:'0.85rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>
+                                {team.name} • {team.formation} • {tactic?.name}
+                            </div>
+                            {cond && <div className="alert-badge info" style={{display:'inline-flex',marginBottom:'0.3rem'}}>{cond.name}</div>}
+                            <div className="inline-stats" style={{justifyContent:'center'}}>
+                                <div className="inline-stat"><span className="stat-value">{sectors.goalkeeper}</span><span className="stat-label">GOL</span></div>
+                                <div className="inline-stat"><span className="stat-value">{sectors.defense}</span><span className="stat-label">DEF</span></div>
+                                <div className="inline-stat"><span className="stat-value">{sectors.midfield}</span><span className="stat-label">MEI</span></div>
+                                <div className="inline-stat"><span className="stat-value">{sectors.attack}</span><span className="stat-label">ATA</span></div>
+                            </div>
+                            <div style={{fontSize:'0.72rem',color: talkDone ? 'var(--primary)' : 'var(--accent)',marginTop:'0.3rem'}}>
+                                {talkDone ? '✅ Preleção feita' : '⚠️ Sem preleção'}
+                            </div>
+                        </div>
+                        <button className="btn-cta" onClick={launchMatch}>⚽ INICIAR PARTIDA</button>
+                        <button className="btn btn-secondary" style={{width:'100%',marginTop:'0.3rem'}} onClick={() => setPreStep(2)}>← Voltar</button>
+                    </>
+                )}
 
-                        setResult({
-                            home: isHome ? team.name : opponent.name,
-                            away: isHome ? opponent.name : team.name,
-                            homeGoals: myMatch.score.homeGoals,
-                            awayGoals: myMatch.score.awayGoals,
-                        });
-                        setNarration(allEvents);
-                        setHalfTimeData({
-                            homeGoals: isHome ? htHomeGoals : htAwayGoals,
-                            awayGoals: isHome ? htAwayGoals : htHomeGoals,
-                        });
-
-                        const totalChances = allEvents.filter(e => e.text && (e.text.includes('⚽') || e.text.includes('Defesa') || e.text.includes('salva'))).length;
-                        const goals = allEvents.filter(e => e.text && e.text.includes('⚽')).length;
-                        setMatchStats({ totalChances, goals, injuries: engine.weekInjuries.length });
-
-                        setDisplayedEvents([]);
-                        setCurrentMinute(0);
-                        setPhase('firsthalf');
-
-                        // Start live ticker after render
-                        setTimeout(() => {
-                            const firstHalf = allEvents.filter(e => e.minute <= 45);
-                            startLiveTicker(allEvents, 0, 45, null);
-                        }, 300);
-                    } else {
-                        setResult({ home: team.name, away: 'Sem Jogo', homeGoals: '-', awayGoals: '-' });
-                        setPhase('fulltime');
-                    }
-                    forceUpdate();
-                }}>
-                    ⚽ INICIAR PARTIDA
-                </button>
-
-                <button className="btn btn-secondary" style={{width:'100%',marginTop:'0.5rem'}} onClick={() => changeView('dashboard')}>
-                    ← Voltar ao Dashboard
+                <button className="btn btn-secondary" style={{width:'100%',marginTop:'0.5rem',opacity:0.5,fontSize:'0.75rem'}} onClick={() => changeView('dashboard')}>
+                    Cancelar
                 </button>
             </div>
         );

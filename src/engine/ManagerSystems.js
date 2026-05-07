@@ -226,7 +226,9 @@ export function calculateSquadMoral(team) {
 
 export function applyTraining(team, trainingType) {
     const training = TRAINING_TYPES.find(t => t.id === trainingType);
-    if (!training) return { success: false, msg: "Tipo de treino inválido." };
+    if (!training) return { success: false, msg: "Tipo de treino inválido.", improvements: [] };
+
+    const improvements = [];
 
     team.squad.forEach(player => {
         // Energy
@@ -235,22 +237,38 @@ export function applyTraining(team, trainingType) {
         player.moral = Math.max(0, Math.min(100, (player.moral || 50) + training.effect.moralCost));
         // Attribute boost
         if (training.effect.attrBoost === "ALL") {
+            const boosted = [];
             ['FIS', 'DEF', 'CRI', 'FIN'].forEach(attr => {
-                player.attributes[attr] = Math.min(99, (player.attributes[attr] || 50) + training.effect.attrAmount);
+                const old = player.attributes[attr] || 50;
+                player.attributes[attr] = Math.min(99, old + training.effect.attrAmount);
+                if (player.attributes[attr] > old) boosted.push({ attr, old, now: player.attributes[attr] });
             });
+            if (boosted.length > 0) improvements.push({ name: player.name, changes: boosted });
         } else if (training.effect.attrBoost) {
             const attr = training.effect.attrBoost;
-            player.attributes[attr] = Math.min(99, (player.attributes[attr] || 50) + training.effect.attrAmount);
+            const old = player.attributes[attr] || 50;
+            player.attributes[attr] = Math.min(99, old + training.effect.attrAmount);
+            if (player.attributes[attr] > old) {
+                improvements.push({ name: player.name, changes: [{ attr, old, now: player.attributes[attr] }] });
+            }
         }
     });
 
-    // Recalculate OVR for each player
+    // Recalculate OVR
     team.squad.forEach(p => {
         const attrs = p.attributes;
         p.ovr = Math.floor((attrs.FIS + attrs.DEF + attrs.CRI + attrs.FIN + (attrs.REF || 50)) / 5);
     });
 
-    return { success: true, msg: `Treino "${training.name}" aplicado ao plantel.` };
+    const impText = improvements.slice(0, 5).map(i =>
+        `${i.name}: ${i.changes.map(c => `${c.attr} ${c.old}→${c.now}`).join(', ')}`
+    ).join(' | ');
+
+    return {
+        success: true,
+        msg: `Treino "${training.name}" aplicado.${impText ? ' 📈 ' + impText : ''}`,
+        improvements,
+    };
 }
 
 export function applyTeamTalk(team, talkId) {
