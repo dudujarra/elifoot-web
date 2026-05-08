@@ -28,6 +28,7 @@ export function MatchView() {
     const [liveModalOpen, setLiveModalOpen] = useState(false);
     const [liveSubsCount, setLiveSubsCount] = useState(0);
     const [goalBurstActive, setGoalBurstActive] = useState(false);
+    const [eventOverlay, setEventOverlay] = useState(null); // 'card'|'injury'|'sub'|'whistle'
     const logRef = useRef(null);
     const timerRef = useRef(null);
     const speedRef = useRef(200);
@@ -111,7 +112,18 @@ export function MatchView() {
                     sfx.goal();
                     setGoalBurstActive(true);
                     setTimeout(() => setGoalBurstActive(false), 1300);
-                } else if (ev.text?.includes('🟨') || ev.text?.includes('🟥')) sfx.card();
+                } else if (ev.text?.includes('🟨') || ev.text?.includes('🟥')) {
+                    sfx.card();
+                    const cls = ev.text.includes('🟥') ? 'ef-event-redcard' : 'ef-event-foul';
+                    setEventOverlay(cls);
+                    setTimeout(() => setEventOverlay(null), 1200);
+                } else if (ev.text?.includes('🤕')) {
+                    setEventOverlay('ef-event-injury');
+                    setTimeout(() => setEventOverlay(null), 1200);
+                } else if (ev.text?.includes('🔄') || ev.text?.includes('substitui')) {
+                    setEventOverlay('ef-event-sub');
+                    setTimeout(() => setEventOverlay(null), 1200);
+                }
                 eventIdx++;
                 tickerStateRef.current.eventIdx = eventIdx;
             }
@@ -380,6 +392,9 @@ export function MatchView() {
                         pointerEvents: 'none'
                     }}
                 />
+            )}
+            {eventOverlay && (
+                <div className={`ef-event-overlay ef-event-icon ${eventOverlay}`} />
             )}
             <div className="match-teams" style={{display:'flex',alignItems:'center',justifyContent:'space-around',gap:'1rem'}}>
                 <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>

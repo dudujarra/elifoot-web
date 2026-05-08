@@ -140,6 +140,145 @@
     to   { background-position: -128px 0; }
 }
 
+/* ========== EVENT SPRITES (match-events.png 4×3) ========== */
+.ef-event-icon {
+    display: inline-block;
+    width: 96px;
+    height: 96px;
+    background-image: url('/sprites/cards/match-events.png');
+    background-size: 384px 288px; /* 4×96 × 3×96 */
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+.ef-event-goal       { background-position: 0 0; }
+.ef-event-foul       { background-position: -96px 0; }
+.ef-event-injury     { background-position: -192px 0; }
+.ef-event-sub        { background-position: -288px 0; }
+.ef-event-redcard    { background-position: 0 -96px; }
+.ef-event-corner     { background-position: -96px -96px; }
+.ef-event-offside    { background-position: -192px -96px; }
+.ef-event-penalty    { background-position: -288px -96px; }
+.ef-event-save       { background-position: 0 -192px; }
+.ef-event-hattrick   { background-position: -96px -192px; }
+.ef-event-halftime   { background-position: -192px -192px; }
+.ef-event-fulltime   { background-position: -288px -192px; }
+
+/* Animated entry */
+.ef-event-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    pointer-events: none;
+    animation: ef-pop-in 200ms ease-out, ef-fade-out 300ms ease-out 900ms forwards;
+}
+
+@keyframes ef-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* ========== GLOBAL MICROINTERACTIONS ========== */
+
+/* All buttons get hover-lift unless opted out */
+button:not(.no-anim):not([disabled]):hover {
+    transform: translateY(-1px);
+    transition: transform 80ms steps(1);
+}
+button:not(.no-anim):not([disabled]):active {
+    transform: translateY(2px);
+    transition: transform 50ms steps(1);
+}
+
+/* Tooltip fade-in — apply to .tooltip class */
+.tooltip {
+    animation: ef-fade-in 150ms ease-out;
+}
+
+/* Toast/event-toast slide-down + auto fade */
+.event-toast {
+    animation: ef-slide-down 200ms ease-out, ef-fade-out 400ms ease-out 2600ms forwards;
+}
+
+/* Tab content fade-in (DashboardView) */
+.nav-tabs ~ * {
+    animation: ef-fade-in 200ms ease-out;
+}
+
+/* Card hover lift (game cards, player cards) */
+.card.interactive:hover,
+.card.clickable:hover {
+    transform: translateY(-2px);
+    transition: transform 100ms steps(1);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.5);
+}
+
+/* Stat counter pulse on update */
+.stat-value.updated {
+    animation: ef-counter 300ms steps(2) 1;
+}
+
+/* ========== POSITION ICONS (position-icons.png 4×2) ========== */
+.ef-pos-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-image: url('/sprites/positions/position-icons.png');
+    background-size: 96px 48px; /* 4×24 × 2×24 scaled */
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    vertical-align: middle;
+}
+.ef-pos-icon.GOL { background-position: 0 0; }
+.ef-pos-icon.DEF { background-position: -24px 0; }
+.ef-pos-icon.MEI { background-position: -48px 0; }
+.ef-pos-icon.ATA { background-position: -72px 0; }
+.ef-pos-icon.ZAG { background-position: 0 -24px; }
+.ef-pos-icon.LAT { background-position: -24px -24px; }
+.ef-pos-icon.VOL { background-position: -48px -24px; }
+.ef-pos-icon.PON { background-position: -72px -24px; }
+
+/* ========== TROPHY ICONS (trophy-set.png 4×2) ========== */
+.ef-trophy-icon {
+    display: inline-block;
+    width: 48px;
+    height: 64px;
+    background-image: url('/sprites/trophies/trophy-set.png');
+    background-size: 192px 128px; /* 4×48 × 2×64 scaled */
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+.ef-trophy-tier-1 { background-position: 0 0; }       /* Gold cup tier 1 */
+.ef-trophy-tier-2 { background-position: -48px 0; }   /* Silver cup tier 2 */
+.ef-trophy-tier-3 { background-position: -96px 0; }   /* Bronze cup tier 3 */
+.ef-trophy-tier-4 { background-position: -144px 0; }  /* Copper cup tier 4 */
+.ef-trophy-cup-domestic    { background-position: 0 -64px; }
+.ef-trophy-cup-continental { background-position: -48px -64px; }
+.ef-trophy-cup-secondary   { background-position: -96px -64px; }
+.ef-trophy-cup-world       { background-position: -144px -64px; }
+
+/* ========== SCORE DIGITS LED (score-digits.png 5×2) ========== */
+.ef-led-digit {
+    display: inline-block;
+    width: 32px;
+    height: 48px;
+    background-image: url('/sprites/effects/score-digits.png');
+    background-size: 160px 96px; /* 5×32 × 2×48 scaled */
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+.ef-led-digit-0 { background-position: 0 0; }
+.ef-led-digit-1 { background-position: -32px 0; }
+.ef-led-digit-2 { background-position: -64px 0; }
+.ef-led-digit-3 { background-position: -96px 0; }
+.ef-led-digit-4 { background-position: -128px 0; }
+.ef-led-digit-5 { background-position: 0 -48px; }
+.ef-led-digit-6 { background-position: -32px -48px; }
+.ef-led-digit-7 { background-position: -64px -48px; }
+.ef-led-digit-8 { background-position: -96px -48px; }
+.ef-led-digit-9 { background-position: -128px -48px; }
+
 .ef-anim-trophy-unlock {
     width: 96px;
     height: 128px;

@@ -129,7 +129,7 @@ export function SquadView() {
                                         </span>
                                     )}
                                 </td>
-                                <td><span className={`pos-badge ${p.position}`}>{p.position}</span></td>
+                                <td><span className={`pos-badge ${p.position}`}><span className={`ef-pos-icon ${p.position}`} aria-hidden="true" /> {p.position}</span></td>
                                 <td><strong>{p.ovr}</strong></td>
                                 <td className="hide-mobile" style={{ color: getEnergyColor(p.energy) }}>{p.energy}%</td>
                                 <td className="hide-mobile">{getMoralEmoji(p.moral || 50)} {(p.moral || 50)}%</td>

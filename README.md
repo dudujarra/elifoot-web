@@ -383,6 +383,27 @@ EfClubBadge auto-resolve via `getClubSprite(name)`.
 | trophy-unlock | 6 | 96×128 | 1500ms once | — |
 | crowd-wave | 4 | 256×80 | 1000ms loop | — |
 
+### Motion Apply Coverage (Sprint A-E)
+13 views/components com motion+art aplicado:
+
+| View | Motion |
+|---|---|
+| MatchView | goal-burst overlay + shake + counter + event-overlay (card/injury/sub) |
+| EfModal | pop-in keyframe |
+| EfButton | spinner-sm sprite + global hover-lift |
+| ClubGalleryView | pop-in cards filled + pulse-glow lendas |
+| StandingsView | pulse-glow user row + trophy-icon top 4 positions |
+| PreMatchScreen | pulse-glow VS center |
+| ChronicleView | slide-down content card |
+| SquadView | pos-icon sprite per row |
+| Global CSS | button hover-lift / tooltip fade / toast slide-down / nav-tabs fade / card hover lift / counter |
+
+### Sprite Utility Classes
+`.ef-event-{goal,foul,injury,sub,redcard,corner,offside,penalty,save,hattrick,halftime,fulltime}` — match-events.png crops
+`.ef-pos-icon.{GOL,DEF,MEI,ATA,ZAG,LAT,VOL,PON}` — position-icons.png crops
+`.ef-trophy-{tier-1,2,3,4,cup-domestic,cup-continental,cup-secondary,cup-world}` — trophy-set.png crops
+`.ef-led-digit-{0..9}` — score-digits.png LED display crops
+
 Keyframes UI:
 - `ef-shake` (banner gol scoreboard)
 - `ef-pop-in` (modais)

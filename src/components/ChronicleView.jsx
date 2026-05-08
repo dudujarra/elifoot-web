@@ -132,7 +132,7 @@ export function ChronicleView() {
                 </div>
             </div>
 
-            <div className="card" style={{ padding: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.85rem', lineHeight: 1.6 }}>
+            <div key={view} className="card ef-anim-slide-down" style={{ padding: '1.5rem', whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.85rem', lineHeight: 1.6 }}>
                 {content || '*Carregando crônica...*'}
             </div>
         </div>

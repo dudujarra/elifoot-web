@@ -127,10 +127,13 @@ export function StandingsView() {
                             const zoneClass = getZoneClass(pos, standings.length, activeDiv);
                             const zoneTooltip = getZoneTooltip(pos, standings.length, activeDiv);
                             const isUser = s.teamId === userTeam?.id;
-                            const rowClass = `${zoneClass} ${isUser ? 'highlight' : ''}`.trim();
+                            const rowClass = `${zoneClass} ${isUser ? 'highlight ef-anim-pulse-glow' : ''}`.trim();
                             const row = (
                                 <tr key={s.teamId} className={rowClass}>
-                                    <td>{pos}</td>
+                                    <td>
+                                        {pos <= 4 && <span className={`ef-trophy-icon ef-trophy-tier-${pos}`} style={{width:'16px',height:'20px',backgroundSize:'64px 40px',backgroundPosition:`-${(pos-1)*16}px 0`,verticalAlign:'middle',marginRight:'4px'}} aria-hidden="true" />}
+                                        {pos}
+                                    </td>
                                     <td style={{display:'flex',alignItems:'center',gap:'8px'}}>
                                         {t?.name && <EfClubBadge name={t.name} size="sm" />}
                                         <span>{t?.name || `Time ${s.teamId}`}</span>

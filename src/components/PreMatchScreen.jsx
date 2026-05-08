@@ -64,7 +64,7 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
 
                     {/* CENTER: VS */}
                     <div style={{textAlign:'center',minWidth:'80px'}}>
-                        <div style={{fontSize:'1.8rem',fontWeight:700,color:'var(--accent)'}}>VS</div>
+                        <div className="ef-anim-pulse-glow" style={{fontSize:'1.8rem',fontWeight:700,color:'var(--accent)',display:'inline-block',padding:'4px 12px',borderRadius:'4px'}}>VS</div>
                         <Tooltip content={context?.isHome ? 'Você joga em casa: +5% bilheteria, +3 moral' : 'Você joga fora: público adversário, sem boost casa'}>
                             <div style={{
                                 fontSize:'0.78rem',
