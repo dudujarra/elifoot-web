@@ -14,6 +14,7 @@ import { StyleguideView } from './components/StyleguideView';
 import { AchievementsView } from './components/AchievementsView';
 import { TutorialView } from './components/TutorialView';
 import { PressView } from './components/PressView';
+import { SaveSlotsView } from './components/SaveSlotsView';
 import { isSoundEnabled, setSoundEnabled, sfx } from './utils/sound';
 import { MonitorService } from './services/MonitorService';
 
@@ -63,6 +64,7 @@ function App() {
             case 'achievements': return <AchievementsView />;
             case 'tutorial': return <TutorialView />;
             case 'press': return <PressView />;
+            case 'saves': return <SaveSlotsView />;
             default: return <StartView />;
         }
     };

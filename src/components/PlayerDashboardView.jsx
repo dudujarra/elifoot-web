@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { OffPitchEventsDeck } from '../engine/OffPitchEventsDeck';
-import { PERSONALITIES, TRAITS_CATALOG, LIFESTYLE_CATALOG } from '../engine/PlayerCareer';
+import { PERSONALITIES, TRAITS_CATALOG, LIFESTYLE_CATALOG, SUB_ATTRIBUTES } from '../engine/PlayerCareer';
 import { EfClubBadge, EfBanner } from './ui';
 
 export function PlayerDashboardView() {
@@ -14,6 +14,7 @@ export function PlayerDashboardView() {
     const [offPitchResult, setOffPitchResult] = useState(null);
     const [mentalBreakModal, setMentalBreakModal] = useState(false);
     const [banner, setBanner] = useState(null);
+    const [showSubAttrs, setShowSubAttrs] = useState(false);
     const prevTeamIdRef = React.useRef(player?.teamId ?? null);
     const prevRetiredRef = React.useRef(player?._retired ?? false);
     const prevMotmRef = React.useRef(player?.career?.seasonMotm ?? 0);
@@ -113,6 +114,13 @@ export function PlayerDashboardView() {
 
     const handleBuyLifestyle = (itemId) => {
         const result = player.buyLifestyle(itemId);
+        setLog(result.msg);
+        forceUpdate();
+    };
+
+    const handleTrainSubAttr = (subAttr) => {
+        if (!player.trainSubAttr) return;
+        const result = player.trainSubAttr(subAttr);
         setLog(result.msg);
         forceUpdate();
     };
@@ -298,6 +306,56 @@ export function PlayerDashboardView() {
                         );
                     })}
                 </div>
+            </div>
+
+            {/* SPEC-062 Sub-Attributes Panel (16 granular) */}
+            <div className="card">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <h3 style={{ margin: 0 }}>🎯 Sub-Atributos (16 detalhados)</h3>
+                    <button
+                        className="btn btn-sm btn-secondary"
+                        onClick={() => setShowSubAttrs(!showSubAttrs)}
+                    >
+                        {showSubAttrs ? 'Ocultar' : 'Mostrar'}
+                    </button>
+                </div>
+                {showSubAttrs && player.subAttrs && (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '6px' }}>
+                        {Object.entries(SUB_ATTRIBUTES).map(([base, subs]) => (
+                            <div key={base} style={{ border: '1px solid var(--border-subtle, #2a3530)', borderRadius: '4px', padding: '6px' }}>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '4px', textTransform: 'uppercase' }}>{base}</div>
+                                {subs.map(sub => {
+                                    const lvl = player.subAttrs[sub] ?? 0;
+                                    const prog = player.subAttrProgress?.[sub] ?? 0;
+                                    return (
+                                        <div key={sub} style={{ marginBottom: '4px' }}>
+                                            <div style={{ display:'flex', justifyContent:'space-between', fontSize:'0.7rem' }}>
+                                                <span>{sub} <strong>{lvl}</strong></span>
+                                                <button
+                                                    onClick={() => handleTrainSubAttr(sub)}
+                                                    disabled={!player.canAct}
+                                                    style={{
+                                                        fontSize:'0.6rem',
+                                                        padding:'1px 6px',
+                                                        background:'var(--accent)',
+                                                        color:'#0F1A14',
+                                                        border:'none',
+                                                        borderRadius:'2px',
+                                                        cursor: player.canAct ? 'pointer' : 'not-allowed',
+                                                        opacity: player.canAct ? 1 : 0.5
+                                                    }}
+                                                >TREINAR</button>
+                                            </div>
+                                            <div style={{ height:'3px', background:'#1a2520', borderRadius:'2px', overflow:'hidden' }}>
+                                                <div style={{ height:'100%', width:`${prog}%`, background:'#6ABC3A' }} />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* SPEC-065 Loja Lifestyle — casa, carro, festas, caridade, investimentos, casamento */}

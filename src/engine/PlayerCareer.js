@@ -1,3 +1,14 @@
+// === SPEC-062 SUB-ATTRIBUTES (16 attrs in 4 groups) ===
+export const SUB_ATTRIBUTES = {
+    technique: ['dribbling', 'passing', 'shooting', 'firstTouch'],
+    pace:      ['acceleration', 'sprintSpeed', 'agility', 'balance'],
+    power:     ['strength', 'jumping', 'stamina', 'aggression'],
+    vision:    ['positioning', 'decisions', 'composure', 'leadership']
+};
+
+// All 16 sub-attrs flattened
+export const ALL_SUB_ATTRS = Object.values(SUB_ATTRIBUTES).flat();
+
 // === SPEC-065 LIFESTYLE CATALOG ===
 export const LIFESTYLE_CATALOG = {
     // Casa (Tier 1-3) — boost mood + actionSlots
@@ -87,6 +98,18 @@ export class ProPlayer {
 
         // Skill progress (0-100, ao chegar em 100 o skill sobe 1 ponto)
         this.skillProgress = { technique: 0, pace: 0, power: 0, vision: 0 };
+
+        // SPEC-062 Sub-attributes (16 attrs derived from 4 base skills)
+        this.subAttrs = {};
+        for (const [base, subs] of Object.entries(SUB_ATTRIBUTES)) {
+            const baseVal = this.skills[base];
+            subs.forEach(sub => {
+                this.subAttrs[sub] = baseVal + Math.floor(Math.random() * 10 - 5);
+                this.subAttrs[sub] = Math.max(1, Math.min(99, this.subAttrs[sub]));
+            });
+        }
+        this.subAttrProgress = {};
+        ALL_SUB_ATTRS.forEach(a => { this.subAttrProgress[a] = 0; });
 
         // Atributos do jogador no squad do time (para a Engine usar)
         this.attributes = {
@@ -192,6 +215,44 @@ export class ProPlayer {
         this.relationships.fans = Math.max(0, this.relationships.fans - 1);
 
         return { success: true, msg: `Treino de ${skill} concluído! (${this.actionSlots} ações restantes)` };
+    }
+
+    // SPEC-062 train specific sub-attribute (granular)
+    trainSubAttr(subAttr) {
+        if (!this.canAct) return { success: false, msg: "Sem ações restantes esta semana." };
+        if (this.energy < 20) return { success: false, msg: "Energia insuficiente para treinar." };
+        if (!ALL_SUB_ATTRS.includes(subAttr)) return { success: false, msg: "Atributo inválido." };
+
+        const roll = Math.random();
+        const successChance = (this.energy / 100) * 0.85;
+
+        if (roll > successChance) {
+            this.energy = Math.max(0, this.energy - 8);
+            this.actionSlots--;
+            return { success: false, msg: `Falhou no treino de ${subAttr}.` };
+        }
+
+        const xpMultiplier = PERSONALITIES[this.personality]?.trainXPMultiplier || 1.0;
+        const curLvl = this.subAttrs[subAttr] || 50;
+
+        // Exponential XP cost: levels 1-50 cheap, 96-99 legendary
+        let xpGain = 25 * xpMultiplier;
+        if (curLvl >= 51 && curLvl <= 70) xpGain *= 0.5;
+        if (curLvl >= 71 && curLvl <= 85) xpGain *= 0.25;
+        if (curLvl >= 86 && curLvl <= 95) xpGain *= 0.125;
+        if (curLvl >= 96) xpGain *= 0.05;
+        xpGain = Math.floor(xpGain);
+
+        this.subAttrProgress[subAttr] += xpGain;
+        if (this.subAttrProgress[subAttr] >= 100) {
+            this.subAttrs[subAttr] = Math.min(99, this.subAttrs[subAttr] + 1);
+            this.subAttrProgress[subAttr] = 0;
+        }
+
+        this.energy = Math.max(0, this.energy - 12);
+        this.actionSlots--;
+
+        return { success: true, msg: `Treino ${subAttr} +${xpGain} XP (${this.subAttrs[subAttr]} lvl).` };
     }
 
     rest() {
