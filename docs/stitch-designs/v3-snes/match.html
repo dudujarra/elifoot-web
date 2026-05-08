@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elifoot SNES - Match View</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pacaembu-green: #2D5A3D;
+            --pitch-green-light: #3E7C54;
+            --pitch-green-dark: #2D5A3D;
+            --snes-gray: #C0C0C0;
+            --snes-dark-gray: #808080;
+            --snes-black: #1A1A1A;
+            --bezel-light: rgba(255, 255, 255, 0.5);
+            --bezel-dark: rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            background-color: var(--snes-black);
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            image-rendering: pixelated;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .snes-bezel {
+            border: 2px solid var(--snes-black);
+            box-shadow: 
+                inset 2px 2px 0px var(--bezel-light),
+                inset -2px -2px 0px var(--bezel-dark),
+                2px 2px 0px var(--bezel-dark);
+            background: var(--snes-gray);
+            color: black;
+            padding: 8px;
+        }
+
+        .snes-panel-dark {
+            background: #222;
+            border: 2px solid #000;
+            box-shadow: inset 2px 2px 0px #444;
+            color: #fff;
+        }
+
+        .hud-scoreboard {
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 10px;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .pitch-container {
+            position: relative;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--pitch-green-light),
+                var(--pitch-green-light) 60px,
+                var(--pitch-green-dark) 60px,
+                var(--pitch-green-dark) 120px
+            );
+            border: 4px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .pitch-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid white;
+            pointer-events: none;
+        }
+
+        .center-circle {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .control-group {
+            padding: 10px;
+        }
+
+        .control-title {
+            font-size: 8px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn-snes {
+            background: var(--snes-gray);
+            border: 2px solid #000;
+            box-shadow: inset 2px 2px 0 #fff, 2px 2px 0 #444;
+            padding: 8px 4px;
+            font-size: 10px;
+            text-align: center;
+            cursor: pointer;
+            active: translate(1px, 1px);
+            active: box-shadow: inset 1px 1px 0 #444;
+        }
+
+        .btn-snes.active {
+            background: #f00;
+            color: white;
+        }
+
+        .narration-log {
+            height: 120px;
+            margin-top: 10px;
+            overflow-y: auto;
+            font-size: 10px;
+            line-height: 2;
+            padding: 10px 20px;
+        }
+
+        .event-item {
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid #444;
+        }
+
+        .event-time { color: #ffff00; }
+
+        .pixel-player {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            position: absolute;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top HUD Scoreboard -->
+    <div class="hud-scoreboard snes-bezel">
+        <div>HOME</div>
+        <div class="text-2xl">1 - 0</div>
+        <div>AWAY</div>
+        <div class="event-time">72'</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Pitch -->
+        <div class="pitch-container snes-bezel" style="background: var(--pacaembu-green); border: none;">
+            <div class="pitch-lines" style="border: 4px solid rgba(255,255,255,0.3); margin: 20px;">
+                <div class="absolute left-1/2 top-0 bottom-0 w-1 bg-white opacity-30"></div>
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-4 border-white opacity-30 rounded-full w-40 h-40"></div>
+            </div>
+            
+            <!-- Dummy Pixel Players -->
+            <div class="pixel-player" style="top: 40%; left: 45%; background: red;"></div>
+            <div class="pixel-player" style="top: 42%; left: 48%; background: blue;"></div>
+            <div class="pixel-player" style="top: 55%; left: 52%; background: red;"></div>
+            <div class="pixel-player" style="top: 30%; left: 60%; background: blue;"></div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="snes-bezel control-group">
+                <div class="control-title">Match Speed</div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="btn-snes active">1X</div>
+                    <div class="btn-snes">3X</div>
+                    <div class="btn-snes">5X</div>
+                    <div class="btn-snes">PAUSE</div>
+                </div>
+            </div>
+
+            <div class="snes-bezel control-group">
+                <div class="control-title">Tactic</div>
+                <div class="btn-snes w-full">4-3-3</div>
+            </div>
+
+            <div class="snes-bezel control-group">
+                <div class="control-title">Substitutions</div>
+                <div class="text-center text-xl">2 / 3</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Narration Log -->
+    <div class="narration-log snes-panel-dark">
+        <div class="event-item"><span class="event-time">68'</span> <span>Cartão Amarelo para Silva (HOME)</span></div>
+        <div class="event-item"><span class="event-time">70'</span> <span>Substituição: Sai Santos, Entra Oliveira</span></div>
+        <div class="event-item"><span class="event-time">72'</span> <span class="text-red-500">GOL! HOME amplia o placar!</span></div>
+        <div class="event-item opacity-50"><span class="event-time">--</span> <span>Aguardando reinício...</span></div>
+    </div>
+
+</body>
+</html>
