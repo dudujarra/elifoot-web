@@ -16,8 +16,13 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Pega mensagem do commit
-COMMIT_MSG=$(git log -1 --pretty=%B)
+# Pega mensagem do commit (do arquivo temporário que git cria)
+if [ -f .git/COMMIT_EDITMSG ]; then
+  COMMIT_MSG=$(cat .git/COMMIT_EDITMSG)
+else
+  # Fallback: último arg é a mensagem (pra scripts que usam `git commit -m "..."`)
+  COMMIT_MSG="${@: -1}"
+fi
 
 # Padrão esperado: AKITA-XXX: Descrição
 AKITA_PATTERN="^AKITA-[0-9]{3,4}:"
