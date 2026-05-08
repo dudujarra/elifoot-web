@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ELIFOOT 8-BIT MANAGER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Rubik:wght@400;500;700&amp;family=Space+Mono:wght@400;700&amp;family=Public+Sans:ital,wght@0,400;0,700;0,900;1,900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        grass: {
+                            mid: "#2D6A4F",
+                            dark: "#1B4332",
+                            light: "#52B788"
+                        },
+                        leather: "#8B5A2B",
+                        leather_dark: "#6B4226",
+                        card_y: "#FFD600",
+                        card_r: "#C62828",
+                        pitch: "#F1FAEE",
+                        stadium: "#0E1F14"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        arcade: ["'Press Start 2P'", "cursive"],
+                        headline: ["Anton", "Public Sans", "sans-serif"],
+                        body: ["Rubik", "sans-serif"],
+                        mono: ["Space Mono", "monospace"],
+                        label: ["Public Sans", "sans-serif"]
+                    }
+                }
+            }
+        }</script>
+<style>
+        .pixel-border {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+            border: 4px solid #000;
+        }
+        .pixel-border-leather {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+            border: 4px solid #8B5A2B;
+        }
+        .scanline {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+        .pitch-lines {
+            background-image: radial-gradient(circle at 50% 50%, transparent 120px, rgba(241, 250, 238, 0.05) 121px, rgba(241, 250, 238, 0.05) 123px, transparent 124px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-stadium text-pitch font-body selection:bg-card_y selection:text-stadium">
+<div class="fixed inset-0 scanline z-50 opacity-20"></div>
+<div class="flex min-h-screen overflow-x-hidden">
+<!-- SideNavBar (Desktop) -->
+<aside class="bg-stadium border-r-8 border-black w-20 hidden md:flex flex-col sticky left-0 z-40 items-center py-8"><div class="space-y-8">
+<div class="w-12 h-12 bg-black border-4 border-card_y flex items-center justify-center"><span class="material-symbols-outlined text-card_y">dashboard</span></div>
+<div class="w-12 h-12 bg-black border-4 border-pitch flex items-center justify-center opacity-50 hover:opacity-100 cursor-pointer"><span class="material-symbols-outlined text-pitch">groups</span></div>
+<div class="w-12 h-12 bg-black border-4 border-pitch flex items-center justify-center opacity-50 hover:opacity-100 cursor-pointer"><span class="material-symbols-outlined text-pitch">storefront</span></div>
+<div class="w-12 h-12 bg-black border-4 border-pitch flex items-center justify-center opacity-50 hover:opacity-100 cursor-pointer"><span class="material-symbols-outlined text-pitch">leaderboard</span></div>
+<div class="w-12 h-12 bg-black border-4 border-pitch flex items-center justify-center opacity-50 hover:opacity-100 cursor-pointer"><span class="material-symbols-outlined text-pitch">settings</span></div>
+</div></aside>
+<!-- Main Content -->
+<main class="flex-1 relative pitch-lines bg-grass-dark/20 pb-24 md:pb-8">
+<!-- TopNavBar -->
+<header class="bg-[#1B4332] dark:bg-[#0E1F14] text-[#F1FAEE] w-full top-0 sticky border-b-4 border-[#8B5A2B] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-30 flex justify-between items-center px-4 h-16">
+<div class="flex items-center gap-4">
+<h1 class="font-headline text-3xl font-black text-[#FFD600] italic">ELIFOOT 8-BIT</h1>
+<div class="hidden sm:flex bg-stadium border-2 border-leather px-3 py-1 items-center gap-2 font-mono text-sm">
+<span class="text-card_y">RODADA</span> <span>05 / 38</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-[#F1FAEE] cursor-pointer hover:bg-[#2D6A4F] p-1 rounded transition-all">calendar_today</span>
+<span class="material-symbols-outlined text-[#F1FAEE] cursor-pointer hover:bg-[#2D6A4F] p-1 rounded transition-all">payments</span>
+</div>
+<div class="w-10 h-10 bg-leather pixel-border-leather overflow-hidden">
+<img alt="Manager Avatar" class="w-full h-full object-cover" data-alt="A pixel-art style manager character with a focused expression, wearing a retro tracksuit and holding a clipboard. The character is set against a vibrant green stadium background with bright stadium lights creating a nostalgic 80s arcade aesthetic. The lighting is warm and energetic with high contrast and sharp shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlQpxZ9bXbhl6eqlC-WMffq0cNOFZW9PAo-IDzkutMseERgBg3ajYwJ45qi9IHz4W2IswSyaG4yu6OtwXFpjlWvztYImX5KL2skG2hMhGzPT83cwqEKlqoTHGpylpHyjrlqwQiy42TpFKsZEQj3Ov_ZW108Vipj5KWqu2vy0Yf-n7u-B9xv1TQTT35c5c6itf1D6oKaKn8guClnWt0K2GuhSSJCrUk-X2wEuE7JH5XGs7e8KegpEuokGUXELBqb7jjf9-GxKuSrAnj"/>
+</div>
+</div>
+</header>
+<div class="flex flex-col items-center justify-center max-w-4xl mx-auto p-4 space-y-12 py-12 font-arcade text-center">
+<div class="space-y-4">
+<p class="text-card_y text-xs animate-pulse">- SELECT YOUR TEAM -</p>
+<div class="w-64 h-64 bg-black border-[12px] border-white shadow-[0_0_20px_rgba(255,255,255,0.5)] mx-auto overflow-hidden">
+<img alt="Flamengo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uiNn0wORrL5cAQUZOUmhjUqVmNpC0hJmBZNkJzljyAQuZMp9LLZz0gugNppuGHlNsG6bH-PqABT0UwqaLKsR79f9jyTquqo-1nkZraX3Wqcix5An-_Xr2HgpeOjDy_aRJr48OrbnjC5Df0W2Y3NcGg6iSpBOoOx97noRfX4FZ40M2Kq7EmxWlfZe7cTlHaYwLMcqcHZsb3nndD52qPb032wxbHgx_vJZ9elIskjgHRlsEXu0UJTJaq7oyxa"/>
+</div>
+<h2 class="text-5xl text-card_y italic uppercase mt-6 tracking-tighter shadow-pitch">FLAMENGO</h2>
+<p class="text-lg text-pitch mt-2">SÉRIE A - BRASIL</p>
+</div>
+<div class="grid grid-cols-2 gap-8 w-full max-w-2xl">
+<div class="bg-black border-4 border-card_y p-6 space-y-6">
+<p class="text-card_y text-sm">TEAM STATS</p>
+<div class="space-y-4">
+<div class="text-left">
+<div class="flex justify-between text-[10px] mb-2"><span>ATK</span><span>88</span></div>
+<div class="h-6 bg-gray-800 border-2 border-white p-1"><div class="h-full bg-card_r w-[88%]"></div></div>
+</div>
+<div class="text-left">
+<div class="flex justify-between text-[10px] mb-2"><span>DEF</span><span>79</span></div>
+<div class="h-6 bg-gray-800 border-2 border-white p-1"><div class="h-full bg-sky-400 w-[79%]"></div></div>
+</div>
+<div class="text-left">
+<div class="flex justify-between text-[10px] mb-2"><span>MID</span><span>82</span></div>
+<div class="h-6 bg-gray-800 border-2 border-white p-1"><div class="h-full bg-grass-light w-[82%]"></div></div>
+</div>
+</div>
+</div>
+<div class="bg-black border-4 border-card_y p-6 flex flex-col justify-between">
+<p class="text-card_y text-sm">MANAGEMENT</p>
+<div class="space-y-2 text-left text-[10px] leading-loose">
+<p>SALDO: <span class="text-grass-light">R$350M</span></p>
+<p>RECORD: <span class="text-pitch">2W-1D-1L</span></p>
+<p>MORAL: <span class="text-grass-light">92%</span></p>
+<p>GOALS: <span class="text-pitch">8:4</span></p>
+</div>
+<div class="pt-4 border-t-2 border-card_y/20">
+<p class="text-[8px] text-pitch">TRUST</p>
+<div class="h-4 bg-gray-800 border-2 border-white p-0.5 mt-1"><div class="h-full bg-grass-light w-[78%]"></div></div>
+</div>
+</div>
+</div>
+<div class="w-full max-w-xl space-y-6">
+<button class="w-full bg-card_r border-[8px] border-black text-pitch p-8 text-4xl shadow-[8px_8px_0_0_#801d1d] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all">
+START MATCH
+</button>
+<p class="text-card_y text-xs animate-bounce">PRESS BUTTON TO PLAY</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl text-[8px] text-left">
+<div class="bg-black/50 p-4 border-2 border-leather">
+<p class="text-card_y mb-2">LATEST NEWS</p>
+<p class="text-card_r uppercase">! GERSON INJURED (2 WEEKS)</p>
+<p class="text-grass-light uppercase mt-1">+ ARRASCAETA UPGRADED TO 89</p>
+</div>
+<div class="bg-black/50 p-4 border-2 border-leather">
+<p class="text-card_y mb-2">FINANCIALS</p>
+<div class="flex justify-between"><span>SALARIES</span><span class="text-card_r">-15.2M</span></div>
+<div class="flex justify-between mt-1"><span>REVENUE</span><span class="text-grass-light">+35.3M</span></div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden bg-[#1B4332] dark:bg-[#0E1F14] border-t-4 border-[#8B5A2B] flex justify-around items-center h-16 px-2">
+<a class="flex flex-col items-center justify-center text-[#F1FAEE] p-1 flex-1 hover:bg-[#2D6A4F] active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label text-xs uppercase">SQUAD</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#C62828] text-[#F1FAEE] border-x-2 border-[#F1FAEE] p-1 flex-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">sports_soccer</span>
+<span class="font-label text-xs uppercase">PLAY</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#F1FAEE] p-1 flex-1 hover:bg-[#2D6A4F] active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label text-xs uppercase">MARKET</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#F1FAEE] p-1 flex-1 hover:bg-[#2D6A4F] active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label text-xs uppercase">STATS</span>
+</a>
+</nav>
+</div>
+</body></html>

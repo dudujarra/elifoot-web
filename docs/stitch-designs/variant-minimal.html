@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ELIFOOT 8-BIT MANAGER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Rubik:wght@400;500;700&amp;family=Space+Mono:wght@400;700&amp;family=Public+Sans:ital,wght@0,400;0,700;0,900;1,900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        grass: {
+                            mid: "#2D6A4F",
+                            dark: "#1B4332",
+                            light: "#52B788"
+                        },
+                        leather: "#8B5A2B",
+                        leather_dark: "#6B4226",
+                        card_y: "#FFD600",
+                        card_r: "#C62828",
+                        pitch: "#F1FAEE",
+                        stadium: "#0E1F14"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    fontFamily: {
+                        headline: ["Anton", "Public Sans", "sans-serif"],
+                        body: ["Rubik", "sans-serif"],
+                        mono: ["Space Mono", "monospace"],
+                        label: ["Public Sans", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pixel-border {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+            border: 4px solid #000;
+        }
+        .pixel-border-leather {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+            border: 4px solid #8B5A2B;
+        }
+        .scanline {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+        .pitch-lines {
+            background-image: radial-gradient(circle at 50% 50%, transparent 120px, rgba(241, 250, 238, 0.05) 121px, rgba(241, 250, 238, 0.05) 123px, transparent 124px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-stadium text-pitch font-body selection:bg-card_y selection:text-stadium">
+<div class="fixed inset-0 scanline z-50 opacity-20"></div>
+<div class="flex min-h-screen overflow-x-hidden">
+<!-- SideNavBar (Desktop) -->
+<!-- Main Content -->
+<main class="relative pitch-lines bg-grass-dark/20 pb-24 md:pb-8 w-full">
+<!-- TopNavBar -->
+<header class="bg-[#1B4332] dark:bg-[#0E1F14] text-[#F1FAEE] w-full top-0 sticky border-b-4 border-[#8B5A2B] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-30 flex justify-between items-center h-16 px-6">
+<div class="flex items-center gap-4">
+<h1 class="font-headline text-3xl font-black text-[#FFD600] italic">ELIFOOT 8-BIT</h1>
+<div class="hidden sm:flex bg-stadium border-2 border-leather px-3 py-1 items-center gap-2 font-mono text-sm">
+<span class="text-card_y">RODADA</span> <span>05 / 38</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-[#F1FAEE] cursor-pointer hover:bg-[#2D6A4F] p-1 rounded transition-all">calendar_today</span>
+<span class="material-symbols-outlined text-[#F1FAEE] cursor-pointer hover:bg-[#2D6A4F] p-1 rounded transition-all">payments</span>
+</div>
+<div class="w-10 h-10 bg-leather pixel-border-leather overflow-hidden">
+<img alt="Manager Avatar" class="w-full h-full object-cover" data-alt="A pixel-art style manager character with a focused expression, wearing a retro tracksuit and holding a clipboard. The character is set against a vibrant green stadium background with bright stadium lights creating a nostalgic 80s arcade aesthetic. The lighting is warm and energetic with high contrast and sharp shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlQpxZ9bXbhl6eqlC-WMffq0cNOFZW9PAo-IDzkutMseERgBg3ajYwJ45qi9IHz4W2IswSyaG4yu6OtwXFpjlWvztYImX5KL2skG2hMhGzPT83cwqEKlqoTHGpylpHyjrlqwQiy42TpFKsZEQj3Ov_ZW108Vipj5KWqu2vy0Yf-n7u-B9xv1TQTT35c5c6itf1D6oKaKn8guClnWt0K2GuhSSJCrUk-X2wEuE7JH5XGs7e8KegpEuokGUXELBqb7jjf9-GxKuSrAnj"/>
+</div>
+</div>
+</header>
+<div class="p-4 md:p-8 max-w-4xl mx-auto space-y-8 pb-32"><!-- Team Card -->
+<div class="bg-grass-mid p-6 pixel-border-leather relative overflow-hidden group">
+<div class="relative z-10 flex flex-col md:flex-row gap-6 items-center md:items-start">
+<div class="w-32 h-32 md:w-40 md:h-40 bg-stadium border-4 border-card_y pixel-border shrink-0 overflow-hidden">
+<img alt="Flamengo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0uiNn0wORrL5cAQUZOUmhjUqVmNpC0hJmBZNkJzljyAQuZMp9LLZz0gugNppuGHlNsG6bH-PqABT0UwqaLKsR79f9jyTquqo-1nkZraX3Wqcix5An-_Xr2HgpeOjDy_aRJr48OrbnjC5Df0W2Y3NcGg6iSpBOoOx97noRfX4FZ40M2Kq7EmxWlfZe7cTlHaYwLMcqcHZsb3nndD52qPb032wxbHgx_vJZ9elIskjgHRlsEXu0UJTJaq7oyxa"/>
+</div>
+<div class="flex-1 space-y-4 w-full text-center md:text-left">
+<div>
+<h2 class="font-headline text-4xl text-card_y italic uppercase leading-none">C.R. FLAMENGO</h2>
+<p class="font-mono text-xl text-pitch">5º LUGAR - SÉRIE A</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-stadium/40 p-4 border-2 border-leather/30">
+<div class="text-center"><p class="text-[10px] uppercase opacity-60">Saldo</p><p class="font-mono text-lg text-card_y">R$ 350.0M</p></div>
+<div class="text-center"><p class="text-[10px] uppercase opacity-60">Recorde</p><p class="font-mono text-lg">2V 1E 1D</p></div>
+<div class="text-center"><p class="text-[10px] uppercase opacity-60">Gols</p><p class="font-mono text-lg">8 : 4</p></div>
+<div class="text-center"><p class="text-[10px] uppercase opacity-60">Moral</p><p class="font-mono text-lg text-grass-light">92%</p></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Next Match -->
+<div class="bg-card_r p-6 pixel-border-leather">
+<h3 class="font-headline text-2xl text-pitch uppercase tracking-tighter border-b-2 border-pitch/30 pb-2 mb-4">PRÓXIMO JOGO</h3>
+<div class="flex flex-col md:flex-row gap-6 items-center">
+<div class="flex-1 flex justify-around items-center w-full">
+<p class="font-headline text-2xl uppercase italic">FLA</p>
+<div class="bg-stadium px-4 py-2 font-mono text-card_y font-bold text-2xl">VS</div>
+<p class="font-headline text-2xl uppercase italic opacity-70">PAL</p>
+</div>
+<button class="w-full md:w-auto px-8 bg-[#52B788] text-stadium py-4 pixel-border font-headline text-2xl uppercase tracking-tighter hover:brightness-110">JOGAR PARTIDA</button>
+</div>
+</div>
+<!-- News & Finance Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-stadium/80 p-6 pixel-border-leather">
+<h3 class="font-headline text-xl text-card_y mb-4 uppercase italic">Últimas Notícias</h3>
+<div class="space-y-4 font-mono text-sm">
+<div class="flex gap-3 border-b border-leather/20 pb-3"><span class="text-card_r material-symbols-outlined">report</span><p><span class="text-card_r">LESÃO:</span> Gerson fora por 2 semanas.</p></div>
+<div class="flex gap-3 border-b border-leather/20 pb-3"><span class="text-grass-light material-symbols-outlined">trending_up</span><p><span class="text-grass-light">TREINO:</span> Arrascaeta subiu para 89.</p></div>
+<div class="flex gap-3"><span class="text-card_y material-symbols-outlined">campaign</span><p>Olheiro reportou novos talentos.</p></div>
+</div>
+</div>
+<div class="bg-leather_dark p-6 pixel-border">
+<h3 class="font-headline text-xl text-pitch mb-4 uppercase italic">Finanças</h3>
+<table class="w-full font-mono text-xs text-left">
+<tr class="text-card_y"><th>ITEM</th><th class="text-right">VALOR</th></tr>
+<tr><td>Salários</td><td class="text-right text-card_r">-R$ 15.2M</td></tr>
+<tr><td>Receitas</td><td class="text-right text-grass-light">+R$ 35.3M</td></tr>
+</table>
+</div>
+</div>
+<!-- Playbook -->
+<div class="bg-pitch text-stadium p-6 pixel-border-leather">
+<h3 class="font-headline text-2xl mb-6 border-b-4 border-stadium pb-2 italic uppercase text-center">PLAYBOOK</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex gap-3 items-center"><span class="bg-stadium text-pitch w-6 h-6 flex items-center justify-center shrink-0">1</span><span>Mantenha o moral alto rotacionando o elenco.</span></div>
+<div class="flex gap-3 items-center"><span class="bg-stadium text-pitch w-6 h-6 flex items-center justify-center shrink-0">2</span><span>Busque um novo Goleiro (GOL) no mercado.</span></div>
+</div>
+</div></div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#1B4332] dark:bg-[#0E1F14] border-t-4 border-[#8B5A2B] flex justify-around items-center h-16 px-2">
+<a class="flex flex-col items-center justify-center text-[#F1FAEE] p-1 flex-1 hover:bg-[#2D6A4F] active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label text-xs uppercase">SQUAD</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#C62828] text-[#F1FAEE] border-x-2 border-[#F1FAEE] p-1 flex-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">sports_soccer</span>
+<span class="font-label text-xs uppercase">PLAY</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#F1FAEE] p-1 flex-1 hover:bg-[#2D6A4F] active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label text-xs uppercase">MARKET</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#F1FAEE] p-1 flex-1 hover:bg-[#2D6A4F] active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label text-xs uppercase">STATS</span>
+</a>
+</nav>
+</div>
+</body></html>
