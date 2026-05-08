@@ -26,7 +26,7 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
     const opp = context?.opponent;
 
     return (
-        <div className="prematch-screen">
+        <div className="prematch-screen ef-art-bg ef-art-locker-room">
             <div className="card" style={{padding:'1rem'}}>
                 <h3 style={{margin:'0 0 0.6rem 0'}}>⚽ Pré-Jogo</h3>
 

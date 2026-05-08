@@ -475,6 +475,62 @@ button:not(.no-anim):not([disabled]):active {
     image-rendering: pixelated;
 }
 
+.ef-art-locker-room {
+    background-image: url('/sprites/banners/locker-room.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+.ef-art-tunnel-walkout {
+    background-image: url('/sprites/banners/tunnel-walkout.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+.ef-art-press-box {
+    background-image: url('/sprites/banners/press-box.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+.ef-art-trophy-room {
+    background-image: url('/sprites/banners/trophy-room-cabinet.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+.ef-art-pitch-tactical {
+    background-image: url('/sprites/pitch-tactical-433.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+.ef-art-pitch-patterns {
+    background-image: url('/sprites/pitch-patterns-4variants.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+.ef-art-stadium-night {
+    background-image: url('/sprites/stadium-night-D-I-variants.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
 /* Atmospheric art overlay helper — dimmed background panel */
 .ef-art-bg {
     position: relative;
