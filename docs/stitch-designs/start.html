@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&amp;family=Rubik:wght@400;500;700&amp;family=Space+Mono:wght@400;700&amp;family=Anton&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#52B788",
+                        "on-primary": "#0E1F14",
+                        secondary: "#FFD600",
+                        surface: "#1B4332",
+                        "on-surface": "#F1FAEE",
+                        "surface-variant": "#2D6A4F",
+                        "on-surface-variant": "#F1FAEE",
+                        "primary-container": "#2D6A4F",
+                        "on-primary-container": "#F1FAEE",
+                        background: "#0E1F14",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "0px"
+                    },
+                    fontFamily: {
+                        headline: ["Anton", "sans-serif"],
+                        display: ["Anton", "sans-serif"],
+                        body: ["Rubik", "sans-serif"],
+                        mono: ["Space Mono", "monospace"],
+                        label: ["Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>.pixel-border {
+    box-shadow: 0 -4px 0 0 #000, 0 4px 0 0 #000, -4px 0 0 0 #000, 4px 0 0 0 #000
+    }
+.pixel-shadow {
+    box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 1)
+    }
+.pixel-shadow-active {
+    box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 1);
+    transform: translate(2px, 2px)
+    }
+.stadium-bg {
+    background-image: linear-gradient(rgba(14, 31, 20, 0.8), rgba(14, 31, 20, 0.8)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuC5_aoKOjCfItU6E4VY1Sbe5Ywb_3-VsqkOI-t5jy5BlTvfAGTIfQGuNshu7Uq0SwyhHoNZPKXpIN1cmTETlnfjjlUcTncipQGrWvgiA3Hpgpa2h8Re0ctMGAglwtRhI8cGqcOtgclz1RoT8Isbnr1mJnz_4rScxHkmiH6PPjYTTTbigrsAuaBMLGCDX656xBNo7IZhTFY1sayXgbKUAn5WC_K_sSY9Wa6hgxKmbu_yJtE2FatGy4yyGK8BXMj9Qi4uKz-8VJ1BZbs8);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }</style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex flex-col items-center justify-center stadium-bg p-4 overflow-x-hidden">
+<!-- Top AppBar (from JSON) -->
+<header class="bg-surface dark:bg-surface text-primary dark:text-primary font-headline uppercase tracking-tighter text-label-lg docked full-width top-0 border-b-4 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] fixed top-0 left-0 right-0 z-50">
+<div class="flex justify-between items-center w-full px-4 h-16 max-w-7xl mx-auto">
+<div class="font-headline text-2xl font-black text-primary italic">ELIFOOT</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-primary font-bold border-b-2 border-primary active:translate-y-1 transition-all duration-75" href="#">WEEK 12</a>
+<a class="text-on-surface-variant font-medium hover:bg-primary-container hover:text-on-primary-container active:translate-y-1 transition-all duration-75" href="#">COACH: SILVA</a>
+</nav>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:bg-primary-container p-1 active:translate-y-1 transition-all">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-primary-container p-1 active:translate-y-1 transition-all">notifications</span>
+</div>
+</div>
+</header>
+<main class="w-full max-w-2xl mt-20 mb-10 flex flex-col items-center space-y-8">
+<!-- Hero Branding -->
+<div class="text-center space-y-2">
+<h1 class="text-secondary font-headline text-7xl md:text-9xl italic tracking-tighter drop-shadow-[6px_6px_0px_rgba(0,0,0,1)] leading-none">
+                ELIFOOT
+            </h1>
+<p class="font-mono text-primary text-xl font-bold tracking-widest bg-black/50 px-4 py-1 inline-block">
+                SOCCER MANAGER RPG
+            </p>
+</div>
+<!-- Mode Selection -->
+<div class="grid grid-cols-2 gap-4 w-full px-4">
+<button class="bg-primary text-on-primary border-4 border-black p-4 flex flex-col items-center gap-2 pixel-shadow active:pixel-shadow-active transition-all group">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-headline text-xl tracking-wide">TREINADOR</span>
+</button>
+<button class="bg-surface-variant text-on-surface-variant border-4 border-black p-4 flex flex-col items-center gap-2 pixel-shadow opacity-70 hover:opacity-100 active:pixel-shadow-active transition-all group">
+<span class="material-symbols-outlined text-4xl">sports_soccer</span>
+<span class="font-headline text-xl tracking-wide">JOGADOR</span>
+</button>
+</div>
+<!-- Main Form Box -->
+<section class="w-full bg-surface-variant border-4 border-black pixel-shadow p-6 md:p-8 space-y-6 relative overflow-hidden">
+<!-- Decorative wood pattern border inner -->
+<div class="absolute inset-0 pointer-events-none border-[8px] border-black/10"></div>
+<div class="space-y-4 relative z-10">
+<!-- Name Input -->
+<div class="space-y-2">
+<label class="block font-mono text-secondary text-sm font-bold uppercase tracking-wider">NOME DO TREINADOR</label>
+<input class="w-full bg-black/40 border-4 border-black text-on-surface p-3 font-mono focus:ring-0 focus:border-primary outline-none text-lg" placeholder="EX: SILVA" type="text"/>
+</div>
+<!-- Scenario Selection -->
+<div class="space-y-2">
+<label class="block font-mono text-secondary text-sm font-bold uppercase tracking-wider">CENÁRIO</label>
+<div class="relative">
+<select class="w-full bg-black/40 border-4 border-black text-on-surface p-3 font-mono focus:ring-0 focus:border-primary outline-none appearance-none text-lg">
+<option>Sandbox Livre</option>
+<option>Gigante Caído</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">arrow_drop_down</span>
+</div>
+</div>
+<!-- Team Selection -->
+<div class="space-y-2">
+<label class="block font-mono text-secondary text-sm font-bold uppercase tracking-wider">ESCOLHER TIME</label>
+<div class="grid grid-cols-[auto_1fr] gap-4 items-center bg-black/20 p-4 border-4 border-black">
+<div class="w-16 h-16 bg-surface border-4 border-black flex items-center justify-center overflow-hidden">
+<img alt="Team Crest" class="w-full h-full object-contain" data-alt="A pixel-art football club crest featuring a classic striped pattern in green and white, designed with the chunky aesthetics of an 8-bit NES game. The icon is sharp and uses a limited color palette of deep forest green, vibrant grass green, and crisp white. The surrounding lighting is flat and bright, emphasizing the retro gaming feel and 4px border style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOWYroK9t0NglhCiWzmiwe_sdhla-yWF_IGj9W9uSiZW163VOaSHZuV7nxtYLBj64xofgdOPeMcSHnYvD5_PWv6uyEFXgCMxK03CzUQ6E8-eZVXazlemapRAXVHswrS_2Ex9c5SCUgT3Onvj5UCLTZCrPyf2DTykWLSNnaSruZxm4A18fS9Ay5YyxS_X4eQWD-A8HWdvbuNNqaysuZnpQBfyLhn1SlwiW75tdftLEKxiwCNaJTbd_Wu067mvnwTkpH1fYCseVMFJkH"/>
+</div>
+<div class="relative">
+<select class="w-full bg-black/40 border-4 border-black text-on-surface p-3 font-mono focus:ring-0 focus:border-primary outline-none appearance-none text-lg">
+<option>S.C. LISBOA</option>
+<option>MADRID F.C.</option>
+<option>LONDON UNITED</option>
+<option>MILANO AZZURRI</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Button -->
+<button class="w-full bg-primary text-on-primary border-4 border-black p-5 flex items-center justify-center gap-3 pixel-shadow hover:bg-opacity-90 active:pixel-shadow-active transition-all group">
+<span class="font-headline text-2xl tracking-widest">COMEÇAR CARREIRA</span>
+<span class="material-symbols-outlined text-3xl group-hover:translate-x-2 transition-transform">play_arrow</span>
+</button>
+</section>
+<!-- Stats Preview (Extra Flair) -->
+<div class="grid grid-cols-3 gap-4 w-full">
+<div class="bg-black/60 border-4 border-black p-3 text-center pixel-shadow">
+<div class="text-secondary font-mono text-xs mb-1">DIVISÃO</div>
+<div class="font-headline text-2xl">04</div>
+</div>
+<div class="bg-black/60 border-4 border-black p-3 text-center pixel-shadow">
+<div class="text-secondary font-mono text-xs mb-1">REPUTAÇÃO</div>
+<div class="font-headline text-2xl text-primary">★</div>
+</div>
+<div class="bg-black/60 border-4 border-black p-3 text-center pixel-shadow">
+<div class="text-secondary font-mono text-xs mb-1">ORÇAMENTO</div>
+<div class="font-headline text-2xl">5M</div>
+</div>
+</div>
+</main>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="hidden lg:flex flex-col h-full py-6 px-4 space-y-4 fixed left-0 top-16 w-64 bg-surface-container dark:bg-surface-container border-r-4 border-on-surface shadow-[4px_0px_0px_0px_rgba(0,0,0,1)] z-40">
+<div class="flex flex-col items-center gap-4 py-4 border-b-4 border-on-surface">
+<div class="w-20 h-20 bg-primary border-4 border-on-surface overflow-hidden">
+<img alt="Manager Avatar" class="w-full h-full object-cover" data-alt="A pixel-art portrait of a football manager with a confident expression, wearing a classic tracksuit and a whistle around his neck. The style is strictly 8-bit retro gaming, inspired by the NES era, with high contrast and a limited color palette of greens, browns, and whites. The background is a simple grass texture, maintaining the sports management theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvio-2ZpXYq-ACI6TU71DpgGE-fihLqX87vxpt_7blhE3XvHWVHJqDg4QUTu5eGzqyCCn-qYCcoYfU6tPUPZZMMuCszVfD4PFsMbA7h8eq_cW0VWT7ViokS11O1dRcgo6tRFkhbwFXUGH29G4ODH-dHFrJLoBVZuAAHaN8oHhdULCbXv9GAIbTSCj_8YOr6Cmqr9b030NJ77Z5n7oiY-YMQsXIrZ8psITJweyId4lf-Zefh2zynGh9NzsA5RrtoQ3LO_j-aXn8tHj-"/>
+</div>
+<div class="text-center">
+<div class="font-headline text-xl text-on-surface uppercase">MANAGER SILVA</div>
+<div class="font-mono text-xs text-primary font-bold">DIVISÃO 4</div>
+</div>
+</div>
+<nav class="flex-grow space-y-2">
+<a class="flex items-center gap-3 bg-primary text-on-primary border-4 border-on-surface p-2 active:scale-95 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-label uppercase font-bold text-label-sm">SQUAD</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant p-2 hover:bg-surface-variant hover:border-4 hover:border-on-surface active:scale-95 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label uppercase font-bold text-label-sm">MARKET</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant p-2 hover:bg-surface-variant hover:border-4 hover:border-on-surface active:scale-95 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label uppercase font-bold text-label-sm">STANDINGS</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant p-2 hover:bg-surface-variant hover:border-4 hover:border-on-surface active:scale-95 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">stadium</span>
+<span class="font-label uppercase font-bold text-label-sm">STADIUM</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant p-2 hover:bg-surface-variant hover:border-4 hover:border-on-surface active:scale-95 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label uppercase font-bold text-label-sm">HISTORY</span>
+</a>
+</nav>
+<button class="bg-primary text-on-primary border-4 border-on-surface py-4 font-headline text-lg tracking-widest hover:bg-opacity-90 active:scale-95 transition-all">
+            NEXT MATCH
+        </button>
+</aside>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full grid grid-cols-4 h-20 items-center px-1 bg-surface dark:bg-surface border-t-4 border-on-surface shadow-[0px_-4px_0px_0px_rgba(0,0,0,1)] z-50">
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-primary-container active:translate-y-1 transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-xs font-black uppercase">Squad</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-primary-container active:translate-y-1 transition-all">
+<span class="material-symbols-outlined">shopping_basket</span>
+<span class="font-label text-xs font-black uppercase">Market</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant py-1 hover:bg-primary-container active:translate-y-1 transition-all">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label text-xs font-black uppercase">Stats</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary text-on-primary border-2 border-on-surface py-1 active:translate-y-1 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_soccer</span>
+<span class="font-label text-xs font-black uppercase">Match</span>
+</div>
+</nav>
+<!-- Background Decoration -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 opacity-30 pointer-events-none">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] border-8 border-on-surface/20 rounded-full"></div>
+<div class="absolute top-0 left-0 w-full h-1/2 border-b-4 border-on-surface/20"></div>
+</div>
+</body></html>
