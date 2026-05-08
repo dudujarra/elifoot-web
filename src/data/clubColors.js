@@ -12,15 +12,27 @@
  * IP-safe: cores autênticas + iniciais ≠ clonar logo.
  */
 
-// Sprite atlas grid: cols × rows = 20 badges per sheet
+// Default sprite atlas grid (Brasil sheets)
 export const SPRITE_GRID = { cols: 5, rows: 4 };
 
-// Sprite atlas paths
+// Sprite atlas configs: each sheet has url + cols + rows
 export const SPRITE_SHEETS = {
-    a: '/sprites/clubs/spritesheet-serie-a.png',
-    b: '/sprites/clubs/spritesheet-serie-b.png',
-    c: '/sprites/clubs/spritesheet-serie-c.png',
-    d: '/sprites/clubs/spritesheet-serie-d.png'
+    // Brasil 5x4 = 20 each (80 total)
+    a:   { url: '/sprites/clubs/spritesheet-serie-a.png',  cols: 5, rows: 4 },
+    b:   { url: '/sprites/clubs/spritesheet-serie-b.png',  cols: 5, rows: 4 },
+    c:   { url: '/sprites/clubs/spritesheet-serie-c.png',  cols: 5, rows: 4 },
+    d:   { url: '/sprites/clubs/spritesheet-serie-d.png',  cols: 5, rows: 4 },
+    // Europe 5x2 = 10 each (50 total)
+    eng: { url: '/sprites/clubs/spritesheet-eng.png',      cols: 5, rows: 3 },
+    esp: { url: '/sprites/clubs/spritesheet-esp.png',      cols: 5, rows: 3 },
+    ita: { url: '/sprites/clubs/spritesheet-ita.png',      cols: 5, rows: 3 },
+    ger: { url: '/sprites/clubs/spritesheet-ger.png',      cols: 5, rows: 3 },
+    fra: { url: '/sprites/clubs/spritesheet-fra.png',      cols: 5, rows: 3 },
+    // South America 5x3 = 15 cells, 10 used (Stitch padded extras)
+    arg: { url: '/sprites/clubs/spritesheet-arg.png',      cols: 5, rows: 3 },
+    uru: { url: '/sprites/clubs/spritesheet-uru.png',      cols: 5, rows: 3 },
+    chi: { url: '/sprites/clubs/spritesheet-chi.png',      cols: 5, rows: 3 },
+    col: { url: '/sprites/clubs/spritesheet-col.png',      cols: 5, rows: 3 }
 };
 
 /**
@@ -114,7 +126,115 @@ export const CLUB_SPRITES = {
     "Portuguesa-RJ":  { sheet: 'd', col: 1, row: 3 },
     "Retrô":          { sheet: 'd', col: 2, row: 3 },
     "Iguatu":         { sheet: 'd', col: 3, row: 3 },
-    "Sousa":          { sheet: 'd', col: 4, row: 3 }
+    "Sousa":          { sheet: 'd', col: 4, row: 3 },
+
+    // ── ENG (5x2) ──
+    "Manchester City":   { sheet: 'eng', col: 0, row: 0 },
+    "Arsenal":           { sheet: 'eng', col: 1, row: 0 },
+    "Liverpool":         { sheet: 'eng', col: 2, row: 0 },
+    "Manchester United": { sheet: 'eng', col: 3, row: 0 },
+    "Chelsea":           { sheet: 'eng', col: 4, row: 0 },
+    "Tottenham":         { sheet: 'eng', col: 0, row: 1 },
+    "Newcastle":         { sheet: 'eng', col: 1, row: 1 },
+    "Aston Villa":       { sheet: 'eng', col: 2, row: 1 },
+    "West Ham":          { sheet: 'eng', col: 3, row: 1 },
+    "Brighton":          { sheet: 'eng', col: 4, row: 1 },
+
+    // ── ESP (5x2) ──
+    "Real Madrid":         { sheet: 'esp', col: 0, row: 0 },
+    "Barcelona":           { sheet: 'esp', col: 1, row: 0 },
+    "Atlético de Madrid":  { sheet: 'esp', col: 2, row: 0 },
+    "Sevilla":             { sheet: 'esp', col: 3, row: 0 },
+    "Real Sociedad":       { sheet: 'esp', col: 4, row: 0 },
+    "Real Betis":          { sheet: 'esp', col: 0, row: 1 },
+    "Villarreal":          { sheet: 'esp', col: 1, row: 1 },
+    "Athletic Bilbao":     { sheet: 'esp', col: 2, row: 1 },
+    "Valencia":            { sheet: 'esp', col: 3, row: 1 },
+    "Osasuna":             { sheet: 'esp', col: 4, row: 1 },
+
+    // ── ITA (5x2) ──
+    "Inter de Milão": { sheet: 'ita', col: 0, row: 0 },
+    "Milan":          { sheet: 'ita', col: 1, row: 0 },
+    "Juventus":       { sheet: 'ita', col: 2, row: 0 },
+    "Napoli":         { sheet: 'ita', col: 3, row: 0 },
+    "Roma":           { sheet: 'ita', col: 4, row: 0 },
+    "Lazio":          { sheet: 'ita', col: 0, row: 1 },
+    "Atalanta":       { sheet: 'ita', col: 1, row: 1 },
+    "Fiorentina":     { sheet: 'ita', col: 2, row: 1 },
+    "Bologna":        { sheet: 'ita', col: 3, row: 1 },
+    "Torino":         { sheet: 'ita', col: 4, row: 1 },
+
+    // ── GER (5x2) ──
+    "Bayern de Munique":   { sheet: 'ger', col: 0, row: 0 },
+    "Borussia Dortmund":   { sheet: 'ger', col: 1, row: 0 },
+    "RB Leipzig":          { sheet: 'ger', col: 2, row: 0 },
+    "Bayer Leverkusen":    { sheet: 'ger', col: 3, row: 0 },
+    "Eintracht Frankfurt": { sheet: 'ger', col: 4, row: 0 },
+    "Wolfsburg":           { sheet: 'ger', col: 0, row: 1 },
+    "Borussia M'gladbach": { sheet: 'ger', col: 1, row: 1 },
+    "Freiburg":            { sheet: 'ger', col: 2, row: 1 },
+    "Hoffenheim":          { sheet: 'ger', col: 3, row: 1 },
+    "Stuttgart":           { sheet: 'ger', col: 4, row: 1 },
+
+    // ── FRA (5x2) ──
+    "Paris Saint-Germain": { sheet: 'fra', col: 0, row: 0 },
+    "Marseille":           { sheet: 'fra', col: 1, row: 0 },
+    "Lyon":                { sheet: 'fra', col: 2, row: 0 },
+    "Monaco":              { sheet: 'fra', col: 3, row: 0 },
+    "Lille":               { sheet: 'fra', col: 4, row: 0 },
+    "Nice":                { sheet: 'fra', col: 0, row: 1 },
+    "Rennes":              { sheet: 'fra', col: 1, row: 1 },
+    "Lens":                { sheet: 'fra', col: 2, row: 1 },
+    "Strasbourg":          { sheet: 'fra', col: 3, row: 1 },
+    "Montpellier":         { sheet: 'fra', col: 4, row: 1 },
+
+    // ── ARG (5x2) ──
+    "Boca Juniors":       { sheet: 'arg', col: 0, row: 0 },
+    "River Plate":        { sheet: 'arg', col: 1, row: 0 },
+    "Racing":             { sheet: 'arg', col: 2, row: 0 },
+    "Independiente":      { sheet: 'arg', col: 3, row: 0 },
+    "San Lorenzo":        { sheet: 'arg', col: 4, row: 0 },
+    "Vélez Sársfield":    { sheet: 'arg', col: 0, row: 1 },
+    "Estudiantes":        { sheet: 'arg', col: 1, row: 1 },
+    "Talleres":           { sheet: 'arg', col: 2, row: 1 },
+    "Argentinos Juniors": { sheet: 'arg', col: 3, row: 1 },
+    "Lanús":              { sheet: 'arg', col: 4, row: 1 },
+
+    // ── URU (5x2) ──
+    "Peñarol":         { sheet: 'uru', col: 0, row: 0 },
+    "Nacional-URU":    { sheet: 'uru', col: 1, row: 0 },
+    "Defensor":        { sheet: 'uru', col: 2, row: 0 },
+    "Danubio":         { sheet: 'uru', col: 3, row: 0 },
+    "Wanderers":       { sheet: 'uru', col: 4, row: 0 },
+    "Liverpool-URU":   { sheet: 'uru', col: 0, row: 1 },
+    "Plaza Colonia":   { sheet: 'uru', col: 1, row: 1 },
+    "Fénix":           { sheet: 'uru', col: 2, row: 1 },
+    "Cerro Largo":     { sheet: 'uru', col: 3, row: 1 },
+    "Boston River":    { sheet: 'uru', col: 4, row: 1 },
+
+    // ── CHI (5x2) ──
+    "Colo-Colo":            { sheet: 'chi', col: 0, row: 0 },
+    "Universidad de Chile": { sheet: 'chi', col: 1, row: 0 },
+    "Universidad Católica": { sheet: 'chi', col: 2, row: 0 },
+    "Cobreloa":             { sheet: 'chi', col: 3, row: 0 },
+    "Huachipato":           { sheet: 'chi', col: 4, row: 0 },
+    "O'Higgins":            { sheet: 'chi', col: 0, row: 1 },
+    "Unión Española":       { sheet: 'chi', col: 1, row: 1 },
+    "Palestino":            { sheet: 'chi', col: 2, row: 1 },
+    "Audax Italiano":       { sheet: 'chi', col: 3, row: 1 },
+    "Everton-CHI":          { sheet: 'chi', col: 4, row: 1 },
+
+    // ── COL (5x2) ──
+    "Atlético Nacional": { sheet: 'col', col: 0, row: 0 },
+    "Millonarios":       { sheet: 'col', col: 1, row: 0 },
+    "Junior":            { sheet: 'col', col: 2, row: 0 },
+    "América de Cali":   { sheet: 'col', col: 3, row: 0 },
+    "Deportivo Cali":    { sheet: 'col', col: 4, row: 0 },
+    "Santa Fe":          { sheet: 'col', col: 0, row: 1 },
+    "Once Caldas":       { sheet: 'col', col: 1, row: 1 },
+    "Tolima":            { sheet: 'col', col: 2, row: 1 },
+    "Bucaramanga":       { sheet: 'col', col: 3, row: 1 },
+    "Medellín":          { sheet: 'col', col: 4, row: 1 }
 };
 
 /**
@@ -222,7 +342,115 @@ export const CLUB_COLORS = {
     "Portuguesa-RJ":  { primary: "#006437", secondary: "#DA020E", accent: "#FFFFFF", nickname: "Lusa Carioca",  initials: "PRJ" },
     "Retrô":          { primary: "#000000", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Fênix",         initials: "RET" },
     "Iguatu":         { primary: "#DA020E", secondary: "#FFFFFF", accent: "#000000", nickname: "Azulão",        initials: "IGU" },
-    "Sousa":          { primary: "#DA020E", secondary: "#000000", accent: "#FFFFFF", nickname: "Dinossauro",    initials: "SOU" }
+    "Sousa":          { primary: "#DA020E", secondary: "#000000", accent: "#FFFFFF", nickname: "Dinossauro",    initials: "SOU" },
+
+    // ── ENG Premier League ──
+    "Manchester City":   { primary: "#6CABDD", secondary: "#FFFFFF", accent: "#1C2C5B", nickname: "Citizens",      initials: "MCI" },
+    "Arsenal":           { primary: "#EF0107", secondary: "#FFFFFF", accent: "#063672", nickname: "Gunners",       initials: "ARS" },
+    "Liverpool":         { primary: "#C8102E", secondary: "#FFFFFF", accent: "#00B2A9", nickname: "Reds",          initials: "LIV" },
+    "Manchester United": { primary: "#DA020E", secondary: "#FBE122", accent: "#000000", nickname: "Red Devils",    initials: "MUN" },
+    "Chelsea":           { primary: "#034694", secondary: "#FFFFFF", accent: "#DBA111", nickname: "Blues",         initials: "CHE" },
+    "Tottenham":         { primary: "#FFFFFF", secondary: "#132257", accent: "#C0C0C0", nickname: "Spurs",         initials: "TOT" },
+    "Newcastle":         { primary: "#000000", secondary: "#FFFFFF", accent: "#41B6E6", nickname: "Magpies",       initials: "NEW" },
+    "Aston Villa":       { primary: "#7A003C", secondary: "#95BFE5", accent: "#FFE100", nickname: "Villans",       initials: "AVL" },
+    "West Ham":          { primary: "#7A263A", secondary: "#1BB1E7", accent: "#FFD700", nickname: "Hammers",       initials: "WHU" },
+    "Brighton":          { primary: "#0057B8", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Seagulls",      initials: "BHA" },
+
+    // ── ESP La Liga ──
+    "Real Madrid":         { primary: "#FFFFFF", secondary: "#FEBE10", accent: "#00529F", nickname: "Merengues",   initials: "RMA" },
+    "Barcelona":           { primary: "#A50044", secondary: "#004D98", accent: "#FFED02", nickname: "Blaugrana",   initials: "BAR" },
+    "Atlético de Madrid":  { primary: "#CB3524", secondary: "#FFFFFF", accent: "#272E61", nickname: "Colchoneros", initials: "ATM" },
+    "Sevilla":             { primary: "#FFFFFF", secondary: "#D71920", accent: "#000000", nickname: "Nervionenses",initials: "SEV" },
+    "Real Sociedad":       { primary: "#1F4998", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Txuri-Urdin", initials: "RSO" },
+    "Real Betis":          { primary: "#00954C", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Verdiblancos",initials: "BET" },
+    "Villarreal":          { primary: "#FFE667", secondary: "#005CB9", accent: "#000000", nickname: "Submarino",   initials: "VIL" },
+    "Athletic Bilbao":     { primary: "#EE2523", secondary: "#FFFFFF", accent: "#000000", nickname: "Leones",      initials: "ATH" },
+    "Valencia":            { primary: "#FF7F00", secondary: "#000000", accent: "#FFFFFF", nickname: "Che",         initials: "VAL" },
+    "Osasuna":             { primary: "#D91A21", secondary: "#0A346F", accent: "#FFFFFF", nickname: "Rojillos",    initials: "OSA" },
+
+    // ── ITA Serie A ──
+    "Inter de Milão":      { primary: "#0068A8", secondary: "#000000", accent: "#FFD700", nickname: "Nerazzurri",  initials: "INT" },
+    "Milan":               { primary: "#FB090B", secondary: "#000000", accent: "#FFFFFF", nickname: "Rossoneri",   initials: "MIL" },
+    "Juventus":            { primary: "#000000", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Bianconeri",  initials: "JUV" },
+    "Napoli":              { primary: "#1FB4E6", secondary: "#FFFFFF", accent: "#003C8F", nickname: "Partenopei",  initials: "NAP" },
+    "Roma":                { primary: "#8E1F2F", secondary: "#F0BC42", accent: "#FFFFFF", nickname: "Giallorossi", initials: "ROM" },
+    "Lazio":               { primary: "#87CEEB", secondary: "#FFFFFF", accent: "#A0892F", nickname: "Biancocelesti",initials: "LAZ" },
+    "Atalanta":            { primary: "#1C71B9", secondary: "#000000", accent: "#FFFFFF", nickname: "Dea",         initials: "ATA" },
+    "Fiorentina":          { primary: "#6C3082", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Viola",       initials: "FIO" },
+    "Bologna":             { primary: "#C8102E", secondary: "#1C2D5C", accent: "#FFFFFF", nickname: "Rossoblù",    initials: "BOL" },
+    "Torino":              { primary: "#8B0000", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Granata",     initials: "TOR" },
+
+    // ── GER Bundesliga ──
+    "Bayern de Munique":   { primary: "#DC052D", secondary: "#FFFFFF", accent: "#0066B2", nickname: "FCB",         initials: "BAY" },
+    "Borussia Dortmund":   { primary: "#FDE100", secondary: "#000000", accent: "#FFFFFF", nickname: "BVB",         initials: "BVB" },
+    "RB Leipzig":          { primary: "#DD1B33", secondary: "#FFFFFF", accent: "#000C40", nickname: "Roten Bullen",initials: "RBL" },
+    "Bayer Leverkusen":    { primary: "#E32221", secondary: "#000000", accent: "#FFFFFF", nickname: "Werkself",    initials: "B04" },
+    "Eintracht Frankfurt": { primary: "#E1000F", secondary: "#000000", accent: "#FFFFFF", nickname: "Adler",       initials: "SGE" },
+    "Wolfsburg":           { primary: "#65B32E", secondary: "#FFFFFF", accent: "#000000", nickname: "Wölfe",       initials: "WOB" },
+    "Borussia M'gladbach": { primary: "#FFFFFF", secondary: "#000000", accent: "#00984A", nickname: "Fohlen",      initials: "BMG" },
+    "Freiburg":            { primary: "#E32219", secondary: "#FFFFFF", accent: "#000000", nickname: "Breisgauer",  initials: "SCF" },
+    "Hoffenheim":          { primary: "#1961AC", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Kraichgauer", initials: "TSG" },
+    "Stuttgart":           { primary: "#E32219", secondary: "#FFFFFF", accent: "#000000", nickname: "Schwaben",    initials: "VFB" },
+
+    // ── FRA Ligue 1 ──
+    "Paris Saint-Germain": { primary: "#004170", secondary: "#DA020E", accent: "#FFFFFF", nickname: "Les Parisiens",initials: "PSG" },
+    "Marseille":           { primary: "#009DDC", secondary: "#FFFFFF", accent: "#FFD700", nickname: "OM",          initials: "OMA" },
+    "Lyon":                { primary: "#FFFFFF", secondary: "#DA020E", accent: "#003DA5", nickname: "Les Gones",   initials: "LYO" },
+    "Monaco":              { primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", nickname: "Rouge & Blanc",initials: "MON" },
+    "Lille":               { primary: "#DA0000", secondary: "#003DA5", accent: "#FFFFFF", nickname: "Dogues",      initials: "LIL" },
+    "Nice":                { primary: "#C8102E", secondary: "#000000", accent: "#FFFFFF", nickname: "Aiglons",     initials: "NCE" },
+    "Rennes":              { primary: "#DA0000", secondary: "#000000", accent: "#FFFFFF", nickname: "Rouge & Noir",initials: "REN" },
+    "Lens":                { primary: "#FFD700", secondary: "#DA0000", accent: "#000000", nickname: "Sang & Or",   initials: "LEN" },
+    "Strasbourg":          { primary: "#1056A3", secondary: "#FFFFFF", accent: "#000000", nickname: "Racing",      initials: "STR" },
+    "Montpellier":         { primary: "#0066B2", secondary: "#F58220", accent: "#FFFFFF", nickname: "La Paillade", initials: "MHS" },
+
+    // ── ARG Liga Profesional ──
+    "Boca Juniors":        { primary: "#002F69", secondary: "#FFD700", accent: "#FFFFFF", nickname: "Xeneizes",    initials: "BOC" },
+    "River Plate":         { primary: "#FFFFFF", secondary: "#DA020E", accent: "#000000", nickname: "Millonarios", initials: "RIV" },
+    "Racing":              { primary: "#6CACE4", secondary: "#FFFFFF", accent: "#000000", nickname: "Academia",    initials: "RAC" },
+    "Independiente":       { primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", nickname: "Diablo Rojo", initials: "IND" },
+    "San Lorenzo":         { primary: "#002F69", secondary: "#C8102E", accent: "#FFFFFF", nickname: "Cuervo",      initials: "SLO" },
+    "Vélez Sársfield":     { primary: "#FFFFFF", secondary: "#003DA5", accent: "#000000", nickname: "Fortín",      initials: "VEL" },
+    "Estudiantes":         { primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", nickname: "Pincharratas",initials: "EST" },
+    "Talleres":            { primary: "#00549F", secondary: "#FFFFFF", accent: "#000000", nickname: "Matador",     initials: "TAL" },
+    "Argentinos Juniors":  { primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", nickname: "Bicho",       initials: "AGJ" },
+    "Lanús":               { primary: "#762737", secondary: "#FFFFFF", accent: "#000000", nickname: "Granate",     initials: "LAN" },
+
+    // ── URU Primera ──
+    "Peñarol":             { primary: "#FFCD00", secondary: "#000000", accent: "#FFFFFF", nickname: "Aurinegro",   initials: "PEN" },
+    "Nacional-URU":        { primary: "#FFFFFF", secondary: "#003DA5", accent: "#DA020E", nickname: "Bolso",       initials: "NAC" },
+    "Defensor":            { primary: "#BB252B", secondary: "#003DA5", accent: "#FFFFFF", nickname: "Violeta",     initials: "DEF" },
+    "Danubio":             { primary: "#DA020E", secondary: "#000000", accent: "#FFFFFF", nickname: "Franja",      initials: "DAN" },
+    "Wanderers":           { primary: "#000000", secondary: "#FFFFFF", accent: "#C0C0C0", nickname: "Bohemios",    initials: "WAN" },
+    "Liverpool-URU":       { primary: "#000000", secondary: "#003DA5", accent: "#FFCD00", nickname: "Negriazul",   initials: "LVU" },
+    "Plaza Colonia":       { primary: "#FFCD00", secondary: "#000000", accent: "#FFFFFF", nickname: "Patablanca",  initials: "PLA" },
+    "Fénix":               { primary: "#4B0082", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Albivioleta", initials: "FEX" },
+    "Cerro Largo":         { primary: "#008000", secondary: "#000000", accent: "#FFFFFF", nickname: "Arachán",     initials: "CER" },
+    "Boston River":        { primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", nickname: "Sastre",      initials: "BOR" },
+
+    // ── CHI ──
+    "Colo-Colo":           { primary: "#FFFFFF", secondary: "#000000", accent: "#FFD700", nickname: "Cacique",     initials: "COL" },
+    "Universidad de Chile":{ primary: "#003DA5", secondary: "#DA020E", accent: "#FFFFFF", nickname: "Azules",       initials: "UCH" },
+    "Universidad Católica":{ primary: "#002F69", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Cruzados",    initials: "UCA" },
+    "Cobreloa":            { primary: "#FF6600", secondary: "#FFFFFF", accent: "#000000", nickname: "Loínos",      initials: "CBL" },
+    "Huachipato":          { primary: "#000000", secondary: "#0098D7", accent: "#FFFFFF", nickname: "Acereros",    initials: "HUA" },
+    "O'Higgins":           { primary: "#87CEEB", secondary: "#000000", accent: "#FFFFFF", nickname: "Celeste",     initials: "OHI" },
+    "Unión Española":      { primary: "#C8102E", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Furia Roja",  initials: "UNE" },
+    "Palestino":           { primary: "#BB252B", secondary: "#008000", accent: "#FFFFFF", nickname: "Árabes",      initials: "PAL" },
+    "Audax Italiano":      { primary: "#006400", secondary: "#FFFFFF", accent: "#DA020E", nickname: "Tanos",       initials: "AUD" },
+    "Everton-CHI":         { primary: "#003DA5", secondary: "#FFD700", accent: "#FFFFFF", nickname: "Ruleteros",   initials: "EVR" },
+
+    // ── COL Categoría Primera A ──
+    "Atlético Nacional":   { primary: "#006837", secondary: "#FFFFFF", accent: "#000000", nickname: "Verdolaga",   initials: "NAC" },
+    "Millonarios":         { primary: "#003DA5", secondary: "#FFFFFF", accent: "#FFD700", nickname: "Embajadores", initials: "MIL" },
+    "Junior":              { primary: "#C8102E", secondary: "#FFFFFF", accent: "#003DA5", nickname: "Tiburones",   initials: "JUN" },
+    "América de Cali":     { primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", nickname: "Diablos Rojos",initials: "AME" },
+    "Deportivo Cali":      { primary: "#006837", secondary: "#FFFFFF", accent: "#000000", nickname: "Azucareros",  initials: "DCL" },
+    "Santa Fe":            { primary: "#C8102E", secondary: "#FFFFFF", accent: "#000000", nickname: "Cardenales",  initials: "STF" },
+    "Once Caldas":         { primary: "#FFFFFF", secondary: "#000000", accent: "#C8102E", nickname: "Albo",        initials: "ONC" },
+    "Tolima":              { primary: "#C8102E", secondary: "#FFD700", accent: "#FFFFFF", nickname: "Pijao",       initials: "TOL" },
+    "Bucaramanga":         { primary: "#FFD700", secondary: "#003DA5", accent: "#FFFFFF", nickname: "Leopardos",   initials: "BUC" },
+    "Medellín":            { primary: "#003DA5", secondary: "#C8102E", accent: "#FFFFFF", nickname: "Poderoso",    initials: "MED" }
 };
 
 /**

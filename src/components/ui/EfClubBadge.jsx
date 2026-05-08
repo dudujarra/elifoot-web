@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import { getClubColors, getClubSprite, SPRITE_SHEETS, SPRITE_GRID } from '../../data/clubColors';
+import { getClubColors, getClubSprite, SPRITE_SHEETS } from '../../data/clubColors';
 
 const SIZE_PX = {
     sm: 24,
@@ -84,15 +84,16 @@ export function EfClubBadge({
  * Cell height = 1/rows of full sheet.
  */
 function SpriteBadge({ sprite, px }) {
-    const sheetUrl = SPRITE_SHEETS[sprite.sheet];
-    const { cols, rows } = SPRITE_GRID;
+    const sheetCfg = SPRITE_SHEETS[sprite.sheet];
+    if (!sheetCfg) return null;
+    const { url, cols, rows } = sheetCfg;
 
     return (
         <div
             style={{
                 width: px,
                 height: px,
-                backgroundImage: `url('${sheetUrl}')`,
+                backgroundImage: `url('${url}')`,
                 backgroundSize: `${px * cols}px ${px * rows}px`,
                 backgroundPosition: `-${sprite.col * px}px -${sprite.row * px}px`,
                 backgroundRepeat: 'no-repeat',

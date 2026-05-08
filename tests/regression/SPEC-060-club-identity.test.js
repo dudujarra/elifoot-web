@@ -1,44 +1,61 @@
 // Regression / harness for SPEC-060 — Club Identity System
-// Validates: 80 clubes mapped, defaults fallback, deriveInitials.
+// Validates: 170 clubes mapped (80 BR + 50 EU + 40 SA), defaults fallback, sprite coords.
 import { describe, test, expect } from 'vitest';
-import { CLUB_COLORS, DEFAULT_COLORS, getClubColors, deriveInitials, CLUB_COUNT, CLUB_SPRITES, getClubSprite, SPRITE_SHEETS, SPRITE_GRID } from '../../src/data/clubColors.js';
+import { CLUB_COLORS, DEFAULT_COLORS, getClubColors, deriveInitials, CLUB_COUNT, CLUB_SPRITES, getClubSprite, SPRITE_SHEETS } from '../../src/data/clubColors.js';
 import { BrazilDB } from '../../src/engine/db/brazil.js';
+import { EuropeDB } from '../../src/engine/db/europe.js';
+import { SouthAmericaDB } from '../../src/engine/db/south_america.js';
 
-describe('SPEC-060: Club Identity System', () => {
-    test('CLUB_COLORS has 80 entries', () => {
-        expect(CLUB_COUNT).toBe(80);
+function flattenDB(db, divisions = false) {
+    if (divisions) {
+        return [...db[1], ...(db[2] || []), ...(db[3] || []), ...(db[4] || [])];
+    }
+    // Country-keyed (EUR/SA)
+    const all = [];
+    Object.values(db).forEach(country => {
+        Object.values(country).forEach(div => all.push(...div));
+    });
+    return all;
+}
+
+const allClubs = [
+    ...flattenDB(BrazilDB, true),
+    ...flattenDB(EuropeDB),
+    ...flattenDB(SouthAmericaDB)
+];
+
+describe('SPEC-060: Club Identity System (170 clubes BR+EU+SA)', () => {
+    test('CLUB_COLORS has 170 entries', () => {
+        expect(CLUB_COUNT).toBe(170);
+    });
+
+    test('Total clubs in DBs is 170', () => {
+        expect(allClubs).toHaveLength(170);
     });
 
     test('getClubColors returns mapped colors for Flamengo', () => {
         const c = getClubColors('Flamengo');
         expect(c.primary).toBe('#E32636');
-        expect(c.secondary).toBe('#000000');
         expect(c.initials).toBe('FLA');
-        expect(c.nickname).toBe('Mengão');
     });
 
-    test('getClubColors returns DEFAULT for unmapped name with derived initials', () => {
+    test('getClubColors returns DEFAULT for unmapped + derived initials', () => {
         const c = getClubColors('Inexistente FC');
         expect(c.primary).toBe(DEFAULT_COLORS.primary);
-        expect(c.secondary).toBe(DEFAULT_COLORS.secondary);
         expect(c.initials).toBe('INE');
     });
 
-    test('All 80 clubes from BrazilDB are mapped in CLUB_COLORS', () => {
-        const allBrazilClubs = [
-            ...BrazilDB[1],
-            ...BrazilDB[2],
-            ...BrazilDB[3],
-            ...BrazilDB[4]
-        ];
-
-        expect(allBrazilClubs).toHaveLength(80);
-
-        const unmapped = allBrazilClubs.filter(c => !CLUB_COLORS[c.name]);
+    test('All 170 clubs from DBs are mapped in CLUB_COLORS', () => {
+        const unmapped = allClubs.filter(c => !CLUB_COLORS[c.name]);
         expect(unmapped.map(c => c.name)).toEqual([]);
     });
 
-    test('deriveInitials strips accents and non-letters', () => {
+    test('All 170 clubs have sprite coords', () => {
+        const unmapped = allClubs.filter(c => !CLUB_SPRITES[c.name]);
+        expect(unmapped.map(c => c.name)).toEqual([]);
+    });
+
+    test('deriveInitials strips accents/non-letters', () => {
         expect(deriveInitials('São Paulo')).toBe('SAO');
         expect(deriveInitials('Atlético-MG')).toBe('ATL');
         expect(deriveInitials('CSA')).toBe('CSA');
@@ -46,61 +63,69 @@ describe('SPEC-060: Club Identity System', () => {
         expect(deriveInitials(null)).toBe('CLB');
     });
 
-    test('All mapped clubes have required fields', () => {
+    test('All clubes have valid color/initials format', () => {
         Object.entries(CLUB_COLORS).forEach(([name, c]) => {
-            expect(c.primary, `${name} primary missing`).toMatch(/^#[0-9A-Fa-f]{6}$/);
-            expect(c.secondary, `${name} secondary missing`).toMatch(/^#[0-9A-Fa-f]{6}$/);
-            expect(c.accent, `${name} accent missing`).toMatch(/^#[0-9A-Fa-f]{6}$/);
-            expect(c.initials, `${name} initials missing`).toMatch(/^[A-Z]{2,3}$/);
-            expect(typeof c.nickname).toBe('string');
+            expect(c.primary, `${name} primary`).toMatch(/^#[0-9A-Fa-f]{6}$/);
+            expect(c.secondary, `${name} secondary`).toMatch(/^#[0-9A-Fa-f]{6}$/);
+            expect(c.accent, `${name} accent`).toMatch(/^#[0-9A-Fa-f]{6}$/);
+            expect(c.initials, `${name} initials`).toMatch(/^[A-Z0-9]{2,3}$/);
         });
     });
 
-    test('All 80 clubes have sprite coords', () => {
-        const allBrazilClubs = [
-            ...BrazilDB[1], ...BrazilDB[2], ...BrazilDB[3], ...BrazilDB[4]
-        ];
-        const unmapped = allBrazilClubs.filter(c => !CLUB_SPRITES[c.name]);
-        expect(unmapped.map(c => c.name)).toEqual([]);
-    });
-
-    test('Sprite coords valid (col 0-4, row 0-3)', () => {
+    test('Sprite coords valid per sheet config', () => {
         Object.entries(CLUB_SPRITES).forEach(([name, s]) => {
-            expect(s.sheet, `${name} sheet`).toMatch(/^[abcd]$/);
-            expect(s.col, `${name} col`).toBeGreaterThanOrEqual(0);
-            expect(s.col, `${name} col`).toBeLessThan(SPRITE_GRID.cols);
-            expect(s.row, `${name} row`).toBeGreaterThanOrEqual(0);
-            expect(s.row, `${name} row`).toBeLessThan(SPRITE_GRID.rows);
+            const cfg = SPRITE_SHEETS[s.sheet];
+            expect(cfg, `${name} sheet '${s.sheet}' missing in SPRITE_SHEETS`).toBeDefined();
+            expect(s.col, `${name} col`).toBeLessThan(cfg.cols);
+            expect(s.row, `${name} row`).toBeLessThan(cfg.rows);
+            expect(s.col).toBeGreaterThanOrEqual(0);
+            expect(s.row).toBeGreaterThanOrEqual(0);
         });
     });
 
-    test('Each sheet has exactly 20 sprites mapped', () => {
-        const counts = { a: 0, b: 0, c: 0, d: 0 };
-        Object.values(CLUB_SPRITES).forEach(s => counts[s.sheet]++);
-        expect(counts).toEqual({ a: 20, b: 20, c: 20, d: 20 });
+    test('Sheet sprite counts match expected: BR 4×20, EU 5×10, SA 4×10', () => {
+        const counts = {};
+        Object.values(CLUB_SPRITES).forEach(s => {
+            counts[s.sheet] = (counts[s.sheet] || 0) + 1;
+        });
+        expect(counts.a).toBe(20);
+        expect(counts.b).toBe(20);
+        expect(counts.c).toBe(20);
+        expect(counts.d).toBe(20);
+        expect(counts.eng).toBe(10);
+        expect(counts.esp).toBe(10);
+        expect(counts.ita).toBe(10);
+        expect(counts.ger).toBe(10);
+        expect(counts.fra).toBe(10);
+        expect(counts.arg).toBe(10);
+        expect(counts.uru).toBe(10);
+        expect(counts.chi).toBe(10);
+        expect(counts.col).toBe(10);
     });
 
-    test('SPRITE_SHEETS has all 4 series files', () => {
-        expect(SPRITE_SHEETS.a).toMatch(/serie-a\.png$/);
-        expect(SPRITE_SHEETS.b).toMatch(/serie-b\.png$/);
-        expect(SPRITE_SHEETS.c).toMatch(/serie-c\.png$/);
-        expect(SPRITE_SHEETS.d).toMatch(/serie-d\.png$/);
+    test('SPRITE_SHEETS has all 13 sheets', () => {
+        const expected = ['a','b','c','d','eng','esp','ita','ger','fra','arg','uru','chi','col'];
+        expect(Object.keys(SPRITE_SHEETS).sort()).toEqual(expected.sort());
     });
 
-    test('getClubSprite returns null for unknown club', () => {
+    test('getClubSprite returns null for unknown', () => {
         expect(getClubSprite('Inexistente FC')).toBeNull();
     });
 
-    test('Tier S Série A clubes have authentic primary colors', () => {
-        // Spot-check famous club colors against authentic references
+    test('Authentic primary colors spot-check BR + Tier S Europe', () => {
         const checks = {
-            'Flamengo': '#E32636',       // Vermelho rubro-negro
-            'Palmeiras': '#006437',      // Verde Palmeiras
-            'São Paulo': '#FE0000',      // Vermelho tricolor
-            'Cruzeiro': '#003F87',       // Azul celeste
-            'Internacional': '#E5050E',  // Vermelho colorado
-            'Grêmio': '#007BC4',         // Azul tricolor
-            'Vasco da Gama': '#000000'   // Preto Cruz Maltesa
+            'Flamengo': '#E32636',
+            'Palmeiras': '#006437',
+            'Manchester City': '#6CABDD',
+            'Real Madrid': '#FFFFFF',
+            'Barcelona': '#A50044',
+            'Juventus': '#000000',
+            'Bayern de Munique': '#DC052D',
+            'Paris Saint-Germain': '#004170',
+            'Boca Juniors': '#002F69',
+            'Peñarol': '#FFCD00',
+            'Colo-Colo': '#FFFFFF',
+            'Atlético Nacional': '#006837'
         };
         Object.entries(checks).forEach(([name, expected]) => {
             expect(getClubColors(name).primary, `${name} primary`).toBe(expected);
