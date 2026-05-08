@@ -4,6 +4,33 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [feat] v1.6 — Monitor System (2026-05-08)
+
+- `src/services/MonitorService.js`:
+  - 4 categorias: bug / gameplay / feedback / note
+  - 4 severities: critical / error / warning / info
+  - Auto-capture window.onerror + unhandledrejection
+  - Methods: recordBug, recordGameplay, recordFeedback, recordNote
+  - Singleton pattern (getInstance)
+  - Storage localStorage `elifoot_monitor` (separado do save)
+  - FIFO cap 500 entries
+  - exportJSON + getStats + getByCategory
+- `src/components/MonitorView.jsx`:
+  - View `monitor` (botão 📊 no header)
+  - Filter por categoria
+  - Stats summary
+  - Export JSON download
+  - Clear all (com confirm)
+  - Stack traces collapsible
+- `src/components/FloatingBugButton.jsx`:
+  - Botão 🐛 sempre visível canto inferior direito
+  - Modal com 3 categorias (bug/feedback/note)
+  - Submit + auto-close 1.5s confirm
+- `src/App.jsx` wires monitor + install global handlers
+- `tests/specs/SPEC-MonitorService.test.js`: 14 unit tests
+- 502 tests passing (488 + 14 new)
+- Build: 43.28 KB CSS / 469.74 KB JS
+
 ### [feat] v1.0.7 — Camada 2 Foundation (AKITA-050) (2026-05-08)
 
 - `src/data/eventTemplates.js`: **66 templates handwritten** em 15 categorias de eventos

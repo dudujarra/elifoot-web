@@ -8,10 +8,16 @@ import { SquadView } from './components/SquadView';
 import { MarketView } from './components/MarketView';
 import { StandingsView } from './components/StandingsView';
 import { MatchView } from './components/MatchView';
+import { MonitorView } from './components/MonitorView';
+import { FloatingBugButton } from './components/FloatingBugButton';
 import { isSoundEnabled, setSoundEnabled, sfx } from './utils/sound';
+import { MonitorService } from './services/MonitorService';
+
+// Install global error handlers (idempotente)
+MonitorService.getInstance().install();
 
 function App() {
-    const { gameState, getEngine, saveGame, resetGame } = useGame();
+    const { gameState, getEngine, saveGame, resetGame, changeView } = useGame();
     const [soundOn, setSoundOn] = useState(isSoundEnabled());
     const [savedToast, setSavedToast] = useState(false);
     // Tri-state theme: modern → 8bit → 32bit → modern (cycle)
@@ -48,6 +54,7 @@ function App() {
             case 'squad': return <SquadView />;
             case 'market': return <MarketView />;
             case 'standings': return <StandingsView />;
+            case 'monitor': return <MonitorView />;
             default: return <StartView />;
         }
     };
@@ -115,6 +122,14 @@ function App() {
                         </button>
                         <button
                             className="btn btn-sm btn-secondary"
+                            onClick={() => changeView?.('monitor')}
+                            title="Monitor (bugs/gameplay/feedback)"
+                            style={{padding:'0.25rem 0.55rem'}}
+                        >
+                            📊
+                        </button>
+                        <button
+                            className="btn btn-sm btn-secondary"
                             onClick={handleReset}
                             title="Resetar carreira"
                             style={{padding:'0.25rem 0.55rem'}}
@@ -130,6 +145,7 @@ function App() {
                 </header>
             )}
             {renderView()}
+            <FloatingBugButton />
         </>
     );
 }
