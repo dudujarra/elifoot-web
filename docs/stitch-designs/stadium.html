@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ELIFOOT - Stadium Upgrade</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Rubik:wght@400;500;700&amp;family=Space+Mono:wght@400;700&amp;family=Public+Sans:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              grass: {
+                mid: "#2D6A4F",
+                dark: "#1B4332",
+                light: "#52B788"
+              },
+              leather: {
+                ball: "#8B5A2B",
+                stands: "#6B4226"
+              },
+              cards: {
+                yellow: "#FFD600",
+                red: "#C62828"
+              },
+              stadium: {
+                night: "#0E1F14"
+              },
+              line: "#F1FAEE"
+            },
+            borderRadius: {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            fontFamily: {
+                    "headline": ["Anton", "Public Sans"],
+                    "display": ["Public Sans"],
+                    "body": ["Rubik"],
+                    "label": ["Public Sans"],
+                    "mono": ["Space Mono"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .pixel-border {
+            box-shadow: 
+                0 -4px 0 0 #000,
+                0 4px 0 0 #000,
+                -4px 0 0 0 #000,
+                4px 0 0 0 #000;
+        }
+        .pixel-border-white {
+            box-shadow: 
+                0 -4px 0 0 #F1FAEE,
+                0 4px 0 0 #F1FAEE,
+                -4px 0 0 0 #F1FAEE,
+                4px 0 0 0 #F1FAEE;
+        }
+        .pixel-shadow {
+            box-shadow: 4px 4px 0 0 rgba(0,0,0,1);
+        }
+        .pixel-shadow-active {
+            box-shadow: 0 0 0 0 rgba(0,0,0,1);
+            transform: translate(4px, 4px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-[#0E1F14] text-[#F1FAEE] font-body min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-[#2D6A4F] dark:bg-[#1B4332] border-b-4 border-[#1B4332] shadow-[0_4px_0_0_rgba(0,0,0,1)]">
+<div class="flex items-center gap-4">
+<span class="font-headline text-3xl italic text-[#FFD600] drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]">ELIFOOT</span>
+</div>
+<div class="flex items-center gap-8">
+<div class="flex flex-col items-end">
+<span class="font-mono text-[#FFD600] font-bold text-xl">$2.5M</span>
+<span class="font-mono text-xs opacity-80 uppercase tracking-widest">Week 12</span>
+</div>
+<div class="flex items-center gap-3 bg-[#1B4332] p-2 border-2 border-black pixel-shadow">
+<span class="material-symbols-outlined text-[#F1FAEE]">account_circle</span>
+<span class="font-headline text-sm uppercase">Manager Avatar</span>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-24 pb-8 bg-[#2D6A4F] dark:bg-[#1B4332] w-64 border-r-4 border-[#1B4332] shadow-[4px_0_0_0_rgba(0,0,0,1)] z-40 hidden md:flex">
+<div class="px-6 mb-8">
+<div class="w-16 h-16 bg-[#F1FAEE] mb-2 pixel-border mx-auto flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A pixel-art football club crest featuring a shield with minimalist green and white stripes. The design is in a classic 8-bit NES style with thick black outlines and vibrant flat colors. It is set against a dark stadium background to maintain the ELIFOOT aesthetic of vintage sports management games." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0VdsOHVxpFTEWodbGdFFuTAGO5rPyoy9hryf6X4JrNQzCGz-V5ywF2BdE084v1T4PD4Zu-zHrDpM-q77pu3wEhXv0QOCsXo-0i4aWBB2O3metrFFMZq-MyvmfiokGOVZ-qfoYeGhuM3gI5HuSz4J8kBnfdIrBpZU8KFOcGtJr3opvpCsM9O-4IgluRN0zw6QMDxm4sBMcd-Zeomh9LFr8eGKhHIJkBP365fh-IrI1uMQNsiMkjD_4ZmURlJvquV5qSb8dpMabLsxg"/>
+</div>
+<h2 class="font-headline text-xl text-[#F1FAEE] text-center">ELIFOOT FC</h2>
+<p class="text-xs text-center opacity-70">Serie A</p>
+</div>
+<nav class="flex-grow flex flex-col gap-2">
+<a class="flex items-center gap-3 px-6 py-3 font-body font-bold uppercase text-sm text-[#F1FAEE] opacity-80 hover:opacity-100 m-2 hover:bg-[#1B4332] hover:scale-105 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">groups</span> Squad
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 font-body font-bold uppercase text-sm text-[#F1FAEE] opacity-80 hover:opacity-100 m-2 hover:bg-[#1B4332] hover:scale-105 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">shopping_cart</span> Market
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 font-body font-bold uppercase text-sm text-[#F1FAEE] opacity-80 hover:opacity-100 m-2 hover:bg-[#1B4332] hover:scale-105 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">leaderboard</span> Standings
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 font-body font-bold uppercase text-sm bg-[#52B788] text-[#1B4332] border-4 border-[#0E1F14] shadow-[4px_4px_0_0_rgba(0,0,0,1)] m-2 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">stadium</span> Stadium
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 font-body font-bold uppercase text-sm text-[#F1FAEE] opacity-80 hover:opacity-100 m-2 hover:bg-[#1B4332] hover:scale-105 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined">history</span> History
+            </a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full bg-[#C62828] text-[#F1FAEE] font-headline py-3 border-4 border-black pixel-shadow active:translate-y-1 active:shadow-none transition-all uppercase tracking-widest italic">
+                Next Match
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 pb-12 px-6">
+<div class="max-w-6xl mx-auto space-y-8">
+<!-- Header Info Section -->
+<div class="bg-[#8B5A2B] border-4 border-black p-6 pixel-shadow flex flex-col md:flex-row justify-between items-center gap-4">
+<div>
+<h1 class="font-headline text-4xl text-[#F1FAEE] uppercase tracking-tighter drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">ESTADIO ARENA REGIONAL</h1>
+<div class="flex gap-4 mt-2">
+<span class="bg-[#1B4332] text-[#FFD600] px-3 py-1 font-mono text-sm border-2 border-black">NIVEL 2/5</span>
+<span class="flex items-center gap-1 font-mono text-sm uppercase"><span class="material-symbols-outlined text-sm">groups</span> 15.000</span>
+<span class="flex items-center gap-1 font-mono text-sm uppercase"><span class="material-symbols-outlined text-sm">payments</span> R$30</span>
+</div>
+</div>
+<div class="hidden lg:block">
+<img class="border-4 border-black pixel-shadow" data-alt="A side-view pixel-art illustration of a mid-sized football stadium called Arena Regional. The stands are made of brown wood and green metal structures, with tiny pixelated fans in the seats. The style is strictly 8-bit retro, using a limited color palette of grass green and leather brown, with sharp pixel rendering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEch3FggWxJyIdnWwai21qCKXb8NoVIdz-Ql2Kvx2BWWRA_NP6espqgZhN-xSrCiuhGV0pmRM55QpfVWQA-l6o6cRrR87OID7wT0rm6HG-9w282m-LVjaGkQEVmMrwHBOh-yDm_H7HTrJqU7cdmMT_JidvlaHMevh-9syjb_fclP0f9fOOPbzI5a8ujL_RbIgkS8ct77fFGMFawmWmXSgWJasB0xkIpdXJbQoZ0T9r9vYG9UdMdxUFNc32nKTCuqHlF_eI98tzAJnq"/>
+</div>
+</div>
+<!-- Stadium Progression Tracker -->
+<section class="bg-[#1B4332] border-4 border-black p-8 pixel-shadow">
+<h3 class="font-headline text-xl text-[#F1FAEE] mb-10 uppercase tracking-widest text-center">Progresso do Estádio</h3>
+<div class="relative flex justify-between items-center max-w-4xl mx-auto">
+<!-- Progress Line -->
+<div class="absolute h-2 w-full bg-black top-1/2 -translate-y-1/2"></div>
+<div class="absolute h-2 w-[25%] bg-[#FFD600] top-1/2 -translate-y-1/2"></div>
+<!-- Points -->
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="w-12 h-12 bg-[#52B788] border-4 border-black flex items-center justify-center pixel-shadow">
+<span class="material-symbols-outlined text-[#1B4332]">house</span>
+</div>
+<span class="font-mono text-[10px] uppercase font-bold text-[#F1FAEE]">Municipal</span>
+<span class="text-[8px] bg-black px-2 py-0.5 text-white">Lv1</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="w-16 h-16 bg-[#FFD600] border-4 border-black flex items-center justify-center pixel-shadow scale-110">
+<span class="material-symbols-outlined text-[#1B4332]" style="font-variation-settings: 'FILL' 1;">stadium</span>
+</div>
+<span class="font-mono text-[10px] uppercase font-bold text-[#FFD600]">Regional</span>
+<span class="text-[8px] bg-[#FFD600] px-2 py-0.5 text-black font-bold">Lv2</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 opacity-40 grayscale">
+<div class="w-12 h-12 bg-[#F1FAEE] border-4 border-black flex items-center justify-center pixel-shadow">
+<span class="material-symbols-outlined text-[#1B4332]">location_city</span>
+</div>
+<span class="font-mono text-[10px] uppercase font-bold text-[#F1FAEE]">Moderno</span>
+<span class="text-[8px] bg-black px-2 py-0.5 text-white">Lv3</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 opacity-40 grayscale">
+<div class="w-12 h-12 bg-[#F1FAEE] border-4 border-black flex items-center justify-center pixel-shadow">
+<span class="material-symbols-outlined text-[#1B4332]">stars</span>
+</div>
+<span class="font-mono text-[10px] uppercase font-bold text-[#F1FAEE]">Premium</span>
+<span class="text-[8px] bg-black px-2 py-0.5 text-white">Lv4</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 opacity-40 grayscale">
+<div class="w-12 h-12 bg-[#F1FAEE] border-4 border-black flex items-center justify-center pixel-shadow">
+<span class="material-symbols-outlined text-[#1B4332]">trophy</span>
+</div>
+<span class="font-mono text-[10px] uppercase font-bold text-[#F1FAEE]">Templo</span>
+<span class="text-[8px] bg-black px-2 py-0.5 text-white">Lv5</span>
+</div>
+</div>
+</section>
+<!-- Grid Layout for Cards -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Upgrade Card (Center/Primary) -->
+<div class="lg:col-span-2 bg-[#8B5A2B] border-4 border-black p-8 pixel-shadow relative overflow-hidden">
+<div class="absolute top-0 right-0 bg-[#FFD600] text-black px-4 py-2 font-headline uppercase text-sm border-l-4 border-b-4 border-black italic">
+                        RECOMENDADO
+                    </div>
+<h2 class="font-headline text-3xl text-[#F1FAEE] mb-6 uppercase border-b-4 border-black pb-2 inline-block">UPGRADE PARA ESTADIO MODERNO</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<div class="flex justify-between items-center border-b-2 border-black pb-2">
+<span class="font-body font-bold text-[#F1FAEE] opacity-80">Custo:</span>
+<span class="font-mono font-bold text-[#FFD600]">R$40M</span>
+</div>
+<div class="flex justify-between items-center border-b-2 border-black pb-2">
+<span class="font-body font-bold text-[#F1FAEE] opacity-80">Nova Capacidade:</span>
+<span class="font-mono font-bold text-[#F1FAEE]">35.000</span>
+</div>
+<div class="flex justify-between items-center border-b-2 border-black pb-2">
+<span class="font-body font-bold text-[#F1FAEE] opacity-80">Novo Ingresso:</span>
+<span class="font-mono font-bold text-[#F1FAEE]">R$40</span>
+</div>
+<div class="flex justify-between items-center border-b-2 border-black pb-2">
+<span class="font-body font-bold text-[#F1FAEE] opacity-80">Receita Estimada:</span>
+<span class="font-mono font-bold text-[#52B788]">+120%</span>
+</div>
+</div>
+<div class="flex flex-col justify-center items-center gap-6">
+<div class="w-full h-32 bg-[#2D6A4F] border-4 border-black flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A pixel-art blueprint of a level 3 football stadium with modern glass enclosures and expanded grandstands. The architectural drawing is rendered in a classic 8-bit style with neon green highlights on dark green backgrounds, suggesting a high-tech upgrade in a retro-gaming context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5egmyC8xloSuNjpfENQE8H-ov2xFz5QuMDgCVMI6Mdk-JZ84cl94H2Pwu34j1kM0hqLF0NsyRtsFBHpPnJaCvpabJHrNj3FFDEJoeT32-VBNIuY9slZt2_RcvttcmOv7YgYlwl-xu1vKP1K2TyjJznJUC44O8gFznQsoPJtU2HDUsABMPM10S6V_es7D2l3Q9s3BNcwWBumCDvDqAdiTSzUFIzsEKfEUSofMXUuSUS6XCErPleMNkRb-lA2HHg1qf8k-RPdforNja"/>
+</div>
+<button class="w-full bg-[#E67E22] hover:bg-[#D35400] text-[#F1FAEE] font-headline text-2xl py-6 border-4 border-black pixel-shadow active:translate-y-1 active:shadow-none transition-all uppercase italic tracking-tighter">
+                                UPGRADE NOW
+                            </button>
+</div>
+</div>
+</div>
+<!-- Revenue Card -->
+<div class="bg-[#1B4332] border-4 border-black p-6 pixel-shadow">
+<h3 class="font-headline text-xl text-[#FFD600] mb-6 uppercase border-b-2 border-black pb-2">RECEITAS ATUAIS</h3>
+<ul class="space-y-6">
+<li class="flex flex-col gap-1">
+<span class="text-xs uppercase font-bold opacity-60">Bilheteria:</span>
+<div class="flex justify-between items-end border-b-2 border-black border-dashed pb-1">
+<span class="font-body text-[#F1FAEE]">Venda de Ingressos</span>
+<span class="font-mono font-bold">R$450k/jogo</span>
+</div>
+</li>
+<li class="flex flex-col gap-1">
+<span class="text-xs uppercase font-bold opacity-60">Vendas VIP:</span>
+<div class="flex justify-between items-end border-b-2 border-black border-dashed pb-1">
+<span class="font-body text-[#F1FAEE]">Camarotes e Lojas</span>
+<span class="font-mono font-bold">R$150k/jogo</span>
+</div>
+</li>
+</ul>
+<div class="mt-12 bg-black/40 p-4 border-2 border-black italic text-xs text-center opacity-80">
+                        "Um estádio maior atrai mais sócios e melhora o moral do time!"
+                    </div>
+<div class="mt-6 flex justify-center">
+<img class="w-24 h-24" data-alt="A small pixel-art icon representing a stack of green dollar bills and golden coins, rendered in a chunky retro style with thick black outlines. The colors are vibrant and flat, capturing the arcade management simulator aesthetic of the 1990s." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtlGR1xWxIMQPtbJsi8n5pAeNl2y0BjIRLrAZ7eiqHQpz65tx8HUjqOdlT10ahk6bwUOpY-P-oeOTg514lreVLK4POnjSr0P1kfqgS_RaGg6iAy837YCWdImehRIi0S0fQw8fCA77wNmtwhupHrMsmgq7150zFsB3KeIonvqKgztb2ArwOe9IfMT4MRULcr0OuznAE7jmc9tVo84C4CtiQ7yqTz3_VjcFDA3ugnD_agRgXAAPV3akoT1Al28MkDmyonTZB0NQ3AjlO"/>
+</div>
+</div>
+</div>
+<!-- Footer Stats for Immersion -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+<div class="bg-[#0E1F14] border-2 border-white/20 p-4 text-center">
+<span class="block text-[10px] uppercase opacity-50">Custo Manutenção</span>
+<span class="font-mono text-[#C62828] font-bold">R$12k/mês</span>
+</div>
+<div class="bg-[#0E1F14] border-2 border-white/20 p-4 text-center">
+<span class="block text-[10px] uppercase opacity-50">Estado Gramado</span>
+<span class="font-mono text-[#52B788] font-bold">EXCELENTE</span>
+</div>
+<div class="bg-[#0E1F14] border-2 border-white/20 p-4 text-center">
+<span class="block text-[10px] uppercase opacity-50">Segurança</span>
+<span class="font-mono text-[#FFD600] font-bold">NIVEL 4</span>
+</div>
+<div class="bg-[#0E1F14] border-2 border-white/20 p-4 text-center">
+<span class="block text-[10px] uppercase opacity-50">Reputação</span>
+<span class="font-mono text-[#F1FAEE] font-bold">LOCAL</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar for Mobile -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-[#2D6A4F] flex justify-around items-center h-16 border-t-4 border-[#1B4332] shadow-[0_-4px_0_0_rgba(0,0,0,1)] px-2">
+<button class="flex flex-col items-center justify-center text-[#F1FAEE] opacity-80">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-[10px] uppercase">Squad</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#F1FAEE] opacity-80">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="text-[10px] uppercase">Market</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#FFD600] bg-[#1B4332] px-4 py-1 border-2 border-black">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">stadium</span>
+<span class="text-[10px] uppercase font-bold">Stadium</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#F1FAEE] opacity-80">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-[10px] uppercase">Table</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#F1FAEE] opacity-80">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-[10px] uppercase">Profile</span>
+</button>
+</nav>
+</body></html>
