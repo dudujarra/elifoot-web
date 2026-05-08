@@ -3,6 +3,7 @@ import { useGame } from '../context/GameContext';
 import { RealDB } from '../engine/db/index';
 import { PERSONALITIES } from '../engine/PlayerCareer';
 import { isTutorialDone } from './TutorialView';
+import { DIFFICULTY_MODES, getDifficulty, setDifficulty } from '../engine/systems/DifficultyModes';
 
 export function StartView() {
     const { startGame, changeView } = useGame();
@@ -12,6 +13,7 @@ export function StartView() {
     const [mode, setMode] = useState('manager');
     const [position, setPosition] = useState('ATA');
     const [personality, setPersonality] = useState('maverick');
+    const [difficulty, setDifficultyState] = useState(getDifficulty().id);
 
     // Build team list from RealDB
     const allTeams = [];
@@ -73,6 +75,26 @@ export function StartView() {
                         <option key={t.id} value={t.id}>{t.name} ({t.zone} - Div {t.div})</option>
                     ))}
                 </select>
+
+                {/* Difficulty selector */}
+                <div style={{ marginTop: '0.5rem' }}>
+                    <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                        DIFICULDADE
+                    </label>
+                    <div style={{ display: 'flex', gap: '0.25rem' }}>
+                        {Object.values(DIFFICULTY_MODES).map(d => (
+                            <button
+                                key={d.id}
+                                className={`mode-btn ${difficulty === d.id ? 'active' : ''}`}
+                                onClick={() => { setDifficulty(d.id); setDifficultyState(d.id); }}
+                                style={{ flex: 1, fontSize: '0.75rem' }}
+                                title={d.description}
+                            >
+                                {d.emoji} {d.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
 
                 <button id="btn-start" className="btn btn-primary" onClick={handleStart} disabled={!name.trim() || !teamId}>
                     ⚡ COMEÇAR CARREIRA

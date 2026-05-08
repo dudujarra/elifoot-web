@@ -461,6 +461,7 @@ export function DashboardView() {
                 <button className="btn btn-secondary" onClick={() => changeView('market')}>🛒 Mercado</button>
                 <button className="btn btn-secondary" onClick={() => changeView('standings')}>📊 Tabela</button>
                 <button className="btn btn-secondary" onClick={() => changeView('achievements')}>🏆 Conquistas</button>
+                <button className="btn btn-secondary" onClick={() => changeView('press')}>🎙️ Coletiva</button>
             </div>
 
             {/* Status Footer (Stitch refactor) */}
