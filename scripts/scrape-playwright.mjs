@@ -107,9 +107,9 @@ async function enrichSquad(page, squad) {
 
 async function loadClubsList() {
     const colorsRaw = fs.readFileSync(path.join(ROOT, 'src/data/clubColors.js'), 'utf-8');
-    // Extract club names from CLUB_COLORS keys
-    const matches = colorsRaw.match(/'([^']+)':\s*\{[^}]*\}/g) || [];
-    const names = matches.map(m => m.match(/'([^']+)':/)[1]).filter((v, i, a) => a.indexOf(v) === i);
+    // Extract club names from "ClubName": { ... } pattern (double quotes)
+    const matches = colorsRaw.match(/"([^"]+)":\s*\{[^}]*sheet:/g) || [];
+    const names = matches.map(m => m.match(/"([^"]+)":/)[1]).filter((v, i, a) => a.indexOf(v) === i);
     return names;
 }
 
