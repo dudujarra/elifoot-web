@@ -514,7 +514,7 @@ export class Engine {
      * Returns array of { team, player, position, ovr, value } sorted by OVR desc.
      * Filters out our own team + injured players + retired.
      */
-    scoutLeague(targetPosition = null, minOVR = 60, limit = 20) {
+    scoutLeague(targetPosition = null, minOVR = 60, limit = 20, maxAge = 29) {
         const myTeamId = this.manager?.teamId;
         const candidates = [];
         for (const team of this.teams) {
@@ -523,6 +523,8 @@ export class Engine {
                 if (player._retired || player.injury) continue;
                 if (targetPosition && player.position !== targetPosition) continue;
                 if ((player.ovr || 0) < minOVR) continue;
+                // BUG-076: filter old players — don't buy 34-year-olds
+                if ((player.age || 25) > maxAge) continue;
                 candidates.push({
                     teamId: team.id,
                     teamName: team.name,
@@ -966,57 +968,102 @@ export class Engine {
      * Also callable manually for tests / explicit season transitions.
      */
     startNewSeason() {
-        // BUG-062 fix: process season-end logic BEFORE resetting week.
-        // Bot was hitting peak position 1 but titlesWon=0 because
-        // legacy.closeSeason() was gated by seasonWeek===38 inside advance loop
-        // which never fires post-rollover (currentWeek already reset to 0).
+        // BUG-062/BUG-076: full season-end logic runs HERE — the inline `seasonWeek===38`
+        // block inside advanceWeek is dead code (startNewSeason resets currentWeek to 0
+        // BEFORE the inline check fires, so it can never reach 38).
+        // All season-end operations: titles, promo/relegation, aging, stats, awards, board.
         try {
             const team = this.getTeam(this.manager?.teamId);
-            if (team && this.legacy && this.mode === 'manager') {
+            if (team && this.mode === 'manager') {
                 const standings = this.getStandings(team.zone, team.division);
                 const pos = (standings.findIndex(s => s.teamId === team.id) + 1) || standings.length;
-                if (pos > 0 && this.managerStats) {
-                    this.legacy.closeSeason(
-                        team.name,
-                        team.division,
-                        pos,
+
+                // Legacy: titles + reputation
+                if (this.legacy && pos > 0 && this.managerStats) {
+                    const season = this.legacy.closeSeason(
+                        team.name, team.division, pos,
                         this.managerStats.wins || 0,
                         this.managerStats.draws || 0,
                         this.managerStats.losses || 0
                     );
-                    // BUG-063 fix: process promo/relegation here too
-                    if (typeof this._processPromoRelegation === 'function') {
-                        try { this._processPromoRelegation(team, standings); } catch { /* ignore */ }
-                    }
+                    this.weekEvents.push(`🏆 Temp ${this.seasonNumber}: ${season.record} (${pos}º lugar)`);
+                    if (season.title) this.weekEvents.push(`🎉 ${season.title}!`);
                 }
+
+                // BUG-076: processPromoRelegation — was checking this._processPromoRelegation
+                // (undefined method) → promo/relegation silently never ran. Use imported fn.
+                try {
+                    const changes = processPromoRelegation(
+                        this.teams, standings.map(s => s), team.zone, team.division
+                    );
+                    changes.forEach(c => {
+                        const emoji = c.action === 'promoted' ? '⬆️' : '⬇️';
+                        this.weekEvents.push(`${emoji} ${c.name} ${c.action === 'promoted' ? 'subiu' : 'caiu'} para Série ${['A','B','C','D'][c.to - 1]}`);
+                    });
+                } catch { /* defensive */ }
+
+                // Close player season stats (resets seasonGoals/seasonApps etc.)
+                team.squad.forEach(p => closeSeasonStats(p, this.seasonNumber, team.name));
+
+                // BUG-076: ageSquad was in dead inline block — players never aged.
+                // Age all players + handle retirement messages.
+                const ageEvents = ageSquad(team.squad);
+                ageEvents.forEach(e => this.weekEvents.push(e));
+
+                // Season awards
+                try {
+                    this.seasonAwards = calculateSeasonAwards(team.squad, team.name, this.seasonNumber);
+                    this.seasonAwards.forEach(a => {
+                        this.weekEvents.push(`${a.emoji} ${a.name}: ${a.player} (${a.value})`);
+                    });
+                } catch { /* ignore */ }
+
+                // Update sponsor + board for new season
+                try {
+                    this.currentSponsor = evaluateSponsor(team.division, pos);
+                    if (this.board && !this.board.isFired) {
+                        this.board = new BoardSystem(team.division, team.balance);
+                    }
+                } catch { /* ignore */ }
             }
         } catch { /* defensive — never break rollover */ }
 
         this.currentWeek = 0;
-        // BUG-043 fix: increment seasonNumber on rollover (line 776 only fires
-        // inside in-line season-end logic which guard at 583 used to skip).
         this.seasonNumber++;
-        // Reset season managerStats
         if (this.managerStats) {
             this.managerStats = { wins: 0, draws: 0, losses: 0, streak: 0 };
         }
-        // BUG-040 cascade: emergency squad replenish if any user team became
-        // critically short (<11) between seasons. triggerYouthIntake replenishes.
+        // BUG-040: emergency squad replenish if critically short (<11).
         try {
             const team = this.getTeam(this.manager?.teamId);
             if (team?.squad && team.squad.length < 11 && typeof this.triggerYouthIntake === 'function') {
                 this.triggerYouthIntake();
-                this.triggerYouthIntake(); // double call for emergency boost
+                this.triggerYouthIntake();
             }
         } catch { /* ignore */ }
-        // Re-init each tournament: regenerate fixtures, reset standings
+        // BUG-076: Re-init leagues by current team.division (handles promotions).
+        // Zone-division leagues (id = `ZONE_N`) rebuild roster from current team divisions.
+        // Cup/continental tournaments fall back to existing standings.
         this.tournaments.forEach(t => {
             try {
                 if (typeof t.init === 'function') {
-                    const teamIds = (t.standings || []).map(s => s.teamId).filter(Boolean);
+                    let teamIds;
+                    if (t.id && /_\d+$/.test(t.id)) {
+                        const lastUnder = t.id.lastIndexOf('_');
+                        const zone = t.id.substring(0, lastUnder);
+                        const div = parseInt(t.id.substring(lastUnder + 1));
+                        if (zone && !isNaN(div) && div >= 1 && div <= 4) {
+                            teamIds = this.teams
+                                .filter(tm => tm.zone === zone && tm.division === div)
+                                .map(tm => tm.id);
+                        }
+                    }
+                    if (!teamIds || teamIds.length === 0) {
+                        teamIds = (t.standings || []).map(s => s.teamId).filter(Boolean);
+                    }
                     if (teamIds.length > 0) t.init(teamIds);
                 }
-            } catch { /* defensive — don't break engine on tournament re-init failure */ }
+            } catch { /* defensive */ }
         });
     }
 
