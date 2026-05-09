@@ -337,18 +337,20 @@ export function migrateLegacyPosition(legacyPos, attrs = {}) {
         case 'LAT':
             return Math.random() < 0.5 ? 'LAD' : 'LAE';
         case 'MEI':
-        case 'VOL':
+        case 'VOL': {
             const r = Math.random();
             if (legacyPos === 'VOL' || (attrs.def ?? 50) > (attrs.atk ?? 50)) return 'VOL';
             if (r < 0.3) return 'MEC';
             if (r < 0.5) return 'MEA';
             if (r < 0.7) return 'MPD';
             return 'MPE';
-        case 'ATA':
+        }
+        case 'ATA': {
             const ra = Math.random();
             if (ra < 0.4) return 'CTA';
             if (ra < 0.7) return 'POD';
             return 'POE';
+        }
         case 'PON':
             return Math.random() < 0.5 ? 'POD' : 'POE';
         default:
