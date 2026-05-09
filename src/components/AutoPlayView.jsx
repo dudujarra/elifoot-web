@@ -135,13 +135,22 @@ export function AutoPlayView() {
 
     const handleResetAll = () => {
         if (!controllerRef.current) return;
-        if (!window.confirm('🚨 RESET TUDO: apaga Q-table + stats + memory + telemetry. Não tem volta. Continuar?')) return;
+        if (!window.confirm('🚨 RESET TUDO: apaga TUDO (Q-table + stats + save jogo + LLM). Sem volta.')) return;
         try { controllerRef.current.pause(); } catch { /* ignore */ }
         try {
             if (typeof localStorage !== 'undefined') {
+                // BUG-074: também limpar main save (elifoot_save_v1) — antes ficava
+                // game state Flamengo persistido após Reset Tudo.
                 localStorage.removeItem('elifoot_autoplay_brain');
                 localStorage.removeItem('elifoot_autoplay_state');
                 localStorage.removeItem('elifoot_llm_mode');
+                localStorage.removeItem('elifoot_save_v1');
+                localStorage.removeItem('elifoot_genetic_state');
+                // Sweep any other elifoot_* keys defensively
+                for (let i = localStorage.length - 1; i >= 0; i--) {
+                    const k = localStorage.key(i);
+                    if (k && k.startsWith('elifoot_')) localStorage.removeItem(k);
+                }
             }
         } catch { /* ignore */ }
         setTimeout(() => window.location.reload(), 100);

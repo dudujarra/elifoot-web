@@ -32,8 +32,14 @@ export function StartView() {
     };
 
     const handleAutoPlay = () => {
-        // BUG-070 + BUG-073: zone key é 'BRA' (não 'BR'), filtro retornava 0 →
-        // fallback pegava último team total (Flamengo Série A). Fix zone match.
+        // BUG-070+073+074: AutoPlay deve começar fresh Série D BRA fallen.
+        // Zone key 'BRA' (não 'BR'). Limpar save key antes start pra evitar
+        // restore old gameState (Flamengo Série A persistia após click).
+        try {
+            if (typeof localStorage !== 'undefined') {
+                localStorage.removeItem('elifoot_save_v1');
+            }
+        } catch { /* ignore */ }
         const div4Teams = allTeams.filter(t => t.zone === 'BRA' && t.div === 4);
         const target = div4Teams.length > 0
             ? div4Teams[div4Teams.length - 1]
