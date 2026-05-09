@@ -515,32 +515,35 @@ export class AutoPlayController {
             const team = engine.getTeam(teamId);
             if (team) {
                 // Process incoming offers (sell decisions — sync heuristic in tick loop)
+                // BUG-076: offer fields were offer.player.id / offer.amount (wrong).
+                // Engine generateTransferOffers returns: { playerId, offerAmount, playerName, buyerClub, deadline }.
+                // Normalize to heuristic format: { player, amount }.
                 if (Array.isArray(engine.transferOffers) && engine.transferOffers.length > 0) {
                     for (const offer of engine.transferOffers.slice(0, 3)) {
-                        if (!offer?.player?.id || !offer?.amount) continue;
-                        // Use sync heuristic always inside tick loop (LLM runs separate async path)
-                        const decision = decideSellHeuristic(team, offer);
+                        if (!offer?.playerId || !offer?.offerAmount) continue;
+                        const player = team.squad.find(p => p.id === offer.playerId);
+                        if (!player) {
+                            // Player not in squad (already sold/retired) — discard offer
+                            engine.rejectTransferOffer?.(offer.playerId);
+                            continue;
+                        }
+                        const normalizedOffer = { player, amount: offer.offerAmount };
+                        const decision = decideSellHeuristic(team, normalizedOffer);
                         if (decision.sell && typeof engine.acceptTransferOffer === 'function') {
-                            const result = engine.acceptTransferOffer(offer.player.id);
+                            const result = engine.acceptTransferOffer(offer.playerId);
                             if (result?.success) {
                                 this.stats.transfers++;
+                                this._logSuccess('TRANSFER_SOLD', `Vendeu ${player.name} (OVR${player.ovr}) por R$ ${(offer.offerAmount/1e6).toFixed(1)}M para ${offer.buyerClub || 'clube'}. ${decision.reason}`);
                                 this._logDecision('SELL_PLAYER', {
-                                    playerId: offer.player.id,
-                                    amount: offer.amount,
+                                    playerId: offer.playerId,
+                                    amount: offer.offerAmount,
                                     source: decision.source,
                                     reason: decision.reason
                                 }, 0);
-                                if (this.telemetry?.history) {
-                                    if (!Array.isArray(this.telemetry.history.offers)) this.telemetry.history.offers = [];
-                                    this.telemetry.history.offers.push({
-                                        week: engine.currentWeek,
-                                        playerId: offer.player.id,
-                                        askPrice: offer.amount,
-                                        accepted: true,
-                                        simulated: false
-                                    });
-                                }
                             }
+                        } else if (offer.deadline && engine.currentWeek >= offer.deadline) {
+                            // Offer expired — clear it
+                            engine.rejectTransferOffer?.(offer.playerId);
                         }
                     }
                 }
