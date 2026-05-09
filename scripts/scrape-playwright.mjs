@@ -48,15 +48,54 @@ async function fetchJSONInPage(page, url) {
     return data;
 }
 
-async function searchClubId(page, name) {
-    try {
-        const data = await fetchJSONInPage(page, `https://api.sofascore.com/api/v1/search/teams/${encodeURIComponent(name)}`);
-        const teams = data.teams || [];
-        const br = teams.find(t => t.team?.country?.alpha2 === 'BR');
-        return (br || teams[0])?.team?.id || null;
-    } catch (e) {
-        return null;
+// Name variants: original, no accents, "-MG"→"Mineiro", "-PR"→"Paranaense", etc
+function nameVariants(name) {
+    const variants = new Set([name]);
+    // Strip accents
+    const noAccents = name.normalize('NFD').replace(/[̀-ͯ]/g, '');
+    variants.add(noAccents);
+    // Suffix expansions
+    const suffixMap = {
+        '-MG': ' Mineiro',
+        '-PR': ' Paranaense',
+        '-RS': ' Gaúcho',
+        '-SP': ' Paulista',
+        '-RJ': '',
+        '-CE': ' Cearense',
+        '-PE': ' Pernambucano',
+        '-BA': ' Bahia',
+        '-CHI': '',
+        '-ARG': '',
+    };
+    for (const [suf, repl] of Object.entries(suffixMap)) {
+        if (name.endsWith(suf)) {
+            const expanded = name.slice(0, -suf.length) + repl;
+            variants.add(expanded.trim());
+            variants.add(expanded.normalize('NFD').replace(/[̀-ͯ]/g, '').trim());
+        }
     }
+    // Without "FC" / "EC" / "AC" prefixes
+    variants.add(name.replace(/^(FC|EC|AC|CR|SC)\s+/, ''));
+    return [...variants].filter(v => v && v.length > 1);
+}
+
+async function searchClubId(page, name) {
+    const variants = nameVariants(name);
+    for (const variant of variants) {
+        try {
+            const data = await fetchJSONInPage(page, `https://api.sofascore.com/api/v1/search/teams/${encodeURIComponent(variant)}`);
+            const teams = data.teams || [];
+            if (teams.length === 0) continue;
+            // Prefer Brazilian, then any
+            const br = teams.find(t => t.team?.country?.alpha2 === 'BR');
+            const result = (br || teams[0])?.team?.id;
+            if (result) return result;
+        } catch {
+            // Try next variant
+        }
+        await sleep(300);
+    }
+    return null;
 }
 
 async function fetchSquad(page, teamId) {
