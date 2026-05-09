@@ -8,26 +8,26 @@
 import React from 'react';
 import { POSITIONS, calculatePositionFit, calculateRatingForPosition, calculateEffectiveRating } from '../engine/Positions';
 
-// Pitch coordinates per position (% of pitch, with pitch oriented vertical, 0=goal, 100=opp goal)
+// Pitch coordinates per BR position code
 const POSITION_COORDS = {
-    GK:  { x: 50, y: 5 },
-    LB:  { x: 15, y: 25 },
-    CBL: { x: 35, y: 20 },
-    CB:  { x: 50, y: 18 },
-    CBR: { x: 65, y: 20 },
-    RB:  { x: 85, y: 25 },
-    LWB: { x: 12, y: 38 },
-    RWB: { x: 88, y: 38 },
-    DM:  { x: 50, y: 38 },
-    CML: { x: 35, y: 50 },
-    CM:  { x: 50, y: 52 },
-    CMR: { x: 65, y: 50 },
-    LM:  { x: 18, y: 62 },
-    AM:  { x: 50, y: 65 },
-    RM:  { x: 82, y: 62 },
-    LW:  { x: 22, y: 80 },
-    CF:  { x: 50, y: 85 },
-    RW:  { x: 78, y: 80 }
+    GOL: { x: 50, y: 5 },
+    LAE: { x: 15, y: 25 },
+    ZAE: { x: 35, y: 20 },
+    ZAG: { x: 50, y: 18 },
+    ZAD: { x: 65, y: 20 },
+    LAD: { x: 85, y: 25 },
+    ALE: { x: 12, y: 38 },
+    ALD: { x: 88, y: 38 },
+    VOL: { x: 50, y: 38 },
+    MCE: { x: 35, y: 50 },
+    MEC: { x: 50, y: 52 },
+    MCD: { x: 65, y: 50 },
+    MPE: { x: 18, y: 62 },
+    MEA: { x: 50, y: 65 },
+    MPD: { x: 82, y: 62 },
+    POE: { x: 22, y: 80 },
+    CTA: { x: 50, y: 85 },
+    POD: { x: 78, y: 80 }
 };
 
 export function PositionPicker({ player, onSelect, selectedPos = null }) {
