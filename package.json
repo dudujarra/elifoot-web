@@ -22,6 +22,8 @@
     "bug:full": "bash scripts/debug-bug.sh full",
     "generate:audio": "node scripts/generate-audio.js",
     "generate:audio:dry": "node scripts/generate-audio.js --dry-run",
+    "render:stems": "node scripts/render-stems.js",
+    "render:stems:dry": "node scripts/render-stems.js --dry-run",
     "mutate": "stryker run",
     "mutate:report": "open tests/characterization/stryker-report/index.html"
   },
