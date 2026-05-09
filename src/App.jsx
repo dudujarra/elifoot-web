@@ -10,6 +10,7 @@ import { StandingsView } from './components/StandingsView';
 import { MatchView } from './components/MatchView';
 import { MonitorView } from './components/MonitorView';
 import { FloatingBugButton } from './components/FloatingBugButton';
+import { Sidebar } from './components/Sidebar';
 import { StyleguideView } from './components/StyleguideView';
 import { AchievementsView } from './components/AchievementsView';
 import { TutorialView } from './components/TutorialView';
@@ -154,6 +155,7 @@ function App() {
                     )}
                 </header>
             )}
+            <Sidebar />
             {renderView()}
             <FloatingBugButton />
         </>
