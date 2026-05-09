@@ -6,6 +6,7 @@ import { KnockoutCup } from '../engine/tournaments/KnockoutCup';
 import { ContinentalCup } from '../engine/tournaments/ContinentalCup';
 import { MonitorService } from '../services/MonitorService';
 import { ProPlayer } from '../engine/PlayerCareer';
+import { ManagerLegacy } from '../engine/SeasonSystem';
 
 const GameContext = createContext();
 
@@ -97,6 +98,18 @@ function serializeEngine(engine) {
     if (engine.staff && Array.isArray(engine.staff.hired)) {
         safe._staffHired = engine.staff.hired;
     }
+    // BUG-075: save legacy separately — ManagerLegacy excluded from ENGINE_CLASS_FIELDS
+    // so it was never persisted → titles/seasons lost on every reload.
+    if (engine.legacy) {
+        safe._legacy = {
+            managerName: engine.legacy.managerName,
+            reputation: engine.legacy.reputation,
+            seasons: engine.legacy.seasons,
+            titles: engine.legacy.titles,
+            totalWins: engine.legacy.totalWins,
+            totalMatches: engine.legacy.totalMatches,
+        };
+    }
     // BUG-021: tag tournaments com class name pra prototype restore
     if (Array.isArray(engine.tournaments)) {
         safe.tournaments = engine.tournaments.map(t => ({
@@ -132,6 +145,17 @@ function restoreEngine(engine, snapshot) {
     // Restore staff hired list (preserva StaffManager class)
     if (snapshot._staffHired && engine.staff) {
         engine.staff.hired = [...snapshot._staffHired];
+    }
+    // BUG-075 fix: restore ManagerLegacy instance from saved plain object
+    if (snapshot._legacy) {
+        const ld = snapshot._legacy;
+        const ml = new ManagerLegacy(ld.managerName || '');
+        ml.reputation = ld.reputation ?? 30;
+        ml.seasons = ld.seasons ?? [];
+        ml.titles = ld.titles ?? [];
+        ml.totalWins = ld.totalWins ?? 0;
+        ml.totalMatches = ld.totalMatches ?? 0;
+        engine.legacy = ml;
     }
     // BUG-024 fix: rehydrate ProPlayer prototype after JSON restore.
     // Save loses class methods (hasFlag/setFlag/etc); OffPitchEventsDeck triggers crash.

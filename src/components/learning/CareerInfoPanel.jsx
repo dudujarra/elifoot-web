@@ -37,18 +37,19 @@ export default function CareerInfoPanel({ controllerRef }) {
             const stats = c.getStats?.() || {};
             const legacy = engine.legacy || {};
 
-            // Top scorers all-time across squad
+            // Top scorers current season (seasonGoals reset each season — realistic numbers)
             const topScorers = (team?.squad || [])
                 .map(p => ({
                     name: p.name,
                     position: p.position,
                     ovr: p.ovr,
-                    goals: p.career?.totalGoals || 0,
-                    assists: p.career?.totalAssists || 0,
-                    apps: p.career?.totalApps || 0
+                    goals: p.career?.seasonGoals || 0,
+                    assists: p.career?.seasonAssists || 0,
+                    apps: p.career?.seasonApps || 0,
+                    totalGoals: p.career?.totalGoals || 0,
                 }))
-                .filter(p => p.goals > 0)
-                .sort((a, b) => b.goals - a.goals)
+                .filter(p => p.goals > 0 || p.totalGoals > 0)
+                .sort((a, b) => b.goals - a.goals || b.totalGoals - a.totalGoals)
                 .slice(0, 5);
 
             // Build seasonHistory promotions/relegations
@@ -205,7 +206,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                     {snapshot.topScorers.length > 0 && (
                         <div style={{ marginTop: '8px' }}>
                             <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                                ⚽ ARTILHEIROS DO ELENCO
+                                ⚽ ARTILHEIROS (TEMPORADA ATUAL)
                             </div>
                             <div style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '2px', padding: '4px' }}>
                                 {snapshot.topScorers.map((p, i) => (
@@ -224,6 +225,9 @@ export default function CareerInfoPanel({ controllerRef }) {
                                             <strong style={{ color: '#6ABC3A' }}>{p.goals} ⚽</strong>{' '}
                                             <span style={{ color: 'var(--text-muted)' }}>
                                                 {p.assists}🅰️ · {p.apps}j
+                                                {p.totalGoals > p.goals && (
+                                                    <span title="Total carreira"> · {p.totalGoals}🏅</span>
+                                                )}
                                             </span>
                                         </span>
                                     </div>
