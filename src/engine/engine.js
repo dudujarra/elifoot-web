@@ -167,7 +167,7 @@ export class Engine {
 
         const sulAmericana = new ContinentalCup('SULA', 'Copa Sul-Americana',
             [7, 11, 15], [19, 23, 27]);
-        sulAmericana.init(sulaTeams.length >= 4 ? sulaTeams : libTeams.slice(0, 8));
+        sulAmericana.init(sulaTeams.length >= 4 ? sulaTeams : libTeams.slice(4, 12));
         this.tournaments.push(sulAmericana);
 
         // Champions League (top 4 from each EU league)
