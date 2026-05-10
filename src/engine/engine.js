@@ -10,6 +10,7 @@ import { checkSquadHealth } from './SquadHealthMonitor';
 import { generateRealTransferOffers } from './MarketPricer';
 import { evaluateGrowth } from './GrowthEventSystem';
 import { canAccess, persistUnlock, evaluateNewUnlocks } from './ViewUnlockSystem';
+import { compute as computeManagerIdentity, applyEvent as applyManagerEvent, computeLeagueRankings } from './ManagerIdentitySystem';
 import { BoardSystem } from './BoardSystem';
 import { processMatchInjuries, processTrainingInjuries, healInjury } from './InjurySystem';
 import { generateYouthIntake, getAcademyUpgradeCost, loanPlayerOut, processLoans } from './YouthAcademy';
@@ -32,7 +33,7 @@ export class Engine {
         this.currentWeek = 0;
         this.mode = 'manager'; // 'manager' or 'player'
         this.proPlayer = null;
-        this.manager = { name: '', teamId: null, money: 0, salary: 5000 };
+        this.manager = { name: '', teamId: null, money: 0, salary: 5000, reputation: 10, tacticHistory: {}, careerHistory: [] };
         this.marketPlayers = [];
 
         // RFCT-004: MatchSimulator extracted from playMatch (ver src/services/MatchSimulator.js)
@@ -240,6 +241,25 @@ export class Engine {
         if (managerReputation !== undefined) this.viewUnlockState.managerReputation = managerReputation;
     }
 
+    // SPEC-070: retorna identidade calculada do técnico (reputação, estilo, carreira)
+    getManagerIdentity() {
+        const th = this.manager.tacticHistory || {};
+        const totalGames = Object.values(th).reduce((s, n) => s + n, 0);
+        const tacticHistory = Object.entries(th).map(([tactic, gamesUsed]) => ({
+            tactic,
+            gamesUsed,
+            winRate: 0, // win rate not tracked per-tactic yet
+        }));
+        return computeManagerIdentity({
+            managerId: this.manager.teamId,
+            name: this.manager.name,
+            isPlayerManager: this.mode === 'manager',
+            tacticHistory,
+            careerHistory: this.manager.careerHistory || [],
+            currentReputation: this.manager.reputation || 10,
+        });
+    }
+
     getTournament(id) {
         return this.tournaments.find(t => t.id === id);
     }
@@ -327,7 +347,12 @@ export class Engine {
 
     // === MANAGER ACTIONS ===
     setTactic(tacticId) {
-        if (TACTICS[tacticId]) this.currentTactic = tacticId;
+        if (TACTICS[tacticId]) {
+            this.currentTactic = tacticId;
+            // SPEC-070: track tactic usage for manager identity (style computation)
+            if (!this.manager.tacticHistory) this.manager.tacticHistory = {};
+            this.manager.tacticHistory[tacticId] = (this.manager.tacticHistory[tacticId] || 0) + 1;
+        }
     }
 
     setFormation(formationId) {
@@ -1081,6 +1106,27 @@ export class Engine {
                     );
                     this.weekEvents.push(`🏆 Temp ${this.seasonNumber}: ${season.record} (${pos}º lugar)`);
                     if (season.title) this.weekEvents.push(`🎉 ${season.title}!`);
+
+                    // SPEC-070: update manager reputation + career history
+                    try {
+                        const repEvent = pos === 1 ? 'national_title' : (pos <= 2 && team.division > 1 ? 'promotion' : null);
+                        const relegated = pos >= 19;
+                        if (repEvent) {
+                            const r = applyManagerEvent({ event: repEvent, currentReputation: this.manager.reputation || 10 });
+                            this.manager.reputation = r.reputation;
+                        } else if (relegated) {
+                            const r = applyManagerEvent({ event: 'relegation', currentReputation: this.manager.reputation || 10 });
+                            this.manager.reputation = r.reputation;
+                        }
+                        if (!Array.isArray(this.manager.careerHistory)) this.manager.careerHistory = [];
+                        this.manager.careerHistory.push({
+                            clubName: team.name,
+                            seasonsManaged: 1,
+                            titlesWon: pos === 1 ? 1 : 0,
+                            promoted: !!(repEvent === 'promotion'),
+                            relegated,
+                        });
+                    } catch { /* defensive */ }
                 }
 
                 // BUG-077: processPromoRelegation previously only ran for bot's division.
