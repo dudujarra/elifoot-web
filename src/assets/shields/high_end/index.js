@@ -82,6 +82,30 @@ import retro from './retro.png';
 import iguatu from './iguatu.png';
 import sousa from './sousa.png';
 
+// ENG
+import manchester_city from './manchester_city.png';
+import arsenal from './arsenal.png';
+import liverpool from './liverpool.png';
+import manchester_united from './manchester_united.png';
+import chelsea from './chelsea.png';
+import tottenham from './tottenham.png';
+import newcastle from './newcastle.png';
+import aston_villa from './aston_villa.png';
+import west_ham from './west_ham.png';
+import brighton from './brighton.png';
+
+// ESP
+import real_madrid from './real_madrid.png';
+import barcelona from './barcelona.png';
+import atletico_de_madrid from './atletico_de_madrid.png';
+import sevilla from './sevilla.png';
+import real_sociedad from './real_sociedad.png';
+import real_betis from './real_betis.png';
+import villarreal from './villarreal.png';
+import athletic_bilbao from './athletic_bilbao.png';
+import valencia from './valencia.png';
+import osasuna from './osasuna.png';
+
 export const HIGH_END_SHIELDS = {
     "Flamengo": flamengo,
     "Palmeiras": palmeiras,
@@ -165,5 +189,27 @@ export const HIGH_END_SHIELDS = {
     "Portuguesa-RJ": portuguesa_rj,
     "Retrô": retro,
     "Iguatu": iguatu,
-    "Sousa": sousa
+    "Sousa": sousa,
+
+    "Manchester City": manchester_city,
+    "Arsenal": arsenal,
+    "Liverpool": liverpool,
+    "Manchester United": manchester_united,
+    "Chelsea": chelsea,
+    "Tottenham": tottenham,
+    "Newcastle": newcastle,
+    "Aston Villa": aston_villa,
+    "West Ham": west_ham,
+    "Brighton": brighton,
+
+    "Real Madrid": real_madrid,
+    "Barcelona": barcelona,
+    "Atlético de Madrid": atletico_de_madrid,
+    "Sevilla": sevilla,
+    "Real Sociedad": real_sociedad,
+    "Real Betis": real_betis,
+    "Villarreal": villarreal,
+    "Athletic Bilbao": athletic_bilbao,
+    "Valencia": valencia,
+    "Osasuna": osasuna
 };
