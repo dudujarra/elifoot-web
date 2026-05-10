@@ -224,6 +224,41 @@ export class AutoPlayController {
             this._advanceWeek();
             this.stats.weeksPlayed++;
 
+            // §16.2: Auto-dismiss trophy ceremony (log it as success)
+            if (this.engine.trophyCeremony) {
+                this._logSuccess('TROPHY_CEREMONY', `🏆 Cerimônia: ${this.engine.trophyCeremony.trophy}`, {
+                    trophy: this.engine.trophyCeremony.trophy,
+                    season: this.engine.trophyCeremony.season
+                });
+                this.engine.trophyCeremony = null;
+            }
+
+            // §17: Auto-answer press conferences (random option)
+            try {
+                if (typeof this.engine.checkPressConference === 'function') {
+                    const question = this.engine.checkPressConference();
+                    if (question && question.options?.length > 0) {
+                        const pick = question.options[Math.floor(systemRng() * question.options.length)];
+                        const result = this.engine.answerPress(pick.id);
+                        this._logDecision('PRESS_CONFERENCE', {
+                            context: question.context,
+                            answered: pick.id,
+                            moraleDelta: result?.moraleDelta || 0
+                        }, 0);
+                    }
+                }
+            } catch { /* press non-critical */ }
+
+            // §15.4: PWA notification trigger on milestones (non-blocking)
+            try {
+                if (this.stats.weeksPlayed % 38 === 0) {
+                    // Season end — trigger notification if PWAService available
+                    if (typeof window !== 'undefined' && window.__pwaService) {
+                        window.__pwaService.notifySeasonEnd?.(this.engine.seasonNumber);
+                    }
+                }
+            } catch { /* PWA non-critical */ }
+
             // Save every 38 weeks (1 season)
             if (this.stats.weeksPlayed % 38 === 0) {
                 this.stats.seasonsPlayed++;
