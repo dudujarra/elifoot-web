@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Help } from './Help';
 import { useGame } from '../context/GameContext';
 import { FORMATIONS, TACTICS, TEAM_TALKS, TRAINING_TYPES } from '../engine/ManagerSystems';
 
@@ -9,10 +10,14 @@ export function DashboardView() {
     const { gameState, changeView, getEngine, forceUpdate } = useGame();
     const engine = getEngine();
     const team = engine.getTeam(gameState.teamId);
-    if (!team) return <div className="main-content">Time não encontrado.</div>;
-
+    // BUG-021: all hooks declared before early return
     const [log, setLog] = useState('');
     const [tab, setTab] = useState('overview');
+    React.useEffect(() => {
+        if (!team) return;
+    }, [team]);
+
+    if (!team) return <div className="main-content">Time não encontrado.</div>;
 
     const sectors = engine.getTeamSectors(team.id);
     const standings = engine.getStandings(team.zone, team.division);
@@ -88,10 +93,10 @@ export function DashboardView() {
                     </div>
                 </div>
                 <div className="inline-stats" style={{marginBottom:'0.5rem'}}>
-                    <div className="inline-stat" title="Força do setor goleiro (média OVR + bônus tática)"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.goalkeeper}</span><span className="stat-label">GOL</span></div>
-                    <div className="inline-stat" title="Força da defesa (média DEF dos titulares)"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.defense}</span><span className="stat-label">DEF</span></div>
-                    <div className="inline-stat" title="Força do meio-campo (média CRI dos titulares)"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.midfield}</span><span className="stat-label">MEI</span></div>
-                    <div className="inline-stat" title="Força do ataque (média FIN dos titulares)"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.attack}</span><span className="stat-label">ATA</span></div>
+                    <Help id="sector.gol"><div className="inline-stat"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.goalkeeper}</span><span className="stat-label">GOL</span></div></Help>
+                    <Help id="sector.def"><div className="inline-stat"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.defense}</span><span className="stat-label">DEF</span></div></Help>
+                    <Help id="sector.mei"><div className="inline-stat"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.midfield}</span><span className="stat-label">MEI</span></div></Help>
+                    <Help id="sector.ata"><div className="inline-stat"><span className="stat-value" style={{fontSize:'0.9rem'}}>{sectors.attack}</span><span className="stat-label">ATA</span></div></Help>
                     <div className="inline-stat" title="Moral média do plantel (>60 bom, <40 crítico)"><span className="stat-value" style={{fontSize:'0.9rem',color: avgMoral > 60 ? 'var(--primary)' : avgMoral < 40 ? 'var(--danger)' : 'var(--accent)'}}>{avgMoral.toFixed(0)}%</span><span className="stat-label">MORAL</span></div>
                     <div className="inline-stat" title="Energia média (<50 risco lesão)"><span className="stat-value" style={{fontSize:'0.9rem',color: avgEnergy < 50 ? 'var(--danger)' : 'var(--primary)'}}>{avgEnergy.toFixed(0)}%</span><span className="stat-label">ENERGIA</span></div>
                 </div>
