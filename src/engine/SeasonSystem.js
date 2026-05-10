@@ -48,16 +48,33 @@ export function getCalendarEvent(week) {
 
 // ============================================================
 // PROMOÇÃO / REBAIXAMENTO
+// Real Brazilian football rules:
+//   Série A (div 1): bottom 4 relegated
+//   Série B (div 2): top 4 promoted, bottom 4 relegated
+//   Série C (div 3): top 4 promoted, bottom 4 relegated
+//   Série D (div 4): top 4 promoted, no relegation (div 5 doesn't exist)
 // ============================================================
-export function calculateSeasonEnd(standings) {
-    // Top 2 sobem, bottom 2 descem
-    const promoted = standings.slice(0, 2).map(s => s.teamId);
-    const relegated = standings.slice(-2).map(s => s.teamId);
+
+// Returns {promoCount, relCount} for a given division
+export function getDivisionCounts(division) {
+    if (division === 1) return { promoCount: 0, relCount: 4 }; // div 1: only relegates
+    if (division === 4) return { promoCount: 4, relCount: 0 }; // div 4: only promotes
+    return { promoCount: 4, relCount: 4 };                     // div 2/3: both 4
+}
+
+export function calculateSeasonEnd(standings, division = 2) {
+    const { promoCount, relCount } = getDivisionCounts(division);
+    const n = standings.length;
+    // Guard: can't promote/relegate more than half the league
+    const safePromo = Math.min(promoCount, Math.floor(n / 2));
+    const safeRel = Math.min(relCount, Math.floor(n / 2));
+    const promoted = standings.slice(0, safePromo).map(s => s.teamId);
+    const relegated = safeRel > 0 ? standings.slice(-safeRel).map(s => s.teamId) : [];
     return { promoted, relegated };
 }
 
 export function processPromoRelegation(teams, standings, zone, division) {
-    const { promoted, relegated } = calculateSeasonEnd(standings);
+    const { promoted, relegated } = calculateSeasonEnd(standings, division);
     const changes = [];
 
     promoted.forEach(teamId => {

@@ -144,7 +144,7 @@ export class Engine {
         copaBrasil.init(braTeams);
         this.tournaments.push(copaBrasil);
 
-        // Libertadores (top 4 BRA div1 + top 2 each SA country)
+        // Libertadores (top 4 BRA div1 + top 2-4 each SA country)
         const libTeams = [];
         libTeams.push(...this.teams.filter(t => t.zone === 'BRA' && t.division === 1).slice(0, 4).map(t => t.id));
         if (RealDB.ARG) libTeams.push(...this.teams.filter(t => t.zone === 'ARG' && t.division === 1).slice(0, 4).map(t => t.id));
@@ -156,6 +156,19 @@ export class Engine {
             [5, 9, 13], [17, 21, 25]);
         libertadores.init(libTeams);
         this.tournaments.push(libertadores);
+
+        // Copa Sul-Americana (positions 5-8 BRA div1 + 3-4 each SA country)
+        const sulaTeams = [];
+        sulaTeams.push(...this.teams.filter(t => t.zone === 'BRA' && t.division === 1).slice(4, 8).map(t => t.id));
+        if (RealDB.ARG) sulaTeams.push(...this.teams.filter(t => t.zone === 'ARG' && t.division === 1).slice(4, 6).map(t => t.id));
+        if (RealDB.URU) sulaTeams.push(...this.teams.filter(t => t.zone === 'URU' && t.division === 1).slice(2, 4).map(t => t.id));
+        if (RealDB.CHI) sulaTeams.push(...this.teams.filter(t => t.zone === 'CHI' && t.division === 1).slice(2, 4).map(t => t.id));
+        if (RealDB.COL) sulaTeams.push(...this.teams.filter(t => t.zone === 'COL' && t.division === 1).slice(4, 6).map(t => t.id));
+
+        const sulAmericana = new ContinentalCup('SULA', 'Copa Sul-Americana',
+            [7, 11, 15], [19, 23, 27]);
+        sulAmericana.init(sulaTeams.length >= 4 ? sulaTeams : libTeams.slice(0, 8));
+        this.tournaments.push(sulAmericana);
 
         // Champions League (top 4 from each EU league)
         const clTeams = [];
@@ -1056,9 +1069,27 @@ export class Engine {
                 this.triggerYouthIntake();
             }
         } catch { /* ignore */ }
+        // Capture final Série A standings BEFORE league re-init resets them —
+        // needed for continental cup re-qualification.
+        const finalDiv1Standings = {};
+        try {
+            const zones = [...new Set(this.teams.map(t => t.zone))];
+            zones.forEach(z => {
+                const st = this.getStandings(z, 1);
+                if (st.length > 0) finalDiv1Standings[z] = st.map(s => s.teamId);
+            });
+        } catch { /* defensive */ }
+
+        // Copa do Brasil winner → Libertadores spot
+        let copaBrWinnerId = null;
+        try {
+            const copa = this.getTournament('COPA_BR');
+            if (copa?.winner) copaBrWinnerId = copa.winner;
+        } catch { /* defensive */ }
+
         // BUG-076: Re-init leagues by current team.division (handles promotions).
         // Zone-division leagues (id = `ZONE_N`) rebuild roster from current team divisions.
-        // Cup/continental tournaments fall back to existing standings.
+        // LIBERTADORES / SULA / CHAMPIONS re-qualified below based on final standings.
         this.tournaments.forEach(t => {
             try {
                 if (typeof t.init === 'function') {
@@ -1073,6 +1104,8 @@ export class Engine {
                                 .map(tm => tm.id);
                         }
                     }
+                    // Skip continental cups — re-qualified separately below
+                    if (['LIBERTADORES', 'SULA', 'CHAMPIONS'].includes(t.id)) return;
                     if (!teamIds || teamIds.length === 0) {
                         teamIds = (t.standings || []).map(s => s.teamId).filter(Boolean);
                     }
@@ -1080,6 +1113,52 @@ export class Engine {
                 }
             } catch { /* defensive */ }
         });
+
+        // Re-qualify continental cups from final div 1 standings.
+        // Libertadores: top 4 each SA zone + Copa do Brasil winner (replaces 4th if already in top 4)
+        // Sul-Americana: positions 5-8 each SA zone
+        try {
+            const saZones = ['BRA', 'ARG', 'URU', 'CHI', 'COL'];
+            const libTeams = [];
+            const sulaTeams = [];
+
+            saZones.forEach(z => {
+                const st = finalDiv1Standings[z] || [];
+                if (z === 'BRA') {
+                    // BRA: top 4 → Libertadores, 5-8 → Sul-Americana
+                    // Copa do Brasil winner gets a Libertadores spot if not already top 4
+                    const top4 = st.slice(0, 4);
+                    if (copaBrWinnerId && !top4.includes(copaBrWinnerId)) {
+                        // Replace 4th spot with Copa winner; push 4th to Sul-Americana
+                        const displaced = top4[3];
+                        top4[3] = copaBrWinnerId;
+                        sulaTeams.push(displaced);
+                    }
+                    libTeams.push(...top4);
+                    sulaTeams.push(...st.slice(4, 8));
+                } else {
+                    // Other SA zones: top 4 → Libertadores, 5-6 → Sul-Americana
+                    libTeams.push(...st.slice(0, 4));
+                    sulaTeams.push(...st.slice(4, 6));
+                }
+            });
+
+            const lib = this.getTournament('LIBERTADORES');
+            if (lib && libTeams.length >= 4) lib.init(libTeams);
+
+            const sula = this.getTournament('SULA');
+            if (sula && sulaTeams.length >= 4) sula.init(sulaTeams);
+
+            // Champions League: top 4 from EU div 1 leagues
+            const euZones = ['ENG', 'ESP', 'ITA', 'GER', 'FRA'];
+            const clTeams = [];
+            euZones.forEach(z => {
+                const st = finalDiv1Standings[z] || [];
+                clTeams.push(...st.slice(0, 4));
+            });
+            const cl = this.getTournament('CHAMPIONS');
+            if (cl && clTeams.length >= 4) cl.init(clTeams);
+        } catch { /* defensive */ }
     }
 
     registerPlayerGoal(type) {
