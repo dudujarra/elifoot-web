@@ -14,6 +14,7 @@ export function ChronicleView() {
     const [view, setView] = useState('season'); // 'season' | 'lifetime'
     const [content, setContent] = useState('');
 
+    // Fallback service for lifetime view
     const chronicle = new ChronicleService({
         narrativeService: engine?._narrativeService,
         mythService: engine?._mythService,
@@ -23,10 +24,20 @@ export function ChronicleView() {
 
     React.useEffect(() => {
         if (!engine) return;
-        const text = view === 'season'
-            ? chronicle.generateSeasonChronicle(engine)
-            : chronicle.generateLifetimeChronicle(engine);
-        setContent(text);
+        if (view === 'season') {
+            // AKITA-142: use engine.chronicles[] from ChronicleSystem (SPEC-082)
+            const chronicles = engine.chronicles || [];
+            if (chronicles.length > 0) {
+                const lines = chronicles.map(c =>
+                    `## Temporada ${c.season} — ${c.mood === 'triumph' ? '🏆' : c.mood === 'despair' ? '😢' : '📖'}\n${c.chronicle}`
+                );
+                setContent(`# 📜 Crônicas de ${engine.manager?.name || 'Anônimo'}\n\n${lines.join('\n\n')}`);
+            } else {
+                setContent(chronicle.generateSeasonChronicle(engine));
+            }
+        } else {
+            setContent(chronicle.generateLifetimeChronicle(engine));
+        }
     }, [view, engine]);
 
     function handleExportJSON() {

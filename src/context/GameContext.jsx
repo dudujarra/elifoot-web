@@ -80,7 +80,7 @@ function clearStorage() {
 const ENGINE_CLASS_FIELDS = [
     'staff', 'board', 'legacy',
     '_matchSimulator', '_mythService', '_relationshipService', '_narrativeService', '_careerService',
-    '_inheritanceService'
+    '_inheritanceService', '_weekProcessor', '_seasonProcessor'
 ];
 
 function serializeEngine(engine) {

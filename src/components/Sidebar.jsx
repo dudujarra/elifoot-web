@@ -16,6 +16,8 @@ const NAV_ITEMS_MANAGER = [
     { view: 'achievements', icon: '🏆', label: 'Conquistas' },
     { view: 'press',        icon: '🎙️', label: 'Coletiva' },
     { view: 'shop',         icon: '🛍️', label: 'Loja' },
+    { view: 'rivalries',    icon: '⚔️', label: 'Rivalidades' },
+    { view: 'chronicle',    icon: '📜', label: 'Crônica' },
     { view: 'saves',        icon: '💾', label: 'Saves' },
     { view: 'autoplay',     icon: '🤖', label: 'AutoPlay' }
 ];
