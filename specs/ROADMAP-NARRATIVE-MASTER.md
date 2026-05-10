@@ -1,11 +1,33 @@
 # ELIFOOT WEB — Roadmap Integrado v2.0
 *Atualizado com dados de playtest (pasta 12) + game design insights (técnico como personagem)*
 
-**Estado atual:** v1.0 + hotfix v1.0.1 (BUG-021)  
+**Estado atual:** AKITA-139 — Fase 3-6 engine complete  
 **SAVE_VERSION atual:** 11 (pós AKITA-128)  
 **Próximo SPEC gameplay livre:** SPEC-136  
 **Próximo SPEC engine livre:** SPEC-083  
-**Próximo AKITA livre:** AKITA-130 (após sessão de bugs paralela)
+**Próximo AKITA livre:** AKITA-140
+
+## Status engines implementados (sessão 2026-05-10)
+
+| SPEC | Sistema | Status |
+|------|---------|--------|
+| SPEC-131..135 | Fase 0: AI Tactic, Squad Emergency, MarketPricer, GrowthEvents, ViewUnlock | ✅ DONE |
+| BUG-080..083 | Balance spiral, TACTIC_STUCK, PlayerIdentity, MARKET_DEAD | ✅ FIXED |
+| SPEC-070 | ManagerIdentitySystem | ✅ DONE |
+| SPEC-071 | ContractGoalSystem | ✅ DONE |
+| SPEC-072 | BoardTensionSystem | ✅ DONE |
+| SPEC-073 | CoachProposalSystem | ✅ DONE |
+| SPEC-074 | OrganicChallengeSystem | ✅ DONE |
+| SPEC-075 | StarProtectionSystem | ✅ DONE |
+| SPEC-076 | HumiliationCascadeSystem | ✅ DONE |
+| SPEC-077 | LossStreakResponseSystem | ✅ DONE |
+| SPEC-078 | HallOfLegendsSystem | ✅ DONE |
+| SPEC-079 | HeritageTraitSystem | ✅ DONE |
+| SPEC-080 | RivalryUpgradeSystem | ✅ DONE |
+| SPEC-081 | FilhosRegenSystem | ✅ DONE |
+| SPEC-082 | ChronicleSystem | ✅ DONE |
+
+**959/963 tests passing. PRs #99..103 merged.**
 
 ---
 
