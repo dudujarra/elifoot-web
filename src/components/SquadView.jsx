@@ -125,7 +125,7 @@ export function SquadView() {
             )}
 
             {/* SPEC-080 Tabs */}
-            <div className="nav-tabs" style={{ display: 'flex', gap: '4px', marginBottom: '0.75rem', borderBottom: '2px solid var(--border-subtle, var(--ef-color-border-subtle))' }}>
+            <div className="nav-tabs" style={{ display: 'flex', gap: '4px', marginBottom: '0.75rem', borderBottom: '2px solid var(--border-subtle, #2a3530)' }}>
                 {[
                     { id: 'plantel', label: '👥 Plantel' },
                     { id: 'stats', label: '📊 Stats' },
@@ -223,10 +223,7 @@ export function SquadView() {
                                     </span>
                                 </td>
                                 <td><strong>{p.ovr}</strong></td>
-                                <td className="hide-mobile" style={{ color: getEnergyColor(p.energy) }}>
-                                    {p.energy < 30 && <span title="Fadiga crítica" className="ef-anim-pulse-glow">⚠️</span>}
-                                    {p.energy}%
-                                </td>
+                                <td className="hide-mobile" style={{ color: getEnergyColor(p.energy) }}>{p.energy}%</td>
                                 <td className="hide-mobile">{getMoralEmoji(p.moral || 50)} {(p.moral || 50)}%</td>
                                 <td className="hide-mobile">{getFormEmoji(p.form?.trend)}</td>
                                 <td className="hide-mobile">{p.age}</td>
@@ -306,7 +303,7 @@ export function SquadView() {
                     <h3 style={{ marginBottom: '0.75rem' }}>📊 Pentagon Comparison (Top 11 Titulares)</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
                         {sorted.filter(p => p.isTitular).slice(0, 11).map(p => (
-                            <div key={p.id} style={{ border: '1px solid var(--border-subtle, var(--ef-color-border-subtle))', borderRadius: '4px', padding: '8px', textAlign: 'center' }}>
+                            <div key={p.id} style={{ border: '1px solid var(--border-subtle, #2a3530)', borderRadius: '4px', padding: '8px', textAlign: 'center' }}>
                                 <div style={{ fontWeight: 600, fontSize: '0.85rem', marginBottom: '4px' }}>{p.name}</div>
                                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
                                     {p.naturalPosition || p.position}
