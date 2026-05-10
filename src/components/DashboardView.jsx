@@ -149,6 +149,79 @@ export function DashboardView() {
                         </div>
                     )}
 
+                    {/* AKITA-142: Board Tension Widget */}
+                    {typeof engine.boardTension === 'number' && (
+                        <div className="card card-compact" style={{
+                            background: engine.boardTension < -20 ? 'rgba(239,68,68,0.08)' : engine.boardTension > 40 ? 'rgba(16,185,129,0.08)' : 'rgba(245,158,11,0.08)',
+                            borderColor: engine.boardTension < -20 ? 'rgba(239,68,68,0.2)' : engine.boardTension > 40 ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)',
+                        }}>
+                            <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>🏛️ TENSÃO DA DIRETORIA</h4>
+                            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:'0.78rem'}}>
+                                <span>
+                                    {engine.boardTension >= 40 ? '🟢 Estável' :
+                                     engine.boardTension >= 0 ? '🟡 Atenção' :
+                                     engine.boardTension >= -40 ? '🟠 Pressão' : '🔴 Crise'}
+                                </span>
+                                <strong style={{color: engine.boardTension >= 0 ? 'var(--primary)' : 'var(--danger)'}}>
+                                    {engine.boardTension > 0 ? '+' : ''}{engine.boardTension}
+                                </strong>
+                            </div>
+                            <div style={{height:'6px',background:'var(--bg-panel-solid)',borderRadius:'3px',overflow:'hidden',marginTop:'0.3rem'}}>
+                                <div style={{
+                                    width: `${Math.max(0, Math.min(100, (engine.boardTension + 100) / 2))}%`,
+                                    height:'100%',
+                                    background: engine.boardTension >= 0 ? 'var(--primary)' : 'var(--danger)',
+                                    transition:'width 0.3s'
+                                }} />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* AKITA-142: Loss Streak Warning */}
+                    {stats.lossStreak >= 3 && (
+                        <div className="card card-compact" style={{background:'rgba(239,68,68,0.12)',borderColor:'rgba(239,68,68,0.3)'}}>
+                            <h4 style={{fontSize:'0.8rem',color:'var(--danger)',marginBottom:'0.3rem'}}>🔥 CRISE DE RESULTADOS</h4>
+                            <p style={{fontSize:'0.78rem',color:'var(--text-muted)',margin:0}}>
+                                {stats.lossStreak} derrotas seguidas — moral do elenco abalada!
+                            </p>
+                        </div>
+                    )}
+
+                    {/* AKITA-142: Coach Proposal */}
+                    {engine.pendingCoachProposal && (
+                        <div className="card card-compact" style={{background:'rgba(59,130,246,0.08)',borderColor:'rgba(59,130,246,0.2)'}}>
+                            <h4 style={{fontSize:'0.8rem',color:'var(--info)',marginBottom:'0.3rem'}}>📨 PROPOSTA DE EMPREGO</h4>
+                            <p style={{fontSize:'0.78rem',color:'var(--text-muted)',margin:'0 0 0.3rem'}}>
+                                <strong>{engine.pendingCoachProposal.fromClubName}</strong> quer contratá-lo!
+                                <br/><span style={{fontSize:'0.72rem'}}>{engine.pendingCoachProposal.reason}</span>
+                            </p>
+                        </div>
+                    )}
+
+                    {/* AKITA-142: Active Challenge */}
+                    {engine.activeChallenge && (
+                        <div className="card card-compact" style={{background:'rgba(168,85,247,0.08)',borderColor:'rgba(168,85,247,0.2)'}}>
+                            <h4 style={{fontSize:'0.8rem',color:'#A855F7',marginBottom:'0.3rem'}}>🎯 DESAFIO ATIVO</h4>
+                            <p style={{fontSize:'0.78rem',color:'var(--text-muted)',margin:0}}>
+                                {engine.activeChallenge.description}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* AKITA-142: Hall of Legends (compact) */}
+                    {engine.hallOfLegends && engine.hallOfLegends.filledCount > 0 && (
+                        <div className="card card-compact" style={{background:'rgba(245,158,11,0.05)',borderColor:'rgba(245,158,11,0.15)'}}>
+                            <h4 style={{fontSize:'0.8rem',color:'var(--accent)',marginBottom:'0.3rem'}}>⭐ HALL DE LENDAS ({engine.hallOfLegends.filledCount}/{engine.hallOfLegends.slots?.length || 6})</h4>
+                            <div style={{display:'flex',flexWrap:'wrap',gap:'0.3rem'}}>
+                                {(engine.hallOfLegends.slots || []).filter(s => s.filled).map((s, i) => (
+                                    <span key={i} style={{fontSize:'0.72rem',padding:'0.15rem 0.4rem',borderRadius:'3px',background:'rgba(245,158,11,0.12)',color:'var(--accent)'}}>
+                                        {s.playerName || `Lenda #${i+1}`}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     {(engine.weekEvents?.length ?? 0) > 0 && (
                         <div className="card card-compact">
                             <h4 style={{fontSize:'0.8rem',color:'var(--text-muted)',marginBottom:'0.3rem'}}>📰 EVENTOS DA SEMANA</h4>

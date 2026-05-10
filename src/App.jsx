@@ -18,6 +18,8 @@ import { AchievementsView } from './components/AchievementsView';
 import { TutorialView } from './components/TutorialView';
 import { PressView } from './components/PressView';
 import { SaveSlotsView } from './components/SaveSlotsView';
+import { RivalriesView } from './components/RivalriesView';
+import { ChronicleView } from './components/ChronicleView';
 import { isSoundEnabled, setSoundEnabled, sfx } from './utils/sound';
 import { MonitorService } from './services/MonitorService';
 import { AudioController } from './audio/AudioController.jsx';
@@ -71,6 +73,8 @@ function App() {
             case 'shop': return <CosmeticShopView />;
             case 'autoplay': return <AutoPlayView />;
             case 'saves': return <SaveSlotsView />;
+            case 'rivalries': return <RivalriesView />;
+            case 'chronicle': return <ChronicleView />;
             default: return <StartView />;
         }
     };
