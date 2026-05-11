@@ -12,7 +12,7 @@
     border: 4px solid !important;
     border-color: #4A5059 #111417 #111417 #4A5059 !important;
     border-left: 4px solid #FFD700 !important;
-    box-shadow: 0 8px 0 rgba(0,0,0,0.8);
+    /* box-shadow removed for brand compliance */
 }
 
 .ef-dash-header-row {
@@ -84,8 +84,8 @@
 
 .ef-dash-progress-fill {
     height: 100%;
-    background: linear-gradient(to bottom, #39FF14 0%, #1A8A0A 100%);
-    box-shadow: inset 0 2px 0 rgba(255,255,255,0.3);
+    background: #111417; /* Replaced gradient */
+    /* box-shadow removed for brand compliance */
     transition: width 300ms ease-out;
 }
 

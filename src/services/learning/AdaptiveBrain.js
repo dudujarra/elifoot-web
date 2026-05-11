@@ -63,24 +63,24 @@ export function encodeState(ctx = {}) {
     const top4Threshold = Math.max(4, Math.floor(totalTeams * 0.25));
     const midThreshold = Math.floor(totalTeams * 0.6);
     const pos = ctx.position || totalTeams;
-    const posTier = pos <= top4Threshold ? 'top4' : (pos <= midThreshold ? 'mid' : 'bottom');
+    const posTier = pos <= top4Threshold ? 'T4' : (pos <= midThreshold ? 'MD' : 'BT');
 
     const bal = ctx.balance || 0;
-    const balTier = bal < 0 ? 'red' : (bal < 5_000_000 ? 'low' : (bal < 50_000_000 ? 'mid' : 'rich'));
+    const balTier = bal < 0 ? 'NEG' : (bal < 5_000_000 ? 'LOW' : (bal < 50_000_000 ? 'MID' : 'RCH'));
 
     const f = ctx.formAvg || 50;
-    const formTier = f < 40 ? 'poor' : (f <= 70 ? 'avg' : 'good');
+    const formTier = f < 40 ? 'PR' : (f <= 70 ? 'AV' : 'GD');
 
     const w = ctx.week || 0;
-    const phase = w < 13 ? 'early' : (w < 26 ? 'mid' : 'late');
+    const phase = w < 13 ? 'E' : (w < 26 ? 'M' : 'L');
 
     const last = ctx.lastResult || '-';
     // BUG-042: add squadTier to diversify state space
     const squadSize = ctx.squadSize || 0;
-    const squadTier = squadSize < 11 ? 'thin' : (squadSize < 18 ? 'normal' : 'deep');
+    const squadTier = squadSize < 11 ? 'TN' : (squadSize < 18 ? 'NR' : 'DP');
     // AUDIT-FIX #10: Division-aware encoding — separate policy per division tier
     const div = ctx.division || 4;
-    const divTier = div <= 1 ? 'elite' : (div <= 2 ? 'pro' : 'lower');
+    const divTier = div <= 1 ? 'E' : (div <= 2 ? 'P' : 'L');
     return `${formTier}|${posTier}|${balTier}|${phase}|${last}|${squadTier}|${divTier}`;
 }
 

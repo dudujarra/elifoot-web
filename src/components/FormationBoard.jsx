@@ -150,7 +150,7 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                     maxWidth: FIELD_W,
                     aspectRatio: `${FIELD_W} / ${FIELD_H}`,
                     position: 'relative',
-                    background: `linear-gradient(180deg, ${colors.field} 0%, #152A22 100%)`,
+                    background: colors.field,
                     border: `4px solid ${colors.panelElevated}`,
                     overflow: 'hidden',
                     cursor: draggedSlot !== null ? 'grabbing' : 'default',

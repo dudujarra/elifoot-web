@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: center;
     gap: 1.5rem;
-    background-color: rgba(0, 0, 0, 0.92);
+    background-color: #040805;
 }
 
 .trophy-reveal {
@@ -21,7 +21,7 @@
 .trophy-title {
     font-size: 2.5rem;
     color: var(--ef-color-func-warning, #F7B538);
-    text-shadow: 0 0 20px rgba(247, 181, 56, 0.6);
+    text-shadow: 0 0 20px #111417 /* Fallback CRT Black */;
     margin-top: 1rem;
 }
 
@@ -34,10 +34,10 @@
 .trophy-stats {
     text-align: center;
     padding: 1.5rem 2rem;
-    background: rgba(15, 26, 20, 0.85);
+    background: #111417 /* Fallback CRT Black */;
     border: 2px solid;
     border-color: var(--ef-bevel-light, #4A6B4A) var(--ef-bevel-dark, #1A2E1A) var(--ef-bevel-dark, #1A2E1A) var(--ef-bevel-light, #4A6B4A);
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .stat-grid {
@@ -90,7 +90,7 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
-    opacity: 0.6;
+    /* opacity removed for brand compliance */
     pointer-events: none;
 }
 

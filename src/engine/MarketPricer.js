@@ -128,7 +128,7 @@ function baseValue(ovr) {
     // Resolve mercado flat onde todos custam parecido.
     // Formula: base * 1.12^(ovr-50) — doubling every ~6 OVR points
     if (ovr < 50) return 200_000;
-    const exponential = Math.floor(500_000 * Math.pow(1.12, ovr - 50));
+    const exponential = Math.floor(350_000 * Math.pow(1.12, ovr - 50));
     // Cap at R$200M to prevent absurd values
     return Math.min(200_000_000, exponential);
     // OVR50→R$500k | OVR60→R$1.55M | OVR70→R$4.8M | OVR80→R$15.3M | OVR85→R$27M | OVR90→R$48.5M | OVR95→R$85M

@@ -22,11 +22,30 @@ export function PlayerAvatar({ name, size = 28 }) {
                 width: size, 
                 height: size, 
                 objectFit: 'cover',
-                borderRadius: '4px',
+                borderRadius: '0px',
                 border: '1px solid #334155',
                 backgroundColor: '#111417',
                 imageRendering: 'pixelated'
             }}
         />
     );
+}
+
+export function getInitials(name) {
+    if (!name) return '?';
+    const parts = name.trim().split(' ');
+    if (parts.length > 1) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+}
+
+export function getAvatarColor(name) {
+    if (!name) return '#40BAF7';
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+    return '#' + '00000'.substring(0, 6 - color.length) + color;
 }

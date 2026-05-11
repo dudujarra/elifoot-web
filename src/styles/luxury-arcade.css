@@ -12,7 +12,7 @@
   
   --primary: #00FF66; /* Neon Turf Green */
   --primary-dark: #00CC52;
-  --primary-glow: rgba(0, 255, 102, 0.25);
+  --primary-glow: #111417 /* Fallback CRT Black */;
   
   --accent: #FFD600; /* Arcade Yellow */
   --accent-dark: #CCAA00;
@@ -28,8 +28,8 @@
   --text-inverse: #040805;
 
   /* Borders & Shadows */
-  --glass-border: rgba(0, 255, 102, 0.3);
-  --border-subtle: rgba(253, 251, 247, 0.08);
+  --glass-border: #111417 /* Fallback CRT Black */;
+  --border-subtle: #111417 /* Fallback CRT Black */;
   --border-panel: #4A5059;
   
   /* SNES 16-bit 3D Bezel Colors */
@@ -53,14 +53,14 @@
    ========================================================================== */
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Pixelify Sans', system-ui, sans-serif;
   background: var(--bg-dark);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4 { 
-  font-family: 'Outfit', sans-serif; 
+  font-family: 'Press Start 2P', monospace; 
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -92,14 +92,14 @@ h1, h2, h3, h4 {
 }
 
 .ef-btn:disabled {
-  opacity: 0.5;
+  /* opacity removed for brand compliance */
   cursor: not-allowed;
   pointer-events: none;
 }
 
 .ef-btn:active {
   transform: translateY(2px);
-  box-shadow: none !important;
+  /* box-shadow removed for brand compliance */
 }
 
 /* Button Sizes */
@@ -112,7 +112,7 @@ h1, h2, h3, h4 {
   background: #0A1A0A;
   color: var(--primary);
   border-color: var(--bezel-primary-light) var(--bezel-primary-dark) var(--bezel-primary-dark) var(--bezel-primary-light);
-  box-shadow: 0 3px 0 #0A4A0A;
+  /* box-shadow removed for brand compliance */
   text-shadow: 1px 1px 0 #000;
 }
 .ef-btn-primary:hover {
@@ -124,7 +124,7 @@ h1, h2, h3, h4 {
   background: var(--bg-panel);
   color: var(--text-main);
   border-color: var(--bezel-light) var(--bezel-dark) var(--bezel-dark) var(--bezel-light);
-  box-shadow: 0 3px 0 rgba(0,0,0,0.5);
+  /* box-shadow removed for brand compliance */
   text-shadow: 1px 1px 0 #000;
 }
 .ef-btn-secondary:hover {
@@ -136,7 +136,7 @@ h1, h2, h3, h4 {
   background: #1A0A0A;
   color: var(--danger);
   border-color: var(--bezel-danger-light) var(--bezel-danger-dark) var(--bezel-danger-dark) var(--bezel-danger-light);
-  box-shadow: 0 3px 0 #400000;
+  /* box-shadow removed for brand compliance */
   text-shadow: 1px 1px 0 #000;
 }
 .ef-btn-danger:hover {
@@ -148,7 +148,7 @@ h1, h2, h3, h4 {
   background: transparent;
   color: var(--text-muted);
   border-color: #333 #111 #111 #333;
-  box-shadow: none;
+  /* box-shadow removed for brand compliance */
 }
 .ef-btn-ghost:hover {
   background: var(--bg-panel);
@@ -190,31 +190,31 @@ h1, h2, h3, h4 {
 .ef-panel-default, .ef-panel-elev {
   background: var(--bg-panel);
   border-color: var(--bezel-light) var(--bezel-dark) var(--bezel-dark) var(--bezel-light);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+  /* box-shadow removed for brand compliance */
 }
 
 .ef-panel-sunk {
   background: var(--bg-dark);
   border-color: var(--bezel-dark) var(--bezel-light) var(--bezel-light) var(--bezel-dark);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  /* box-shadow removed for brand compliance */
 }
 
 .ef-panel-hero {
   background: #0B2015;
   border-color: var(--bezel-primary-light) var(--bezel-primary-dark) var(--bezel-primary-dark) var(--bezel-primary-light);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+  /* box-shadow removed for brand compliance */
 }
 
 .ef-panel-warning {
   background: #1A1A0A;
   border-color: var(--bezel-accent-light) var(--bezel-accent-dark) var(--bezel-accent-dark) var(--bezel-accent-light);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+  /* box-shadow removed for brand compliance */
 }
 
 .ef-panel-danger {
   background: #1A0A0A;
   border-color: var(--bezel-danger-light) var(--bezel-danger-dark) var(--bezel-danger-dark) var(--bezel-danger-light);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.5);
+  /* box-shadow removed for brand compliance */
 }
 
 /* ==========================================================================
@@ -226,7 +226,7 @@ h1, h2, h3, h4 {
   background: #1E2124;
   border: 4px solid;
   border-color: var(--bezel-light) var(--bezel-dark) var(--bezel-dark) var(--bezel-light);
-  box-shadow: 2px 4px 0 rgba(0,0,0,0.5);
+  /* box-shadow removed for brand compliance */
   transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
   position: relative;
 }
@@ -255,7 +255,7 @@ h1, h2, h3, h4 {
 
 .ef-card-player.ef-selected {
   border-color: #40BAF7;
-  box-shadow: 0 0 0 2px #40BAF7;
+  /* box-shadow removed for brand compliance */
 }
 
 .ef-card-player-info {
@@ -385,7 +385,7 @@ h1, h2, h3, h4 {
   content: '';
   position: fixed; /* Use fixed to cover the entire scrolled viewport */
   inset: 0;
-  background: rgba(10, 19, 14, 0.65); /* Dimming the background image */
+  background: #111417 /* Fallback CRT Black */; /* Dimming the background image */
   z-index: -1;
   pointer-events: none;
 }
@@ -409,13 +409,13 @@ h1, h2, h3, h4 {
 .ef-form-input {
   flex: 1 1 200px;
   padding: 8px 12px;
-  background: rgba(0,0,0,0.5);
+  background: #040805;
   border: 4px solid var(--bg-dark);
   color: var(--text-main);
   font-size: 0.85rem;
   outline: none;
   font-weight: 600;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Pixelify Sans', system-ui, sans-serif;
   transition: border-color 0.1s;
 }
 
@@ -431,7 +431,7 @@ h1, h2, h3, h4 {
   font-size: 0.85rem;
   outline: none;
   font-weight: 600;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Pixelify Sans', system-ui, sans-serif;
   cursor: pointer;
   transition: border-color 0.1s;
 }
@@ -473,7 +473,7 @@ h1, h2, h3, h4 {
 
 .ef-table td {
   padding: 12px 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid #F1FAEE;
 }
 
 .ef-table tbody tr {
@@ -481,7 +481,7 @@ h1, h2, h3, h4 {
 }
 
 .ef-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: #F1FAEE;
   transform: translateX(2px);
   border-left-color: var(--primary) !important;
 }

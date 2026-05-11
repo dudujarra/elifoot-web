@@ -1,5 +1,5 @@
-import { rng } from './rng';
-import { calcMarketValue } from './MarketPricer';
+import { rng } from './rng.js';
+import { calcMarketValue } from './MarketPricer.js';
 import realPlayers from '../data/realPlayers.json';
 
 const ALL_REAL_NAMES = realPlayers.map(p => p.name);

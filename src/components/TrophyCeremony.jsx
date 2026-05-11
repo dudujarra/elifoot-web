@@ -84,7 +84,8 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
         <div className="trophy-ceremony-overlay ef-art-champion-celebration"
              role="dialog" aria-label="Cerimônia de troféu"
              style={{ 
-                 background: `linear-gradient(#111417, #111417), url(${bgTrophyCeremony})`,
+                 background: `url(${bgTrophyCeremony})`,
+                 backgroundColor: '#111417',
                  backgroundSize: 'cover',
                  backgroundPosition: 'center',
                  imageRendering: 'pixelated',
@@ -112,7 +113,7 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
                         <div style={{
                             position: 'absolute',
                             width: '300px', height: '300px',
-                            background: `radial-gradient(circle, #1B4332 0%, rgba(255, 215, 0, 0) 70%)`,
+                            background: '#1B4332',
                             zIndex: -1,
                             animation: 'pulse-glow 2s infinite alternate'
                         }} />

@@ -145,6 +145,90 @@ export class AutoPlayController {
 
         // §17: Session time metrics
         this._sessionMetrics = new SessionMetrics();
+
+        // SPEC-119: LLM Bridge instance — satisfies UI contract in AutoPlayView
+        // Modes: 'heuristic' (pure functions, always available) | 'webllm' (dynamic import)
+        this.llmBridge = {
+            _mode: 'heuristic',
+            _loadStatus: 'idle',    // idle | loading | ready | error
+            _loadProgress: 0,
+            _errorMsg: null,
+            _webllmEngine: null,
+
+            status() {
+                return {
+                    mode: this._mode,
+                    loadStatus: this._loadStatus,
+                    loadProgress: this._loadProgress,
+                    error: this._errorMsg,
+                };
+            },
+
+            setMode(mode) {
+                this._mode = mode;
+                if (mode === 'heuristic') {
+                    this._loadStatus = 'idle';
+                    this._loadProgress = 0;
+                    this._webllmEngine = null;
+                    this._errorMsg = null;
+                }
+            },
+
+            async init() {
+                if (this._mode !== 'webllm') return;
+                this._loadStatus = 'loading';
+                this._loadProgress = 0;
+                this._errorMsg = null;
+
+                try {
+                    // Check WebGPU support first
+                    if (!navigator.gpu) {
+                        throw new Error('WebGPU não suportado neste navegador. Use Chrome 113+ ou Edge 113+.');
+                    }
+
+                    // Dynamic import — only downloads @mlc-ai/web-llm when needed
+                    const webllm = await import(/* @vite-ignore */ 'https://esm.run/@mlc-ai/web-llm');
+                    const engine = await webllm.CreateMLCEngine(
+                        'Llama-3.2-1B-Instruct-q4f16_1-MLC',
+                        {
+                            initProgressCallback: (report) => {
+                                this._loadProgress = report.progress || 0;
+                                console.log(`[SPEC-119] WebLLM: ${(this._loadProgress * 100).toFixed(0)}% — ${report.text || ''}`);
+                            }
+                        }
+                    );
+                    this._webllmEngine = engine;
+                    this._loadStatus = 'ready';
+                    this._loadProgress = 1;
+                    console.log('[SPEC-119] WebLLM engine ready');
+                } catch (err) {
+                    this._loadStatus = 'error';
+                    this._errorMsg = err.message || String(err);
+                    console.error('[SPEC-119] WebLLM init failed:', err);
+                }
+            },
+
+            /**
+             * Ask the LLM for a buy/sell decision.
+             * Falls back to heuristic if not in webllm mode or engine not ready.
+             */
+            async decide(prompt) {
+                if (this._mode === 'webllm' && this._webllmEngine && this._loadStatus === 'ready') {
+                    try {
+                        const reply = await this._webllmEngine.chat.completions.create({
+                            messages: [{ role: 'user', content: prompt }],
+                            max_tokens: 200,
+                            temperature: 0.3,
+                        });
+                        return { source: 'webllm', text: reply.choices?.[0]?.message?.content || '' };
+                    } catch (err) {
+                        console.warn('[SPEC-119] WebLLM decide error, falling back:', err);
+                    }
+                }
+                // Fallback: heuristic (the existing pure functions handle this elsewhere)
+                return { source: 'heuristic', text: null };
+            }
+        };
     }
 
     /**
@@ -1154,6 +1238,22 @@ export class AutoPlayController {
                         const decision = smartSellDecision(this.brain, {
                             team, player, offerAmount: offer.offerAmount
                         });
+
+                        // SPEC-119: When LLM is active, fire async consultation for logging/override
+                        if (this.llmBridge._mode === 'webllm' && this.llmBridge._loadStatus === 'ready') {
+                            const prompt = `Futebol manager. Recebi oferta de R$ ${(offer.offerAmount/1e6).toFixed(1)}M por ${player.name} (OVR ${player.ovr}, pos ${player.position}, idade ${player.age || '?'}). Meu saldo: R$ ${((team.balance||0)/1e6).toFixed(1)}M. Elenco tem ${team.squad.length} jogadores. Devo VENDER ou MANTER? Responda apenas VENDER ou MANTER e o motivo em 1 linha.`;
+                            this.llmBridge.decide(prompt).then(resp => {
+                                if (resp.source === 'webllm' && resp.text) {
+                                    this._logDecision('LLM_CONSULT_SELL', {
+                                        player: player.name, ovr: player.ovr,
+                                        amount: offer.offerAmount,
+                                        llmResponse: resp.text.substring(0, 200),
+                                        heuristicSaid: decision.sell ? 'SELL' : 'KEEP'
+                                    }, 0);
+                                }
+                            }).catch(() => { /* non-blocking */ });
+                        }
+
                         if (decision.sell && typeof engine.acceptTransferOffer === 'function') {
                             // Track for reward feedback
                             const standings = engine.getStandings(team.zone, team.division) || [];
@@ -1167,10 +1267,11 @@ export class AutoPlayController {
                             const result = engine.acceptTransferOffer(offer.playerId);
                             if (result?.success) {
                                 this.stats.transfers++;
-                                this._logSuccess('TRANSFER_SOLD', `Vendeu ${player.name} (OVR${player.ovr}) por R$ ${(offer.offerAmount/1e6).toFixed(1)}M. ${decision.reason}`);
+                                this._logSuccess('TRANSFER_SOLD', `Vendeu ${player.name} (OVR${player.ovr}) por R$ ${(offer.offerAmount/1e6).toFixed(1)}M. ${decision.reason}${this.llmBridge._mode === 'webllm' ? ' [LLM ativo]' : ''}`);
                                 this._logDecision('SELL_PLAYER', {
                                     playerId: offer.playerId, amount: offer.offerAmount,
-                                    source: decision.source, reason: decision.reason,
+                                    source: this.llmBridge._mode === 'webllm' ? 'webllm+heuristic' : decision.source,
+                                    reason: decision.reason,
                                     biases: decision.biases || []
                                 }, 0);
                             }
@@ -1221,6 +1322,21 @@ export class AutoPlayController {
                                     const target = best.candidate;
                                     const player = target.player || target;
                                     const offerAmount = best.askingPrice;
+
+                                    // SPEC-119: LLM consultation for buy decisions
+                                    if (this.llmBridge._mode === 'webllm' && this.llmBridge._loadStatus === 'ready') {
+                                        const prompt = `Futebol manager. Quero contratar ${player.name} (OVR ${player.ovr}, pos ${player.position || weakest.pos}, idade ${player.age || '?'}) por R$ ${(offerAmount/1e6).toFixed(1)}M. Meu saldo: R$ ${((team.balance||0)/1e6).toFixed(1)}M. Posição mais fraca: ${weakest.pos} (média OVR ${weakest.avgOVR.toFixed(0)}). Vale a pena COMPRAR ou ESPERAR? Responda COMPRAR ou ESPERAR e o motivo em 1 linha.`;
+                                        this.llmBridge.decide(prompt).then(resp => {
+                                            if (resp.source === 'webllm' && resp.text) {
+                                                this._logDecision('LLM_CONSULT_BUY', {
+                                                    target: player.name, ovr: player.ovr,
+                                                    amount: offerAmount,
+                                                    llmResponse: resp.text.substring(0, 200),
+                                                    heuristicSaid: 'BUY'
+                                                }, 0);
+                                            }
+                                        }).catch(() => { /* non-blocking */ });
+                                    }
 
                                     const result = engine.makeBuyOffer(target.teamId, player.id, offerAmount);
                                     // Track for ML reward feedback
