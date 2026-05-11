@@ -20,7 +20,7 @@
 import { TACTICS } from '../engine/ManagerSystems';
 import { drawCard } from '../engine/MatchEventsDeck.js';
 import { TACTIC_COUNTERS, TACTIC_NARRATION, getFormModifier } from '../engine/PlayerDevelopment';
-import { getDifficulty } from '../engine/systems/DifficultyModes.js';
+import { getDifficulty, calcOpponentBoost } from '../engine/systems/DifficultyModes.js';
 import { getTraitMatchModifier, hasTrait, initCareerStats, recordMatchStats, getGoalConversionBonus, getDefenseSectorBonus, getSetPieceBonus, getPenaltySaveBonus, getPenaltyConversionBonus } from '../engine/PlayerTraits';
 import { recordNpcResult } from '../engine/NpcTacticAdvisor';
 import { npcFeedMatchResult } from './learning/NpcManagerAI.js';
@@ -86,23 +86,18 @@ export class MatchSimulator {
         // SPEC-125 BUG-072: AI counter-tactic — adversários adaptam vs streak.
         // ==========================================
         // DDA (Dynamic Difficulty) — Flow Channel (§1.2)
+        // SPEC-147: calibrated boost curve (deep soak data: max win streak 18, max loss 11)
         // ==========================================
         let opponentBoost = 1.0;
-        
-        if ((isManagerHome || isManagerAway) && engine.managerStats?.rollingForm) {
-            const form = engine.managerStats.rollingForm;
-            if (form.length >= 5) {
-                const wins = form.filter(r => r === 'W').length;
-                const winRate = wins / form.length;
-                const difficulty = getDifficulty();
-                
-                if (winRate > 0.8) {
-                    // Fácil demais: Boost nos atributos do oponente (+15%)
-                    opponentBoost = 1.15;
-                } else if (winRate <= 0.2 && difficulty.id !== 'hard' && difficulty.id !== 'sinistro') {
-                    // Difícil demais: Debuff no oponente (-15%), modo rubber-banding, exceto Hard/Sinistro
-                    opponentBoost = 0.85;
-                }
+
+        if ((isManagerHome || isManagerAway) && engine.managerStats?.currentStreak !== undefined) {
+            const streak = engine.managerStats.currentStreak || 0;
+            const difficulty = getDifficulty();
+            // Hard/Sinistro: rubber-banding only applies upward (boost opponent on win streaks)
+            if (difficulty.id === 'hard' || difficulty.id === 'sinistro') {
+                opponentBoost = streak > 0 ? calcOpponentBoost(streak) : 1.0;
+            } else {
+                opponentBoost = calcOpponentBoost(streak);
             }
         }
 

@@ -34,6 +34,7 @@ import { inherit as inheritTraits } from '../engine/HeritageTraitSystem';
 import { evaluate as evaluateRivalry } from '../engine/RivalryUpgradeSystem';
 import { evaluate as evaluateFilhosRegen } from '../engine/FilhosRegenSystem';
 import { evaluateAchievements } from '../engine/MetaProgression';
+import { generateSeasonStory } from '../engine/SeasonStoryEngine.js';
 
 export class SeasonProcessor {
     /**
@@ -152,6 +153,27 @@ export class SeasonProcessor {
                     },
                 };
             }
+            // SPEC-150: gerar story da temporada
+            try {
+                const story = generateSeasonStory({
+                    wins: engine.managerStats?.wins || 0,
+                    draws: engine.managerStats?.draws || 0,
+                    losses: engine.managerStats?.losses || 0,
+                    goalsFor: engine.managerStats?.goalsFor || 0,
+                    goalsAgainst: engine.managerStats?.goalsAgainst || 0,
+                    topScorer: this._findTopScorer(team),
+                    longestWinStreak: engine.stats?.insights?.longestWinStreak || 0,
+                    biggestWin: engine.stats?.insights?.biggestWin || null,
+                    position: pos,
+                    promoted: season?.title ? true : false,
+                    relegated: season?.title === 'Rebaixado',
+                    division: team.division,
+                    seasonNumber: engine.seasonNumber,
+                });
+                if (!engine.seasonHistory) engine.seasonHistory = [];
+                engine.seasonHistory.push(story);
+                engine.weekEvents.push(`📖 ${story.headline}`);
+            } catch { /* defensive */ }
         }
     }
 

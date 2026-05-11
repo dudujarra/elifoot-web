@@ -225,12 +225,117 @@ export function getFormModifier(trend) {
 }
 
 /**
+ * SPEC-146: Narrative Pool Expansion — contextos diferenciados por situação do clube.
+ * Mínimo 60 narrativas distribuídas em 5 contextos:
+ *   title_race, relegation, moral_low, moral_high, mid_table.
+ */
+const NARRATIVES_BY_CONTEXT = {
+    moral_high: [
+        '🎉 Clima excelente no vestiário! Elenco em alta.',
+        '💪 Semana de treinos intensa. Time focado.',
+        '🔥 Moral nas alturas. Grupo unido.',
+        '⚡ Jogadores motivados, rendimento acima da média.',
+        '🌟 Vestiário tranquilo. Tudo preparado.',
+        '🎯 Concentração total nos próximos desafios.',
+        '🤝 Espírito coletivo em alta. Todos no mesmo ritmo.',
+        '😄 Animação contagiante nos treinos desta semana.',
+        '🌈 Semana positiva. Elenco com sede de vencer.',
+        '🏃 Ritmo forte e alegre nos trabalhos do campo.',
+        '🎵 Música no vestiário. Grupo leve e confiante.',
+        '☀️ Semana ensolarada dentro e fora do campo.',
+    ],
+    moral_low: [
+        '😞 Ambiente pesado após os resultados recentes.',
+        '🥀 Elenco abatido. Treinamento irregular.',
+        '⚠️ Tensão no grupo. Técnico reuniu o elenco.',
+        '💔 Sequência ruim afeta a confiança.',
+        '🌧️ Semana difícil. Grupo precisa se reencontrar.',
+        '😤 Cobrança interna. Jogadores insatisfeitos.',
+        '🔇 Silêncio pesado no vestiário. Ninguém fala muito.',
+        '👁️ Olhares baixos. Confiança no chão.',
+        '🤕 Treino abaixo do esperado. Foco comprometido.',
+        '📉 Semana de reflexão forçada após o mau momento.',
+        '🚨 Diretoria monitorando de perto o estado do elenco.',
+        '😶 Grupo fechado. Poucas conversas, muitas dúvidas.',
+    ],
+    relegation: [
+        '😰 Pressão máxima. Cada ponto é vital.',
+        '🧨 Semana decisiva na luta contra o rebaixamento.',
+        '🏃 Time treinou dobrado, consciente da situação.',
+        '😓 Clima pesado. Rebaixamento à vista.',
+        '🔥 Tudo ou nada nas próximas rodadas.',
+        '🪖 Mentalidade de batalha. Cada jogo, uma final.',
+        '📣 Técnico convocou reunião de emergência na semana.',
+        '🧱 Muralha defensiva sendo construída nos treinos.',
+        '💢 Raiva canalizada. Time quer sair do sufoco.',
+        '🎲 Semana de apostas. O grupo precisa entregar.',
+        '⏳ Tempo curto, pressão grande. Grupo concentrado.',
+        '🌊 Nado contra a maré — mas o elenco não desistiu.',
+    ],
+    title_race: [
+        '👑 Concentração total na disputa pelo título.',
+        '🏆 Cada treino é tratado como final.',
+        '🎯 Grupo blindado. Foco no campeonato.',
+        '⭐ Momento histórico se aproxima.',
+        '🥇 Semana decisiva. Pressão positiva no grupo.',
+        '🔒 Vestiário fechado para o exterior. Zero distração.',
+        '🏅 Fome de título. Jogadores em estado de graça.',
+        '✨ Semana especial. Sente-se algo diferente no ar.',
+        '🚀 Energia de campeão. O grupo acredita.',
+        '🌠 Treinos intensos mas alegres. Título à vista.',
+        '💎 O mais difícil está perto. Time focado.',
+        '🎖️ Legado sendo construído. Semana histórica em potencial.',
+    ],
+    mid_table: [
+        '📊 Semana de ajustes táticos.',
+        '🔄 Rotação no treino. Todos os jogadores envolvidos.',
+        '📝 Técnico analisa próximos adversários.',
+        '🏃 Ritmo forte nos treinos.',
+        '💬 Reunião de equipe. Foco nos detalhes.',
+        '🧩 Semana de encaixe do esquema tático.',
+        '🔍 Vídeos de oposição estudados com atenção.',
+        '⚙️ Ajustes finos na mecânica coletiva.',
+        '📅 Semana de preparação sem novidades negativas.',
+        '🎽 Treino físico intenso. Elenco em boa forma.',
+        '🧘 Semana tranquila. Grupo confiante no processo.',
+        '🤔 Análise pós-rodada. Time busca consistência.',
+    ],
+};
+
+/**
+ * Seleciona narrativa contextual baseada em posição, moral e sequência.
+ *
+ * @param {{ position: number, totalTeams: number, moral: number, streak: number }} ctx
+ * @returns {string}
+ */
+export function pickNarrative(ctx) {
+    const { position = 10, totalTeams = 20, moral = 50, streak = 0 } = ctx;
+    let key;
+    if (moral > 65 && position <= 3) {
+        key = 'title_race';
+    } else if (position >= totalTeams - 3) {
+        key = 'relegation';
+    } else if (moral < 40) {
+        key = 'moral_low';
+    } else if (moral > 65) {
+        key = 'moral_high';
+    } else {
+        key = 'mid_table';
+    }
+    const pool = NARRATIVES_BY_CONTEXT[key];
+    return pool[Math.floor(rng() * pool.length)];
+}
+
+/**
  * Dressing Room Dynamics — relações no vestiário
  * - Cliques: jogadores com alta moral formam grupo positivo
  * - Cancers: jogadores insatisfeitos contaminam moral
  * - Leader: jogador mais velho com moral alta estabiliza o grupo
+ *
+ * @param {object[]} squad
+ * @param {{ position?: number, totalTeams?: number, streak?: number }} [ctx={}]  SPEC-146 context
  */
-export function processDressingRoom(squad) {
+export function processDressingRoom(squad, ctx = {}) {
     const events = [];
 
     // Find leader
@@ -242,6 +347,11 @@ export function processDressingRoom(squad) {
     // Count unhappy players
     const unhappy = squad.filter(p => (p.moral || 50) < 30 && !p.injury);
     const happy = squad.filter(p => (p.moral || 50) > 75);
+
+    // Average moral for narrative context
+    const avgMoral = squad.length
+        ? squad.reduce((s, p) => s + (p.moral || 50), 0) / squad.length
+        : 50;
 
     // Leader stabilizes
     if (leader && unhappy.length > 0 && unhappy.length <= 3) {
@@ -261,12 +371,17 @@ export function processDressingRoom(squad) {
         events.push(`☠️ Vestiário em crise! ${unhappy.length} jogadores insatisfeitos contaminam o grupo.`);
     }
 
-    // Good vibes: if 6+ happy, slight boost to everyone
+    // Good vibes: if 6+ happy, emit contextual narrative (SPEC-146 expansion)
     if (happy.length >= 6) {
         squad.forEach(p => {
             p.moral = Math.min(100, (p.moral || 50) + 1);
         });
-        events.push(`🎉 Clima excelente no vestiário! ${happy.length} jogadores em alta moral.`);
+        events.push(pickNarrative({
+            position: ctx.position,
+            totalTeams: ctx.totalTeams,
+            moral: avgMoral,
+            streak: ctx.streak,
+        }));
     }
 
     // Captain system: highest OVR veteran gets +2 moral stability

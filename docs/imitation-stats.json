@@ -1,0 +1,12 @@
+{
+  "total": 18,
+  "breakdown": {
+    "TACTIC_CHANGE": 3,
+    "TEAM_TALK": 4,
+    "SUBSTITUTION": 2,
+    "TRAIN": 3,
+    "ML_TRANSFER_REWARD": 2,
+    "BUY_OFFER": 2,
+    "MARKET_INQUIRY": 2
+  }
+}

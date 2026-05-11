@@ -197,8 +197,14 @@ export class WeekProcessor {
             engine.weekEvents.push(`🔓 Novo acesso desbloqueado: ${viewId} — ${reason}`);
         });
 
-        // Dressing Room Dynamics
-        const dressingRoom = processDressingRoom(team.squad);
+        // Dressing Room Dynamics (SPEC-146: pass position context for narrative selection)
+        const _drStandings = engine.getStandings(team.zone, team.division);
+        const _drPos = _drStandings.findIndex(s => s.teamId === team.id) + 1;
+        const dressingRoom = processDressingRoom(team.squad, {
+            position: _drPos || undefined,
+            totalTeams: _drStandings.length || undefined,
+            streak: engine.managerStats?.streak,
+        });
         dressingRoom.events.forEach(e => engine.weekEvents.push(e));
 
         // Morale Events (narrative)
