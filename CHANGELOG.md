@@ -4,37 +4,44 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
-### [chore] AKITA-106 — Cleanup root clutter (2026-05-11)
+### [chore] AKITA-205 — Bundle code-split + lint cleanup + isolation + root cleanup (2026-05-11)
 
-- Remove 4.5MB de artefatos transientes commitados: `screenshot*.png` (3.6MB), `vitest_report.json` (328KB), `test_output.txt` (144KB), `build_errors.log` (20KB), `audit-escudos.html` (76KB), `shield-audit.html`, `fifa_sample.csv` (stub 404).
-- Remove 11 scripts ad-hoc órfãos do root (`audit_ui.cjs`, `check_teams.{cjs,js}`, `fix_{brand,quotes,styles,ui}.{py,cjs,js}`, `test_{squad,ui}.{cjs,js}`, `test-localstorage.js`, `screenshot.js`, `screenshot_squad.js`) — nenhum referenciado em `package.json` ou CI.
-- `.gitignore` ganha padrões `*.log`, `screenshot*.png`, `test_output*.txt`, `vitest_report.json`, `audit-*.html`, `shield-audit.html`, `fifa_sample.csv` para impedir regressão.
+Múltiplos débitos arquiteturais fechados num único PR após auditoria via systematic-debugging:
 
-### [feat] AKITA-105 — Code-split bundle + isolamento de testes (2026-05-11)
+- **Bundle**: `index.js` 1.56MB → **376KB** (-76%, gzip 110KB). 16 views via `React.lazy()` + `Suspense`. Eager: `StartView`, `DashboardView`, `Sidebar`, `FloatingBugButton`, `AudioController`, `EfButton`. Inline `isTutorialDone` em `StartView.jsx` elimina `INEFFECTIVE_DYNAMIC_IMPORT`.
+- **Lint**: 180+ → **130 warnings**, 0 errors. 6 `react-hooks/rules-of-hooks` (bugs reais) corrigidos em `MarketView.jsx` (early-return movido para depois dos `useState`). 47 imports `React` mortos removidos via codemod (React 19 JSX runtime — main usava `/* eslint-disable no-unused-vars */` band-aid).
+- **Isolation de testes**: `tests/_setup-isolate-localstorage.js` + `setupFiles` no `vite.config.js` limpam `localStorage` no início de cada suite. Resolve root cause de flakies order-dependent (`.vitest-localstorage*` persistia state entre runs). Mais granular que `fileParallelism: false` que main usava como mitigação.
+- **SDD local**: `scripts/spec-check.sh` copiado de `~/bin/`. CI workflow já referenciava com fallback.
+- **Root cleanup**: 4.5MB de artefatos transientes deletados (3× screenshots, vitest_report.json, test_output.txt, build_errors.log, audit HTMLs, fifa_sample.csv stub). 11 scripts ad-hoc órfãos removidos (`audit_ui.cjs`, `check_teams.{cjs,js}`, `fix_*.{py,cjs,js}`, `test_{squad,ui,localstorage}*`, `screenshot*.js`). `.gitignore` previne regressão.
 
-- **Bundle**: `index.js` 1.56MB → **376KB** (-76%, gzip 110KB). Todas as 17 views via `React.lazy()` + `Suspense`. `EfButton` mantido eager como shared chunk.
-- **Lint**: 180 → **133 warnings**, 0 errors. 6 `react-hooks/rules-of-hooks` (bugs reais) corrigidos em `MarketView.jsx`. 47 imports `React` mortos removidos em batch (React 19 JSX runtime).
-- **Isolamento de testes**: `tests/_setup-isolate-localstorage.js` + `setupFiles` no `vite.config.js` limpam `localStorage` no início de cada suite. Root cause dos flakies order-dependent: `.vitest-localstorage*` persistia state entre runs. Arquivos gitignored.
-- **SDD enforcement local**: `scripts/spec-check.sh` copiado de `~/bin/`. CI já referenciava; agora também local.
-- **Inline `isTutorialDone`** em `StartView.jsx`: elimina `INEFFECTIVE_DYNAMIC_IMPORT`.
+### [fix] AKITA-204 — NPC brain unique persona + golden master determinism (2026-05-11)
 
-### [fix] AKITA-104 — Fecha 18 vermelhos pós-integração de dados reais (2026-05-11)
+Bug latente descoberto: `AdaptiveBrain._restore()` lia o key compartilhado `elifoot_autoplay_brain` em todo constructor — todos NPCs criados pelo engine convergiam para uma única persona (a do último autoplay save). Quebrava SPEC-117 (unique OCEAN) e golden master determinism.
 
-Cluster de regressões herdado de AKITA-100..102. Todos com regression test correspondente.
+- `AdaptiveBrain` constructor agora aceita `{ skipAutoRestore }`. Engine passa `true` para NPC brains; NPCs hidratam via `BrainPersistence.js` com per-team keys.
+- Test `tests/integration/marl-e2e.test.js > NPC brains have EmotionalEngine attached` agora passa (estava falhando em main).
+- `tests/integration/deep-soak-100seasons.test.js` timeout bumped de 30s → 120s (ainda flaky em suite-load — débito para teste solo via `npm run test:soak`).
 
-- `YouthAcademy.generateYouthIntake` usa stats flat (`attacking/technical/tactical/defending/creativity`) em vez do `player.attributes` removido pelo `generatePlayer` atual.
-- `AdaptiveBrain.encodeState` realinhado com SPEC-116: 6 dims, nomes longos. `divTier` (AUDIT-FIX #10 sem spec — vibe addition) removido.
-- `src/data/clubColors.js` ganha `CLUB_NAME_ALIASES` + Proxy resolvendo 46 nomes oficiais → 170 entradas canônicas.
-- `AdaptiveBrain` constructor aceita `{ skipAutoRestore }`. Engine usa para NPC brains — todos compartilhavam `STORAGE_KEY` do autoplay (bug latente em prod).
-- `engine.initGame.restoreAllBrains` só roda fora de test env (golden master determinism).
-- `TutorialView.jsx`: remove `backgroundColor` duplicado.
-- `SPEC-025-aging`, `SPEC-134-growth-event-system`, `autoplay-full-audit`: pin seed em `beforeEach/beforeAll`.
+### [docs] AKITA-203 — Documentação canônica Akita (2026-05-11)
 
-### [docs] AKITA-103 — Fechamento dos gaps Akita na documentação (2026-05-11)
+Mandamento #4 (CLAUDE.md fonte única técnica) e #5 (GitHub público dia 1) tinham gaps no repo.
 
-Criados: `CLAUDE.md` (Mandamento #4 fonte única), `LICENSE` MIT, `CONTRIBUTING.md`, `GEMINI.md` + `CODEX.md` (espelhos multi-IA), `specs/generators/{code,research,pipeline,decision}.md`, `.github/ISSUE_TEMPLATE/feature_request.md`.
+Criados:
 
-Atualizados: `AKITA_RULES.md` (7 mandamentos globais), `README.md` (badges + Numbers corrigidos), `BUGS.md`, `SPECS-MASTER-GUIDE.md` (30→97 specs), `.github/PULL_REQUEST_TEMPLATE.md` + `bug_report.md` (Regra 0 explícita).
+- `CLAUDE.md` (raiz — fonte única técnica)
+- `LICENSE` MIT (README anunciava sem arquivo)
+- `CONTRIBUTING.md` (workflow Akita para contribuidores)
+- `GEMINI.md`, `CODEX.md` (espelhos slim multi-IA partindo do mesmo ponto)
+- `specs/generators/{code,research,pipeline,decision}.md` (templates SDD)
+- `.github/ISSUE_TEMPLATE/feature_request.md` (SPEC-first)
+
+Atualizados:
+
+- `AKITA_RULES.md` → 7 mandamentos globais (SDD, Regra 0, anti-vibe, fonte única, GitHub público, 3-artefact, LLM local) + arquitetura como restrições.
+- `README.md` → badges e tabela Numbers corrigidos (1035/1035, 97 specs, 169 commits). Aviso topo apontando docs canônicas.
+- `BUGS.md` → inventário real de `tests/regression/`.
+- `SPECS-MASTER-GUIDE.md` → 30→97 specs.
+- `.github/PULL_REQUEST_TEMPLATE.md` + `bug_report.md` → Regra 0 explícita.
 
 ### [feat] v2.0.0 — SNES Pacaembu Edition (2026-05-08)
 

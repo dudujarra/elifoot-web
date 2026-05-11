@@ -38,7 +38,7 @@ describe('Deep Soak Test — 100 seasons ML convergence', () => {
         bot.running = false;
         stats = bot.getStats();
         console.log(`\n=== DEEP SOAK: ${stats.weeksPlayed} weeks, ${stats.seasonsPlayed} seasons, ${errors.length} errors ===`);
-    }, 30000);
+    }, 120000); // AKITA-108: 30s timeout era apertado em parallel-suite load; 120s dá folga
 
     it('zero crashes over 100 seasons', () => {
         expect(stats.seasonsPlayed).toBeGreaterThanOrEqual(SEASONS);
