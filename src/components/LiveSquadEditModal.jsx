@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { TACTICS } from '../engine/ManagerSystems';
 import { Help } from './Help';
-import { Tooltip } from './Tooltip';
-import { EfModal, EfButton } from './ui';
+import { EfTooltip, EfModal, EfButton } from './ui';
+import { 
+    ArrowsLeftRight, Strategy, Lightning, Users, CheckCircle, Warning, XCircle, Play
+} from '@phosphor-icons/react';
 
 const MAX_LIVE_SUBS = 5;
 
@@ -22,6 +24,19 @@ export function LiveSquadEditModal({ team, engine, currentMinute, liveSubsCount,
     const [tactic, setTactic] = useState(engine.currentTactic);
     const [feedback, setFeedback] = useState('');
 
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
+
     if (!team) return null;
 
     const titulares = team.squad.filter(p => p.isTitular && !p.injury);
@@ -31,17 +46,17 @@ export function LiveSquadEditModal({ team, engine, currentMinute, liveSubsCount,
 
     const handleSub = (outPlayer, inPlayer) => {
         if (subsLeft <= 0) {
-            setFeedback('❌ Limite de 5 substituições atingido.');
+            setFeedback('error:Limite de 5 substituições atingido.');
             return;
         }
         if (engine.applyLiveSubstitution) {
             const result = engine.applyLiveSubstitution(outPlayer.id, inPlayer.id, currentMinute);
             if (result?.success) {
-                setFeedback(`✅ ${outPlayer.name} → ${inPlayer.name} aos ${currentMinute}'`);
+                setFeedback(`success:${outPlayer.name} substituído por ${inPlayer.name} aos ${currentMinute}'`);
                 setSelectedOut(null);
                 onSubMade();
             } else {
-                setFeedback(`❌ ${result?.msg || 'Erro na substituição.'}`);
+                setFeedback(`error:${result?.msg || 'Erro na substituição.'}`);
             }
         } else {
             // Fallback inline if engine method missing
@@ -49,7 +64,7 @@ export function LiveSquadEditModal({ team, engine, currentMinute, liveSubsCount,
             inPlayer.isTitular = true;
             inPlayer.energy = Math.min(100, inPlayer.energy + 10);
             outPlayer.energy = Math.max(outPlayer.energy, 30);
-            setFeedback(`✅ ${outPlayer.name} → ${inPlayer.name} aos ${currentMinute}'`);
+            setFeedback(`success:${outPlayer.name} substituído por ${inPlayer.name} aos ${currentMinute}'`);
             setSelectedOut(null);
             onSubMade();
         }
@@ -59,43 +74,86 @@ export function LiveSquadEditModal({ team, engine, currentMinute, liveSubsCount,
         if (engine.setTactic) {
             engine.setTactic(newTacticKey);
             setTactic(newTacticKey);
-            setFeedback(`✅ Tática mudada para ${TACTICS[newTacticKey]?.name}`);
+            setFeedback(`success:Tática alterada para ${TACTICS[newTacticKey]?.name}`);
         }
     };
+
+    const isFeedbackSuccess = feedback.startsWith('success:');
+    const isFeedbackError = feedback.startsWith('error:');
+    const cleanFeedback = feedback.replace('success:', '').replace('error:', '');
 
     return (
         <EfModal
             open={true}
             onClose={onClose}
-            title={`⏸️ PAUSA — Min ${currentMinute}'`}
+            title={
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Strategy size={24} color={colors.secondary} /> 
+                    <span>GESTÃO TÁTICA ({currentMinute}')</span>
+                </div>
+            }
             size="md"
             footer={
-                <EfButton variant="primary" onClick={onClose}>▶️ Retomar Partida</EfButton>
+                <EfButton variant="primary" onClick={onClose} size="lg" style={{ width: '100%', display: 'flex', gap: '8px' }}>
+                    RETOMAR PARTIDA <Play weight="fill" />
+                </EfButton>
             }
         >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                
+                {/* Status Bar */}
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <EfTooltip content="Limite FIFA: 5 substituições por jogo">
+                        <div style={{
+                            flex: 1,
+                            backgroundColor: colors.bg,
+                            padding: '12px',
+                            borderRadius: '8px',
+                            border: `1px solid ${subsLeft <= 0 ? colors.danger : colors.border}`,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '4px'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)' }}>
+                                <ArrowsLeftRight size={16} /> SUBSTITUIÇÕES
+                            </div>
+                            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', fontFamily: 'var(--font-mono)', color: subsLeft <= 0 ? colors.danger : colors.text }}>
+                                {liveSubsCount} / {MAX_LIVE_SUBS}
+                            </div>
+                        </div>
+                    </EfTooltip>
+                </div>
 
-                {/* Subs counter */}
-                <Tooltip content="Limite FIFA: 5 substituições por jogo. Mudanças aplicam ao plantel.">
+                {/* Feedback */}
+                {feedback && (
                     <div style={{
-                        background: '#1E2124',
-                        padding: '0.5rem 0.75rem',
-                        borderRadius: '0',
-                        fontSize: '0.85rem',
-                        marginBottom: '0.75rem'
+                        backgroundColor: isFeedbackSuccess ? 'rgba(57, 255, 20, 0.1)' : 'rgba(255, 51, 51, 0.1)',
+                        border: `1px solid ${isFeedbackSuccess ? colors.accent : colors.danger}`,
+                        color: isFeedbackSuccess ? colors.accent : colors.danger,
+                        padding: '12px 16px',
+                        borderRadius: '8px',
+                        fontSize: '0.9rem',
+                        fontFamily: 'var(--font-mono)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
                     }}>
-                        🔄 Substituições: <strong>{liveSubsCount}</strong> / {MAX_LIVE_SUBS}
-                        {subsLeft <= 0 && <span style={{color:'#FF3333',marginLeft:'0.5rem'}}> (limite atingido)</span>}
+                        {isFeedbackSuccess ? <CheckCircle size={20} /> : <Warning size={20} />}
+                        {cleanFeedback}
                     </div>
-                </Tooltip>
+                )}
 
                 {/* Tactic switch */}
-                <div style={{marginBottom: '1rem'}}>
+                <div>
                     <Help id="btn.set_tactics">
-                        <h4 style={{fontSize:'0.85rem',color:'#888',marginBottom:'0.4rem'}}>⚔️ TÁTICA ATUAL</h4>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: colors.textMuted, marginBottom: '12px', fontFamily: 'var(--font-mono)' }}>
+                            <Strategy size={16} /> TÁTICA ATUAL
+                        </div>
                     </Help>
-                    <div style={{display:'flex',flexWrap:'wrap',gap:'0.3rem'}}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {Object.entries(TACTICS).map(([k, v]) => (
-                            <Tooltip key={k} content={v.description || `Tática ${v.name}`}>
+                            <EfTooltip key={k} content={v.description || `Tática ${v.name}`}>
                                 <EfButton
                                     variant={tactic === k ? 'primary' : 'secondary'}
                                     size="sm"
@@ -103,55 +161,59 @@ export function LiveSquadEditModal({ team, engine, currentMinute, liveSubsCount,
                                 >
                                     {v.name}
                                 </EfButton>
-                            </Tooltip>
+                            </EfTooltip>
                         ))}
                     </div>
                 </div>
 
-                {/* Feedback */}
-                {feedback && (
-                    <div style={{
-                        background: feedback.startsWith('✅') ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)',
-                        color: feedback.startsWith('✅') ? '#39FF14' : '#FF3333',
-                        padding: '0.5rem 0.75rem',
-                        borderRadius: '0',
-                        fontSize: '0.85rem',
-                        marginBottom: '0.75rem'
-                    }}>
-                        {feedback}
-                    </div>
-                )}
-
                 {/* Substituição UI */}
                 {subsLeft > 0 && (
-                    <>
+                    <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: '20px' }}>
                         {!selectedOut && (
-                            <div style={{marginBottom:'0.75rem'}}>
-                                <h4 style={{fontSize:'0.85rem',color:'#888',marginBottom:'0.4rem'}}>👥 ESCOLHA QUEM SAI</h4>
-                                <div style={{display:'flex',flexDirection:'column',gap:'0.25rem',maxHeight:'200px',overflowY:'auto'}}>
-                                    {titulares.map(p => (
-                                        <div key={p.id} style={{
-                                            display:'flex',
-                                            justifyContent:'space-between',
-                                            alignItems:'center',
-                                            padding:'0.4rem 0.65rem',
-                                            background:'#1E2124',
-                                            borderRadius:'0',
-                                            fontSize:'0.85rem',
-                                            cursor:'pointer'
-                                        }} onClick={() => setSelectedOut(p)}>
-                                            <span>
-                                                <span className={`pos-badge ${p.position}`} style={{marginRight:'0.4rem'}}>{p.position}</span>
-                                                {p.name}
-                                            </span>
-                                            <span style={{
-                                                color: p.energy < 50 ? '#FF3333' : p.energy < 70 ? '#FFD700' : '#39FF14',
-                                                fontSize:'0.8rem'
-                                            }}>
-                                                ⚡{p.energy}%
-                                            </span>
-                                        </div>
-                                    ))}
+                            <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: colors.textMuted, marginBottom: '12px', fontFamily: 'var(--font-mono)' }}>
+                                    <Users size={16} /> SUBSTITUIR QUEM?
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '250px', overflowY: 'auto', paddingRight: '4px' }}>
+                                    {titulares.map(p => {
+                                        const energyColor = p.energy < 50 ? colors.danger : p.energy < 75 ? colors.warning : colors.accent;
+                                        return (
+                                            <div key={p.id} style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                padding: '10px 12px',
+                                                backgroundColor: colors.bg,
+                                                borderRadius: '6px',
+                                                border: `1px solid ${colors.border}`,
+                                                cursor: 'pointer',
+                                                transition: 'all 0.15s ease'
+                                            }} 
+                                            onClick={() => setSelectedOut(p)}
+                                            onMouseEnter={e => e.currentTarget.style.borderColor = colors.secondary}
+                                            onMouseLeave={e => e.currentTarget.style.borderColor = colors.border}
+                                            >
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                    <span style={{ 
+                                                        backgroundColor: colors.panelElevated, 
+                                                        color: colors.textMuted, 
+                                                        padding: '2px 6px', 
+                                                        borderRadius: '4px', 
+                                                        fontSize: '0.75rem', 
+                                                        fontFamily: 'var(--font-mono)',
+                                                        width: '36px',
+                                                        textAlign: 'center'
+                                                    }}>
+                                                        {p.position}
+                                                    </span>
+                                                    <span style={{ fontFamily: 'var(--font-sans)', fontWeight: '600' }}>{p.name}</span>
+                                                </div>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: energyColor, fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
+                                                    <Lightning size={14} weight="fill" /> {p.energy}%
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}
@@ -159,50 +221,79 @@ export function LiveSquadEditModal({ team, engine, currentMinute, liveSubsCount,
                         {selectedOut && (
                             <div>
                                 <div style={{
-                                    background:'rgba(239,68,68,0.1)',
-                                    padding:'0.5rem 0.75rem',
-                                    borderRadius:'0',
-                                    fontSize:'0.85rem',
-                                    marginBottom:'0.5rem'
+                                    backgroundColor: 'rgba(255, 51, 51, 0.1)',
+                                    border: `1px solid ${colors.danger}`,
+                                    padding: '12px',
+                                    borderRadius: '8px',
+                                    marginBottom: '16px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center'
                                 }}>
-                                    Sai: <strong>{selectedOut.name}</strong> ({selectedOut.position})
-                                    <EfButton variant="secondary" size="sm" style={{marginLeft:'0.5rem',padding:'0.15rem 0.5rem',fontSize:'0.75rem'}} onClick={() => setSelectedOut(null)}>Cancelar</EfButton>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <XCircle size={20} color={colors.danger} />
+                                        <span style={{ color: colors.danger, fontFamily: 'var(--font-mono)', fontSize: '0.9rem' }}>SAINDO:</span>
+                                        <strong style={{ fontFamily: 'var(--font-sans)' }}>{selectedOut.name} ({selectedOut.position})</strong>
+                                    </div>
+                                    <EfButton variant="secondary" size="sm" onClick={() => setSelectedOut(null)}>CANCELAR</EfButton>
                                 </div>
-                                <h4 style={{fontSize:'0.85rem',color:'#888',marginBottom:'0.4rem'}}>👤 ESCOLHA QUEM ENTRA</h4>
-                                <div style={{display:'flex',flexDirection:'column',gap:'0.25rem',maxHeight:'200px',overflowY:'auto'}}>
+                                
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: colors.textMuted, marginBottom: '12px', fontFamily: 'var(--font-mono)' }}>
+                                    <Users size={16} /> ESCOLHER RESERVA
+                                </div>
+                                
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px' }}>
                                     {reserves.length === 0 && (
-                                        <div style={{color:'#888',fontSize:'0.85rem'}}>Nenhuma reserva disponível.</div>
+                                        <div style={{ color: colors.textMuted, fontSize: '0.85rem', textAlign: 'center', padding: '24px 0', fontFamily: 'var(--font-mono)' }}>
+                                            NENHUM RESERVA COM ENERGIA DISPONÍVEL
+                                        </div>
                                     )}
                                     {reserves.map(p => (
                                         <div key={p.id} style={{
-                                            display:'flex',
-                                            justifyContent:'space-between',
-                                            alignItems:'center',
-                                            padding:'0.4rem 0.65rem',
-                                            background:'#1E2124',
-                                            borderRadius:'0',
-                                            fontSize:'0.85rem'
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            padding: '8px 12px',
+                                            backgroundColor: colors.bg,
+                                            borderRadius: '6px',
+                                            border: `1px solid ${colors.border}`
                                         }}>
-                                            <span>
-                                                <span className={`pos-badge ${p.position}`} style={{marginRight:'0.4rem'}}>{p.position}</span>
-                                                {p.name}
-                                                <span style={{color:'#888',marginLeft:'0.4rem',fontSize:'0.75rem'}}>OVR {p.ovr}</span>
-                                            </span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                <span style={{ 
+                                                    backgroundColor: colors.panelElevated, 
+                                                    color: colors.textMuted, 
+                                                    padding: '2px 6px', 
+                                                    borderRadius: '4px', 
+                                                    fontSize: '0.75rem', 
+                                                    fontFamily: 'var(--font-mono)',
+                                                    width: '36px',
+                                                    textAlign: 'center'
+                                                }}>
+                                                    {p.position}
+                                                </span>
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span style={{ fontFamily: 'var(--font-sans)', fontWeight: '600' }}>{p.name}</span>
+                                                    <span style={{ color: colors.textMuted, fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>
+                                                        OVR: <strong style={{ color: colors.text }}>{p.ovr}</strong> • ENERGIA: <strong style={{ color: colors.accent }}>{p.energy}%</strong>
+                                                    </span>
+                                                </div>
+                                            </div>
                                             <EfButton
                                                 variant="primary"
                                                 size="sm"
                                                 onClick={() => handleSub(selectedOut, p)}
+                                                style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
                                             >
-                                                Entrar
+                                                ENTRAR <ArrowsLeftRight size={14} />
                                             </EfButton>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         )}
-                    </>
+                    </div>
                 )}
-
+            </div>
         </EfModal>
     );
 }

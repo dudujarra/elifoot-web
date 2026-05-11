@@ -1,17 +1,13 @@
-/**
- * PressView — SPEC-069 Press Conferences Hub
- *
- * Centraliza coletivas de imprensa pré + pós match.
- * Show 30+ question types via PressConference.generateQuestion().
- * 
- * 16-BIT BRUTALIST ARCADE AESTHETIC
- */
-
 import React, { useState, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import { generateQuestion, shouldTriggerPress } from '../engine/PressConference';
-import { EfButton } from './ui/EfButton';
+import { EfPanel, EfButton } from './ui';
 import bgPressConference from '../assets/environments/bg_press_conference.png';
+
+import { 
+    MicrophoneStage, Info, ArrowLeft, CheckCircle, ChartLineUp,
+    Warning
+} from '@phosphor-icons/react';
 
 export function PressView() {
     const { changeView, getEngine, forceUpdate, getDashboardView } = useGame();
@@ -32,8 +28,29 @@ export function PressView() {
         setQuestion(q);
     }, []);
 
-    if (!engine || !team) return <div style={{padding:'16px',color:'#FFF',fontFamily:"'Press Start 2P', monospace"}}>ERRO: JOGO NÃO INICIADO.</div>;
-    if (!question) return <div style={{padding:'16px',color:'#FFF',fontFamily:"'Press Start 2P', monospace"}}>CARREGANDO COLETIVA...</div>;
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
+
+    if (!engine || !team) return (
+        <div style={{ padding: '24px', color: colors.text, fontFamily: 'var(--font-mono)' }}>
+            <Warning size={32} color={colors.danger} /> ERRO: JOGO NÃO INICIADO.
+        </div>
+    );
+    if (!question) return (
+        <div style={{ padding: '24px', color: colors.text, fontFamily: 'var(--font-mono)' }}>
+            CARREGANDO COLETIVA...
+        </div>
+    );
 
     const handleAnswer = (option) => {
         // Apply effects
@@ -54,204 +71,229 @@ export function PressView() {
             backgroundImage: `url(${bgPressConference})`,
             imageRendering: 'pixelated',
             WebkitImageRendering: 'pixelated',
-            backgroundColor: '#0A130E',
+            backgroundColor: colors.bg,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
             minHeight: '100dvh',
-            padding: '16px',
-            color: '#E2E8F0',
-            fontFamily: "'Outfit', sans-serif"
+            padding: '24px',
+            color: colors.text,
+            fontFamily: 'var(--font-sans)',
+            overflowY: 'auto'
         }}>
-            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
                 {/* HEADER */}
-                <div style={{
-                    background: '#1E2124',
-                    border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    padding: '16px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
+                <EfPanel padding="lg" style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
                     alignItems: 'center',
-                    boxShadow: '0 8px 0 rgba(0,0,0,0.8)'
+                    borderBottom: `2px solid ${colors.secondary}`
                 }}>
-                    <div>
-                        <h2 style={{fontFamily: "'Press Start 2P', monospace", color: '#FFD700', margin: '0 0 8px 0', fontSize: '1rem', textShadow: '3px 3px 0 #000'}}>
-                            COLETIVA DE IMPRENSA
-                        </h2>
-                        <span style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', color: '#888'}}>SALA DE CONFERÊNCIA</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                            <MicrophoneStage size={28} color={colors.secondary} />
+                        </div>
+                        <div>
+                            <h2 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', fontFamily: 'var(--font-sans)', color: colors.text, fontWeight: 'bold' }}>
+                                COLETIVA DE IMPRENSA
+                            </h2>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: colors.textMuted }}>
+                                SALA DE CONFERÊNCIA — TREINADOR {engine?.manager?.name.toUpperCase()}
+                            </span>
+                        </div>
                     </div>
-                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>SAIR</EfButton>
-                </div>
+                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>
+                        <ArrowLeft size={16} /> SAIR
+                    </EfButton>
+                </EfPanel>
 
                 {/* QUESTION CARD */}
-                <div className="ef-anim-pop-in" style={{
-                    background: '#1E2124',
-                    border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    padding: '24px',
-                    boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
+                <EfPanel padding="lg" className="ef-anim-pop-in" style={{
+                    borderLeft: `4px solid ${colors.warning}`
                 }}>
                     {/* Context tag */}
                     <div style={{
-                        display: 'inline-block',
-                        background: '#3D280B',
-                        border: '2px solid #F59E0B',
-                        padding: '4px 12px',
-                        fontFamily: "'Press Start 2P', monospace",
-                        fontSize: '0.55rem',
-                        color: '#FFD700',
-                        marginBottom: '16px'
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        backgroundColor: colors.bg,
+                        border: `1px solid ${colors.warning}`,
+                        padding: '6px 12px',
+                        borderRadius: '4px',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.8rem',
+                        color: colors.warning,
+                        marginBottom: '20px',
+                        fontWeight: 'bold'
                     }}>
-                        CONTEXTO: {question.context.toUpperCase()}
+                        <Info size={16} /> CONTEXTO: {question.context.toUpperCase()}
                     </div>
 
-                    {/* Microphone icon + Question */}
-                    <div style={{display: 'flex', gap: '16px', alignItems: 'flex-start'}}>
+                    <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
                         <div style={{
-                            width: '48px', height: '48px', minWidth: '48px',
-                            background: '#111', border: '4px solid #333',
+                            width: '40px', height: '40px', minWidth: '40px',
+                            backgroundColor: colors.bg, borderRadius: '50%',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '1.5rem'
+                            border: `1px solid ${colors.border}`, color: colors.textMuted
                         }}>
-                            🎙️
+                            <MicrophoneStage size={20} />
                         </div>
                         <p style={{
-                            fontFamily: "'Press Start 2P', monospace",
-                            fontSize: '0.7rem',
-                            lineHeight: '1.8',
-                            color: '#FFF',
-                            margin: 0
+                            fontFamily: 'var(--font-sans)',
+                            fontSize: '1.1rem',
+                            lineHeight: '1.6',
+                            color: colors.text,
+                            margin: 0,
+                            fontWeight: '500',
+                            fontStyle: 'italic'
                         }}>
-                            "{question.text.toUpperCase()}"
+                            "{question.text}"
                         </p>
                     </div>
-                </div>
+                </EfPanel>
 
                 {/* ANSWER OPTIONS */}
                 {!answered ? (
-                    <div style={{
-                        background: '#1E2124',
-                        border: '4px solid',
-                        borderColor: '#4A5059 #111417 #111417 #4A5059',
-                        padding: '16px'
-                    }}>
+                    <EfPanel padding="lg">
                         <div style={{
-                            background: '#111',
-                            padding: '8px',
-                            borderBottom: '2px solid #333',
-                            marginBottom: '16px',
-                            fontFamily: "'Press Start 2P', monospace",
-                            color: '#FFD700',
-                            fontSize: '0.65rem',
-                            textShadow: '2px 2px 0 #000'
+                            fontFamily: 'var(--font-mono)',
+                            color: colors.textMuted,
+                            fontSize: '0.9rem',
+                            marginBottom: '20px',
+                            fontWeight: 'bold',
+                            borderBottom: `1px solid ${colors.border}`,
+                            paddingBottom: '8px'
                         }}>
                             SUA RESPOSTA:
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {question.options.map((opt, idx) => (
-                                <div
+                                <button
                                     key={opt.id}
                                     onClick={() => handleAnswer(opt)}
                                     style={{
-                                        background: '#111',
-                                        border: '4px solid',
-                                        borderColor: '#333 #000 #000 #333',
-                                        padding: '16px',
+                                        backgroundColor: colors.panelElevated,
+                                        border: `1px solid ${colors.border}`,
+                                        borderRadius: '8px',
+                                        padding: '16px 20px',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '16px',
-                                        transition: 'border-color 0.1s'
+                                        gap: '20px',
+                                        transition: 'all 0.2s ease',
+                                        textAlign: 'left'
                                     }}
-                                    onMouseEnter={(e) => e.currentTarget.style.borderColor = '#FFD700 #AA8800 #AA8800 #FFD700'}
-                                    onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333 #000 #000 #333'}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.borderColor = colors.secondary;
+                                        e.currentTarget.style.backgroundColor = colors.panelBg;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.borderColor = colors.border;
+                                        e.currentTarget.style.backgroundColor = colors.panelElevated;
+                                    }}
                                 >
                                     <span style={{
-                                        fontFamily: "'Press Start 2P', monospace",
-                                        fontSize: '0.8rem',
-                                        color: '#FFD700',
-                                        minWidth: '24px'
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: '1.2rem',
+                                        color: colors.secondary,
+                                        minWidth: '24px',
+                                        fontWeight: 'bold'
                                     }}>
-                                        {String.fromCharCode(65 + idx)}.
+                                        {String.fromCharCode(65 + idx)}
                                     </span>
                                     <span style={{
-                                        fontFamily: "'Press Start 2P', monospace",
-                                        fontSize: '0.6rem',
-                                        lineHeight: '1.6',
-                                        color: '#FFF'
+                                        fontFamily: 'var(--font-sans)',
+                                        fontSize: '1rem',
+                                        lineHeight: '1.5',
+                                        color: colors.text,
+                                        fontWeight: '500'
                                     }}>
-                                        {opt.text.toUpperCase()}
+                                        {opt.text}
                                     </span>
-                                </div>
+                                </button>
                             ))}
                         </div>
-                    </div>
+                    </EfPanel>
                 ) : (
-                    <div className="ef-anim-slide-down" style={{
-                        background: '#1E2124',
-                        border: '4px solid',
-                        borderColor: '#4A5059 #111417 #111417 #4A5059',
-                        padding: '24px'
+                    <EfPanel padding="lg" className="ef-anim-slide-down" style={{
+                        borderLeft: `4px solid ${colors.accent}`
                     }}>
                         <div style={{
-                            fontFamily: "'Press Start 2P', monospace",
-                            fontSize: '0.7rem',
-                            color: '#39FF14',
-                            marginBottom: '16px',
-                            textShadow: '2px 2px 0 #000'
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            fontFamily: 'var(--font-sans)',
+                            fontSize: '1.1rem',
+                            color: colors.accent,
+                            marginBottom: '20px',
+                            fontWeight: 'bold'
                         }}>
-                            ✓ RESPOSTA ENVIADA
+                            <CheckCircle size={24} weight="fill" /> RESPOSTA ENVIADA
                         </div>
 
                         <div style={{
-                            background: '#111',
-                            border: '4px solid',
-                            borderColor: '#333 #000 #000 #333',
-                            padding: '16px',
-                            marginBottom: '16px'
+                            backgroundColor: colors.panelElevated,
+                            border: `1px solid ${colors.border}`,
+                            borderRadius: '8px',
+                            padding: '20px',
+                            marginBottom: '24px'
                         }}>
                             <p style={{
-                                fontFamily: "'Press Start 2P', monospace",
-                                fontSize: '0.6rem',
+                                fontFamily: 'var(--font-sans)',
+                                fontSize: '1rem',
                                 lineHeight: '1.6',
-                                color: '#FFF',
+                                color: colors.text,
                                 margin: 0
                             }}>
-                                {answered.text.toUpperCase()}
+                                "{answered.text}"
                             </p>
                         </div>
 
                         {/* EFFECTS */}
                         <div style={{
-                            background: '#0A1A0A',
-                            border: '4px solid #39FF14',
-                            padding: '12px',
-                            marginBottom: '16px'
+                            backgroundColor: colors.bg,
+                            border: `1px solid ${colors.accent}`,
+                            borderRadius: '8px',
+                            padding: '16px',
+                            marginBottom: '24px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px'
                         }}>
-                            <span style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', color: '#39FF14'}}>EFEITOS: </span>
-                            {Object.entries(answered.effect).map(([k, v]) => (
-                                <span key={k} style={{
-                                    fontFamily: "'Press Start 2P', monospace",
-                                    fontSize: '0.6rem',
-                                    marginRight: '16px',
-                                    color: '#FFF'
-                                }}>
-                                    {k.toUpperCase()}: <strong style={{ color: v > 0 ? '#39FF14' : '#FF3333' }}>{v > 0 ? '+' : ''}{v}</strong>
-                                </span>
-                            ))}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: colors.textMuted, fontWeight: 'bold' }}>
+                                <ChartLineUp size={16} /> REPERCUSSÃO (EFEITOS):
+                            </div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+                                {Object.entries(answered.effect).map(([k, v]) => (
+                                    <div key={k} style={{
+                                        backgroundColor: colors.panelElevated,
+                                        padding: '8px 12px',
+                                        borderRadius: '4px',
+                                        fontFamily: 'var(--font-sans)',
+                                        fontSize: '0.9rem',
+                                        color: colors.text,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        border: `1px solid ${colors.border}`
+                                    }}>
+                                        <span style={{ color: colors.textMuted, textTransform: 'uppercase' }}>{k}</span>
+                                        <strong style={{ color: v > 0 ? colors.accent : colors.danger }}>{v > 0 ? '+' : ''}{v}</strong>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         <EfButton
                             variant="primary"
                             size="lg"
                             onClick={() => changeView(getDashboardView())}
-                            style={{ width: '100%', justifyContent: 'center' }}
+                            style={{ width: '100%', justifyContent: 'center', padding: '16px' }}
                         >
                             VOLTAR AO DASHBOARD
                         </EfButton>
-                    </div>
+                    </EfPanel>
                 )}
             </div>
         </div>

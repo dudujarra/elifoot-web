@@ -2,12 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
 import { drawCard } from '../engine/MatchEventsDeck';
 import { BenchEventsDeck } from '../engine/BenchEventsDeck';
-import { EfClubBadge } from './ui';
-import { EfPanel } from './ui/EfPanel';
-import { EfButton } from './ui/EfButton';
+import { EfClubBadge, EfPanel, EfButton } from './ui';
 import bgMatchStadium from '../assets/environments/bg_match_stadium.png';
-
 import { rng as systemRng } from '../engine/rng.js';
+
+import { 
+    Clock, SoccerBall, Whistle, UserMinus, TrendUp, WarningCircle, CheckCircle, Question
+} from '@phosphor-icons/react';
 
 export function PlayerMatchView() {
     const { getEngine, changeView, forceUpdate } = useGame();
@@ -27,6 +28,19 @@ export function PlayerMatchView() {
     const [goalBurstActive, setGoalBurstActive] = useState(false);
     const prevHomeGoalsRef = useRef(0);
     const timerRef = useRef(null);
+
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
 
     // Trigger goal-burst quando homeGoals incrementar
     useEffect(() => {
@@ -159,49 +173,113 @@ export function PlayerMatchView() {
             backgroundImage: `url(${bgMatchStadium})`,
             imageRendering: 'pixelated',
             WebkitImageRendering: 'pixelated',
-            backgroundColor: '#0A130E',
+            backgroundColor: colors.bg,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
             minHeight: '100dvh',
-            padding: '16px',
-            color: '#E2E8F0'
+            padding: '24px',
+            color: colors.text,
+            fontFamily: 'var(--font-sans)',
+            overflowY: 'auto'
         }}>
-            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {isBenched && <div style={{ background: 'rgba(239,68,68,0.1)', color: '#FF3333', padding: '12px', borderRadius: '4px', textAlign: 'center', fontWeight: 'bold' }}>🔴 VOCÊ ESTÁ NO BANCO — Observe e interaja com os eventos</div>}
+            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {isBenched && (
+                    <div style={{ 
+                        backgroundColor: colors.bg, 
+                        color: colors.danger, 
+                        padding: '16px', 
+                        borderRadius: '8px', 
+                        textAlign: 'center', 
+                        fontWeight: 'bold',
+                        border: `1px solid ${colors.danger}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                    }}>
+                        <UserMinus size={24} weight="fill" /> VOCÊ ESTÁ NO BANCO — Observe e interaja com os eventos
+                    </div>
+                )}
 
-                <EfPanel variant="elev" padding="md" className={goalBurstActive ? 'ef-anim-shake' : ''} style={{ textAlign: 'center', position: 'relative' }}>
+                {/* Scoreboard Panel */}
+                <EfPanel padding="lg" className={goalBurstActive ? 'ef-anim-shake' : ''} style={{ textAlign: 'center', position: 'relative' }}>
                     {goalBurstActive && (
                         <div className="ef-anim-goal-burst" style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',zIndex:10,pointerEvents:'none'}} />
                     )}
-                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-around',gap:'1rem'}}>
-                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-                            {team?.name && <EfClubBadge name={team.name} size="md" />}
-                            <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#E2E8F0' }}>{team?.name || 'Meu Time'}</span>
+                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between', padding: '0 24px'}}>
+                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px', flex: 1}}>
+                            {team?.name ? (
+                                <EfClubBadge name={team.name} size="md" />
+                            ) : (
+                                <div style={{ width: '64px', height: '64px', backgroundColor: colors.bg, borderRadius: '50%' }} />
+                            )}
+                            <span style={{ fontSize: '1rem', fontWeight: 'bold', color: colors.text, fontFamily: 'var(--font-sans)' }}>{team?.name || 'Meu Time'}</span>
                         </div>
-                        <div className={goalBurstActive ? 'ef-anim-counter' : ''} style={{ fontSize: '2.5rem', fontWeight: 800, color: '#39FF14', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{homeGoals} — {awayGoals}</div>
-                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-                            {opponent?.name && <EfClubBadge name={opponent.name} size="md" />}
-                            <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#E2E8F0' }}>{opponent?.name || 'Adversário'}</span>
+                        
+                        <div className={goalBurstActive ? 'ef-anim-counter' : ''} style={{ 
+                            fontSize: '3.5rem', 
+                            fontWeight: '800', 
+                            color: colors.accent, 
+                            fontFamily: 'var(--font-mono)',
+                            padding: '0 32px',
+                            backgroundColor: colors.bg,
+                            borderRadius: '8px',
+                            border: `2px solid ${colors.border}`
+                        }}>
+                            {homeGoals} <span style={{ color: colors.border }}>-</span> {awayGoals}
+                        </div>
+                        
+                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px', flex: 1}}>
+                            {opponent?.name ? (
+                                <EfClubBadge name={opponent.name} size="md" />
+                            ) : (
+                                <div style={{ width: '64px', height: '64px', backgroundColor: colors.bg, borderRadius: '50%' }} />
+                            )}
+                            <span style={{ fontSize: '1rem', fontWeight: 'bold', color: colors.text, fontFamily: 'var(--font-sans)' }}>{opponent?.name || 'Adversário'}</span>
                         </div>
                     </div>
-                    <p style={{ color: '#888', marginTop: '1rem', fontSize: '1.2rem', fontWeight: 'bold' }}>{matchFinished ? 'FIM DE JOGO' : `${minute}'`}</p>
-                    <div style={{ background: '#111417', height: '6px', borderRadius: '3px', marginTop: '0.5rem', border: '1px solid #333' }}>
-                        <div style={{ width: `${(minute / 90) * 100}%`, height: '100%', background: '#6ABC3A', borderRadius: '2px', transition: 'width 0.3s' }} />
+                    
+                    <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: colors.secondary, fontSize: '1.2rem', fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>
+                            <Clock size={24} weight="bold" /> {matchFinished ? 'FIM DE JOGO' : `${minute}'`}
+                        </div>
+                        <div style={{ width: '100%', maxWidth: '400px', backgroundColor: colors.bg, height: '8px', borderRadius: '4px', border: `1px solid ${colors.border}`, overflow: 'hidden' }}>
+                            <div style={{ width: `${(minute / 90) * 100}%`, height: '100%', backgroundColor: colors.secondary, transition: 'width 0.3s ease' }} />
+                        </div>
                     </div>
                 </EfPanel>
 
-                {/* Event Modal */}
+                {/* Event Modal Overlay */}
                 {activeEvent && !eventResult && (
-                    <div className="modal-overlay">
-                        <EfPanel variant="elev" padding="md" style={{ maxWidth: '400px', textAlign: 'center' }}>
-                            <h3 style={{ margin: '0 0 10px 0', color: activeEvent.isBench ? '#E2E8F0' : '#FFD700' }}>{activeEvent.isBench ? '📋 Evento no Banco' : `⚡ Momento Decisivo — ${minute}'`}</h3>
-                            <p style={{ fontSize: '0.9rem', marginBottom: '16px' }}>{activeEvent.text}</p>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{
+                        position: 'fixed',
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: 'rgba(13, 17, 23, 0.8)',
+                        backdropFilter: 'blur(4px)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 100,
+                        padding: '24px'
+                    }}>
+                        <EfPanel padding="lg" style={{ maxWidth: '500px', width: '100%', border: `2px solid ${activeEvent.isBench ? colors.border : colors.warning}` }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px', color: activeEvent.isBench ? colors.text : colors.warning }}>
+                                {activeEvent.isBench ? <Question size={32} /> : <WarningCircle size={32} weight="fill" />}
+                                <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', fontSize: '1.2rem' }}>
+                                    {activeEvent.isBench ? '📋 DECISÃO NO BANCO' : `⚡ MOMENTO DECISIVO — ${minute}'`}
+                                </h3>
+                            </div>
+                            
+                            <p style={{ fontSize: '1rem', lineHeight: '1.6', color: colors.text, marginBottom: '24px' }}>
+                                {activeEvent.text}
+                            </p>
+                            
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                 {activeEvent.options.map((opt, i) => (
-                                    <EfButton key={i} variant="secondary" onClick={() => handleChoice(opt)}>
-                                        {opt.label}
-                                        {opt.skill && <span style={{ color: '#888', fontSize: '0.7rem', marginLeft: '0.5rem' }}>({opt.skill})</span>}
+                                    <EfButton key={i} variant="secondary" onClick={() => handleChoice(opt)} style={{ justifyContent: 'space-between', padding: '16px' }}>
+                                        <span>{opt.label}</span>
+                                        {opt.skill && <span style={{ color: colors.secondary, fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>[{opt.skill.toUpperCase()}]</span>}
                                     </EfButton>
                                 ))}
                             </div>
@@ -209,32 +287,64 @@ export function PlayerMatchView() {
                     </div>
                 )}
 
-                {/* Event Result */}
+                {/* Event Result Overlay */}
                 {eventResult && (
-                    <EfPanel variant="elev" padding="md" style={{ textAlign: 'center', border: '2px solid #FFD700' }}>
-                        <p style={{ fontSize: '1rem', margin: 0 }}>{eventResult}</p>
-                    </EfPanel>
+                    <div style={{
+                        position: 'fixed',
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: 'rgba(13, 17, 23, 0.8)',
+                        backdropFilter: 'blur(4px)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 100,
+                        padding: '24px'
+                    }}>
+                        <EfPanel padding="lg" style={{ maxWidth: '500px', width: '100%', textAlign: 'center', border: `2px solid ${eventResult.includes('✅') ? colors.accent : colors.danger}` }}>
+                            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+                                {eventResult.includes('✅') ? <CheckCircle size={48} color={colors.accent} weight="fill" /> : <WarningCircle size={48} color={colors.danger} weight="fill" />}
+                            </div>
+                            <p style={{ fontSize: '1.2rem', margin: 0, color: colors.text, fontWeight: 'bold' }}>
+                                {eventResult.replace('✅ ', '').replace('❌ ', '')}
+                            </p>
+                        </EfPanel>
+                    </div>
                 )}
 
                 {/* Narration */}
-                <EfPanel variant="sunk" padding="md" style={{ maxHeight: '250px', overflowY: 'auto' }}>
-                    {narration.length === 0 && <span style={{ color: '#888' }}>Aguardando início...</span>}
-                    {narration.map((n, i) => (
-                        <div key={i} style={{ 
-                            padding: '4px 8px', 
-                            borderLeft: n.isGoal ? '3px solid #39FF14' : 'none',
-                            background: n.isGoal ? 'rgba(106, 188, 58, 0.1)' : 'transparent',
-                            color: n.isGoal ? '#E2E8F0' : '#888',
-                            fontSize: '0.85rem',
-                            marginBottom: '4px'
-                        }}>{n.minute}' — {n.text}</div>
-                    ))}
+                <EfPanel padding="lg" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '300px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: colors.text, marginBottom: '16px', fontWeight: 'bold' }}>
+                        <Whistle size={20} /> LANCES DA PARTIDA
+                    </div>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto', flex: 1 }}>
+                        {narration.length === 0 && <span style={{ color: colors.textMuted, fontStyle: 'italic', padding: '12px', textAlign: 'center' }}>Aguardando o apito inicial...</span>}
+                        {narration.map((n, i) => (
+                            <div key={i} style={{ 
+                                padding: '12px 16px', 
+                                borderLeft: n.isGoal ? `4px solid ${colors.accent}` : `4px solid ${colors.border}`,
+                                backgroundColor: n.isGoal ? colors.bg : colors.panelElevated,
+                                color: colors.text,
+                                fontSize: '0.95rem',
+                                borderRadius: '0 4px 4px 0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px'
+                            }}>
+                                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', color: n.isGoal ? colors.accent : colors.secondary, width: '32px' }}>{n.minute}'</span>
+                                <span>{n.text.replace('⚽ ', '')}</span>
+                                {n.isGoal && <SoccerBall size={16} color={colors.accent} weight="fill" style={{ marginLeft: 'auto' }} />}
+                            </div>
+                        ))}
+                    </div>
                 </EfPanel>
 
                 {matchFinished && (
-                    <EfButton variant="primary" onClick={handleEndMatch} style={{ width: '100%', justifyContent: 'center', padding: '16px', fontSize: '1.1rem' }}>
-                        📊 VER RESULTADOS E AVANÇAR
-                    </EfButton>
+                    <div className="ef-anim-slide-up">
+                        <EfButton variant="primary" size="lg" onClick={handleEndMatch} style={{ width: '100%', justifyContent: 'center', padding: '20px', fontSize: '1.1rem' }}>
+                            <TrendUp size={24} weight="bold" /> VER RESULTADOS E AVANÇAR
+                        </EfButton>
+                    </div>
                 )}
             </div>
         </div>

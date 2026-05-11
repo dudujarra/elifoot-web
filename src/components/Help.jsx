@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip } from './Tooltip';
+import { EfTooltip } from './ui';
 import { getTooltip } from '../data/tooltipsLoader';
 
 /**
@@ -16,9 +16,9 @@ export function Help({ id, fallback, position = 'auto', delay = 300, children, c
     const content = getTooltip(id) || fallback;
     if (!content) return children;
     return (
-        <Tooltip content={content} position={position} delay={delay} className={className}>
+        <EfTooltip content={content} position={position} delay={delay} className={className}>
             {children}
-        </Tooltip>
+        </EfTooltip>
     );
 }
 
