@@ -126,7 +126,10 @@ export const Data = {
             if (isSuper) {
                 ovr = rng.int(Math.max(75, baseMin + 10), Math.min(99, baseMax + 15));
             } else {
-                ovr = rng.int(baseMin, baseMax);
+                // Multiplicador caótico: 0.8 a 1.2, cria de flops a hidden gems no mesmo time
+                const chaos = 0.8 + (rng() * 0.4); 
+                ovr = Math.floor(rng.int(baseMin, baseMax) * chaos);
+                ovr = Math.max(10, Math.min(99, ovr));
             }
             ovr = Math.min(ovr, maxOvrForTier);
 
@@ -150,8 +153,10 @@ export const Data = {
 
         for (const attr of statKeys) {
             const bias = specialty.bias[attr] || 1.0;
-            let biased = Math.round(ovr * bias * (0.85 + (rng() * 0.3)));
-            stats[attr] = Math.max(20, Math.min(attrMax, biased));
+            // MEGA PATCH: Aumentado MUITO o fator de "ruído" na geração de stats.
+            // Em vez de ±15% (0.85 a 1.15), agora é ±35% (0.65 a 1.35)
+            let biased = Math.round(ovr * bias * (0.65 + (rng() * 0.7)));
+            stats[attr] = Math.max(10, Math.min(attrMax, biased));
         }
 
         // Físico
@@ -196,13 +201,27 @@ export const Data = {
 
     /**
      * MEGA PATCH: generateSquad agora cria um elenco com DIVERSIDADE real.
-     * Se o time existir no banco de dados real (PLAYERS_BY_TEAM), injeta os jogadores reais.
-     * Preenche lacunas com a geração procedural avançada.
+     * Sorteia uma tática inicial (4-4-2, 4-3-3, 3-5-2, etc) para não ter times idênticos.
      */
     generateSquad(tier, teamBudget = 0, teamName = "") {
         const squad = [];
-        const formation = ["GOL", "DEF", "DEF", "DEF", "DEF", "MEI", "MEI", "MEI", "ATA", "ATA", "ATA"];
-        const benchPositions = ["GOL", "DEF", "DEF", "MEI", "MEI", "ATA", "ATA"];
+        
+        // Pool de formações iniciais para garantir que os times não nasçam todos no 4-3-3
+        const formationsPool = [
+            ["GOL", "DEF", "DEF", "DEF", "DEF", "MEI", "MEI", "MEI", "MEI", "ATA", "ATA"], // 4-4-2
+            ["GOL", "DEF", "DEF", "DEF", "DEF", "MEI", "MEI", "MEI", "ATA", "ATA", "ATA"], // 4-3-3
+            ["GOL", "DEF", "DEF", "DEF", "MEI", "MEI", "MEI", "MEI", "MEI", "ATA", "ATA"], // 3-5-2
+            ["GOL", "DEF", "DEF", "DEF", "DEF", "MEI", "MEI", "MEI", "MEI", "MEI", "ATA"], // 4-5-1
+            ["GOL", "DEF", "DEF", "DEF", "DEF", "DEF", "MEI", "MEI", "MEI", "ATA", "ATA"], // 5-3-2
+            ["GOL", "DEF", "DEF", "DEF", "DEF", "MEI", "MEI", "ATA", "ATA", "ATA", "ATA"], // 4-2-4
+        ];
+        const formation = rng.pick(formationsPool);
+        
+        // Reservas variados para acompanhar a tática
+        const benchPositions = ["GOL"];
+        for(let i = 0; i < 6; i++) {
+            benchPositions.push(rng.pick(["DEF", "MEI", "ATA"]));
+        }
         
         // Copiar os jogadores reais do time (se houver) para consumirmos durante a escalação
         let realRoster = [];
@@ -236,11 +255,12 @@ export const Data = {
                 p = this.generatePlayer(pos, tier, { realPlayer: realData, teamBudget });
             } else {
                 const options = { teamBudget };
-                if (guaranteeSuper && !superSpawned && idx === (tier <= 1 ? 9 : 7)) {
+                // Aumentando a chance do superplayer nascer em posições variadas
+                if (guaranteeSuper && !superSpawned && rng() < 0.2) {
                     options.forceSuper = true;
                     superSpawned = true;
                 }
-                if (!wonderkidSpawned && idx === 5) {
+                if (!wonderkidSpawned && rng() < 0.15) {
                     options.forceAge = rng.int(17, 20);
                     wonderkidSpawned = true;
                 }
@@ -250,6 +270,9 @@ export const Data = {
             squad.push(p);
         });
 
+        // Se o loop de titulares terminou e o superplayer não spawnou, não tem problema,
+        // às vezes um time de Tier 1 não tem uma "mega estrela" absoluta, aumentando a aleatoriedade.
+
         // 7 reservas (tier ligeiramente menor)
         benchPositions.forEach(pos => {
             const realData = pickRealPlayer(pos);
@@ -258,10 +281,10 @@ export const Data = {
             if (realData) {
                 p = this.generatePlayer(pos, tier + 0.5, { realPlayer: realData, teamBudget });
             } else {
-                p = this.generatePlayer(pos, tier + 0.5, { teamBudget });
-                if (rng() < 0.3 && p.age > 25) {
-                    p.age = rng.int(18, 22);
-                    p.potential = Math.min(99, p.ovr + rng.int(10, 25));
+                p = this.generatePlayer(pos, tier + 0.8, { teamBudget }); // reservas mais fracos (mais variação)
+                if (rng() < 0.4 && p.age > 24) {
+                    p.age = rng.int(17, 21);
+                    p.potential = Math.min(99, p.ovr + rng.int(15, 30));
                     p.isWonderkid = p.potential - p.ovr >= 15;
                 }
             }
