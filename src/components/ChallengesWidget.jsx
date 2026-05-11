@@ -58,8 +58,7 @@ export function ChallengesWidget() {
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             padding: '10px',
-                            backgroundColor: isCompleted ? 'rgba(57, 255, 20, 0.05)' : colors.panelElevated,
-                            borderRadius: '6px',
+                            backgroundColor: isCompleted ? '#1B4332' : colors.panelElevated,
                             border: `1px solid ${isCompleted ? colors.accent : canClaim ? colors.warning : colors.border}`,
                             transition: 'all 0.2s ease',
                             opacity: isCompleted ? 0.7 : 1
@@ -91,10 +90,9 @@ export function ChallengesWidget() {
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '4px',
-                                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                                    backgroundColor: '#1B4332',
                                     padding: '2px 6px',
-                                    borderRadius: '4px'
-                                }}>
+                                    }}>
                                     <Star size={10} weight="fill" /> +{c.reward.prestige}P · R${(c.reward.money / 1000).toFixed(0)}k
                                 </div>
                                 

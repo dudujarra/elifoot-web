@@ -96,7 +96,7 @@ export default function CareerInfoPanel({ controllerRef }) {
     return (
         <EfPanel variant="sunk" padding="md" style={{
             marginTop: '0.5rem',
-            background: 'rgba(255, 215, 0, 0.05)',
+            background: '#1B4332',
             border: '1px solid #FFD700',
         }}>
             <div
@@ -122,8 +122,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                     <div style={{
                         marginTop: '8px',
                         padding: '8px',
-                        background: 'rgba(0,0,0,0.2)',
-                        borderRadius: '4px',
+                        background: '#040805',
                         display: 'flex',
                         gap: '12px',
                         flexWrap: 'wrap'
@@ -206,14 +205,14 @@ export default function CareerInfoPanel({ controllerRef }) {
                             <div style={{ fontSize: '0.72rem', color: '#888', marginBottom: '4px' }}>
                                 ⚽ ARTILHEIROS (TEMPORADA ATUAL)
                             </div>
-                            <div style={{ background: 'rgba(0,0,0,0.15)', borderRadius: '2px', padding: '4px' }}>
+                            <div style={{ background: '#040805', padding: '4px' }}>
                                 {snapshot.topScorers.map((p, i) => (
                                     <div key={i} style={{
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         fontSize: '0.7rem',
                                         padding: '2px 4px',
-                                        borderBottom: i < snapshot.topScorers.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none'
+                                        borderBottom: i < snapshot.topScorers.length - 1 ? '1px solid #0E1F14' : 'none'
                                     }}>
                                         <span>
                                             <strong style={{ color: '#FFD700' }}>{i + 1}.</strong>{' '}
@@ -244,10 +243,9 @@ export default function CareerInfoPanel({ controllerRef }) {
                                 display: 'flex',
                                 gap: '4px',
                                 flexWrap: 'wrap',
-                                background: 'rgba(0,0,0,0.15)',
+                                background: '#040805',
                                 padding: '4px',
-                                borderRadius: '2px'
-                            }}>
+                                }}>
                                 {snapshot.seasons.map((s, i) => {
                                     const div = DIV_NAMES[s.division] || `D${s.division}`;
                                     const titleEmoji = s.title === 'Promovido' ? '⬆️' : s.title?.startsWith('Campeão') ? '🏆' : s.title === 'Rebaixado' ? '⬇️' : '';
@@ -255,9 +253,8 @@ export default function CareerInfoPanel({ controllerRef }) {
                                         <div key={i} style={{
                                             fontSize: '0.65rem',
                                             padding: '2px 6px',
-                                            background: titleEmoji ? 'rgba(255, 215, 0, 0.1)' : 'transparent',
-                                            border: titleEmoji ? '1px solid #FFD700' : '1px solid rgba(255,255,255,0.1)',
-                                            borderRadius: '2px',
+                                            background: titleEmoji ? '#1B4332' : 'transparent',
+                                            border: titleEmoji ? '1px solid #FFD700' : '1px solid #0E1F14',
                                             fontFamily: 'monospace'
                                         }} title={s.title || s.record}>
                                             {titleEmoji} {div} · {s.position}º

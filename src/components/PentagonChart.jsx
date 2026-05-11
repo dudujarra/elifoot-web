@@ -52,7 +52,7 @@ export function PentagonChart({ player, size = 200, showLabels = true }) {
                     key={i}
                     points={points}
                     fill="none"
-                    stroke="rgba(255,255,255,0.15)"
+                    stroke="#0E1F14"
                     strokeWidth="1"
                 />
             ))}
@@ -67,7 +67,7 @@ export function PentagonChart({ player, size = 200, showLabels = true }) {
                         y1={cy}
                         x2={cx + radius * Math.cos(a)}
                         y2={cy + radius * Math.sin(a)}
-                        stroke="rgba(255,255,255,0.2)"
+                        stroke="#0E1F14"
                         strokeWidth="1"
                     />
                 );
@@ -76,7 +76,7 @@ export function PentagonChart({ player, size = 200, showLabels = true }) {
             {/* Player polygon (filled) */}
             <polygon
                 points={playerPoints}
-                fill="rgba(255, 215, 0, 0.35)"
+                fill="#1B4332"
                 stroke="#FFD700"
                 strokeWidth="2"
             />

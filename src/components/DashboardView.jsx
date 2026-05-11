@@ -32,6 +32,7 @@ export function DashboardView() {
     const [tab, setTab] = useState('overview');
     const [pendingUnlock, setPendingUnlock] = useState(null);
     const [pendingAchievement, setPendingAchievement] = useState(null);
+    const [pacingQueue, setPacingQueue] = useState([]);
     const [showTutorial, setShowTutorial] = useState(() => {
         try { return !localStorage.getItem('elifoot_tutorial_done') && (engine?.seasonNumber || 1) === 1; }
         catch { return false; }
@@ -80,7 +81,7 @@ export function DashboardView() {
                 {/* === HEADER — LUXURY BENTO === */}
                 <EfPanel variant="hero" padding="lg" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                        <div style={{ display: 'inline-block', background: '#1A1F24', color: '#888', padding: '4px 12px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', marginBottom: '12px' }}>
+                        <div style={{ display: 'inline-block', background: '#1A1F24', color: '#888', padding: '4px 12px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', marginBottom: '12px' }}>
                             {pos}º • SÉRIE {['A','B','C','D'][team.division - 1]}
                         </div>
                         <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '2rem', fontWeight: '800', margin: '0 0 8px 0', color: '#FDFBF7' }}>
@@ -96,7 +97,7 @@ export function DashboardView() {
                             R$ {(team.balance / 1000000).toFixed(1)}M
                         </div>
                         {boardStatus && (
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: boardStatus.color, background: '#1A1F24', padding: '6px 12px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '6px' }} title={`Diretoria: ${boardStatus.label} (${engine.board?.confidence ?? 60}%).`}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: boardStatus.color, background: '#1A1F24', padding: '6px 12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }} title={`Diretoria: ${boardStatus.label} (${engine.board?.confidence ?? 60}%).`}>
                                 <span>{boardStatus.emoji}</span> {boardStatus.label}
                             </div>
                         )}
@@ -105,7 +106,7 @@ export function DashboardView() {
                                 <span>SEM {seasonWeek}/38</span>
                                 <span>TEMP {engine.seasonNumber}</span>
                             </div>
-                            <div style={{ width: '100%', height: '4px', background: '#1A1F24', borderRadius: '2px', overflow: 'hidden' }}>
+                            <div style={{ width: '100%', height: '4px', background: '#1A1F24', overflow: 'hidden' }}>
                                 <div style={{ width: `${(seasonWeek / 38) * 100}%`, height: '100%', background: '#39FF14' }} />
                             </div>
                         </div>
@@ -135,7 +136,16 @@ export function DashboardView() {
                         </EfPanel>
 
                         <div style={{ marginTop: 'auto' }}>
-                            <EfButton variant="primary" size="lg" style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', padding: '24px', fontFamily: 'var(--font-sans)', fontWeight: 'bold', gap: '8px' }} onClick={() => { engine.checkPressConference(); if (!engine.pressQuestion) changeView('match'); else forceUpdate(); }}>
+                            <EfButton variant="primary" size="lg" style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', padding: '24px', fontFamily: 'var(--font-sans)', fontWeight: 'bold', gap: '8px' }} onClick={() => {
+                                // AUDIT-FIX #17: Check pacing friction before match
+                                const events = engine.getPacingEvents?.() || [];
+                                if (events.length > 0) {
+                                    setPacingQueue(events);
+                                } else {
+                                    engine.checkPressConference();
+                                    if (!engine.pressQuestion) changeView('match'); else forceUpdate();
+                                }
+                            }}>
                                 <SoccerBall weight="fill" /> JOGAR PARTIDA
                             </EfButton>
                         </div>
@@ -205,8 +215,8 @@ export function DashboardView() {
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '16px', color: '#FFD700' }}><Bank weight="fill" /> EMPRÉSTIMO ATIVO</div>
                                             <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
                                                 <tbody>
-                                                    <tr style={{ borderBottom: '1px solid rgba(255, 215, 0, 0.2)' }}><td style={{ color: '#8E9E94', padding: '8px 0' }}>Principal</td><td style={{ textAlign: 'right', padding: '8px 0', color: '#FDFBF7' }}>R$ {(engine.activeLoan.principal / 1_000_000).toFixed(1)}M</td></tr>
-                                                    <tr style={{ borderBottom: '1px solid rgba(255, 215, 0, 0.2)' }}><td style={{ color: '#8E9E94', padding: '8px 0' }}>Parcela</td><td style={{ textAlign: 'right', padding: '8px 0', color: '#FF3333' }}>R$ {(engine.activeLoan.weeklyPayment / 1000).toFixed(0)}K</td></tr>
+                                                    <tr style={{ borderBottom: '1px solid #1B4332' }}><td style={{ color: '#8E9E94', padding: '8px 0' }}>Principal</td><td style={{ textAlign: 'right', padding: '8px 0', color: '#FDFBF7' }}>R$ {(engine.activeLoan.principal / 1_000_000).toFixed(1)}M</td></tr>
+                                                    <tr style={{ borderBottom: '1px solid #1B4332' }}><td style={{ color: '#8E9E94', padding: '8px 0' }}>Parcela</td><td style={{ textAlign: 'right', padding: '8px 0', color: '#FF3333' }}>R$ {(engine.activeLoan.weeklyPayment / 1000).toFixed(0)}K</td></tr>
                                                     <tr><td style={{ color: '#8E9E94', padding: '8px 0' }}>Restante</td><td style={{ textAlign: 'right', padding: '8px 0', color: '#FDFBF7' }}>{engine.activeLoan.weeksRemaining} sem</td></tr>
                                                 </tbody>
                                             </table>
@@ -233,7 +243,6 @@ export function DashboardView() {
                                                             padding: '12px', 
                                                             background: isGood ? '#162D1C' : isBad ? '#2D1616' : '#1A1F24', 
                                                             borderLeft: `4px solid ${isGood ? '#39FF14' : isBad ? '#FF3333' : '#4A5059'}`,
-                                                            borderRadius: '4px',
                                                             fontFamily: 'var(--font-sans)',
                                                             fontSize: '0.85rem',
                                                             color: isGood ? '#39FF14' : isBad ? '#FF3333' : '#FDFBF7'
@@ -257,7 +266,7 @@ export function DashboardView() {
                                                     {engine.boardTension > 0 ? '+' : ''}{engine.boardTension}
                                                 </strong>
                                             </div>
-                                            <div style={{ width: '100%', height: '6px', background: '#1A1F24', borderRadius: '3px', marginTop: '16px', overflow: 'hidden' }}>
+                                            <div style={{ width: '100%', height: '6px', background: '#1A1F24', marginTop: '16px', overflow: 'hidden' }}>
                                                 <div style={{ height: '100%', width: `${Math.max(0, Math.min(100, (engine.boardTension + 100) / 2))}%`, background: engine.boardTension >= 0 ? '#39FF14' : '#FF3333' }} />
                                             </div>
                                         </EfPanel>
@@ -270,7 +279,7 @@ export function DashboardView() {
                                                 {stats.rollingForm.map((r, i) => (
                                                     <span key={i} style={{
                                                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                                                        width: '32px', height: '32px', borderRadius: '4px', fontSize: '0.85rem', fontFamily: 'var(--font-mono)', fontWeight: 'bold',
+                                                        width: '32px', height: '32px', fontSize: '0.85rem', fontFamily: 'var(--font-mono)', fontWeight: 'bold',
                                                         backgroundColor: r === 'W' ? '#162D1C' : r === 'D' ? '#2D2916' : '#2D1616',
                                                         color: r === 'W' ? '#39FF14' : r === 'D' ? '#FFD700' : '#FF3333'
                                                     }}>{r}</span>
@@ -333,7 +342,7 @@ export function DashboardView() {
                                     <EfPanel padding="md" style={{ background: '#161B22' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1rem', marginBottom: '16px', color: '#FDFBF7' }}><Building weight="fill" /> {stadiumInfo.name}</div>
                                         <div style={{ fontSize: '0.85rem', color: '#8E9E94', marginBottom: '16px', fontFamily: 'var(--font-sans)' }}>Cap: {stadiumInfo.capacity.toLocaleString()} • R$ {stadiumInfo.ticketPrice}/ingresso</div>
-                                        <div style={{ width: '100%', height: '6px', background: '#1A1F24', borderRadius: '3px', marginBottom: '16px', overflow: 'hidden' }}>
+                                        <div style={{ width: '100%', height: '6px', background: '#1A1F24', marginBottom: '16px', overflow: 'hidden' }}>
                                             <div style={{ height: '100%', width: `${(engine.stadiumLevel / 5) * 100}%`, background: '#40BAF7' }} />
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -347,7 +356,7 @@ export function DashboardView() {
                                     <EfPanel padding="md" style={{ background: '#161B22' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1rem', marginBottom: '16px', color: '#FDFBF7' }}><GraduationCap weight="fill" /> BASE Nv.{engine.academyLevel}</div>
                                         <div style={{ fontSize: '0.85rem', color: '#8E9E94', marginBottom: '16px', fontFamily: 'var(--font-sans)' }}>Produz {engine.academyLevel + 1} jovens/temporada</div>
-                                        <div style={{ width: '100%', height: '6px', background: '#1A1F24', borderRadius: '3px', marginBottom: '16px', overflow: 'hidden' }}>
+                                        <div style={{ width: '100%', height: '6px', background: '#1A1F24', marginBottom: '16px', overflow: 'hidden' }}>
                                             <div style={{ height: '100%', width: `${(engine.academyLevel / 5) * 100}%`, background: '#FFD700' }} />
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -459,6 +468,43 @@ export function DashboardView() {
                 {pendingUnlock && <UnlockTooltip viewId={pendingUnlock} onDismiss={() => setPendingUnlock(null)} />}
                 {pendingAchievement && <AchievementPopup achievement={pendingAchievement} onDismiss={() => setPendingAchievement(null)} />}
                 <TutorialOverlay visible={showTutorial} onDismiss={() => setShowTutorial(false)} />
+
+                {/* AUDIT-FIX #17: Pacing Friction Modal */}
+                {pacingQueue.length > 0 && (() => {
+                    const evt = pacingQueue[0];
+                    const sevColors = { critical: '#FF3333', warning: '#FFD700', info: '#40BAF7' };
+                    const borderColor = sevColors[evt.severity] || '#40BAF7';
+                    return (
+                        <EfModal title={evt.title} onClose={() => {}}>
+                            <div style={{ borderLeft: `4px solid ${borderColor}`, paddingLeft: '16px', marginBottom: '24px' }}>
+                                <p style={{ margin: 0, fontSize: '1rem', lineHeight: 1.6, fontFamily: 'var(--font-sans)', color: '#FDFBF7' }}>{evt.body}</p>
+                            </div>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                {evt.action && (
+                                    <EfButton variant="primary" size="md" onClick={() => {
+                                        setPacingQueue([]);
+                                        if (evt.action === 'tactics') setTab('tactics');
+                                        else changeView(evt.action);
+                                    }} style={{ fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
+                                        RESOLVER AGORA
+                                    </EfButton>
+                                )}
+                                <EfButton variant="secondary" size="md" onClick={() => {
+                                    const rest = pacingQueue.slice(1);
+                                    if (rest.length > 0) {
+                                        setPacingQueue(rest);
+                                    } else {
+                                        setPacingQueue([]);
+                                        engine.checkPressConference();
+                                        if (!engine.pressQuestion) changeView('match'); else forceUpdate();
+                                    }
+                                }} style={{ fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
+                                    {pacingQueue.length > 1 ? 'PRÓXIMO ALERTA' : 'ENTENDIDO — JOGAR'}
+                                </EfButton>
+                            </div>
+                        </EfModal>
+                    );
+                })()}
             </div>
         </div>
     );

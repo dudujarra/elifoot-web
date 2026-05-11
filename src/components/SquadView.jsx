@@ -83,7 +83,7 @@ export function SquadView() {
                 color = energy > 60 ? '#39FF14' : energy > 30 ? '#FFD700' : '#FF3333';
             }
             blocks.push(
-                <div key={i} style={{ width: '8px', height: '14px', backgroundColor: color, borderRadius: '2px' }} />
+                <div key={i} style={{ width: '8px', height: '14px', backgroundColor: color, }} />
             );
         }
         return <div style={{ display: 'flex', gap: '3px', alignItems: 'center', justifyContent: 'center' }}>{blocks}</div>;
@@ -118,7 +118,7 @@ export function SquadView() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                         <EfClubBadge name={team.name} size="lg" />
                         <div>
-                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#1A1F24', color: '#8E9E94', padding: '4px 12px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', marginBottom: '12px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#1A1F24', color: '#8E9E94', padding: '4px 12px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', marginBottom: '12px' }}>
                                 <Users weight="fill" /> {sorted.length}/{team.squad.length} JOGADORES NO PLANTEL
                             </div>
                             <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '2rem', fontWeight: '800', margin: '0 0 8px 0', color: '#FDFBF7' }}>
@@ -134,7 +134,7 @@ export function SquadView() {
                             </EfButton>
                         </div>
                         {team.manager && team.manager.name && (
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#40BAF7', background: '#16242D', padding: '6px 12px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#40BAF7', background: '#16242D', padding: '6px 12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                                 <User weight="fill" /> TREINADOR: {team.manager.name.toUpperCase()}
                             </div>
                         )}
@@ -163,16 +163,16 @@ export function SquadView() {
                     <div style={{ display: 'flex', gap: '8px' }}>
                         <div style={{ position: 'relative' }}>
                             <MagnifyingGlass size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#8E9E94' }} />
-                            <input type="text" placeholder="Buscar jogador..." value={search} onChange={(e) => setSearch(e.target.value)} style={{ padding: '8px 12px 8px 36px', background: '#1A1F24', border: '1px solid #2D3748', borderRadius: '4px', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', outline: 'none', width: '200px' }} />
+                            <input type="text" placeholder="Buscar jogador..." value={search} onChange={(e) => setSearch(e.target.value)} style={{ padding: '8px 12px 8px 36px', background: '#1A1F24', border: '1px solid #2D3748', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', outline: 'none', width: '200px' }} />
                         </div>
-                        <select value={filterPos} onChange={(e) => setFilterPos(e.target.value)} style={{ padding: '8px 12px', background: '#1A1F24', border: '1px solid #2D3748', borderRadius: '4px', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', outline: 'none' }}>
+                        <select value={filterPos} onChange={(e) => setFilterPos(e.target.value)} style={{ padding: '8px 12px', background: '#1A1F24', border: '1px solid #2D3748', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', outline: 'none' }}>
                             <option value="all">Todas as posições</option>
                             <option value="GOL">GOL</option>
                             <option value="DEF">DEF</option>
                             <option value="MEI">MEI</option>
                             <option value="ATA">ATA</option>
                         </select>
-                        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ padding: '8px 12px', background: '#1A1F24', border: '1px solid #2D3748', borderRadius: '4px', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', outline: 'none' }}>
+                        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} style={{ padding: '8px 12px', background: '#1A1F24', border: '1px solid #2D3748', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', outline: 'none' }}>
                             <option value="position">Ordenação: POS</option>
                             <option value="ovr">Ordenação: OVR ↓</option>
                             <option value="age">Ordenação: IDADE</option>
@@ -219,7 +219,6 @@ export function SquadView() {
                                                             width: '24px', height: '24px',
                                                             background: isSelected ? '#162D1C' : '#2D3748',
                                                             border: `1px solid ${isSelected ? '#39FF14' : '#4A5059'}`,
-                                                            borderRadius: '4px',
                                                             cursor: p.injury ? 'not-allowed' : 'pointer'
                                                         }}
                                                         title={p.injury ? 'Lesionado' : 'Alternar Titular'}
@@ -234,7 +233,6 @@ export function SquadView() {
                                                         padding: '4px 8px',
                                                         fontSize: '0.75rem',
                                                         fontWeight: 700,
-                                                        borderRadius: '4px',
                                                         fontFamily: 'var(--font-mono)'
                                                     }}>
                                                         {p.naturalPosition || p.position}
@@ -270,12 +268,12 @@ export function SquadView() {
                                                 <td style={{ textAlign:'center', padding: '12px' }}>
                                                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                                                         {!p.isTitular && !p.injury && p.age <= 23 && (
-                                                            <button onClick={(e) => { e.stopPropagation(); handleLoan(p.id); }} style={{ background: '#16242D', border: '1px solid #40BAF7', color: '#40BAF7', padding: '6px 8px', cursor: 'pointer', borderRadius: '4px' }}>
+                                                            <button onClick={(e) => { e.stopPropagation(); handleLoan(p.id); }} style={{ background: '#16242D', border: '1px solid #40BAF7', color: '#40BAF7', padding: '6px 8px', cursor: 'pointer', }}>
                                                                 <PaperPlaneRight size={16} weight="bold" />
                                                             </button>
                                                         )}
                                                         {!p.isTitular && (
-                                                            <button onClick={(e) => { e.stopPropagation(); handleSell(p); }} style={{ background: '#2D1616', border: '1px solid #FF3333', color: '#FF3333', padding: '6px 8px', cursor: 'pointer', borderRadius: '4px' }}>
+                                                            <button onClick={(e) => { e.stopPropagation(); handleSell(p); }} style={{ background: '#2D1616', border: '1px solid #FF3333', color: '#FF3333', padding: '6px 8px', cursor: 'pointer', }}>
                                                                 <UserMinus size={16} weight="bold" />
                                                             </button>
                                                         )}
@@ -286,7 +284,7 @@ export function SquadView() {
                                                 <tr key={`${p.id}-details`} style={{ background: '#0D1117' }}>
                                                     <td colSpan="7" style={{ padding: '24px', borderBottom: '1px solid #2D3748' }}>
                                                         <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
-                                                            <div style={{ background: '#1A1F24', padding: '16px', borderRadius: '8px', border: '1px solid #2D3748' }}>
+                                                            <div style={{ background: '#1A1F24', padding: '16px', border: '1px solid #2D3748' }}>
                                                                 <PentagonChart player={p} size={180} />
                                                             </div>
                                                             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -299,21 +297,21 @@ export function SquadView() {
                                                                     <span>PÉ: {p.foot || p.preferredFoot || 'D'}</span>
                                                                 </div>
                                                                 <div style={{ display: 'flex', gap: '24px', marginTop: '12px', fontFamily: 'var(--font-mono)' }}>
-                                                                    <div style={{ background: '#1A1F24', padding: '12px 16px', borderRadius: '6px', borderLeft: '3px solid #39FF14' }}>
+                                                                    <div style={{ background: '#1A1F24', padding: '12px 16px', borderLeft: '3px solid #39FF14' }}>
                                                                         <div style={{ fontSize: '0.7rem', color: '#8E9E94', marginBottom: '4px' }}>OVR / POT</div>
                                                                         <div style={{ fontSize: '1.2rem', color: '#FDFBF7', fontWeight: 'bold' }}>{p.ovr} <span style={{ color: '#4A5059', fontSize: '1rem', fontWeight: 'normal' }}>/</span> <span style={{ color: p.potential > p.ovr + 5 ? '#39FF14' : '#8E9E94' }}>{p.potential || p.ovr}</span></div>
                                                                     </div>
-                                                                    <div style={{ background: '#1A1F24', padding: '12px 16px', borderRadius: '6px', borderLeft: '3px solid #FFD700' }}>
+                                                                    <div style={{ background: '#1A1F24', padding: '12px 16px', borderLeft: '3px solid #FFD700' }}>
                                                                         <div style={{ fontSize: '0.7rem', color: '#8E9E94', marginBottom: '4px' }}>VALOR DE MERCADO</div>
                                                                         <div style={{ fontSize: '1.2rem', color: '#FFD700', fontWeight: 'bold' }}>R$ {((p.marketValue || p.value) / 1e6).toFixed(1)}M</div>
                                                                     </div>
-                                                                    <div style={{ background: '#1A1F24', padding: '12px 16px', borderRadius: '6px', borderLeft: '3px solid #40BAF7' }}>
+                                                                    <div style={{ background: '#1A1F24', padding: '12px 16px', borderLeft: '3px solid #40BAF7' }}>
                                                                         <div style={{ fontSize: '0.7rem', color: '#8E9E94', marginBottom: '4px' }}>RATING (POS)</div>
                                                                         <div style={{ fontSize: '1.2rem', color: '#40BAF7', fontWeight: 'bold' }}>{p.attacking ? calculateRatingForPosition(p, p.naturalPosition || 'MEC') : p.ovr}</div>
                                                                     </div>
                                                                 </div>
                                                                 {p.personality && (
-                                                                    <div style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#2D162D', padding: '6px 12px', borderRadius: '4px', border: '1px solid #C084FC', color: '#C084FC', fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'var(--font-sans)' }}>
+                                                                    <div style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#2D162D', padding: '6px 12px', border: '1px solid #C084FC', color: '#C084FC', fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'var(--font-sans)' }}>
                                                                         <Heartbeat weight="fill" /> PERFIL: {p.personality}
                                                                     </div>
                                                                 )}
@@ -338,9 +336,9 @@ export function SquadView() {
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
                             {sorted.filter(p => p.isTitular).slice(0, 11).map(p => (
-                                <div key={p.id} style={{ background: '#1A1F24', border: '1px solid #2D3748', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <div key={p.id} style={{ background: '#1A1F24', border: '1px solid #2D3748', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#FDFBF7', fontFamily: 'var(--font-sans)', marginBottom: '8px', textAlign: 'center' }}>{p.name}</div>
-                                    <div style={{ fontSize: '0.8rem', color: getPosColor(p.position), fontWeight: 'bold', fontFamily: 'var(--font-mono)', marginBottom: '16px', background: '#0D1117', padding: '4px 12px', borderRadius: '4px' }}>{p.naturalPosition || p.position}</div>
+                                    <div style={{ fontSize: '0.8rem', color: getPosColor(p.position), fontWeight: 'bold', fontFamily: 'var(--font-mono)', marginBottom: '16px', background: '#0D1117', padding: '4px 12px', }}>{p.naturalPosition || p.position}</div>
                                     <PentagonChart player={p} size={160} />
                                 </div>
                             ))}
@@ -391,11 +389,11 @@ export function SquadView() {
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
                             {loanedOut.map((l, i) => (
-                                <div key={i} style={{ background: '#1A1F24', padding: '16px', border: '1px solid #4A5059', borderRadius: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div key={i} style={{ background: '#1A1F24', padding: '16px', border: '1px solid #4A5059', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ fontWeight: 'bold', color: '#FDFBF7', fontSize: '0.9rem', fontFamily: 'var(--font-sans)' }}>
                                         {l.playerName} <span style={{ color: '#8E9E94', fontWeight: 'normal', display: 'block', marginTop: '4px', fontSize: '0.8rem' }}>→ {l.destination}</span>
                                     </div>
-                                    <div style={{ fontFamily: 'var(--font-mono)', color: '#FFD700', fontSize: '0.85rem', background: '#0D1117', padding: '6px 12px', borderRadius: '4px' }}>
+                                    <div style={{ fontFamily: 'var(--font-mono)', color: '#FFD700', fontSize: '0.85rem', background: '#0D1117', padding: '6px 12px', }}>
                                         {l.weeksLeft}/{l.totalWeeks} sem
                                     </div>
                                 </div>

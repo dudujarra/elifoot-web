@@ -289,8 +289,7 @@ export function MatchView() {
                                 opacity: preStep >= step ? 1 : 0.5
                             }}>
                                 <div style={{ 
-                                    width: '32px', height: '32px', borderRadius: '50%', 
-                                    backgroundColor: preStep > step ? colors.accent : preStep === step ? colors.secondary : colors.border,
+                                    width: '32px', height: '32px', backgroundColor: preStep > step ? colors.accent : preStep === step ? colors.secondary : colors.border,
                                     color: preStep > step ? colors.bg : colors.text,
                                     display: 'flex', justifyContent: 'center', alignItems: 'center'
                                 }}>
@@ -308,7 +307,7 @@ export function MatchView() {
                                     <ListNumbers size={24} color={colors.warning} />
                                     <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>SETORES DO PLANTEL</h3>
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-around', backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-around', backgroundColor: colors.panelElevated, padding: '16px', border: `1px solid ${colors.border}` }}>
                                     <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{sectors.goalkeeper}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>GOL</div></div>
                                     <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{sectors.defense}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>DEF</div></div>
                                     <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{sectors.midfield}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>MEI</div></div>
@@ -323,7 +322,7 @@ export function MatchView() {
                                         <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>TITULARES ({titulares.length})</h3>
                                     </div>
                                     {lowEnergy.length > 0 && (
-                                        <div style={{ backgroundColor: 'rgba(255, 51, 51, 0.1)', color: colors.danger, padding: '4px 12px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <div style={{ backgroundColor: '#8B0000', color: colors.danger, padding: '4px 12px', fontSize: '0.8rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                             <Warning /> {lowEnergy.length} COM ENERGIA BAIXA
                                         </div>
                                     )}
@@ -333,11 +332,11 @@ export function MatchView() {
                                     {titulares.map(p => (
                                         <div key={p.id} style={{
                                             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                                            padding: '12px', borderRadius: '6px', border: `1px solid ${colors.border}`,
+                                            padding: '12px', border: `1px solid ${colors.border}`,
                                             backgroundColor: p.energy < 40 ? '#2D1616' : colors.panelElevated,
                                         }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                                <div style={{ width: '40px', textAlign: 'center', backgroundColor: colors.bg, padding: '4px', borderRadius: '4px', color: colors.textMuted, fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                <div style={{ width: '40px', textAlign: 'center', backgroundColor: colors.bg, padding: '4px', color: colors.textMuted, fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 'bold' }}>
                                                     {p.position}
                                                 </div>
                                                 <div style={{ color: colors.text, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
@@ -388,7 +387,7 @@ export function MatchView() {
                                             onClick={() => { engine.setTactic(k); forceUpdate(); }}>{v.name}</EfButton>
                                     ))}
                                 </div>
-                                <p style={{ fontSize: '0.85rem', color: colors.textMuted, marginTop: '12px', fontFamily: 'var(--font-sans)', backgroundColor: colors.panelElevated, padding: '12px', borderRadius: '4px', borderLeft: `4px solid ${colors.secondary}` }}>
+                                <p style={{ fontSize: '0.85rem', color: colors.textMuted, marginTop: '12px', fontFamily: 'var(--font-sans)', backgroundColor: colors.panelElevated, padding: '12px', borderLeft: `4px solid ${colors.secondary}` }}>
                                     {TACTICS[engine.currentTactic]?.description}
                                 </p>
                             </EfPanel>
@@ -399,7 +398,7 @@ export function MatchView() {
                                     <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>PRELEÇÃO</h3>
                                 </div>
                                 {talkDone ? (
-                                    <div style={{ backgroundColor: 'rgba(57, 255, 20, 0.1)', color: colors.accent, padding: '16px', borderRadius: '6px', border: `1px solid ${colors.accent}`, fontWeight: 'bold', fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{ backgroundColor: '#1B4332', color: colors.accent, padding: '16px', border: `1px solid ${colors.accent}`, fontWeight: 'bold', fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <CheckCircle size={24} /> PRELEÇÃO REALIZADA COM SUCESSO!
                                     </div>
                                 ) : (
@@ -430,17 +429,17 @@ export function MatchView() {
                                 <EfClubBadge name={team.name} size="xl" style={{ margin: '0 auto 16px' }} />
                                 <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.8rem', color: colors.text, margin: '0 0 8px 0' }}>{team.name}</h2>
                                 <div style={{ display: 'inline-flex', gap: '12px', marginBottom: '24px', fontFamily: 'var(--font-mono)' }}>
-                                    <span style={{ backgroundColor: colors.panelElevated, padding: '6px 16px', borderRadius: '4px', border: `1px solid ${colors.border}`, color: colors.accent }}>{team.formation}</span>
-                                    <span style={{ backgroundColor: colors.panelElevated, padding: '6px 16px', borderRadius: '4px', border: `1px solid ${colors.border}`, color: colors.secondary }}>{tactic?.name}</span>
+                                    <span style={{ backgroundColor: colors.panelElevated, padding: '6px 16px', border: `1px solid ${colors.border}`, color: colors.accent }}>{team.formation}</span>
+                                    <span style={{ backgroundColor: colors.panelElevated, padding: '6px 16px', border: `1px solid ${colors.border}`, color: colors.secondary }}>{tactic?.name}</span>
                                 </div>
                                 
-                                {cond && <div style={{ display: 'inline-block', backgroundColor: 'rgba(64, 186, 247, 0.1)', border: `1px solid ${colors.secondary}`, padding: '8px 16px', borderRadius: '4px', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.secondary, marginBottom: '24px', fontWeight: 'bold' }}>CONDIÇÃO: {cond.name}</div>}
+                                {cond && <div style={{ display: 'inline-block', backgroundColor: '#111417', border: `1px solid ${colors.secondary}`, padding: '8px 16px', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.secondary, marginBottom: '24px', fontWeight: 'bold' }}>CONDIÇÃO: {cond.name}</div>}
                                 
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', justifyContent: 'center', maxWidth: '600px', margin: '0 auto 24px' }}>
-                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{sectors.goalkeeper}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>GOL</div></div>
-                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{sectors.defense}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>DEF</div></div>
-                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{sectors.midfield}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>MEI</div></div>
-                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.danger, fontFamily: 'var(--font-mono)' }}>{sectors.attack}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>ATA</div></div>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{sectors.goalkeeper}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>GOL</div></div>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{sectors.defense}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>DEF</div></div>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{sectors.midfield}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>MEI</div></div>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.danger, fontFamily: 'var(--font-mono)' }}>{sectors.attack}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>ATA</div></div>
                                 </div>
                                 
                                 <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 'bold', color: talkDone ? colors.accent : colors.warning, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
@@ -474,12 +473,12 @@ export function MatchView() {
     const Scoreboard = ({ half }) => (
         <EfPanel padding="md" style={{ position: 'relative', marginBottom: '24px', overflow: 'hidden', border: `2px solid ${colors.border}` }}>
             {goalBurstActive && (
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(57, 255, 20, 0.2)', animation: 'pulse 1s infinite', pointerEvents: 'none', zIndex: 1 }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#1B4332', animation: 'pulse 1s infinite', pointerEvents: 'none', zIndex: 1 }} />
             )}
             
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px', marginBottom: '16px', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 'bold', color: colors.warning, position: 'relative', zIndex: 2 }}>
                 <div style={{ flex: 1, textAlign: 'right', letterSpacing: '0.1em' }}>MANDANTE</div>
-                <div style={{ backgroundColor: colors.bg, padding: '6px 12px', borderRadius: '4px', border: `1px solid ${colors.border}`, color: colors.accent, fontFamily: 'var(--font-mono)' }}>
+                <div style={{ backgroundColor: colors.bg, padding: '6px 12px', border: `1px solid ${colors.border}`, color: colors.accent, fontFamily: 'var(--font-mono)' }}>
                     {half}
                 </div>
                 <div style={{ flex: 1, textAlign: 'left', letterSpacing: '0.1em' }}>VISITANTE</div>
@@ -492,17 +491,17 @@ export function MatchView() {
                 </div>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.bg, padding: '16px 32px', borderRadius: '8px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.bg, padding: '16px 32px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
                         <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{runningScore.home}</div>
                         <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2rem', color: colors.border, lineHeight: 1 }}>-</div>
                         <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{runningScore.away}</div>
                     </div>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', backgroundColor: colors.bg, padding: '8px 24px', borderRadius: '24px', border: `1px solid ${colors.border}` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', backgroundColor: colors.bg, padding: '8px 24px', border: `1px solid ${colors.border}` }}>
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', color: isPlaying ? colors.accent : colors.textMuted, fontWeight: 'bold' }}>
                             {String(currentMinute).padStart(2, '0')}:00
                         </span>
-                        {isPlaying && <div style={{ width: '8px', height: '8px', backgroundColor: colors.danger, borderRadius: '50%', animation: 'pulse 1s infinite' }} />}
+                        {isPlaying && <div style={{ width: '8px', height: '8px', backgroundColor: colors.danger, animation: 'pulse 1s infinite' }} />}
                     </div>
                 </div>
 
@@ -529,13 +528,13 @@ export function MatchView() {
                         
                         let bgColor = colors.panelElevated;
                         let borderColor = 'transparent';
-                        if (isGoal) { bgColor = 'rgba(57, 255, 20, 0.1)'; borderColor = colors.accent; }
-                        else if (isCard) { bgColor = 'rgba(255, 215, 0, 0.1)'; borderColor = colors.warning; }
-                        else if (isSub) { bgColor = 'rgba(64, 186, 247, 0.1)'; borderColor = colors.secondary; }
-                        else if (isInjury) { bgColor = 'rgba(255, 51, 51, 0.1)'; borderColor = colors.danger; }
+                        if (isGoal) { bgColor = '#1B4332'; borderColor = colors.accent; }
+                        else if (isCard) { bgColor = '#1B4332'; borderColor = colors.warning; }
+                        else if (isSub) { bgColor = '#111417'; borderColor = colors.secondary; }
+                        else if (isInjury) { bgColor = '#8B0000'; borderColor = colors.danger; }
 
                         return (
-                            <div key={i} style={{ display: 'flex', gap: '16px', padding: '12px 16px', backgroundColor: bgColor, borderRadius: '6px', borderLeft: `4px solid ${borderColor}`, fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.text, alignItems: 'center' }}>
+                            <div key={i} style={{ display: 'flex', gap: '16px', padding: '12px 16px', backgroundColor: bgColor, borderLeft: `4px solid ${borderColor}`, fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.text, alignItems: 'center' }}>
                                 <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', color: colors.textMuted, minWidth: '40px' }}>{n.minute}'</div>
                                 <div style={{ flex: 1 }}>{n.text}</div>
                             </div>
@@ -544,7 +543,7 @@ export function MatchView() {
                 </EfPanel>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', gap: '8px', backgroundColor: colors.panelElevated, padding: '8px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                    <div style={{ display: 'flex', gap: '8px', backgroundColor: colors.panelElevated, padding: '8px', border: `1px solid ${colors.border}` }}>
                         <EfButton size="md" variant={!paused && speed === 400 ? 'primary' : 'secondary'} onClick={() => { setSpeed(400); setPaused(false); pausedRef.current = false; }}>1x</EfButton>
                         <EfButton size="md" variant={!paused && speed === 200 ? 'primary' : 'secondary'} onClick={() => { setSpeed(200); setPaused(false); pausedRef.current = false; }}>2x</EfButton>
                         <EfButton size="md" variant={!paused && speed === 80 ? 'primary' : 'secondary'} onClick={() => { setSpeed(80); setPaused(false); pausedRef.current = false; }}>5x</EfButton>
@@ -602,7 +601,7 @@ export function MatchView() {
                                 <EfClubBadge name={result.home} size="lg" />
                                 <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 'bold', color: colors.text }}>{result.home}</span>
                             </div>
-                            <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.panelElevated, padding: '12px 24px', borderRadius: '8px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.panelElevated, padding: '12px 24px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
                                 <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2.5rem', color: colors.text, lineHeight: 1 }}>{halfTimeData?.homeGoals ?? 0}</div>
                                 <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '1.5rem', color: colors.border, lineHeight: 1 }}>-</div>
                                 <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2.5rem', color: colors.text, lineHeight: 1 }}>{halfTimeData?.awayGoals ?? 0}</div>
@@ -640,7 +639,7 @@ export function MatchView() {
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                     {tiredPlayers.slice(0, 3).map(p => (
-                                        <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                        <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: colors.panelElevated, border: `1px solid ${colors.border}` }}>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                                 <div style={{ color: colors.text, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>{p.name} <span style={{ color: colors.textMuted, fontSize: '0.8rem' }}>({p.position})</span></div>
                                                 <div style={{ color: getEnergyColor(p.energy), fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>COND: {p.energy}%</div>
@@ -695,7 +694,7 @@ export function MatchView() {
                             <EfClubBadge name={result?.home} size="xl" />
                             <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: 'bold', color: colors.text }}>{result?.home}</span>
                         </div>
-                        <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.panelElevated, padding: '16px 32px', borderRadius: '8px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
+                        <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.panelElevated, padding: '16px 32px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
                             <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{result?.homeGoals}</div>
                             <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2rem', color: colors.border, lineHeight: 1 }}>-</div>
                             <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{result?.awayGoals}</div>
@@ -706,7 +705,7 @@ export function MatchView() {
                         </div>
                     </div>
                     {motmEntry && (
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(255, 215, 0, 0.1)', padding: '12px 24px', borderRadius: '24px', border: `1px solid ${colors.warning}`, color: colors.warning, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: '#1B4332', padding: '12px 24px', border: `1px solid ${colors.warning}`, color: colors.warning, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
                             <ChartBar size={20} weight="fill" /> {motmEntry.text}
                         </div>
                     )}
@@ -721,14 +720,14 @@ export function MatchView() {
                         {lastMatchScorers.length > 0 ? (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {lastMatchScorers.map((s, i) => (
-                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', backgroundColor: colors.panelElevated, border: `1px solid ${colors.border}` }}>
                                         <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', color: colors.accent, minWidth: '40px' }}>{s.minute}'</div>
                                         <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.text }}>{s.text}</div>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', fontSize: '0.9rem', padding: '12px', textAlign: 'center', backgroundColor: colors.panelElevated, borderRadius: '6px' }}>
+                            <div style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', fontSize: '0.9rem', padding: '12px', textAlign: 'center', backgroundColor: colors.panelElevated, }}>
                                 Nenhum gol na partida.
                             </div>
                         )}
@@ -740,19 +739,19 @@ export function MatchView() {
                             <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>ESTATÍSTICAS DA PARTIDA</h3>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, border: `1px solid ${colors.border}` }}>
                                 <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>Finalizações</span>
                                 <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{matchStats?.totalChances || 0}</strong>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, border: `1px solid ${colors.border}` }}>
                                 <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>Tática Utilizada</span>
                                 <strong style={{ color: colors.text, fontFamily: 'var(--font-sans)' }}>{TACTICS[engine.currentTactic]?.name}</strong>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, border: `1px solid ${colors.border}` }}>
                                 <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: '6px' }}><Cardholder color={colors.warning} weight="fill" /> Cartões</span>
                                 <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{lastMatchCards.length}</strong>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, border: `1px solid ${colors.border}` }}>
                                 <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: '6px' }}><FirstAid color={colors.danger} weight="fill" /> Lesões</span>
                                 <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{matchStats?.injuries || 0}</strong>
                             </div>
@@ -765,7 +764,7 @@ export function MatchView() {
                                 <Shield size={24} color={engine.board.getStatus().color} />
                                 <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>STATUS DA DIRETORIA</h3>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', backgroundColor: colors.panelElevated, borderRadius: '8px', border: `1px solid ${engine.board.getStatus().color}` }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', backgroundColor: colors.panelElevated, border: `1px solid ${engine.board.getStatus().color}` }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                     <div style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>Confiança</div>
                                     <div style={{ color: engine.board.getStatus().color, fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1.1rem' }}>{engine.board.getStatus().label}</div>

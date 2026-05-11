@@ -231,7 +231,6 @@ export function BrainDashboard({ controllerRef }) {
                                                 width: `${pct}%`,
                                                 background: BAR_COLORS[i % BAR_COLORS.length],
                                                 height: '14px',
-                                                borderRadius: '3px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 paddingLeft: '4px',
@@ -262,7 +261,7 @@ export function BrainDashboard({ controllerRef }) {
                                 <div key={String(a.action)} style={{
                                     display: 'flex', justifyContent: 'space-between',
                                     fontSize: '0.7rem', padding: '2px 0',
-                                    borderBottom: '1px solid rgba(255,255,255,0.05)'
+                                    borderBottom: '1px solid #0E1F14'
                                 }}>
                                     <span>{i + 1}. {String(a.action)}</span>
                                     <strong style={{ color: a.totalQ >= 0 ? '#6ABC3A' : '#ef4444' }}>
@@ -291,9 +290,7 @@ export function BrainDashboard({ controllerRef }) {
                                                     height: `${height}px`,
                                                     minHeight: '2px',
                                                     background: r.reward >= 0 ? '#6ABC3A' : '#ef4444',
-                                                    borderRadius: '1px',
-                                                    opacity: 0.8
-                                                }}
+                                                    }}
                                             />
                                         );
                                     })}
@@ -317,7 +314,6 @@ export function BrainDashboard({ controllerRef }) {
                                             padding: '3px 6px',
                                             fontSize: '0.6rem',
                                             fontFamily: 'monospace',
-                                            borderRadius: '4px',
                                             background: `rgba(59, 130, 246, ${0.1 + intensity * 0.4})`,
                                             border: `1px solid rgba(59, 130, 246, ${0.2 + intensity * 0.5})`,
                                             color: intensity > 0.5 ? '#fff' : '#888'
@@ -338,7 +334,7 @@ export function BrainDashboard({ controllerRef }) {
                                 <div key={i} style={{
                                     display: 'flex', justifyContent: 'space-between', gap: '8px',
                                     padding: '3px 0', fontSize: '0.68rem',
-                                    borderBottom: '1px solid rgba(255,255,255,0.04)'
+                                    borderBottom: '1px solid #0E1F14'
                                 }}>
                                     <span style={{ color: '#888' }}>wk{m.week ?? '?'}</span>
                                     <span style={{ flex: 1 }}>{String(m.action || m.decision || '?')}</span>
@@ -378,10 +374,9 @@ function MiniStat({ label, value, color }) {
 // Styles
 const cardStyle = {
     padding: '8px 10px',
-    background: 'rgba(45,90,61,0.12)',
-    border: '1px solid rgba(45,90,61,0.25)',
-    borderRadius: '6px',
-};
+    background: '#111417',
+    border: '1px solid #111417',
+    };
 
 const titleStyle = {
     fontSize: '0.72rem',
@@ -393,15 +388,13 @@ const titleStyle = {
 };
 
 const barBg = {
-    background: 'rgba(255,255,255,0.06)',
-    borderRadius: '3px',
+    background: '#0E1F14',
     height: '6px',
     overflow: 'hidden',
 };
 
 const barFill = {
     height: '6px',
-    borderRadius: '3px',
     transition: 'width 0.3s ease',
 };
 

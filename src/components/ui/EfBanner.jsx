@@ -134,7 +134,7 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
             style={{
                 position: 'fixed',
                 inset: 0,
-                background: 'rgba(0,0,0,0.6)',
+                background: '#040805',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -153,7 +153,7 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
 
                     border: '4px solid',
                     borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    boxShadow: '0 8px 0 rgba(0,0,0,0.5), 0 0 40px rgba(247,181,56,0.4)',
+                    boxShadow: '0 8px 0 #040805, 0 0 40px #111417',
                     textAlign: 'center',
                     minWidth: '320px',
                     maxWidth: '600px',
@@ -171,14 +171,13 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
                     textTransform: 'uppercase',
                     letterSpacing: '0.06em',
                     fontFamily: "'Press Start 2P', monospace",
-                    textShadow: '2px 2px 0 rgba(0,0,0,0.5)'
+                    textShadow: '2px 2px 0 #040805'
                 }}>
                     {customTitle || cfg.title}
                 </h2>
                 <p style={{
                     margin: '12px 0 0',
                     fontSize: '14px',
-                    opacity: 0.9,
                     fontStyle: 'italic'
                 }}>
                     {customSubtitle || cfg.subtitle}
@@ -186,7 +185,6 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
                 <div style={{
                     marginTop: '20px',
                     fontSize: '10px',
-                    opacity: 0.6,
                     fontFamily: "'Press Start 2P', monospace"
                 }}>
                     CLIQUE PARA CONTINUAR

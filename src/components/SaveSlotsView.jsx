@@ -97,7 +97,7 @@ export function SaveSlotsView() {
                     borderBottom: `2px solid ${colors.secondary}`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
                             <FloppyDisk size={28} color={colors.secondary} />
                         </div>
                         <div>
@@ -174,7 +174,6 @@ export function SaveSlotsView() {
                                 <div style={{
                                     width: '48px', height: '48px',
                                     backgroundColor: slot.empty ? colors.bg : colors.accent,
-                                    borderRadius: '8px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -229,8 +228,7 @@ export function SaveSlotsView() {
                                     padding: '20px',
                                     backgroundColor: colors.bg,
                                     border: `1px dashed ${colors.warning}`,
-                                    borderRadius: '8px'
-                                }}>
+                                    }}>
                                     <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.text, marginBottom: '12px', fontWeight: 'bold' }}>
                                         Selecione o arquivo de save (.json):
                                     </div>

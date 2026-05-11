@@ -11,9 +11,8 @@
  * substituindo o NpcTacticAdvisor para times com brain.
  */
 
-import { encodeState, detectGoals, computeReward } from './AdaptiveBrain.js';
-import { smartBuyDecision, smartSellDecision, rankCandidates } from './SmartMarketEngine.js';
-import { rng as systemRng } from '../../engine/rng.js';
+import { encodeState, computeReward } from './AdaptiveBrain.js';
+import { rankCandidates } from './SmartMarketEngine.js';
 
 // ─── STATE CONTEXT BUILDER ───────────────────────────────────
 

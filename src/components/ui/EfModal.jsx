@@ -42,7 +42,7 @@ export function EfModal({
             style={{
                 position: 'fixed',
                 inset: 0,
-                background: 'rgba(0, 0, 0, 0.85)',
+                background: '#040805',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -60,7 +60,7 @@ export function EfModal({
                     backgroundColor: '#1E2124',
                     border: '4px solid',
                     borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    boxShadow: '0 16px 0 rgba(0,0,0,0.8)',
+                    boxShadow: '0 16px 0 #040805',
                     display: 'flex',
                     flexDirection: 'column',
                     overflow: 'hidden',

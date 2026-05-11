@@ -7,7 +7,7 @@ import bgMatchStadium from '../assets/environments/bg_match_stadium.png';
 import { rng as systemRng } from '../engine/rng.js';
 
 import { 
-    Clock, SoccerBall, Whistle, UserMinus, TrendUp, WarningCircle, CheckCircle, Question
+    Clock, SoccerBall, Flag, UserMinus, TrendUp, WarningCircle, CheckCircle, Question
 } from '@phosphor-icons/react';
 
 export function PlayerMatchView() {
@@ -189,7 +189,6 @@ export function PlayerMatchView() {
                         backgroundColor: colors.bg, 
                         color: colors.danger, 
                         padding: '16px', 
-                        borderRadius: '8px', 
                         textAlign: 'center', 
                         fontWeight: 'bold',
                         border: `1px solid ${colors.danger}`,
@@ -212,7 +211,7 @@ export function PlayerMatchView() {
                             {team?.name ? (
                                 <EfClubBadge name={team.name} size="md" />
                             ) : (
-                                <div style={{ width: '64px', height: '64px', backgroundColor: colors.bg, borderRadius: '50%' }} />
+                                <div style={{ width: '64px', height: '64px', backgroundColor: colors.bg, }} />
                             )}
                             <span style={{ fontSize: '1rem', fontWeight: 'bold', color: colors.text, fontFamily: 'var(--font-sans)' }}>{team?.name || 'Meu Time'}</span>
                         </div>
@@ -224,7 +223,6 @@ export function PlayerMatchView() {
                             fontFamily: 'var(--font-mono)',
                             padding: '0 32px',
                             backgroundColor: colors.bg,
-                            borderRadius: '8px',
                             border: `2px solid ${colors.border}`
                         }}>
                             {homeGoals} <span style={{ color: colors.border }}>-</span> {awayGoals}
@@ -234,7 +232,7 @@ export function PlayerMatchView() {
                             {opponent?.name ? (
                                 <EfClubBadge name={opponent.name} size="md" />
                             ) : (
-                                <div style={{ width: '64px', height: '64px', backgroundColor: colors.bg, borderRadius: '50%' }} />
+                                <div style={{ width: '64px', height: '64px', backgroundColor: colors.bg, }} />
                             )}
                             <span style={{ fontSize: '1rem', fontWeight: 'bold', color: colors.text, fontFamily: 'var(--font-sans)' }}>{opponent?.name || 'Adversário'}</span>
                         </div>
@@ -244,7 +242,7 @@ export function PlayerMatchView() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: colors.secondary, fontSize: '1.2rem', fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>
                             <Clock size={24} weight="bold" /> {matchFinished ? 'FIM DE JOGO' : `${minute}'`}
                         </div>
-                        <div style={{ width: '100%', maxWidth: '400px', backgroundColor: colors.bg, height: '8px', borderRadius: '4px', border: `1px solid ${colors.border}`, overflow: 'hidden' }}>
+                        <div style={{ width: '100%', maxWidth: '400px', backgroundColor: colors.bg, height: '8px', border: `1px solid ${colors.border}`, overflow: 'hidden' }}>
                             <div style={{ width: `${(minute / 90) * 100}%`, height: '100%', backgroundColor: colors.secondary, transition: 'width 0.3s ease' }} />
                         </div>
                     </div>
@@ -255,8 +253,7 @@ export function PlayerMatchView() {
                     <div style={{
                         position: 'fixed',
                         top: 0, left: 0, right: 0, bottom: 0,
-                        backgroundColor: 'rgba(13, 17, 23, 0.8)',
-                        backdropFilter: 'blur(4px)',
+                        backgroundColor: '#111417',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -292,8 +289,7 @@ export function PlayerMatchView() {
                     <div style={{
                         position: 'fixed',
                         top: 0, left: 0, right: 0, bottom: 0,
-                        backgroundColor: 'rgba(13, 17, 23, 0.8)',
-                        backdropFilter: 'blur(4px)',
+                        backgroundColor: '#111417',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -314,7 +310,7 @@ export function PlayerMatchView() {
                 {/* Narration */}
                 <EfPanel padding="lg" style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: '300px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: colors.text, marginBottom: '16px', fontWeight: 'bold' }}>
-                        <Whistle size={20} /> LANCES DA PARTIDA
+                        <Flag size={20} /> LANCES DA PARTIDA
                     </div>
                     
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', overflowY: 'auto', flex: 1 }}>
@@ -326,7 +322,6 @@ export function PlayerMatchView() {
                                 backgroundColor: n.isGoal ? colors.bg : colors.panelElevated,
                                 color: colors.text,
                                 fontSize: '0.95rem',
-                                borderRadius: '0 4px 4px 0',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '12px'

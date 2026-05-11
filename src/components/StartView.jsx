@@ -85,7 +85,6 @@ export function StartView() {
                         style={{
                             width: '200px', 
                             height: '200px', 
-                            borderRadius: '50%',
                             boxShadow: `0 0 0 4px ${colors.border}`,
                             imageRendering: 'pixelated',
                             background: colors.panelElevated,
@@ -149,7 +148,6 @@ export function StartView() {
                                 padding: '14px 16px',
                                 background: colors.panelElevated,
                                 border: `1px solid ${colors.border}`,
-                                borderRadius: '6px',
                                 color: colors.text,
                                 fontSize: '1rem',
                                 fontFamily: 'var(--font-sans)',
@@ -167,8 +165,7 @@ export function StartView() {
                                 onChange={e => setPosition(e.target.value)}
                                 style={{
                                     width: '100%', padding: '14px 16px', background: colors.panelElevated,
-                                    color: colors.text, border: `1px solid ${colors.border}`, borderRadius: '6px',
-                                    fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1rem', outline: 'none'
+                                    color: colors.text, border: `1px solid ${colors.border}`, fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1rem', outline: 'none'
                                 }}
                             >
                                 <option value="GOL">Goleiro (GOL)</option>
@@ -205,8 +202,7 @@ export function StartView() {
                                 onChange={e => setScenario(e.target.value)}
                                 style={{
                                     width: '100%', padding: '14px 16px', background: colors.panelElevated,
-                                    color: colors.text, border: `1px solid ${colors.border}`, borderRadius: '6px',
-                                    fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1rem', outline: 'none'
+                                    color: colors.text, border: `1px solid ${colors.border}`, fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1rem', outline: 'none'
                                 }}
                             >
                                 <option value="livre">Sandbox (Livre)</option>
@@ -219,8 +215,7 @@ export function StartView() {
                     <div style={{ 
                         display: 'flex', alignItems: 'center', gap: '12px', 
                         background: colors.panelElevated, padding: '12px 16px', 
-                        border: `1px solid ${colors.border}`, borderRadius: '6px'
-                    }}>
+                        border: `1px solid ${colors.border}`, }}>
                         <MapPin size={24} color={colors.secondary} />
                         <select 
                             id="select-team" 

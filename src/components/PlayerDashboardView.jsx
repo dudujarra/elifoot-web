@@ -111,7 +111,7 @@ export function PlayerDashboardView() {
                 <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{icon} {label}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', color: '#FDFBF7' }}>{value}%</span>
             </label>
-            <div style={{ height: '6px', background: '#1A1F24', borderRadius: '3px', overflow: 'hidden' }}>
+            <div style={{ height: '6px', background: '#1A1F24', overflow: 'hidden' }}>
                 <div style={{ height: '100%', width: `${value}%`, background: type === 'boss' ? '#FF3333' : type === 'fans' ? '#39FF14' : type === 'teammates' ? '#FFD700' : '#40BAF7', transition: 'width 200ms ease-out' }} />
             </div>
         </div>
@@ -131,7 +131,7 @@ export function PlayerDashboardView() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                         {team?.name && <EfClubBadge name={team.name} size="lg" />}
                         <div>
-                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#1A1F24', color: '#8E9E94', padding: '4px 12px', borderRadius: '4px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', marginBottom: '12px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#1A1F24', color: '#8E9E94', padding: '4px 12px', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', marginBottom: '12px' }}>
                                 <span>{pers.emoji}</span> {pers.name.toUpperCase()} • SÉRIE {['A','B','C','D'][team.division - 1]}
                             </div>
                             <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '2rem', fontWeight: '800', margin: '0 0 8px 0', color: '#FDFBF7' }}>
@@ -149,7 +149,7 @@ export function PlayerDashboardView() {
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 'bold', color: '#39FF14' }}>
                             R$ {(player.money).toLocaleString('pt-BR')}
                         </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#FFD700', background: '#2D2916', padding: '6px 12px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#FFD700', background: '#2D2916', padding: '6px 12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                             <SoccerBall weight="fill" /> {player.seasonGoals} GOLS NA TEMPORADA
                         </div>
                         <div style={{ marginTop: '12px', width: '200px' }}>
@@ -159,7 +159,7 @@ export function PlayerDashboardView() {
                             </div>
                             <div style={{ display: 'flex', gap: '4px', justifyContent: 'flex-end' }}>
                                 {Array.from({ length: player.maxActionSlots }).map((_, i) => (
-                                    <div key={i} style={{ width: '24px', height: '6px', borderRadius: '3px', background: i < player.actionSlots ? '#39FF14' : '#1A1F24' }} />
+                                    <div key={i} style={{ width: '24px', height: '6px', background: i < player.actionSlots ? '#39FF14' : '#1A1F24' }} />
                                 ))}
                             </div>
                         </div>
@@ -250,7 +250,7 @@ export function PlayerDashboardView() {
                                                         <span>{s.label}</span>
                                                         <span style={{ fontFamily: 'var(--font-mono)' }}>{lvl} <span style={{ color: '#8E9E94', fontSize: '0.75rem' }}>({prog}/100 XP)</span></span>
                                                     </div>
-                                                    <div style={{ height: '6px', background: '#1A1F24', borderRadius: '3px', overflow: 'hidden' }}>
+                                                    <div style={{ height: '6px', background: '#1A1F24', overflow: 'hidden' }}>
                                                         <div style={{ height: '100%', width: `${prog}%`, background: s.color, transition: 'width 200ms ease-out' }} />
                                                     </div>
                                                 </div>
@@ -296,7 +296,7 @@ export function PlayerDashboardView() {
                                     {showSubAttrs && player.subAttrs && (
                                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                                             {Object.entries(SUB_ATTRIBUTES).map(([base, subs]) => (
-                                                <div key={base} style={{ background: '#1A1F24', borderRadius: '8px', padding: '12px' }}>
+                                                <div key={base} style={{ background: '#1A1F24', padding: '12px' }}>
                                                     <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#FFD700', marginBottom: '12px', textTransform: 'uppercase', fontFamily: 'var(--font-sans)' }}>{base}</div>
                                                     {subs.map(sub => {
                                                         const lvl = player.subAttrs[sub] ?? 0;
@@ -307,7 +307,7 @@ export function PlayerDashboardView() {
                                                                     <span>{sub} <strong style={{ fontFamily: 'var(--font-mono)', color: '#40BAF7' }}>{lvl}</strong></span>
                                                                     <EfButton size="sm" variant="secondary" onClick={() => handleTrainSubAttr(sub)} disabled={!player.canAct} style={{ padding: '4px 8px', fontSize: '0.65rem' }}>TREINAR</EfButton>
                                                                 </div>
-                                                                <div style={{ height:'4px', background:'#0D1117', borderRadius:'2px', overflow:'hidden' }}>
+                                                                <div style={{ height:'4px', background:'#0D1117', overflow:'hidden' }}>
                                                                     <div style={{ height:'100%', width:`${prog}%`, background:'#39FF14' }} />
                                                                 </div>
                                                             </div>
@@ -331,7 +331,7 @@ export function PlayerDashboardView() {
                                         const bossOk = player.relationships.boss >= t.requiredBoss;
                                         const disabled = owned || !canAfford || !bossOk;
                                         return (
-                                            <div key={id} style={{ background: owned ? '#162D1C' : '#1A1F24', border: `1px solid ${owned ? '#39FF14' : '#2D3748'}`, borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', opacity: disabled && !owned ? 0.5 : 1 }}>
+                                            <div key={id} style={{ background: owned ? '#162D1C' : '#1A1F24', border: `1px solid ${owned ? '#39FF14' : '#2D3748'}`, padding: '16px', display: 'flex', flexDirection: 'column', opacity: disabled && !owned ? 0.5 : 1 }}>
                                                 <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#FDFBF7', fontFamily: 'var(--font-sans)', marginBottom: '8px' }}>{owned ? '✓ ' : ''}{t.name}</div>
                                                 <div style={{ fontSize: '0.75rem', color: '#8E9E94', fontFamily: 'var(--font-sans)', marginBottom: '16px', flex: 1, lineHeight: 1.4 }}>{t.description}</div>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
@@ -351,7 +351,7 @@ export function PlayerDashboardView() {
                         {tab === 'lifestyle' && (
                             <EfPanel padding="md">
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '16px', color: '#8E9E94' }}><House weight="fill" /> LIFESTYLE & BENS</div>
-                                <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: '#FDFBF7', background: '#1A1F24', padding: '12px', borderRadius: '8px' }}>
+                                <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: '#FDFBF7', background: '#1A1F24', padding: '12px', }}>
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><House color="#40BAF7" weight="fill" /> {player.lifestyle?.ownedHouse ? LIFESTYLE_CATALOG[player.lifestyle.ownedHouse]?.name : 'Sem casa'}</span>
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Car color="#FFD700" weight="fill" /> {player.lifestyle?.ownedCar ? LIFESTYLE_CATALOG[player.lifestyle.ownedCar]?.name : 'Sem carro'}</span>
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart color="#FF3333" weight="fill" /> {player.lifestyle?.isMarried ? 'Casado' : 'Solteiro'}</span>
@@ -365,7 +365,7 @@ export function PlayerDashboardView() {
                                         const canAfford = player.money >= it.cost;
                                         const disabled = owned || !canAfford;
                                         return (
-                                            <div key={id} style={{ background: owned ? '#162D1C' : '#1A1F24', border: `1px solid ${owned ? '#39FF14' : '#2D3748'}`, borderRadius: '8px', padding: '16px', opacity: disabled && !owned ? 0.5 : 1 }}>
+                                            <div key={id} style={{ background: owned ? '#162D1C' : '#1A1F24', border: `1px solid ${owned ? '#39FF14' : '#2D3748'}`, padding: '16px', opacity: disabled && !owned ? 0.5 : 1 }}>
                                                 <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#FDFBF7', fontFamily: 'var(--font-sans)', marginBottom: '8px' }}>{it.emoji} {owned ? '✓ ' : ''}{it.name}</div>
                                                 <div style={{ fontSize: '0.8rem', color: canAfford ? '#39FF14' : '#FF3333', fontFamily: 'var(--font-mono)', marginBottom: '16px' }}>R$ {it.cost.toLocaleString('pt-BR')}</div>
                                                 <EfButton size="sm" variant={owned ? 'secondary' : 'primary'} onClick={() => handleBuyLifestyle(id)} disabled={disabled} style={{ width: '100%', justifyContent: 'center', fontWeight: 'bold' }}>

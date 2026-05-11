@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-useless-escape, no-prototype-builtins, no-unused-vars */
+/* eslint-disable no-useless-escape */
 
 /**
  * render-all-subgenres.js

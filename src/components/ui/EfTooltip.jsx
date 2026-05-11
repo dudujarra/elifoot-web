@@ -81,7 +81,7 @@ export function EfTooltip({
                         lineHeight: 1.6,
                         border: '4px solid',
                         borderColor: '#4A5059 #111417 #111417 #4A5059',
-                        boxShadow: '4px 8px 0 rgba(0,0,0,0.6)',
+                        boxShadow: '4px 8px 0 #040805',
                         borderTopWidth: '4px',
                         borderTopColor: HEADER_COLOR[color] || HEADER_COLOR.info,
                         pointerEvents: 'none',

@@ -72,7 +72,7 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     alignItems:'start'
                 }}>
                     {/* LEFT: Nosso time */}
-                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', border: `1px solid ${colors.border}` }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                             <EfClubBadge name={team.name} size="md" />
                             <div>
@@ -81,7 +81,7 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                             </div>
                         </div>
                         
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', backgroundColor: colors.bg, padding: '12px', borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', backgroundColor: colors.bg, padding: '12px', border: `1px solid ${colors.border}` }}>
                             <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{sectors?.goalkeeper ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>GOL</div></div>
                             <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{sectors?.defense ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>DEF</div></div>
                             <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{sectors?.midfield ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>MEI</div></div>
@@ -100,12 +100,12 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
 
                     {/* CENTER: VS */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', paddingTop: '24px' }}>
-                        <div style={{ backgroundColor: colors.bg, padding: '16px', borderRadius: '50%', border: `2px solid ${colors.warning}`, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '64px', height: '64px' }}>
+                        <div style={{ backgroundColor: colors.bg, padding: '16px', border: `2px solid ${colors.warning}`, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '64px', height: '64px' }}>
                             <Sword size={32} color={colors.warning} />
                         </div>
                         
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '4px', backgroundColor: colors.panelElevated, border: `1px solid ${context?.isHome ? colors.accent : colors.danger}`, color: context?.isHome ? colors.accent : colors.danger, fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', backgroundColor: colors.panelElevated, border: `1px solid ${context?.isHome ? colors.accent : colors.danger}`, color: context?.isHome ? colors.accent : colors.danger, fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 'bold' }}>
                                 <MapPin weight="fill" /> {context?.location || 'CASA'}
                             </div>
                             <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)' }}>
@@ -115,9 +115,9 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     </div>
 
                     {/* RIGHT: Adversário */}
-                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', border: `1px solid ${colors.border}` }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                            {opp?.name ? <EfClubBadge name={opp.name} size="md" /> : <div style={{ width: '48px', height: '48px', backgroundColor: colors.bg, borderRadius: '50%' }} />}
+                            {opp?.name ? <EfClubBadge name={opp.name} size="md" /> : <div style={{ width: '48px', height: '48px', backgroundColor: colors.bg, }} />}
                             <div>
                                 <h4 style={{ margin: 0, fontSize: '1rem', color: colors.text, fontFamily: 'var(--font-sans)' }}>{opp?.name || '—'}</h4>
                                 <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)' }}>VISITANTE</div>
@@ -126,7 +126,7 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                         
                         {opp && (
                             <>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', backgroundColor: colors.bg, padding: '12px', borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', backgroundColor: colors.bg, padding: '12px', border: `1px solid ${colors.border}` }}>
                                     <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{context.oppSectors?.goalkeeper ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>GOL</div></div>
                                     <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{context.oppSectors?.defense ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>DEF</div></div>
                                     <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{context.oppSectors?.midfield ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>MEI</div></div>
@@ -144,7 +144,7 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                                     </div>
                                 </div>
                                 
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: colors.text, fontFamily: 'var(--font-sans)', backgroundColor: colors.bg, padding: '8px', borderRadius: '4px', border: `1px solid ${colors.border}` }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: colors.text, fontFamily: 'var(--font-sans)', backgroundColor: colors.bg, padding: '8px', border: `1px solid ${colors.border}` }}>
                                     <Trophy size={16} color={colors.warning} /> {context.tournament}
                                 </div>
                                 
@@ -159,7 +159,7 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                                                 const bg = result === 'V' ? colors.accent : result === 'D' ? colors.danger : colors.warning;
                                                 return (
                                                     <div key={i} style={{
-                                                        width: '24px', height: '24px', borderRadius: '4px', backgroundColor: bg,
+                                                        width: '24px', height: '24px', backgroundColor: bg,
                                                         color: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center',
                                                         fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 'bold'
                                                     }} title={`${ourGoals}x${theirGoals} — Sem ${m.week ?? '?'}`}>

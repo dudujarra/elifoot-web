@@ -5,7 +5,7 @@ import { EfPanel, EfButton } from './ui';
 import bgNewspaper from '../assets/environments/bg_newspaper.png';
 
 import { 
-    Article, ArrowLeft, Image as ImageIcon, FileJson, 
+    Article, ArrowLeft, Image as ImageIcon, FileCode, 
     CalendarBlank, Infinity as InfinityIcon
 } from '@phosphor-icons/react';
 
@@ -153,7 +153,7 @@ export function ChronicleView() {
                     borderBottom: `2px solid ${colors.secondary}`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
                             <Article size={28} color={colors.secondary} />
                         </div>
                         <div>
@@ -207,7 +207,7 @@ export function ChronicleView() {
                             onClick={handleExportJSON}
                             style={{ color: colors.secondary, borderColor: colors.border }}
                         >
-                            <FileJson size={16} /> EXPORTAR JSON
+                            <FileCode size={16} /> EXPORTAR JSON
                         </EfButton>
                     </div>
                 </div>
