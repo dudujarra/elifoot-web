@@ -49,8 +49,8 @@ export const Data = {
             default: ovr = Math.floor((attributes.FIS + attributes.DEF + attributes.CRI + attributes.FIN + attributes.REF) / 5);
         }
 
-        // BUG-FIX: salary was negative for old low-OVR players; enforce floor
-        const salary = Math.max(2000, Math.floor((ovr * ovr) * 5 + (age > 30 ? -ovr * 20 : 0)));
+        // SPEC-145: salary rebalance — multiplier 5→1.5, floor 2000→500
+        const salary = Math.max(500, Math.floor((ovr * ovr) * 1.5 + (age > 30 ? -ovr * 10 : 0)));
 
         // §3.2: Potential — ceiling for development. Hidden from player.
         // Higher tier → higher potential spread. Young players get more headroom.

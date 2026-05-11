@@ -90,3 +90,13 @@ export function applyDifficultyToValue(rawValue, modifierKey) {
     const mult = diff.modifiers[modifierKey] ?? 1.0;
     return Math.round(rawValue * mult);
 }
+
+// SPEC-147: DDA calibrated boost curve (data: deep soak max win streak 18, max loss 11)
+export function calcOpponentBoost(streak) {
+    if (streak <= 0) {
+        const severity = Math.min(11, Math.abs(streak));
+        return 1.0 - (severity / 11) * 0.18; // min 0.82 em streak -11
+    }
+    const severity = Math.min(18, streak);
+    return 1.0 + (severity / 18) * 0.35; // max 1.35 em streak +18
+}

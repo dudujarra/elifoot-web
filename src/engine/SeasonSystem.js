@@ -8,12 +8,13 @@
 // ============================================================
 // SPEC-125 BUG-071: cut sponsor pay 50% — bot accumulating R$ 4.7B+ peak
 // because sponsor income > all expenses combined. Realistic football economy.
+// SPEC-145: sponsor weeklyPay increased ~30% to better cover reduced player salaries
 export const SPONSOR_TIERS = [
-    { id: "bronze", name: "🥉 Loja do Bairro", weeklyPay: 25000, reqDivision: 4, reqPosition: 99 },
-    { id: "silver", name: "🥈 Rede Regional", weeklyPay: 100000, reqDivision: 3, reqPosition: 10 },
-    { id: "gold", name: "🥇 Marca Nacional", weeklyPay: 300000, reqDivision: 2, reqPosition: 6 },
-    { id: "diamond", name: "💎 Multinacional", weeklyPay: 750000, reqDivision: 1, reqPosition: 4 },
-    { id: "platinum", name: "👑 Patrocinador Master", weeklyPay: 1500000, reqDivision: 1, reqPosition: 1 },
+    { id: "bronze", name: "🥉 Loja do Bairro", weeklyPay: 32500, reqDivision: 4, reqPosition: 99 },
+    { id: "silver", name: "🥈 Rede Regional", weeklyPay: 130000, reqDivision: 3, reqPosition: 10 },
+    { id: "gold", name: "🥇 Marca Nacional", weeklyPay: 390000, reqDivision: 2, reqPosition: 6 },
+    { id: "diamond", name: "💎 Multinacional", weeklyPay: 975000, reqDivision: 1, reqPosition: 4 },
+    { id: "platinum", name: "👑 Patrocinador Master", weeklyPay: 1950000, reqDivision: 1, reqPosition: 1 },
 ];
 
 export function evaluateSponsor(division, position) {
