@@ -314,8 +314,8 @@ export function BrainDashboard({ controllerRef }) {
                                             padding: '3px 6px',
                                             fontSize: '0.6rem',
                                             fontFamily: 'monospace',
-                                            background: `rgba(59, 130, 246, ${0.1 + intensity * 0.4})`,
-                                            border: `1px solid rgba(59, 130, 246, ${0.2 + intensity * 0.5})`,
+                                            background: '#3b82f6',
+                                            border: `1px solid #2563eb`,
                                             color: intensity > 0.5 ? '#fff' : '#888'
                                         }}
                                     >

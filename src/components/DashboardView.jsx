@@ -41,6 +41,7 @@ export function DashboardView() {
     useKeyboardNav({ changeView, currentView: gameState?.view || 'dashboard' });
 
     React.useEffect(() => {
+        if (!team) return;
         if (!engine?.weekEvents) return;
         const unlockEvent = engine.weekEvents.find(e => typeof e === 'string' && e.includes('🔓 Novo acesso'));
         if (unlockEvent) {
@@ -164,10 +165,10 @@ export function DashboardView() {
                                 </div>
                             </div>
                             <div style={{ display: 'flex', gap: '24px' }}>
-                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#FFD700', display: 'block' }}><AnimatedStat value={sectors.goalkeeper} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94' }}>GOL</span></div>
-                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#40BAF7', display: 'block' }}><AnimatedStat value={sectors.defense} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94' }}>DEF</span></div>
-                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#39FF14', display: 'block' }}><AnimatedStat value={sectors.midfield} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94' }}>MEI</span></div>
-                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#FF3333', display: 'block' }}><AnimatedStat value={sectors.attack} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94' }}>ATA</span></div>
+                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#FFD700', display: 'block' }}><AnimatedStat value={sectors.goalkeeper} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94', display: 'flex', alignItems: 'center', gap: '4px' }}><Help id="sector.gol" />GOL</span></div>
+                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#40BAF7', display: 'block' }}><AnimatedStat value={sectors.defense} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94', display: 'flex', alignItems: 'center', gap: '4px' }}><Help id="sector.def" />DEF</span></div>
+                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#39FF14', display: 'block' }}><AnimatedStat value={sectors.midfield} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94', display: 'flex', alignItems: 'center', gap: '4px' }}><Help id="sector.mei" />MEI</span></div>
+                                <div style={{ textAlign: 'center' }}><span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 'bold', color: '#FF3333', display: 'block' }}><AnimatedStat value={sectors.attack} /></span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#8E9E94', display: 'flex', alignItems: 'center', gap: '4px' }}><Help id="sector.ata" />ATA</span></div>
                             </div>
                         </EfPanel>
 

@@ -436,10 +436,14 @@ export function AutoPlayView() {
                         </span>
                     </div>
                     {llmStatus.mode === 'webllm' && (
-                        <div style={{ fontSize: '0.72rem', color: '#888' }}>
-                            status: {llmStatus.loadStatus}
+                        <div style={{ fontSize: '0.72rem', color: llmStatus.loadStatus === 'error' ? '#FF3333' : '#888' }}>
+                            status: <strong>{llmStatus.loadStatus}</strong>
                             {llmStatus.loadProgress > 0 && llmStatus.loadProgress < 1 && (
                                 <span> ({(llmStatus.loadProgress * 100).toFixed(0)}%)</span>
+                            )}
+                            {llmStatus.loadStatus === 'ready' && <span style={{ color: '#39FF14' }}> ✓ LLM ativo</span>}
+                            {llmStatus.loadStatus === 'error' && llmStatus.error && (
+                                <div style={{ marginTop: '4px', fontSize: '0.65rem', color: '#FF6666' }}>{llmStatus.error}</div>
                             )}
                         </div>
                     )}

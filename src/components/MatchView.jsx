@@ -130,6 +130,7 @@ export function MatchView() {
             while (eventIdx < eventQueue.length && eventQueue[eventIdx].minute <= min) {
                 const ev = eventQueue[eventIdx];
                 setDisplayedEvents(prev => {
+                    // dedupe via key
                     const key = `${ev.minute}-${ev.text}`;
                     if (prev.some(e => e && `${e.minute}-${e.text}` === key)) return prev;
                     return [...prev, ev];
@@ -182,7 +183,7 @@ export function MatchView() {
         if (onComplete) onComplete();
     };
 
-    const getRunningScore = () => {
+    const getDisplayScore = () => {
         if (!result) return { home: 0, away: 0 };
         let h = 0, a = 0;
         (displayedEvents || []).forEach(e => {
@@ -467,7 +468,7 @@ export function MatchView() {
         );
     }
 
-    const runningScore = getRunningScore();
+    const runningScore = getDisplayScore();
 
     // === SCOREBOARD ===
     const Scoreboard = ({ half }) => (
