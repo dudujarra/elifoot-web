@@ -37,7 +37,7 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
         warning: '#FFD700',
         danger: '#FF3333',
         field: '#1E3A2F', // Darker, more premium green
-        fieldLines: 'rgba(253, 251, 247, 0.25)',
+        fieldLines: '#111417',
         jerseyBlue: '#1E40AF',
         jerseyGold: '#B8860B' // Premium gold for GK
     };
@@ -114,7 +114,7 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
     return (
         <div className="formation-board" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Formation selector */}
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', backgroundColor: colors.panelBg, padding: '12px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', backgroundColor: colors.panelBg, padding: '12px', border: `1px solid ${colors.border}` }}>
                 <span style={{ fontSize: '0.85rem', color: colors.textMuted, fontFamily: 'var(--font-mono)', marginRight: '8px' }}>ESQUEMA:</span>
                 {FORMATION_KEYS.map(k => (
                     <EfTooltip key={k} content={`Mudar para ${k} — reorganiza posições padrão`}>
@@ -152,12 +152,11 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                     position: 'relative',
                     background: `linear-gradient(180deg, ${colors.field} 0%, #152A22 100%)`,
                     border: `4px solid ${colors.panelElevated}`,
-                    borderRadius: '8px',
                     overflow: 'hidden',
                     cursor: draggedSlot !== null ? 'grabbing' : 'default',
                     touchAction: 'none',
                     margin: '0 auto',
-                    boxShadow: `inset 0 0 40px rgba(0,0,0,0.5)`
+                    boxShadow: `inset 0 0 40px #040805`
                 }}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
@@ -204,7 +203,7 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                                 onPointerDown={(e) => handlePointerDown(e, Number(slotIdx))}
                             >
                                 {/* Shadow */}
-                                <circle r={JERSEY_R} fill="rgba(0,0,0,0.4)" cy={isDragging ? 8 : 4} cx={isDragging ? 4 : 2} />
+                                <circle r={JERSEY_R} fill="#040805" cy={isDragging ? 8 : 4} cx={isDragging ? 4 : 2} />
                                 
                                 {/* Jersey Base */}
                                 <circle r={JERSEY_R} fill={fillColor} stroke={colors.text} strokeWidth="2" opacity={isDragging ? 0.8 : 1} 
@@ -216,7 +215,7 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                                 </text>
                                 
                                 {/* Player Name Background */}
-                                <rect x="-30" y="24" width="60" height="14" rx="4" fill="rgba(13, 17, 23, 0.8)" />
+                                <rect x="-30" y="24" width="60" height="14" rx="4" fill="#111417" />
                                 
                                 {/* Player Name */}
                                 <text y="34" textAnchor="middle" fill={colors.text} fontSize="9" fontWeight="600" fontFamily="var(--font-sans)">
@@ -236,7 +235,7 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                 </svg>
             </div>
 
-            <div style={{ fontSize: '0.8rem', color: colors.textMuted, textAlign: 'center', fontFamily: 'var(--font-mono)', padding: '8px', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
+            <div style={{ fontSize: '0.8rem', color: colors.textMuted, textAlign: 'center', fontFamily: 'var(--font-mono)', padding: '8px', backgroundColor: '#0E1F14', }}>
                 {editable ? '👆 ARRASTE OS JOGADORES PARA AJUSTAR O POSICIONAMENTO EM CAMPO' : '👁️ VISUALIZAÇÃO DA FORMAÇÃO TÁTICA'}
             </div>
         </div>

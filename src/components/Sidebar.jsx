@@ -13,7 +13,7 @@ import React from 'react';
 import { useGame } from '../context/GameContext';
 import { 
     House, Users, ShoppingCart, ListNumbers, Trophy, 
-    MicrophoneStage, Storefront, Swords, Scroll, FloppyDisk, Robot 
+    MicrophoneStage, Storefront, Sword, Scroll, FloppyDisk, Robot 
 } from '@phosphor-icons/react';
 
 const NAV_ITEMS_MANAGER = [
@@ -24,7 +24,7 @@ const NAV_ITEMS_MANAGER = [
     { view: 'achievements', icon: Trophy, label: 'CONQUISTAS' },
     { view: 'press',        icon: MicrophoneStage, label: 'COLETIVA' },
     { view: 'shop',         icon: Storefront, label: 'LOJA' },
-    { view: 'rivalries',    icon: Swords, label: 'RIVALIDADES' },
+    { view: 'rivalries',    icon: Sword, label: 'RIVALIDADES' },
     { view: 'chronicle',    icon: Scroll, label: 'CRÔNICA' },
     { view: 'saves',        icon: FloppyDisk, label: 'SAVES' },
     { view: 'autoplay',     icon: Robot, label: 'AUTOPLAY' }
@@ -74,7 +74,7 @@ export function Sidebar() {
                 top: 0,
                 zIndex: 998,
                 overflowY: 'auto',
-                boxShadow: `4px 0 20px rgba(0,0,0,0.5)`
+                boxShadow: `4px 0 20px #040805`
             }}
         >
             <div style={{
@@ -114,13 +114,12 @@ export function Sidebar() {
                                 cursor: 'pointer',
                                 backgroundColor: isActive ? colors.panelBg : 'transparent',
                                 borderLeft: isActive ? `4px solid ${colors.accent}` : '4px solid transparent',
-                                borderRadius: '0 8px 8px 0',
                                 boxSizing: 'border-box',
                                 transition: 'all 0.15s ease'
                             }}
                             onMouseEnter={(e) => {
                                 if (!isActive) {
-                                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)';
+                                    e.currentTarget.style.backgroundColor = '#0E1F14';
                                     e.currentTarget.style.borderLeftColor = colors.border;
                                 }
                             }}

@@ -5,7 +5,7 @@
  * State persisted in localStorage 'elifoot_tutorial_done'.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useGame } from '../context/GameContext';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
@@ -62,17 +62,53 @@ export function TutorialView() {
         danger: '#FF3333'
     };
 
+    // --- AUDIT-FIX #16: Tutorial Funnel Tracking for SPEC-113 ---
+    const FUNNEL_KEY = 'elifoot_tutorial_funnel';
+    const tracked = useRef(new Set());
+
+    const trackStep = useCallback((idx) => {
+        if (tracked.current.has(idx)) return;
+        tracked.current.add(idx);
+        try {
+            const raw = localStorage.getItem(FUNNEL_KEY);
+            const arr = raw ? JSON.parse(raw) : [];
+            arr.push({ step: STEPS[idx]?.title || `Step ${idx}`, stepIndex: idx, reached: true, reachedAt: Date.now() });
+            localStorage.setItem(FUNNEL_KEY, JSON.stringify(arr));
+        } catch { /* ignore */ }
+    }, []);
+
+    const trackDrop = useCallback((idx) => {
+        try {
+            const raw = localStorage.getItem(FUNNEL_KEY);
+            const arr = raw ? JSON.parse(raw) : [];
+            arr.push({ step: STEPS[idx]?.title || `Step ${idx}`, stepIndex: idx, reached: true, droppedAt: Date.now() });
+            localStorage.setItem(FUNNEL_KEY, JSON.stringify(arr));
+        } catch { /* ignore */ }
+    }, []);
+
+    // Track step 0 on mount
+    useEffect(() => { trackStep(0); }, [trackStep]);
+
     const finish = () => {
-        try { localStorage.setItem(STORAGE_KEY, 'true'); } catch { /* ignore */ }
+        trackStep(step);
+        try {
+            localStorage.setItem(STORAGE_KEY, 'true');
+            localStorage.setItem('elifoot_tutorial_origin', 'completed');
+        } catch { /* ignore */ }
         changeView('start');
     };
 
     const skip = () => {
-        try { localStorage.setItem(STORAGE_KEY, 'skipped'); } catch { /* ignore */ }
+        trackDrop(step);
+        try {
+            localStorage.setItem(STORAGE_KEY, 'skipped');
+            localStorage.setItem('elifoot_tutorial_origin', 'skipped');
+        } catch { /* ignore */ }
         changeView('start');
     };
 
     const next = () => {
+        trackStep(step);
         if (step < STEPS.length - 1) setStep(step + 1);
         else finish();
     };
@@ -92,7 +128,7 @@ export function TutorialView() {
             minHeight: '100dvh',
             padding: '24px',
             backgroundColor: colors.bg,
-            backgroundImage: `linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url(${bgTutorial})`,
+            backgroundImage: `linear-gradient(#111417, #111417), url(${bgTutorial})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
@@ -114,12 +150,11 @@ export function TutorialView() {
                     width: '120px', 
                     height: '120px', 
                     backgroundColor: colors.bg,
-                    borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     border: `1px solid ${colors.border}`,
-                    boxShadow: `0 0 30px rgba(64, 186, 247, 0.2)`
+                    boxShadow: `0 0 30px #111417`
                 }}>
                     {cur.icon}
                 </div>
@@ -146,7 +181,6 @@ export function TutorialView() {
                             style={{
                                 flex: 1,
                                 height: '4px',
-                                borderRadius: '2px',
                                 backgroundColor: i === step ? colors.secondary : i < step ? colors.accent : colors.border,
                                 transition: 'background-color 300ms ease'
                             }}

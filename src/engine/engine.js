@@ -977,6 +977,96 @@ export class Engine {
         return acceptRenewal(player, offer);
     }
 
+    // === PACING FRICTION (AUDIT-FIX #17) ===
+    /**
+     * Returns an array of "friction events" the human UI must show
+     * before letting the player advance to the next match.
+     * Each event: { type, severity, title, body, action? }
+     *   severity: 'info' | 'warning' | 'critical'
+     */
+    getPacingEvents() {
+        if (this.mode !== 'manager') return [];
+        const events = [];
+        const team = this.getTeam(this.manager?.teamId);
+        if (!team) return [];
+
+        // 1. Board ultimatum — critical pacing stop
+        if (this.board && this.board.confidence < 20) {
+            events.push({
+                type: 'BOARD_ULTIMATUM',
+                severity: 'critical',
+                title: '⚠️ ULTIMATO DA DIRETORIA',
+                body: `A diretoria perdeu a confiança (${this.board.confidence}%). Mais derrotas levarão à demissão. Considere ajustar tática e reforçar o elenco.`,
+                action: 'tactics'
+            });
+        }
+
+        // 2. Contract emergency — players about to leave for free
+        const expiringNow = team.squad.filter(p => p.contract && p.contract.weeksLeft <= 2 && p.ovr >= 60);
+        if (expiringNow.length > 0) {
+            const names = expiringNow.map(p => p.name).join(', ');
+            events.push({
+                type: 'CONTRACT_EMERGENCY',
+                severity: 'warning',
+                title: '📋 CONTRATOS EXPIRANDO',
+                body: `${expiringNow.length} jogador(es) sairão DE GRAÇA em 2 semanas: ${names}. Renove agora ou perca-os.`,
+                action: 'squad'
+            });
+        }
+
+        // 3. Financial crisis — negative balance warning
+        if (team.balance < -500000) {
+            events.push({
+                type: 'FINANCIAL_CRISIS',
+                severity: 'critical',
+                title: '💸 CRISE FINANCEIRA',
+                body: `Balanço em R$ ${(team.balance / 1000000).toFixed(1)}M. Venda jogadores ou reduza custos para evitar colapso.`,
+                action: 'market'
+            });
+        }
+
+        // 4. Squad too thin — risk of forfeit
+        const available = team.squad.filter(p => !p.injury && !p._retired);
+        if (available.length <= 13) {
+            events.push({
+                type: 'SQUAD_THIN',
+                severity: 'warning',
+                title: '🚨 ELENCO CURTO',
+                body: `Apenas ${available.length} jogadores disponíveis. Contrate reforços ou arrisque W.O.`,
+                action: 'market'
+            });
+        }
+
+        // 5. Milestone celebrations (positive friction — savoring moments)
+        const seasonWeek = ((this.currentWeek - 1) % 38) + 1;
+        if (seasonWeek === 19) {
+            const standings = this.getStandings(team.zone, team.division);
+            const pos = standings.findIndex(s => s.teamId === team.id) + 1;
+            events.push({
+                type: 'MID_SEASON_REVIEW',
+                severity: 'info',
+                title: '📊 BALANÇO DO 1º TURNO',
+                body: `Metade da temporada! Posição: ${pos}º lugar. V${this.managerStats.wins} E${this.managerStats.draws} D${this.managerStats.losses}. Mantenha o foco para o 2º turno.`
+            });
+        }
+
+        // 6. Big win/loss streak pause
+        if (Math.abs(this.managerStats.streak) >= 5 && this.currentWeek > 3) {
+            const isWin = this.managerStats.streak > 0;
+            events.push({
+                type: 'STREAK_PAUSE',
+                severity: 'info',
+                title: isWin ? '🔥 SEQUÊNCIA HISTÓRICA' : '❄️ MOMENTO DIFÍCIL',
+                body: isWin 
+                    ? `${this.managerStats.streak} vitórias consecutivas! A torcida está empolgada. Continue o bom trabalho!`
+                    : `${Math.abs(this.managerStats.streak)} derrotas seguidas. Considere mudanças táticas e de formação.`,
+                action: isWin ? null : 'tactics'
+            });
+        }
+
+        return events;
+    }
+
     // === COLETIVA DE IMPRENSA ===
     checkPressConference() {
         if (this.mode !== 'manager') return null;

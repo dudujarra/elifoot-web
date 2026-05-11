@@ -5,13 +5,13 @@ import { EfPanel, EfButton } from './ui';
 import bgManagerOffice from '../assets/environments/bg_manager_office.png';
 
 import { 
-    Bug, Gamepad, ChatCircleText, Note, ArrowLeft,
+    Bug, GameController, ChatCircleText, Note, ArrowLeft,
     WarningCircle, Info, DownloadSimple, Trash, ArrowsClockwise, HardDrives
 } from '@phosphor-icons/react';
 
 const CATEGORY_ICONS = {
     bug: <Bug size={16} />,
-    gameplay: <Gamepad size={16} />,
+    gameplay: <GameController size={16} />,
     feedback: <ChatCircleText size={16} />,
     note: <Note size={16} />
 };
@@ -109,7 +109,7 @@ export function MonitorView() {
                     borderBottom: `2px solid ${colors.secondary}`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
                             <HardDrives size={28} color={colors.secondary} />
                         </div>
                         <div>
@@ -138,7 +138,7 @@ export function MonitorView() {
                                 <div style={{ fontSize: '1.5rem', fontWeight: 'bold', fontFamily: 'var(--font-mono)', color: stats.bugs > 0 ? colors.danger : colors.text }}>{stats.bugs}</div>
                             </div>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.75rem', color: colors.textMuted, marginBottom: '4px', fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: '4px' }}><Gamepad size={12} /> GAMEPLAY</div>
+                                <div style={{ fontSize: '0.75rem', color: colors.textMuted, marginBottom: '4px', fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: '4px' }}><GameController size={12} /> GAMEPLAY</div>
                                 <div style={{ fontSize: '1.5rem', fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>{stats.gameplay}</div>
                             </div>
                             <div style={{ textAlign: 'center' }}>
@@ -202,9 +202,8 @@ export function MonitorView() {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                             <div style={{ 
-                                                backgroundColor: 'rgba(255,255,255,0.05)', 
+                                                backgroundColor: '#0E1F14', 
                                                 padding: '4px 8px', 
-                                                borderRadius: '4px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 gap: '6px',
@@ -241,7 +240,6 @@ export function MonitorView() {
                                         <div style={{ 
                                             backgroundColor: colors.bg, 
                                             padding: '12px', 
-                                            borderRadius: '6px',
                                             fontSize: '0.8rem', 
                                             color: colors.textMuted, 
                                             fontFamily: 'var(--font-mono)', 
@@ -258,7 +256,6 @@ export function MonitorView() {
                                             <div style={{ 
                                                 backgroundColor: colors.bg, 
                                                 padding: '12px', 
-                                                borderRadius: '6px',
                                                 fontSize: '0.75rem', 
                                                 color: colors.danger, 
                                                 fontFamily: 'var(--font-mono)', 

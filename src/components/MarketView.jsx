@@ -108,7 +108,6 @@ export function MarketView() {
                         border: '2px solid #10B981', 
                         color: '#FFF', 
                         padding: '12px',
-                        borderRadius: '4px',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
@@ -153,8 +152,7 @@ export function MarketView() {
                                         width: '100%', padding: '12px 12px 12px 36px', 
                                         background: 'var(--bg-sunk)', border: '2px solid var(--border-panel)', 
                                         color: 'var(--text-main)', ...fontMono, fontSize: '0.8rem', outline: 'none',
-                                        borderRadius: '4px'
-                                    }}
+                                        }}
                                 />
                             </div>
                             <div style={{ display: 'flex', position: 'relative', width: '160px' }}>
@@ -163,8 +161,7 @@ export function MarketView() {
                                     width: '100%', padding: '12px 12px 12px 36px', 
                                     background: 'var(--bg-sunk)', border: '2px solid var(--border-panel)', 
                                     color: 'var(--text-main)', ...fontMono, fontSize: '0.8rem', outline: 'none', appearance: 'none',
-                                    borderRadius: '4px'
-                                }}>
+                                    }}>
                                     <option value="all">TODAS POS</option>
                                     <option value="GOL">GOL</option>
                                     <option value="DEF">DEF</option>
@@ -178,8 +175,7 @@ export function MarketView() {
                                     width: '100%', padding: '12px 12px 12px 36px', 
                                     background: 'var(--bg-sunk)', border: '2px solid var(--border-panel)', 
                                     color: 'var(--text-main)', ...fontMono, fontSize: '0.8rem', outline: 'none', appearance: 'none',
-                                    borderRadius: '4px'
-                                }}>
+                                    }}>
                                     <option value="ovr">MAIOR OVR</option>
                                     <option value="price">MAIOR PREÇO</option>
                                     <option value="age">MAIS VELHO</option>
@@ -223,7 +219,7 @@ export function MarketView() {
                                                                 {p.name.toUpperCase()}
                                                             </div>
                                                             <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', ...fontMono, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                                <span style={{ color: 'var(--bg-dark)', background: 'var(--text-muted)', padding: '2px 6px', borderRadius: '2px', fontWeight: 'bold' }}>{p.position}</span>
+                                                                <span style={{ color: 'var(--bg-dark)', background: 'var(--text-muted)', padding: '2px 6px', fontWeight: 'bold' }}>{p.position}</span>
                                                                 <span>OVR <strong style={{ color: p.ovr >= 80 ? 'var(--accent)' : 'var(--text-main)' }}>{p.ovr}</strong></span>
                                                                 <span>•</span>
                                                                 <span>{p.age} ANOS</span>
@@ -273,7 +269,7 @@ export function MarketView() {
                                                     {p.name.toUpperCase()}
                                                 </div>
                                                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', ...fontMono, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                    <span style={{ color: 'var(--bg-dark)', background: 'var(--text-muted)', padding: '2px 6px', borderRadius: '2px', fontWeight: 'bold' }}>{p.position}</span>
+                                                    <span style={{ color: 'var(--bg-dark)', background: 'var(--text-muted)', padding: '2px 6px', fontWeight: 'bold' }}>{p.position}</span>
                                                     <span>OVR <strong style={{ color: 'var(--text-main)' }}>{p.ovr}</strong></span>
                                                     <span>•</span>
                                                     <span>{p.age} ANOS</span>
@@ -295,8 +291,7 @@ export function MarketView() {
                             <div className="ef-anim-fade-in" style={{
                                 marginTop: '16px', padding: '24px',
                                 background: '#2E1A05', border: '2px solid var(--accent)',
-                                borderRadius: '4px'
-                            }}>
+                                }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent)', marginBottom: '8px', ...fontMono, fontSize: '0.75rem' }}>
                                     <Handshake size={16} /> {negotiation.msg}
                                 </div>
@@ -363,7 +358,7 @@ export function MarketView() {
                                                         {p.name.toUpperCase()}
                                                     </div>
                                                     <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', ...fontMono, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <span style={{ color: 'var(--bg-dark)', background: 'var(--text-muted)', padding: '2px 6px', borderRadius: '2px', fontWeight: 'bold' }}>{p.position}</span>
+                                                        <span style={{ color: 'var(--bg-dark)', background: 'var(--text-muted)', padding: '2px 6px', fontWeight: 'bold' }}>{p.position}</span>
                                                         <span>OVR <strong style={{ color: p.ovr >= 80 ? 'var(--accent)' : 'var(--text-main)' }}>{p.ovr}</strong></span>
                                                         <span>•</span>
                                                         <span>{p.age} ANOS</span>

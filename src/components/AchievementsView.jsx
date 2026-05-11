@@ -89,7 +89,6 @@ export function AchievementsView() {
             <div style={{
                 height: '8px',
                 backgroundColor: colors.bg,
-                borderRadius: '4px',
                 border: `1px solid ${colors.border}`,
                 overflow: 'hidden',
                 flex: 1
@@ -129,7 +128,7 @@ export function AchievementsView() {
                     borderBottom: `2px solid ${colors.secondary}`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
                             <Trophy size={28} color={colors.secondary} />
                         </div>
                         <div>
@@ -168,7 +167,6 @@ export function AchievementsView() {
                         <div style={{
                             height: '12px',
                             backgroundColor: colors.bg,
-                            borderRadius: '6px',
                             border: `1px solid ${colors.border}`,
                             overflow: 'hidden'
                         }}>
@@ -211,7 +209,6 @@ export function AchievementsView() {
                                         width: '48px', height: '48px', minWidth: '48px',
                                         backgroundColor: ach.unlocked ? rarityColors.bg : colors.bg,
                                         color: ach.unlocked ? rarityColors.text : colors.textMuted,
-                                        borderRadius: '8px',
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                                         fontSize: '1.5rem',
                                         border: `2px solid ${ach.unlocked ? rarityColors.border : colors.border}`

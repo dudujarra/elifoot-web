@@ -84,7 +84,7 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
         <div className="trophy-ceremony-overlay ef-art-champion-celebration"
              role="dialog" aria-label="Cerimônia de troféu"
              style={{ 
-                 background: `linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url(${bgTrophyCeremony})`,
+                 background: `linear-gradient(#111417, #111417), url(${bgTrophyCeremony})`,
                  backgroundSize: 'cover',
                  backgroundPosition: 'center',
                  imageRendering: 'pixelated',
@@ -112,8 +112,7 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
                         <div style={{
                             position: 'absolute',
                             width: '300px', height: '300px',
-                            background: `radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0) 70%)`,
-                            borderRadius: '50%',
+                            background: `radial-gradient(circle, #1B4332 0%, rgba(255, 215, 0, 0) 70%)`,
                             zIndex: -1,
                             animation: 'pulse-glow 2s infinite alternate'
                         }} />
@@ -126,7 +125,7 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
                                 height: '240px', 
                                 objectFit: 'contain', 
                                 imageRendering: 'pixelated',
-                                filter: 'drop-shadow(0 10px 20px rgba(255, 215, 0, 0.6))'
+                                filter: 'drop-shadow(0 10px 20px #1B4332)'
                             }} 
                         />
                     </div>
@@ -136,12 +135,10 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
                         flexDirection: 'column',
                         alignItems: 'center',
                         gap: '8px',
-                        backgroundColor: 'rgba(22, 27, 34, 0.8)',
+                        backgroundColor: '#111417',
                         padding: '16px 32px',
-                        borderRadius: '16px',
                         border: `1px solid ${colors.warning}`,
-                        backdropFilter: 'blur(8px)'
-                    }}>
+                        }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <Trophy size={32} color={colors.warning} weight="fill" />
                             <h1 style={{ margin: 0, fontSize: '2rem', color: colors.warning, fontWeight: '900', textTransform: 'uppercase' }}>
@@ -161,27 +158,26 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
                 <div className="trophy-stats ef-anim-slide-up" style={{ marginTop: '32px', width: '100%', maxWidth: '600px' }}>
                     <EfPanel padding="lg" style={{ 
                         border: `1px solid ${colors.border}`,
-                        backgroundColor: 'rgba(26, 31, 36, 0.9)',
-                        backdropFilter: 'blur(8px)'
-                    }}>
+                        backgroundColor: '#111417',
+                        }}>
                         <div style={{ textAlign: 'center', marginBottom: '16px', fontFamily: 'var(--font-mono)', color: colors.secondary, fontWeight: 'bold' }}>
                             ESTATÍSTICAS DA CAMPANHA
                         </div>
                         
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-                            <div style={{ backgroundColor: colors.bg, padding: '12px', borderRadius: '8px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
+                            <div style={{ backgroundColor: colors.bg, padding: '12px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
                                 <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>VITÓRIAS</div>
                                 <div style={{ fontSize: '1.5rem', color: colors.accent, fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>{season.wins || 0}</div>
                             </div>
-                            <div style={{ backgroundColor: colors.bg, padding: '12px', borderRadius: '8px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
+                            <div style={{ backgroundColor: colors.bg, padding: '12px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
                                 <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>EMPATES</div>
                                 <div style={{ fontSize: '1.5rem', color: colors.warning, fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>{season.draws || 0}</div>
                             </div>
-                            <div style={{ backgroundColor: colors.bg, padding: '12px', borderRadius: '8px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
+                            <div style={{ backgroundColor: colors.bg, padding: '12px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
                                 <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>DERROTAS</div>
                                 <div style={{ fontSize: '1.5rem', color: colors.danger, fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>{season.losses || 0}</div>
                             </div>
-                            <div style={{ backgroundColor: colors.bg, padding: '12px', borderRadius: '8px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
+                            <div style={{ backgroundColor: colors.bg, padding: '12px', textAlign: 'center', border: `1px solid ${colors.border}` }}>
                                 <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)', marginBottom: '4px' }}>GOLS</div>
                                 <div style={{ fontSize: '1.2rem', color: colors.text, fontWeight: 'bold', fontFamily: 'var(--font-mono)', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '36px' }}>
                                     <span style={{ color: colors.accent }}>{season.goalsFor || 0}</span>
@@ -194,10 +190,9 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
                         {season.topScorer && (
                             <div style={{ 
                                 marginTop: '16px', 
-                                backgroundColor: 'rgba(255, 215, 0, 0.1)', 
+                                backgroundColor: '#1B4332', 
                                 border: `1px dashed ${colors.warning}`, 
                                 padding: '12px', 
-                                borderRadius: '8px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -222,10 +217,9 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
                         fontFamily: 'var(--font-mono)', 
                         color: colors.warning, 
                         fontSize: '0.9rem',
-                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        backgroundColor: '#040805',
                         padding: '8px 16px',
-                        borderRadius: '20px'
-                    }}>
+                        }}>
                         <Medal size={20} weight="fill" /> REGISTRADO NO HALL DA FAMA DA SUA CARREIRA
                     </div>
                     <EfButton
@@ -241,7 +235,7 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
             )}
 
             {/* Crowd atmosphere */}
-            <div className="trophy-crowd" style={{ position: 'absolute', bottom: '20px', display: 'flex', gap: '48px', opacity: 0.3, pointerEvents: 'none' }}>
+            <div className="trophy-crowd" style={{ position: 'absolute', bottom: '20px', display: 'flex', gap: '48px', pointerEvents: 'none' }}>
                 <HandsClapping size={64} weight="duotone" color={colors.text} className="ef-anim-crowd-wave" />
                 <HandsClapping size={64} weight="duotone" color={colors.text} className="ef-anim-crowd-flag-wave" style={{ animationDelay: '0.5s' }} />
                 <HandsClapping size={64} weight="duotone" color={colors.text} className="ef-anim-crowd-wave" style={{ animationDelay: '0.2s' }} />
@@ -250,8 +244,8 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
             
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes pulse-glow {
-                    0% { transform: scale(0.9); opacity: 0.5; }
-                    100% { transform: scale(1.1); opacity: 0.8; }
+                    0% { transform: scale(0.9); ; }
+                    100% { transform: scale(1.1); ; }
                 }
             `}} />
         </div>

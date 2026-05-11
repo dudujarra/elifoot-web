@@ -91,7 +91,7 @@ export function PressView() {
                     borderBottom: `2px solid ${colors.secondary}`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
                             <MicrophoneStage size={28} color={colors.secondary} />
                         </div>
                         <div>
@@ -120,7 +120,6 @@ export function PressView() {
                         backgroundColor: colors.bg,
                         border: `1px solid ${colors.warning}`,
                         padding: '6px 12px',
-                        borderRadius: '4px',
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.8rem',
                         color: colors.warning,
@@ -133,8 +132,7 @@ export function PressView() {
                     <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
                         <div style={{
                             width: '40px', height: '40px', minWidth: '40px',
-                            backgroundColor: colors.bg, borderRadius: '50%',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            backgroundColor: colors.bg, display: 'flex', alignItems: 'center', justifyContent: 'center',
                             border: `1px solid ${colors.border}`, color: colors.textMuted
                         }}>
                             <MicrophoneStage size={20} />
@@ -175,7 +173,6 @@ export function PressView() {
                                     style={{
                                         backgroundColor: colors.panelElevated,
                                         border: `1px solid ${colors.border}`,
-                                        borderRadius: '8px',
                                         padding: '16px 20px',
                                         cursor: 'pointer',
                                         display: 'flex',
@@ -235,7 +232,6 @@ export function PressView() {
                         <div style={{
                             backgroundColor: colors.panelElevated,
                             border: `1px solid ${colors.border}`,
-                            borderRadius: '8px',
                             padding: '20px',
                             marginBottom: '24px'
                         }}>
@@ -254,7 +250,6 @@ export function PressView() {
                         <div style={{
                             backgroundColor: colors.bg,
                             border: `1px solid ${colors.accent}`,
-                            borderRadius: '8px',
                             padding: '16px',
                             marginBottom: '24px',
                             display: 'flex',
@@ -269,7 +264,6 @@ export function PressView() {
                                     <div key={k} style={{
                                         backgroundColor: colors.panelElevated,
                                         padding: '8px 12px',
-                                        borderRadius: '4px',
                                         fontFamily: 'var(--font-sans)',
                                         fontSize: '0.9rem',
                                         color: colors.text,

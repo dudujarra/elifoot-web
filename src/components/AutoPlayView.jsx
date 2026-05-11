@@ -426,7 +426,7 @@ export function AutoPlayView() {
                 {/* SPEC-119: LLM Bridge panel — buy/sell decision engine */}
                 <EfPanel variant="sunk" padding="md" style={{
                     marginTop: '0.5rem',
-                    background: 'rgba(106, 188, 58, 0.05)',
+                    background: '#1B4332',
                     border: '1px solid #6ABC3A',
                 }}>
                     <div style={{ marginBottom: '6px', fontWeight: 700, color: '#6ABC3A', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -471,7 +471,7 @@ export function AutoPlayView() {
                 {stats?.brain && (
                     <EfPanel variant="sunk" padding="md" style={{
                         marginTop: '0.5rem',
-                        background: 'rgba(255, 215, 0, 0.05)',
+                        background: '#1B4332',
                         border: '1px solid #FFD700',
                     }}>
                         <div style={{ marginBottom: '6px', fontWeight: 700, color: '#FFD700', fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem' }}>
@@ -763,7 +763,7 @@ export function AutoPlayView() {
                                         </div>
                                     )}
                                     {expandedSpec === spec && res.signals?.length > 0 && (
-                                        <div style={{ marginTop: '6px', paddingTop: '6px', borderTop: '1px dashed rgba(255,255,255,0.1)' }}>
+                                        <div style={{ marginTop: '6px', paddingTop: '6px', borderTop: '1px dashed #0E1F14' }}>
                                             {res.signals.slice(0, 5).map((s, i) => (
                                                 <div key={i} style={{ marginBottom: '3px', fontSize: '0.65rem' }}>
                                                     <strong>{s.id}</strong> ({(s.severity * 100).toFixed(0)}%): {s.msg}
@@ -834,7 +834,7 @@ export function AutoPlayView() {
                                 style={{
                                     padding: '0.4rem 0.5rem',
                                     borderLeft: '4px solid #FF3333',
-                                    background: 'rgba(214,40,40,0.06)',
+                                    background: '#111417',
                                     fontSize: '0.75rem',
                                     marginBottom: '4px'
                                 }}
@@ -863,7 +863,7 @@ export function AutoPlayView() {
                     <h3 style={{ fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', marginBottom: '8px', color: '#FFD700', textShadow: '2px 2px 0 #000' }}>📋 ÚLTIMAS DECISÕES (20)</h3>
                     <div style={{ maxHeight: '200px', overflowY: 'auto', fontSize: '0.7rem', fontFamily: 'monospace' }}>
                         {stats.decisions.slice(-20).reverse().map((d, i) => (
-                            <div key={i} style={{ padding: '2px 4px', borderBottom: '1px solid rgba(45,90,61,0.3)' }}>
+                            <div key={i} style={{ padding: '2px 4px', borderBottom: '1px solid #111417' }}>
                                 <span style={{ color: '#888' }}>W{d.week}</span>{' '}
                                 <strong style={{ color: '#FFD700' }}>{d.action}</strong>{' '}
                                 <span>{JSON.stringify(d.args)}</span>

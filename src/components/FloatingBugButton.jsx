@@ -64,20 +64,19 @@ export function FloatingBugButton() {
                     right: '24px',
                     width: '56px',
                     height: '56px',
-                    borderRadius: '28px',
                     backgroundColor: colors.warning,
                     color: '#000',
                     border: `2px solid #000`,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
+                    boxShadow: '0 4px 20px #1B4332',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     zIndex: 9000,
                     transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(255, 215, 0, 0.6)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(255, 215, 0, 0.4)'; }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 24px #1B4332'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px #1B4332'; }}
             >
                 <Bug size={28} weight="fill" />
             </button>
@@ -157,7 +156,6 @@ export function FloatingBugButton() {
                                     backgroundColor: colors.bg,
                                     color: colors.text,
                                     border: `1px solid ${colors.border}`,
-                                    borderRadius: '8px',
                                     fontFamily: 'var(--font-sans)',
                                     fontSize: '0.9rem',
                                     resize: 'vertical',
@@ -174,9 +172,8 @@ export function FloatingBugButton() {
                                 color: colors.textMuted, 
                                 marginTop: '12px',
                                 fontFamily: 'var(--font-mono)',
-                                backgroundColor: 'rgba(255,255,255,0.05)',
+                                backgroundColor: '#0E1F14',
                                 padding: '8px',
-                                borderRadius: '4px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '8px'

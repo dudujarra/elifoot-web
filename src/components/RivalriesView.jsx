@@ -102,7 +102,7 @@ export function RivalriesView() {
                     borderBottom: `2px solid ${colors.warning}`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
                             <Fire size={28} color={colors.warning} weight="fill" />
                         </div>
                         <div>
@@ -141,7 +141,6 @@ export function RivalriesView() {
                             backgroundColor: colors.panelElevated,
                             padding: '32px',
                             textAlign: 'center',
-                            borderRadius: '8px',
                             border: `1px dashed ${colors.border}`,
                             fontFamily: 'var(--font-mono)',
                             fontSize: '0.9rem',
@@ -161,7 +160,6 @@ export function RivalriesView() {
                                         border: `1px solid ${colors.border}`,
                                         borderLeftColor: borderColor,
                                         borderLeftWidth: '6px',
-                                        borderRadius: '8px',
                                         padding: '16px',
                                         display: 'flex',
                                         justifyContent: 'space-between',
@@ -171,7 +169,7 @@ export function RivalriesView() {
                                             {oppTeam?.name ? (
                                                 <EfClubBadge name={oppTeam.name} size="md" />
                                             ) : (
-                                                <div style={{ width: '48px', height: '48px', backgroundColor: colors.bg, borderRadius: '50%' }} />
+                                                <div style={{ width: '48px', height: '48px', backgroundColor: colors.bg, }} />
                                             )}
                                             <div>
                                                 <div style={{fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1.1rem', color: colors.text, marginBottom: '4px'}}>
@@ -188,7 +186,6 @@ export function RivalriesView() {
                                         <div style={{
                                             backgroundColor: colors.bg,
                                             border: `1px solid ${borderColor}`,
-                                            borderRadius: '4px',
                                             padding: '6px 12px',
                                             fontFamily: 'var(--font-mono)',
                                             fontSize: '0.8rem',
@@ -229,7 +226,6 @@ export function RivalriesView() {
                                 <div key={i} style={{
                                     backgroundColor: colors.panelElevated,
                                     border: `1px solid ${colors.border}`,
-                                    borderRadius: '8px',
                                     padding: '16px',
                                     display: 'flex',
                                     justifyContent: 'space-between',
@@ -242,7 +238,6 @@ export function RivalriesView() {
                                     <div style={{
                                         backgroundColor: colors.bg,
                                         padding: '4px 8px',
-                                        borderRadius: '4px',
                                         border: `1px solid ${colors.border}`,
                                         fontFamily: 'var(--font-mono)', 
                                         fontSize: '0.8rem', 

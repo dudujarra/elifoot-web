@@ -88,7 +88,7 @@ export const detect = safeDetect(SPEC, NAME, (state) => {
 
     // Score: high if ratio in/out is healthy (~1)
     const ratio = totalOut > 0 ? totalIn / totalOut : 1;
-    let score = 50;
+    let score;
     if (ratio >= 0.9 && ratio <= 1.5) score = 90;
     else if (ratio >= 0.7) score = 70;
     else score = 30;

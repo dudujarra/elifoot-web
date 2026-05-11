@@ -92,7 +92,7 @@ export function CosmeticShopView() {
                     borderBottom: `2px solid ${colors.secondary}`
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
                             <Storefront size={28} color={colors.secondary} />
                         </div>
                         <div>
@@ -115,15 +115,14 @@ export function CosmeticShopView() {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     border: `2px solid ${colors.warning}`,
-                    backgroundColor: 'rgba(255, 215, 0, 0.05)'
+                    backgroundColor: '#1B4332'
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                         <div style={{ 
                             width: '64px', height: '64px', 
                             backgroundColor: colors.warning, 
-                            borderRadius: '50%', 
                             display: 'flex', justifyContent: 'center', alignItems: 'center',
-                            boxShadow: `0 0 20px rgba(255, 215, 0, 0.4)`
+                            boxShadow: `0 0 20px #1B4332`
                         }}>
                             <Star size={36} color="#000" weight="fill" />
                         </div>
@@ -179,7 +178,6 @@ export function CosmeticShopView() {
                                     <div key={item.id} style={{
                                         backgroundColor: colors.panelElevated,
                                         border: `1px solid ${itemBorderColor}`,
-                                        borderRadius: '8px',
                                         padding: '20px 16px',
                                         textAlign: 'center',
                                         display: 'flex',
@@ -204,7 +202,6 @@ export function CosmeticShopView() {
                                             width: '64px', height: '64px', margin: '16px auto 16px',
                                             backgroundColor: equipped ? colors.accent : (owned ? colors.secondary : colors.bg),
                                             color: owned ? '#000' : colors.textMuted,
-                                            borderRadius: '50%',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                                             fontSize: '2rem',
                                             border: `2px solid ${owned ? 'transparent' : colors.border}`

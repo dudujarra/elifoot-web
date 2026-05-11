@@ -47,7 +47,7 @@ export const detect = safeDetect(SPEC, NAME, (state) => {
         });
     }
 
-    let score = 50;
+    let score;
     if (projectedSeasonMinutes >= 30 && projectedSeasonMinutes <= 90) score = 95;
     else if (projectedSeasonMinutes >= 5 && projectedSeasonMinutes < 30) score = 80;
     else if (projectedSeasonMinutes < 5) score = 70; // soak mode OK

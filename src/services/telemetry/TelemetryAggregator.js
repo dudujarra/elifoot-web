@@ -140,9 +140,31 @@ export class TelemetryAggregator {
     }
 
     /**
+     * AUDIT-FIX #16: Load tutorial funnel data from localStorage
+     * so SPEC-113 detector has real tracking data.
+     */
+    _loadTutorialFunnel() {
+        try {
+            const raw = localStorage.getItem('elifoot_tutorial_funnel');
+            if (raw) {
+                this.history.tutorialSteps = JSON.parse(raw);
+            }
+            const origin = localStorage.getItem('elifoot_tutorial_origin');
+            if (origin === 'completed') {
+                this.history.startedFromTutorial = 1;
+                this.history.startedFromSkip = 0;
+            } else if (origin === 'skipped') {
+                this.history.startedFromTutorial = 0;
+                this.history.startedFromSkip = 1;
+            }
+        } catch { /* ignore in non-browser env */ }
+    }
+
+    /**
      * Run all detectors. Returns aggregated report.
      */
     scan(engine) {
+        this._loadTutorialFunnel();
         const state = { engine, history: this.history };
         const results = {};
         let overallScore = 0;

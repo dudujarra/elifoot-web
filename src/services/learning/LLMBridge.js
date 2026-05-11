@@ -35,25 +35,37 @@ export function detectMonotonyHeuristic(gameState) {
         division = 4, winRate = 0.33
     } = gameState || {};
 
-    // --- Tactic monotony ---
-    if (tacticStreak >= 8) {
+    // --- Tactic monotony (AUDIT-FIX #4: lowered from 8→4 for reactivity) ---
+    if (tacticStreak >= 4) {
         signals.push({ id: 'TACTIC_STUCK', msg: `Mesma tática '${currentTactic}' há ${tacticStreak} sem`, streak: tacticStreak });
         const TACTICS = ['offensive', 'defensive', 'counter', 'normal'];
         const alt = TACTICS.find(t => t !== currentTactic) || 'counter';
         suggestions.push({ action: 'CHANGE_TACTIC', value: alt, reason: `tática ${currentTactic} monótona` });
     }
 
-    // --- Standing freeze ---
-    if (positionStreak >= 6) {
+    // --- Standing freeze (AUDIT-FIX #4: lowered from 6→4) ---
+    if (positionStreak >= 4) {
         signals.push({ id: 'STANDING_FREEZE', msg: `${position}º lugar há ${positionStreak} sem` });
         if (streak <= 0) {
-            // Stuck + not winning: go more aggressive
             suggestions.push({ action: 'CHANGE_TACTIC', value: 'offensive', reason: 'parado na tabela' });
         }
         if (position <= 2) {
-            // About to promote: strengthen squad
             suggestions.push({ action: 'SCOUT', reason: 'reforçar antes da divisão acima' });
         }
+    }
+
+    // --- Consecutive loss streak (AUDIT-FIX #4: new signal) ---
+    if (streak <= -4) {
+        signals.push({ id: 'LOSS_SPIRAL', msg: `${Math.abs(streak)} derrotas consecutivas` });
+        const defensiveTactics = { offensive: 'counter', normal: 'defensive', counter: 'defensive' };
+        const fallback = defensiveTactics[currentTactic] || 'counter';
+        suggestions.push({ action: 'CHANGE_TACTIC', value: fallback, reason: 'espiral de derrotas' });
+    }
+
+    // --- Winning complacency (AUDIT-FIX #4: new signal) ---
+    if (streak >= 6 && avgOVR < 60 && division <= 2) {
+        signals.push({ id: 'COMPLACENCY', msg: `${streak} vitórias seguidas mas OVR médio ${avgOVR} — risco de platô` });
+        suggestions.push({ action: 'SCOUT', reason: 'time vencendo por inércia, precisa reforçar' });
     }
 
     // --- Balance crisis ---
@@ -68,8 +80,8 @@ export function detectMonotonyHeuristic(gameState) {
         suggestions.push({ action: 'SCOUT', reason: 'elenco fraco para a divisão' });
     }
 
-    // --- Formation monotony (not a signal, just a suggestion if tactics stuck) ---
-    if (tacticStreak >= 12 && !suggestions.find(s => s.action === 'CHANGE_FORMATION')) {
+    // --- Formation monotony (AUDIT-FIX #4: lowered from 12→6) ---
+    if (tacticStreak >= 6 && !suggestions.find(s => s.action === 'CHANGE_FORMATION')) {
         suggestions.push({ action: 'CHANGE_FORMATION', reason: 'formação estagnada' });
     }
 

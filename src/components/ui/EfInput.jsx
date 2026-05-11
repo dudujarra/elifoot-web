@@ -80,7 +80,7 @@ export function EfInput({
                         borderColor: error
                             ? '#FF3333'
                             : '#111417 #4A5059 #4A5059 #111417',
-                        boxShadow: 'inset 2px 2px 0 rgba(0,0,0,0.5)',
+                        boxShadow: 'inset 2px 2px 0 #040805',
                         outline: 'none',
                         transition: 'border-color 0.1s',
                         opacity: disabled ? 0.5 : 1,

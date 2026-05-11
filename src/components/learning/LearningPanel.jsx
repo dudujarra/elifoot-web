@@ -27,7 +27,7 @@ function Sparkline({ data, width = 200, height = 40, color = '#6ABC3A' }) {
         return `${x},${y}`;
     }).join(' ');
     return (
-        <svg width={width} height={height} style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '2px' }}>
+        <svg width={width} height={height} style={{ background: '#040805', }}>
             <polyline
                 points={points}
                 fill="none"
@@ -52,9 +52,8 @@ function ActionBar({ action, q, max }) {
             <div style={{ minWidth: '120px', fontFamily: 'monospace' }}>{action}</div>
             <div style={{
                 flex: 1,
-                background: 'rgba(0,0,0,0.2)',
+                background: '#040805',
                 height: '12px',
-                borderRadius: '2px',
                 overflow: 'hidden'
             }}>
                 <div style={{
@@ -85,7 +84,7 @@ function MemoryEntry({ entry }) {
             justifyContent: 'space-between',
             fontSize: '0.7rem',
             padding: '2px 4px',
-            borderBottom: '1px solid rgba(255,255,255,0.05)',
+            borderBottom: '1px solid #0E1F14',
             fontFamily: 'monospace'
         }}>
             <span>
@@ -134,7 +133,7 @@ export default function LearningPanel({ controllerRef }) {
     return (
         <EfPanel variant="sunk" padding="md" style={{
             marginTop: '0.5rem',
-            background: 'rgba(106, 188, 58, 0.05)',
+            background: '#1B4332',
             border: '1px solid #6ABC3A',
         }}>
             <div
@@ -197,8 +196,7 @@ export default function LearningPanel({ controllerRef }) {
                             <div style={{
                                 maxHeight: '160px',
                                 overflowY: 'auto',
-                                background: 'rgba(0,0,0,0.15)',
-                                borderRadius: '2px',
+                                background: '#040805',
                                 padding: '4px'
                             }}>
                                 {memory.slice().reverse().map((m, i) => (

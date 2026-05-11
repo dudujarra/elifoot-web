@@ -106,7 +106,6 @@ export class AIDirector {
 
         // Recent win rate (last 10)
         const wins = results.slice(0, 10).filter(r => r === 'W').length;
-        const losses = results.slice(0, 10).filter(r => r === 'L').length;
         const n = Math.min(10, results.length);
 
         // Win rate → frustration mapping
