@@ -1,11 +1,3 @@
-/**
- * SaveSlotsView — SPEC-074
- *
- * 3 slots UI: load/save/delete/export/import.
- * 
- * 16-BIT BRUTALIST ARCADE AESTHETIC — Memory Card style
- */
-
 import React, { useState, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import {
@@ -16,8 +8,13 @@ import {
     exportSlotJSON,
     importJSONToSlot
 } from '../services/SaveSlotsService';
-import { EfButton } from './ui/EfButton';
+import { EfPanel, EfButton } from './ui';
 import bgManagerOffice from '../assets/environments/bg_manager_office.png';
+
+import { 
+    FloppyDisk, ArrowLeft, DownloadSimple, UploadSimple, 
+    Trash, FileCode, WarningCircle, CheckCircle
+} from '@phosphor-icons/react';
 
 export function SaveSlotsView() {
     const { gameState, getEngine, changeView, getDashboardView } = useGame();
@@ -62,187 +59,204 @@ export function SaveSlotsView() {
         setImportingSlot(null);
     };
 
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
+
     return (
         <div className="ef-anim-fade-in" style={{
             backgroundImage: `url(${bgManagerOffice})`,
             imageRendering: 'pixelated',
             WebkitImageRendering: 'pixelated',
-            backgroundColor: '#0A130E',
+            backgroundColor: colors.bg,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
             minHeight: '100dvh',
-            padding: '16px',
-            color: '#E2E8F0',
-            fontFamily: "'Outfit', sans-serif"
+            padding: '24px',
+            color: colors.text,
+            fontFamily: 'var(--font-sans)',
+            overflowY: 'auto'
         }}>
-            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
                 {/* HEADER */}
-                <div style={{
-                    background: '#1E2124',
-                    border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    padding: '16px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
+                <EfPanel padding="lg" style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
                     alignItems: 'center',
-                    boxShadow: '0 8px 0 rgba(0,0,0,0.8)'
+                    borderBottom: `2px solid ${colors.secondary}`
                 }}>
-                    <div>
-                        <h2 style={{fontFamily: "'Press Start 2P', monospace", color: '#FFD700', margin: '0 0 8px 0', fontSize: '1rem', textShadow: '3px 3px 0 #000'}}>
-                            MEMORY CARD
-                        </h2>
-                        <span style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', color: '#888'}}>3 SAVE SLOTS</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                            <FloppyDisk size={28} color={colors.secondary} />
+                        </div>
+                        <div>
+                            <h2 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', fontFamily: 'var(--font-sans)', color: colors.text, fontWeight: 'bold' }}>
+                                MEMORY CARD
+                            </h2>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: colors.textMuted }}>
+                                GERENCIADOR DE SAVES
+                            </span>
+                        </div>
                     </div>
-                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>SAIR</EfButton>
-                </div>
+                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>
+                        <ArrowLeft size={16} /> SAIR
+                    </EfButton>
+                </EfPanel>
 
                 {/* SLOTS */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     {slots.map(slot => (
-                        <div key={slot.slot} style={{
-                            background: '#1E2124',
-                            border: '4px solid',
-                            borderColor: slot.empty ? '#333 #111 #111 #333' : '#4A5059 #111417 #111417 #4A5059',
-                            padding: '20px',
-                            boxShadow: slot.empty ? 'none' : '0 4px 0 rgba(0,0,0,0.5)'
+                        <EfPanel key={slot.slot} padding="lg" style={{
+                            borderLeft: `4px solid ${slot.empty ? colors.border : colors.accent}`
                         }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
                                 <div>
                                     <div style={{
-                                        fontFamily: "'Press Start 2P', monospace",
-                                        fontSize: '0.8rem',
-                                        color: '#FFD700',
-                                        marginBottom: '8px',
-                                        textShadow: '2px 2px 0 #000'
+                                        fontFamily: 'var(--font-sans)',
+                                        fontSize: '1.2rem',
+                                        fontWeight: 'bold',
+                                        color: colors.text,
+                                        marginBottom: '12px'
                                     }}>
                                         SLOT {slot.slot}
                                     </div>
                                     {slot.empty ? (
                                         <div style={{
-                                            fontFamily: "'Press Start 2P', monospace",
-                                            fontSize: '0.6rem',
-                                            color: slot.corrupted ? '#FF3333' : '#555'
+                                            fontFamily: 'var(--font-mono)',
+                                            fontSize: '0.9rem',
+                                            color: slot.corrupted ? colors.danger : colors.textMuted,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '8px'
                                         }}>
-                                            {slot.corrupted ? '⚠ CORROMPIDO' : '— VAZIO —'}
+                                            {slot.corrupted ? (
+                                                <><WarningCircle size={16} color={colors.danger} /> CORROMPIDO</>
+                                            ) : (
+                                                <><FileCode size={16} /> VAZIO</>
+                                            )}
                                         </div>
                                     ) : (
                                         <div>
                                             <div style={{
-                                                fontFamily: "'Press Start 2P', monospace",
-                                                fontSize: '0.7rem',
-                                                color: '#39FF14',
-                                                marginBottom: '6px'
+                                                fontFamily: 'var(--font-sans)',
+                                                fontSize: '1rem',
+                                                color: colors.accent,
+                                                marginBottom: '8px',
+                                                fontWeight: 'bold',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '8px'
                                             }}>
-                                                {slot.managerName} — {slot.teamName}
+                                                <CheckCircle size={16} /> {slot.managerName} — {slot.teamName}
                                             </div>
-                                            <div style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', color: '#888'}}>
-                                                TEMP {slot.seasonNumber} • SEM {slot.week}
+                                            <div style={{fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: colors.textMuted, marginBottom: '4px'}}>
+                                                TEMPORADA {slot.seasonNumber} • SEMANA {slot.week}
                                             </div>
-                                            <div style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#555', marginTop: '4px'}}>
-                                                SALVO: {new Date(slot.savedAt).toLocaleString('pt-BR')}
+                                            <div style={{fontFamily: 'var(--font-sans)', fontSize: '0.75rem', color: colors.textMuted}}>
+                                                SALVO EM: {new Date(slot.savedAt).toLocaleString('pt-BR')}
                                             </div>
                                         </div>
                                     )}
                                 </div>
-                                {/* Memory card icon */}
+                                
+                                {/* Memory card icon indicator */}
                                 <div style={{
-                                    width: '40px', height: '40px',
-                                    background: slot.empty ? '#222' : '#39FF14',
-                                    border: '3px solid #000',
+                                    width: '48px', height: '48px',
+                                    backgroundColor: slot.empty ? colors.bg : colors.accent,
+                                    borderRadius: '8px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    fontSize: '1.2rem',
-                                    boxShadow: 'inset 2px 2px 0 rgba(255,255,255,0.2)'
+                                    border: `1px solid ${slot.empty ? colors.border : 'transparent'}`,
+                                    color: slot.empty ? colors.border : '#000'
                                 }}>
-                                    💾
+                                    <FloppyDisk size={24} weight={slot.empty ? "regular" : "fill"} />
                                 </div>
                             </div>
 
                             {/* ACTION BUTTONS */}
-                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                <div
+                            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                <EfButton
+                                    variant="primary"
                                     onClick={() => handleSave(slot.slot)}
-                                    style={{
-                                        background: '#0A1A0A', border: '4px solid', borderColor: '#39FF14 #1A8A0A #1A8A0A #39FF14',
-                                        padding: '8px 16px', cursor: 'pointer',
-                                        fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#39FF14'
-                                    }}
                                 >
-                                    SALVAR
-                                </div>
+                                    <FloppyDisk size={16} /> SALVAR JOGO
+                                </EfButton>
+                                
                                 {!slot.empty && (
                                     <>
-                                        <div
+                                        <EfButton
+                                            variant="secondary"
                                             onClick={() => handleExport(slot.slot)}
-                                            style={{
-                                                background: '#111', border: '4px solid', borderColor: '#40BAF7 #2070A0 #2070A0 #40BAF7',
-                                                padding: '8px 16px', cursor: 'pointer',
-                                                fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#40BAF7'
-                                            }}
+                                            style={{ color: colors.secondary, borderColor: colors.secondary }}
                                         >
-                                            EXPORTAR
-                                        </div>
-                                        <div
+                                            <DownloadSimple size={16} /> EXPORTAR
+                                        </EfButton>
+                                        <EfButton
+                                            variant="secondary"
                                             onClick={() => handleDelete(slot.slot)}
-                                            style={{
-                                                background: '#1A0A0A', border: '4px solid', borderColor: '#FF3333 #AA1111 #AA1111 #FF3333',
-                                                padding: '8px 16px', cursor: 'pointer',
-                                                fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#FF3333'
-                                            }}
+                                            style={{ color: colors.danger, borderColor: colors.danger }}
                                         >
-                                            DELETAR
-                                        </div>
+                                            <Trash size={16} /> DELETAR
+                                        </EfButton>
                                     </>
                                 )}
-                                <div
+                                
+                                <EfButton
+                                    variant="secondary"
                                     onClick={() => setImportingSlot(slot.slot)}
-                                    style={{
-                                        background: '#111', border: '4px solid', borderColor: '#FFD700 #AA8800 #AA8800 #FFD700',
-                                        padding: '8px 16px', cursor: 'pointer',
-                                        fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#FFD700'
-                                    }}
+                                    style={{ color: colors.warning, borderColor: colors.warning }}
                                 >
-                                    IMPORTAR
-                                </div>
+                                    <UploadSimple size={16} /> IMPORTAR
+                                </EfButton>
                             </div>
 
                             {/* IMPORT FILE INPUT */}
                             {importingSlot === slot.slot && (
                                 <div style={{
-                                    marginTop: '16px',
-                                    padding: '16px',
-                                    background: '#111',
-                                    border: '4px dashed #FFD700'
+                                    marginTop: '20px',
+                                    padding: '20px',
+                                    backgroundColor: colors.bg,
+                                    border: `1px dashed ${colors.warning}`,
+                                    borderRadius: '8px'
                                 }}>
+                                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.text, marginBottom: '12px', fontWeight: 'bold' }}>
+                                        Selecione o arquivo de save (.json):
+                                    </div>
                                     <input
                                         type="file"
                                         accept="application/json"
                                         onChange={(e) => handleImport(slot.slot, e.target.files?.[0])}
                                         style={{
-                                            color: '#FFF',
-                                            marginBottom: '12px',
+                                            color: colors.text,
+                                            marginBottom: '16px',
                                             display: 'block',
                                             width: '100%',
-                                            fontFamily: "'Press Start 2P', monospace",
-                                            fontSize: '0.5rem'
+                                            fontFamily: 'var(--font-mono)',
+                                            fontSize: '0.85rem'
                                         }}
                                     />
-                                    <div
+                                    <EfButton
+                                        variant="secondary"
+                                        size="sm"
                                         onClick={() => setImportingSlot(null)}
-                                        style={{
-                                            background: '#111', border: '4px solid', borderColor: '#333 #000 #000 #333',
-                                            padding: '8px 16px', cursor: 'pointer', display: 'inline-block',
-                                            fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#888'
-                                        }}
                                     >
                                         CANCELAR
-                                    </div>
+                                    </EfButton>
                                 </div>
                             )}
-                        </div>
+                        </EfPanel>
                     ))}
                 </div>
             </div>

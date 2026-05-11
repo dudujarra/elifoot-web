@@ -1,22 +1,32 @@
-/**
- * ChronicleView — v1.5 (AKITA-056)
- *
- * Tela prosa do save + botões export PNG/JSON.
- * 
- * 16-BIT BRUTALIST ARCADE AESTHETIC
- */
-
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { ChronicleService } from '../services/ChronicleService';
-import { EfButton } from './ui/EfButton';
+import { EfPanel, EfButton } from './ui';
 import bgNewspaper from '../assets/environments/bg_newspaper.png';
+
+import { 
+    Article, ArrowLeft, Image as ImageIcon, FileJson, 
+    CalendarBlank, Infinity as InfinityIcon
+} from '@phosphor-icons/react';
 
 export function ChronicleView() {
     const { gameState, getEngine, changeView, getDashboardView } = useGame();
     const engine = getEngine();
     const [view, setView] = useState('season'); // 'season' | 'lifetime'
     const [content, setContent] = useState('');
+
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
 
     // Fallback service for lifetime view
     const chronicle = new ChronicleService({
@@ -60,42 +70,40 @@ export function ChronicleView() {
         try {
             const canvas = document.createElement('canvas');
             const width = 800;
-            const lineHeight = 22;
+            const lineHeight = 26;
             const lines = content.split('\n');
             const height = Math.max(600, lines.length * lineHeight + 80);
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
 
-            // Background — dark arcade metal
-            ctx.fillStyle = '#111417';
+            // Background — Bento Grid Theme
+            ctx.fillStyle = colors.panelBg;
             ctx.fillRect(0, 0, width, height);
 
-            // Border — heavy bevel
-            ctx.strokeStyle = '#4A5059';
-            ctx.lineWidth = 4;
-            ctx.strokeRect(2, 2, width - 4, height - 4);
-            ctx.strokeStyle = '#111';
+            // Border
+            ctx.strokeStyle = colors.border;
             ctx.lineWidth = 2;
-            ctx.strokeRect(6, 6, width - 12, height - 12);
+            ctx.strokeRect(1, 1, width - 2, height - 2);
 
             // Text
-            ctx.fillStyle = '#E2E8F0';
-            ctx.font = '14px monospace';
-            let y = 30;
+            ctx.fillStyle = colors.text;
+            ctx.font = '16px monospace';
+            let y = 40;
             for (const line of lines) {
                 if (line.startsWith('# ')) {
-                    ctx.fillStyle = '#FFD700';
-                    ctx.font = 'bold 20px monospace';
-                    ctx.fillText(line.slice(2), 20, y);
-                    ctx.font = '14px monospace';
-                    ctx.fillStyle = '#E2E8F0';
+                    ctx.fillStyle = colors.warning;
+                    ctx.font = 'bold 24px sans-serif';
+                    ctx.fillText(line.slice(2), 30, y);
+                    ctx.font = '16px monospace';
+                    ctx.fillStyle = colors.text;
+                    y += 10;
                 } else if (line.startsWith('## ')) {
-                    ctx.fillStyle = '#39FF14';
-                    ctx.font = 'bold 16px monospace';
-                    ctx.fillText(line.slice(3), 20, y);
-                    ctx.font = '14px monospace';
-                    ctx.fillStyle = '#E2E8F0';
+                    ctx.fillStyle = colors.accent;
+                    ctx.font = 'bold 18px sans-serif';
+                    ctx.fillText(line.slice(3), 30, y);
+                    ctx.font = '16px monospace';
+                    ctx.fillStyle = colors.text;
                 } else {
                     ctx.fillText(line, 30, y);
                 }
@@ -103,9 +111,9 @@ export function ChronicleView() {
             }
 
             // Footer
-            ctx.fillStyle = '#555';
-            ctx.font = '11px monospace';
-            ctx.fillText(`OLÉ FUT · gerado em ${new Date().toLocaleString('pt-BR')}`, 20, height - 15);
+            ctx.fillStyle = colors.textMuted;
+            ctx.font = '12px monospace';
+            ctx.fillText(`ELIFOOT · gerado em ${new Date().toLocaleString('pt-BR')}`, 30, height - 20);
 
             canvas.toBlob(blob => {
                 const url = URL.createObjectURL(blob);
@@ -125,116 +133,99 @@ export function ChronicleView() {
             backgroundImage: `url(${bgNewspaper})`,
             imageRendering: 'pixelated',
             WebkitImageRendering: 'pixelated',
-            backgroundColor: '#0A130E',
+            backgroundColor: colors.bg,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
             minHeight: '100dvh',
-            padding: '16px',
-            color: '#E2E8F0',
-            fontFamily: "'Outfit', sans-serif"
+            padding: '24px',
+            color: colors.text,
+            fontFamily: 'var(--font-sans)',
+            overflowY: 'auto'
         }}>
-            <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
                 {/* HEADER */}
-                <div style={{
-                    background: '#1E2124',
-                    border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    padding: '16px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
+                <EfPanel padding="lg" style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
                     alignItems: 'center',
-                    boxShadow: '0 8px 0 rgba(0,0,0,0.8)'
+                    borderBottom: `2px solid ${colors.secondary}`
                 }}>
-                    <h2 style={{fontFamily: "'Press Start 2P', monospace", color: '#FFD700', margin: 0, fontSize: '1rem', textShadow: '3px 3px 0 #000'}}>
-                        CRÔNICA DO SAVE
-                    </h2>
-                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>SAIR</EfButton>
-                </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                            <Article size={28} color={colors.secondary} />
+                        </div>
+                        <div>
+                            <h2 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', fontFamily: 'var(--font-sans)', color: colors.text, fontWeight: 'bold' }}>
+                                CRÔNICA DO SAVE
+                            </h2>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: colors.textMuted }}>
+                                REGISTROS HISTÓRICOS DA CARREIRA
+                            </span>
+                        </div>
+                    </div>
+                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>
+                        <ArrowLeft size={16} /> SAIR
+                    </EfButton>
+                </EfPanel>
 
                 {/* VIEW TABS + EXPORT */}
                 <div style={{
                     display: 'flex',
-                    gap: '8px',
-                    flexWrap: 'wrap'
+                    gap: '12px',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
                 }}>
-                    <div
-                        onClick={() => setView('season')}
-                        style={{
-                            background: view === 'season' ? '#1E2124' : '#111',
-                            border: '4px solid',
-                            borderColor: view === 'season' ? '#FFD700 #AA8800 #AA8800 #FFD700' : '#333 #000 #000 #333',
-                            padding: '10px 20px',
-                            fontFamily: "'Press Start 2P', monospace",
-                            fontSize: '0.6rem',
-                            color: view === 'season' ? '#FFD700' : '#888',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        TEMPORADA
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <EfButton 
+                            variant={view === 'season' ? 'primary' : 'secondary'}
+                            onClick={() => setView('season')}
+                        >
+                            <CalendarBlank size={16} /> TEMPORADA
+                        </EfButton>
+                        <EfButton 
+                            variant={view === 'lifetime' ? 'primary' : 'secondary'}
+                            onClick={() => setView('lifetime')}
+                            style={view === 'lifetime' ? { backgroundColor: colors.warning, color: '#000', borderColor: colors.warning } : {}}
+                        >
+                            <InfinityIcon size={16} /> SAVE INTEIRO
+                        </EfButton>
                     </div>
-                    <div
-                        onClick={() => setView('lifetime')}
-                        style={{
-                            background: view === 'lifetime' ? '#1E2124' : '#111',
-                            border: '4px solid',
-                            borderColor: view === 'lifetime' ? '#FFD700 #AA8800 #AA8800 #FFD700' : '#333 #000 #000 #333',
-                            padding: '10px 20px',
-                            fontFamily: "'Press Start 2P', monospace",
-                            fontSize: '0.6rem',
-                            color: view === 'lifetime' ? '#FFD700' : '#888',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        SAVE INTEIRO
-                    </div>
-                    <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
-                        <div
+
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <EfButton
+                            variant="secondary"
                             onClick={handleExportPNG}
-                            style={{
-                                background: '#111', border: '4px solid', borderColor: '#333 #000 #000 #333',
-                                padding: '10px 16px', cursor: 'pointer',
-                                fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#39FF14'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.borderColor = '#39FF14 #1A8A0A #1A8A0A #39FF14'}
-                            onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333 #000 #000 #333'}
+                            style={{ color: colors.accent, borderColor: colors.border }}
                         >
-                            🖼️ PNG
-                        </div>
-                        <div
+                            <ImageIcon size={16} /> EXPORTAR PNG
+                        </EfButton>
+                        <EfButton
+                            variant="secondary"
                             onClick={handleExportJSON}
-                            style={{
-                                background: '#111', border: '4px solid', borderColor: '#333 #000 #000 #333',
-                                padding: '10px 16px', cursor: 'pointer',
-                                fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#40BAF7'
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.borderColor = '#40BAF7 #2070A0 #2070A0 #40BAF7'}
-                            onMouseLeave={(e) => e.currentTarget.style.borderColor = '#333 #000 #000 #333'}
+                            style={{ color: colors.secondary, borderColor: colors.border }}
                         >
-                            📄 JSON
-                        </div>
+                            <FileJson size={16} /> EXPORTAR JSON
+                        </EfButton>
                     </div>
                 </div>
 
                 {/* CHRONICLE CONTENT */}
-                <div className="ef-anim-slide-down" style={{
-                    background: '#1E2124',
-                    border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    padding: '24px',
-                    boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)'
+                <EfPanel padding="lg" className="ef-anim-slide-down" style={{ 
+                    minHeight: '400px'
                 }}>
                     <div style={{
                         whiteSpace: 'pre-wrap',
-                        fontFamily: "'Press Start 2P', monospace",
-                        fontSize: '0.6rem',
-                        lineHeight: 2.2,
-                        color: '#E2E8F0'
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.9rem',
+                        lineHeight: 1.8,
+                        color: colors.text
                     }}>
                         {content || 'CARREGANDO CRÔNICA...'}
                     </div>
-                </div>
+                </EfPanel>
             </div>
         </div>
     );

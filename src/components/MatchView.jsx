@@ -8,12 +8,19 @@ import { PreMatchScreen } from './PreMatchScreen';
 import { EfClubBadge, EfBanner } from './ui';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
-import bgStadium from '../assets/environments/bg_match_stadium.png';
+
+import { 
+    SoccerBall, Cardholder, FirstAid, ArrowsLeftRight, Hand, 
+    Play, Pause, FastForward, SkipForward, Megaphone, 
+    Shield, Strategy, ListNumbers, UserList, CheckCircle, Warning, 
+    ChartBar, MicrophoneStage, ArrowLeft
+} from '@phosphor-icons/react';
 
 export function MatchView() {
     const { gameState, changeView, getEngine, forceUpdate, getDashboardView } = useGame();
     const engine = getEngine();
     const team = engine.getTeam(gameState.teamId);
+    
     const [phase, setPhase] = useState('prematch');
     const [result, setResult] = useState(null);
     const [narration, setNarration] = useState([]);
@@ -33,6 +40,7 @@ export function MatchView() {
     const [goalBurstActive, setGoalBurstActive] = useState(false);
     const [eventOverlay, setEventOverlay] = useState(null); // 'card'|'injury'|'sub'|'whistle'
     const [banner, setBanner] = useState(null); // null | 'hattrick' | 'cleanSheet' | 'motm'
+    
     const logRef = useRef(null);
     const timerRef = useRef(null);
     const speedRef = useRef(200);
@@ -70,7 +78,7 @@ export function MatchView() {
         return () => { if (timerRef.current) clearInterval(timerRef.current); };
     }, []);
 
-    // Sync speedRef when speed state changes (BUG-003 fix)
+    // Sync speedRef when speed state changes
     useEffect(() => {
         speedRef.current = speed;
         // Restart interval with new speed if currently playing
@@ -114,29 +122,26 @@ export function MatchView() {
         tickerStateRef.current = { events, eventQueue, endMin, onComplete, currentMin: min, eventIdx };
 
         timerRef.current = setInterval(() => {
-            // A1: live pause — skip tick while paused, keep interval alive
             if (pausedRef.current) return;
             min++;
             tickerStateRef.current.currentMin = min;
             setCurrentMinute(min);
 
             while (eventIdx < eventQueue.length && eventQueue[eventIdx].minute <= min) {
-                // BUG-016 fix: dedupe via key (minute, text) — evita repetição em re-renders
                 const ev = eventQueue[eventIdx];
                 setDisplayedEvents(prev => {
                     const key = `${ev.minute}-${ev.text}`;
                     if (prev.some(e => e && `${e.minute}-${e.text}` === key)) return prev;
                     return [...prev, ev];
                 });
-                // P1-6: sound FX para eventos importantes
+                
                 if (ev.text?.includes('⚽')) {
                     sfx.goal();
                     setGoalBurstActive(true);
                     setTimeout(() => setGoalBurstActive(false), 1300);
                 } else if (ev.text?.includes('🟨') || ev.text?.includes('🟥')) {
                     sfx.card();
-                    const cls = ev.text.includes('🟥') ? 'ef-event-redcard' : 'ef-event-foul';
-                    setEventOverlay(cls);
+                    setEventOverlay(ev.text.includes('🟥') ? 'ef-event-redcard' : 'ef-event-foul');
                     setTimeout(() => setEventOverlay(null), 1200);
                 } else if (ev.text?.includes('🤕')) {
                     setEventOverlay('ef-event-injury');
@@ -164,11 +169,9 @@ export function MatchView() {
 
     const skipToEnd = (events, endMin, onComplete) => {
         if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-        // Use start minute from tickerState to avoid duplicating events from previous halves
         const startMin = tickerStateRef.current?.eventQueue?.[0]?.minute || 0;
         const remaining = events.filter(e => e && e.minute >= startMin && e.minute <= endMin);
         setDisplayedEvents(prev => {
-            // Merge: keep already-displayed events and add remaining that aren't already shown
             const existingMinutes = new Set(prev.map(e => `${e.minute}-${e.text}`));
             const newEvents = remaining.filter(e => !existingMinutes.has(`${e.minute}-${e.text}`));
             return [...prev, ...newEvents];
@@ -179,15 +182,12 @@ export function MatchView() {
         if (onComplete) onComplete();
     };
 
-    // BUG-017 fix: contar gols ⚽ direto, sem depender de regex (mais robusto).
-    // displayedEvents reflete log live, score = goals shown so far.
     const getRunningScore = () => {
         if (!result) return { home: 0, away: 0 };
         let h = 0, a = 0;
         (displayedEvents || []).forEach(e => {
             if (!e || !e.text) return;
             if (e.text.includes('⚽')) {
-                // Tenta regex first
                 const match = e.text.match(/\((\d+)\s*x\s*(\d+)\)/);
                 if (match) { h = parseInt(match[1]); a = parseInt(match[2]); }
             }
@@ -195,17 +195,23 @@ export function MatchView() {
         return { home: h, away: a };
     };
 
-    // BUG-017 final score fallback: se 2º tempo done mas displayed score 0-0, usa result final.
-    const getDisplayScore = (half) => {
-        const live = getRunningScore();
-        // Se passou do 90' e live ainda 0-0 mas result tem goals, usa final
-        if (currentMinute >= 90 && live.home === 0 && live.away === 0 && result && (result.homeGoals > 0 || result.awayGoals > 0)) {
-            return { home: result.homeGoals, away: result.awayGoals };
-        }
-        return live;
+    // Color definitions
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
     };
 
-    // === PRE-MATCH (3-step wizard) ===
+    const getEnergyColor = (e) => e < 40 ? colors.danger : e < 70 ? colors.warning : colors.accent;
+
+    // === PRE-MATCH ===
     if (phase === 'prematch') {
         const titulares = team.squad.filter(p => p.isTitular && !p.injury);
         const lowEnergy = titulares.filter(p => p.energy < 40);
@@ -223,8 +229,6 @@ export function MatchView() {
                 const isHome = myMatch.home === team.id;
                 const opponent = engine.getTeam(isHome ? myMatch.away : myMatch.home);
                 const allEvents = myMatch.score.events?.textLog || [];
-
-                // BUG-015 fix: null-safe filter (events array pode ter entries undefined)
                 const htHomeGoals = myMatch.score.events?.home?.filter(e => e && e.minute <= 45).length || 0;
                 const htAwayGoals = myMatch.score.events?.away?.filter(e => e && e.minute <= 45).length || 0;
 
@@ -255,146 +259,210 @@ export function MatchView() {
             forceUpdate();
         };
 
-        const stepLabels = ['Escalação', 'Tática', 'Confirmar'];
         const matchContext = engine.getMatchContext ? engine.getMatchContext() : null;
 
         return (
-            <div className="ef-anim-fade-in ef-layout-pitch" style={{ backgroundImage: `url(${bgStadium})`, backgroundPosition: 'center' }}>
-                <div className="ef-layout-container">
-                {/* A3: Pre-match adversary info */}
-                {matchContext && (
-                    <PreMatchScreen
-                        team={team}
-                        context={matchContext}
-                        sectors={sectors}
-                        engine={engine}
-                        onSaveLayout={() => forceUpdate()}
-                    />
-                )}
+            <div style={{ padding: '24px', width: '100%', minHeight: '100dvh', backgroundColor: colors.bg, overflowY: 'auto' }}>
+                <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    
+                    {matchContext && (
+                        <PreMatchScreen
+                            team={team}
+                            context={matchContext}
+                            sectors={sectors}
+                            engine={engine}
+                            onSaveLayout={() => forceUpdate()}
+                        />
+                    )}
 
-                {/* Step indicator */}
-                <EfPanel variant="default" padding="md" style={{ textAlign: 'center', boxShadow: '0 8px 0 rgba(0,0,0,0.8)' }}>
-                    <h2 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.8rem',margin:'0 0 12px 0',color:'#FFD700',textShadow:'3px 3px 0 #000'}}>⚽ PRÉ-JOGO — SEMANA {engine.currentWeek + 1}</h2>
-                    <div style={{display:'flex',justifyContent:'center',gap:'12px'}}>
-                        {stepLabels.map((label, i) => (
-                            <div key={i} style={{display:'flex',alignItems:'center',gap:'6px',fontFamily:"'Press Start 2P', monospace",fontSize:'0.45rem',
-                                color: preStep === i + 1 ? '#FFD700' : '#555'}}>
-                                <span style={{
-                                    width:'18px',height:'18px',border:'3px solid #000',display:'flex',alignItems:'center',justifyContent:'center',
-                                    fontSize:'0.45rem',background: preStep > i + 1 ? '#0B2015' : preStep === i + 1 ? '#1E3A8A' : '#111',
-                                    color: preStep > i + 1 ? '#39FF14' : preStep === i + 1 ? '#FFF' : '#555'
-                                }}>{preStep > i + 1 ? '✓' : i + 1}</span>
+                    <EfPanel padding="md" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '32px' }}>
+                        {[
+                            { step: 1, label: 'ESCALAÇÃO', icon: <UserList size={20} /> },
+                            { step: 2, label: 'TÁTICA', icon: <Strategy size={20} /> },
+                            { step: 3, label: 'CONFIRMAÇÃO', icon: <CheckCircle size={20} /> }
+                        ].map(({ step, label, icon }) => (
+                            <div key={step} style={{ 
+                                display: 'flex', alignItems: 'center', gap: '8px', 
+                                color: preStep >= step ? colors.text : colors.textMuted,
+                                fontWeight: preStep >= step ? 'bold' : 'normal',
+                                fontFamily: 'var(--font-sans)',
+                                opacity: preStep >= step ? 1 : 0.5
+                            }}>
+                                <div style={{ 
+                                    width: '32px', height: '32px', borderRadius: '50%', 
+                                    backgroundColor: preStep > step ? colors.accent : preStep === step ? colors.secondary : colors.border,
+                                    color: preStep > step ? colors.bg : colors.text,
+                                    display: 'flex', justifyContent: 'center', alignItems: 'center'
+                                }}>
+                                    {preStep > step ? <CheckCircle weight="fill" /> : icon}
+                                </div>
                                 {label}
                             </div>
                         ))}
-                    </div>
-                </EfPanel>
+                    </EfPanel>
 
-                {/* STEP 1: Squad Review */}
-                {preStep === 1 && (
-                    <>
-                        <EfPanel variant="sunk" padding="md">
-                            <div className="inline-stats" style={{justifyContent:'center'}}>
-                                <div className="inline-stat"><span className="stat-value">{sectors.goalkeeper}</span><span className="stat-label">GOL</span></div>
-                                <div className="inline-stat"><span className="stat-value">{sectors.defense}</span><span className="stat-label">DEF</span></div>
-                                <div className="inline-stat"><span className="stat-value">{sectors.midfield}</span><span className="stat-label">MEI</span></div>
-                                <div className="inline-stat"><span className="stat-value">{sectors.attack}</span><span className="stat-label">ATA</span></div>
-                            </div>
-                        </EfPanel>
-                        <EfPanel variant="elev" padding="md">
-                            <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',marginBottom:'8px',color:'#FFD700',textShadow:'2px 2px 0 #000'}}>TITULARES ({titulares.length})</h4>
-                            <div style={{display:'flex',flexDirection:'column',gap:'0.15rem'}}>
-                                {titulares.map(p => (
-                                    <div key={p.id} style={{
-                                        display:'flex', justifyContent:'space-between', alignItems:'center',
-                                        padding:'0.2rem 0.4rem', borderRadius:'0', borderBottom: '1px solid #111',
-                                        backgroundColor: p.energy < 40 ? '#3A1010' : 'transparent', fontSize:'0.78rem'
-                                    }}>
-                                        <span>
-                                            <strong style={{color:'#888',marginRight:'6px',fontSize:'0.7rem',fontFamily:"'Press Start 2P', monospace"}}>{p.position}</strong>
-                                            {p.name}
-                                            {p._isCaptain && <span style={{marginLeft:'3px'}}>©️</span>}
-                                            {getFormEmoji(p.form?.trend) && <span style={{marginLeft:'3px'}}>{getFormEmoji(p.form?.trend)}</span>}
-                                        </span>
-                                        <span style={{display:'flex',gap:'0.5rem',alignItems:'center'}}>
-                                            <span style={{fontWeight:600}}>{p.ovr}</span>
-                                            <span style={{color: p.energy < 40 ? '#FF3333' : p.energy < 70 ? '#FFD700' : '#39FF14', fontSize:'0.72rem'}}>⚡{p.energy}%</span>
-                                        </span>
+                    {preStep === 1 && (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px' }}>
+                            <EfPanel padding="md">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <ListNumbers size={24} color={colors.warning} />
+                                    <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>SETORES DO PLANTEL</h3>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-around', backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{sectors.goalkeeper}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>GOL</div></div>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{sectors.defense}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>DEF</div></div>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{sectors.midfield}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>MEI</div></div>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colors.danger, fontFamily: 'var(--font-mono)' }}>{sectors.attack}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>ATA</div></div>
+                                </div>
+                            </EfPanel>
+
+                            <EfPanel padding="md">
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <UserList size={24} color={colors.secondary} />
+                                        <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>TITULARES ({titulares.length})</h3>
                                     </div>
-                                ))}
-                            </div>
-                            {lowEnergy.length > 0 && <span style={{display:'inline-block',marginTop:'8px',background:'#1A0A0A',border:'4px solid',borderColor:'#FF3333 #AA1111 #AA1111 #FF3333',padding:'6px 12px',fontFamily:"'Press Start 2P', monospace",fontSize:'0.45rem',color:'#FF3333'}}>⚠️ {lowEnergy.length} COM ENERGIA BAIXA</span>}
-                        </EfPanel>
-                        <EfButton variant="primary" style={{width:'100%',justifyContent:'center'}} onClick={() => setPreStep(2)}>PRÓXIMO: TÁTICA →</EfButton>
-                    </>
-                )}
-
-                {/* STEP 2: Tactics + Team Talk */}
-                {preStep === 2 && (
-                    <>
-                        <EfPanel variant="elev" padding="md">
-                            <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FFD700',marginBottom:'8px',textShadow:'2px 2px 0 #000'}}>FORMAÇÃO</h4>
-                            <div className="action-bar" style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
-                                {Object.keys(FORMATIONS).map(f => (
-                                    <EfButton key={f} size="sm" variant={team.formation === f ? 'primary' : 'secondary'}
-                                        onClick={() => { engine.setFormation(f); forceUpdate(); }}>{f}</EfButton>
-                                ))}
-                            </div>
-                            <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FFD700',margin:'16px 0 8px',textShadow:'2px 2px 0 #000'}}>TÁTICA</h4>
-                            <div className="action-bar" style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
-                                {Object.entries(TACTICS).map(([k, v]) => (
-                                    <EfButton key={k} size="sm" variant={engine.currentTactic === k ? 'primary' : 'secondary'}
-                                        onClick={() => { engine.setTactic(k); forceUpdate(); }}>{v.name}</EfButton>
-                                ))}
-                            </div>
-                            <p style={{fontSize:'0.72rem',color:'#888',marginTop:'8px'}}>{TACTICS[engine.currentTactic]?.description}</p>
-                        </EfPanel>
-                        <EfPanel variant="elev" padding="md">
-                            <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FFD700',marginBottom:'8px',textShadow:'2px 2px 0 #000'}}>📢 PRELEÇÃO</h4>
-                            {talkDone ? (
-                                <span style={{background:'#0B2015',border:'4px solid',borderColor:'#39FF14 #1A8A0A #1A8A0A #39FF14',padding:'6px 12px',fontFamily:"'Press Start 2P', monospace",fontSize:'0.45rem',color:'#39FF14'}}>✅ PRELEÇÃO FEITA!</span>
-                            ) : (
-                                <div style={{display:'flex',flexWrap:'wrap',gap:'0.3rem'}}>
-                                    {TEAM_TALKS.map(t => (
-                                        <EfButton key={t.id} variant="secondary" size="sm"
-                                            onClick={() => { engine.doTeamTalk(t.id); setTalkDone(true); forceUpdate(); }}>{t.name}</EfButton>
+                                    {lowEnergy.length > 0 && (
+                                        <div style={{ backgroundColor: 'rgba(255, 51, 51, 0.1)', color: colors.danger, padding: '4px 12px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <Warning /> {lowEnergy.length} COM ENERGIA BAIXA
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    {titulares.map(p => (
+                                        <div key={p.id} style={{
+                                            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                            padding: '12px', borderRadius: '6px', border: `1px solid ${colors.border}`,
+                                            backgroundColor: p.energy < 40 ? '#2D1616' : colors.panelElevated,
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                <div style={{ width: '40px', textAlign: 'center', backgroundColor: colors.bg, padding: '4px', borderRadius: '4px', color: colors.textMuted, fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                    {p.position}
+                                                </div>
+                                                <div style={{ color: colors.text, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
+                                                    {p.name} {p._isCaptain && '©️'} {getFormEmoji(p.form?.trend)}
+                                                </div>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontFamily: 'var(--font-mono)', fontWeight: 'bold' }}>
+                                                <div style={{ color: colors.text }}>OVR: {p.ovr}</div>
+                                                <div style={{ color: getEnergyColor(p.energy), minWidth: '80px', textAlign: 'right' }}>COND: {p.energy}%</div>
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
-                            )}
-                        </EfPanel>
-                        <div style={{display:'flex',gap:'8px'}}>
-                            <EfButton variant="secondary" style={{flex:1,justifyContent:'center'}} onClick={() => setPreStep(1)}>← Voltar</EfButton>
-                            <EfButton variant="primary" style={{flex:2,justifyContent:'center'}} onClick={() => setPreStep(3)}>CONFIRMAR →</EfButton>
+                            </EfPanel>
+                            
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px' }}>
+                                <EfButton variant="secondary" onClick={() => changeView(getDashboardView())}>
+                                    <ArrowLeft size={16} /> VOLTAR AO DASHBOARD
+                                </EfButton>
+                                <EfButton variant="primary" onClick={() => setPreStep(2)}>
+                                    PRÓXIMO: TÁTICA <SkipForward size={16} />
+                                </EfButton>
+                            </div>
                         </div>
-                    </>
-                )}
+                    )}
 
-                {/* STEP 3: Confirmation */}
-                {preStep === 3 && (
-                    <>
-                        <EfPanel variant="sunk" padding="md" style={{textAlign:'center'}}>
-                            <div style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#888',marginBottom:'8px'}}>
-                                {team.name} • {team.formation} • {tactic?.name}
-                            </div>
-                            {cond && <span style={{display:'inline-block',background:'#0A0A1A',border:'3px solid #40BAF7',padding:'4px 10px',fontFamily:"'Press Start 2P', monospace",fontSize:'0.4rem',color:'#40BAF7',marginBottom:'8px'}}>{cond.name}</span>}
-                            <div style={{display:'grid',gridTemplateColumns:'repeat(4, 1fr)',gap:'8px',justifyContent:'center'}}>
-                                <div className="ef-panel ef-panel-default ef-panel-p-sm" style={{textAlign:'center', border: '3px solid #000', boxShadow: 'none'}}><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.7rem',color:'#FFD700',display:'block'}}>{sectors.goalkeeper}</span><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.4rem',color:'#888'}}>GOL</span></div>
-                                <div className="ef-panel ef-panel-default ef-panel-p-sm" style={{textAlign:'center', border: '3px solid #000', boxShadow: 'none'}}><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.7rem',color:'#40BAF7',display:'block'}}>{sectors.defense}</span><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.4rem',color:'#888'}}>DEF</span></div>
-                                <div className="ef-panel ef-panel-default ef-panel-p-sm" style={{textAlign:'center', border: '3px solid #000', boxShadow: 'none'}}><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.7rem',color:'#39FF14',display:'block'}}>{sectors.midfield}</span><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.4rem',color:'#888'}}>MEI</span></div>
-                                <div className="ef-panel ef-panel-default ef-panel-p-sm" style={{textAlign:'center', border: '3px solid #000', boxShadow: 'none'}}><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.7rem',color:'#FF3333',display:'block'}}>{sectors.attack}</span><span style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.4rem',color:'#888'}}>ATA</span></div>
-                            </div>
-                            <div style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.45rem',color: talkDone ? '#39FF14' : '#FFD700',marginTop:'8px'}}>
-                                {talkDone ? '✅ Preleção feita' : '⚠️ Sem preleção'}
-                            </div>
-                        </EfPanel>
-                        <EfButton variant="primary" style={{justifyContent:'center',padding:'16px',fontSize:'1.1rem'}} onClick={launchMatch}>⚽ INICIAR PARTIDA</EfButton>
-                        <EfButton variant="secondary" style={{width:'100%',marginTop:'0.3rem',justifyContent:'center'}} onClick={() => setPreStep(2)}>← Voltar</EfButton>
-                    </>
-                )}
+                    {preStep === 2 && (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px' }}>
+                            <EfPanel padding="md">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <Strategy size={24} color={colors.secondary} />
+                                    <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>FORMAÇÃO</h3>
+                                </div>
+                                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '32px' }}>
+                                    {Object.keys(FORMATIONS).map(f => (
+                                        <EfButton key={f} variant={team.formation === f ? 'primary' : 'secondary'}
+                                            onClick={() => { engine.setFormation(f); forceUpdate(); }}>{f}</EfButton>
+                                    ))}
+                                </div>
 
-                <EfButton variant="secondary" style={{width:'100%',marginTop:'0.5rem',opacity:0.5,fontSize:'0.75rem',justifyContent:'center'}} onClick={() => changeView(getDashboardView())}>
-                    Cancelar
-                </EfButton>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <Shield size={24} color={colors.accent} />
+                                    <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>ESTILO TÁTICO</h3>
+                                </div>
+                                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                    {Object.entries(TACTICS).map(([k, v]) => (
+                                        <EfButton key={k} variant={engine.currentTactic === k ? 'primary' : 'secondary'}
+                                            onClick={() => { engine.setTactic(k); forceUpdate(); }}>{v.name}</EfButton>
+                                    ))}
+                                </div>
+                                <p style={{ fontSize: '0.85rem', color: colors.textMuted, marginTop: '12px', fontFamily: 'var(--font-sans)', backgroundColor: colors.panelElevated, padding: '12px', borderRadius: '4px', borderLeft: `4px solid ${colors.secondary}` }}>
+                                    {TACTICS[engine.currentTactic]?.description}
+                                </p>
+                            </EfPanel>
+
+                            <EfPanel padding="md">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <Megaphone size={24} color={colors.warning} />
+                                    <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>PRELEÇÃO</h3>
+                                </div>
+                                {talkDone ? (
+                                    <div style={{ backgroundColor: 'rgba(57, 255, 20, 0.1)', color: colors.accent, padding: '16px', borderRadius: '6px', border: `1px solid ${colors.accent}`, fontWeight: 'bold', fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <CheckCircle size={24} /> PRELEÇÃO REALIZADA COM SUCESSO!
+                                    </div>
+                                ) : (
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                                        {TEAM_TALKS.map(t => (
+                                            <EfButton key={t.id} variant="secondary" onClick={() => { engine.doTeamTalk(t.id); setTalkDone(true); forceUpdate(); }}>
+                                                {t.name}
+                                            </EfButton>
+                                        ))}
+                                    </div>
+                                )}
+                            </EfPanel>
+
+                            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px' }}>
+                                <EfButton variant="secondary" onClick={() => setPreStep(1)}>
+                                    <ArrowLeft size={16} /> VOLTAR: ESCALAÇÃO
+                                </EfButton>
+                                <EfButton variant="primary" onClick={() => setPreStep(3)}>
+                                    PRÓXIMO: CONFIRMAR <CheckCircle size={16} />
+                                </EfButton>
+                            </div>
+                        </div>
+                    )}
+
+                    {preStep === 3 && (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px' }}>
+                            <EfPanel padding="lg" style={{ textAlign: 'center', border: `2px solid ${colors.secondary}` }}>
+                                <EfClubBadge name={team.name} size="xl" style={{ margin: '0 auto 16px' }} />
+                                <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.8rem', color: colors.text, margin: '0 0 8px 0' }}>{team.name}</h2>
+                                <div style={{ display: 'inline-flex', gap: '12px', marginBottom: '24px', fontFamily: 'var(--font-mono)' }}>
+                                    <span style={{ backgroundColor: colors.panelElevated, padding: '6px 16px', borderRadius: '4px', border: `1px solid ${colors.border}`, color: colors.accent }}>{team.formation}</span>
+                                    <span style={{ backgroundColor: colors.panelElevated, padding: '6px 16px', borderRadius: '4px', border: `1px solid ${colors.border}`, color: colors.secondary }}>{tactic?.name}</span>
+                                </div>
+                                
+                                {cond && <div style={{ display: 'inline-block', backgroundColor: 'rgba(64, 186, 247, 0.1)', border: `1px solid ${colors.secondary}`, padding: '8px 16px', borderRadius: '4px', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.secondary, marginBottom: '24px', fontWeight: 'bold' }}>CONDIÇÃO: {cond.name}</div>}
+                                
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', justifyContent: 'center', maxWidth: '600px', margin: '0 auto 24px' }}>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{sectors.goalkeeper}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>GOL</div></div>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{sectors.defense}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>DEF</div></div>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{sectors.midfield}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>MEI</div></div>
+                                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}><div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colors.danger, fontFamily: 'var(--font-mono)' }}>{sectors.attack}</div><div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>ATA</div></div>
+                                </div>
+                                
+                                <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 'bold', color: talkDone ? colors.accent : colors.warning, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                                    {talkDone ? <><CheckCircle size={20} /> PRELEÇÃO CONFIRMADA</> : <><Warning size={20} /> ATENÇÃO: SEM PRELEÇÃO REALIZADA</>}
+                                </div>
+                            </EfPanel>
+                            
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                <EfButton variant="primary" style={{ padding: '20px', fontSize: '1.2rem', justifyContent: 'center' }} onClick={launchMatch}>
+                                    <SoccerBall size={24} weight="fill" /> INICIAR PARTIDA
+                                </EfButton>
+                                <div style={{ display: 'flex', gap: '12px' }}>
+                                    <EfButton variant="secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => setPreStep(2)}>
+                                        <ArrowLeft size={16} /> VOLTAR: TÁTICA
+                                    </EfButton>
+                                    <EfButton variant="secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => changeView(getDashboardView())}>
+                                        CANCELAR E VOLTAR
+                                    </EfButton>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -402,216 +470,102 @@ export function MatchView() {
 
     const runningScore = getRunningScore();
 
-    // === SCOREBOARD (shared between phases) ===
+    // === SCOREBOARD ===
     const Scoreboard = ({ half }) => (
-        <div className={`ef-panel ef-panel-default ef-panel-p-md ${goalBurstActive ? 'ef-anim-shake' : ''}`} style={{
-            position: 'relative',
-            marginBottom: '24px',
-            boxShadow: '0 16px 0 rgba(0,0,0,0.5)'
-        }}>
-            <div
-                className="ef-anim-crowd-flag-wave"
-                aria-hidden="true"
-                style={{
-                    position: 'absolute',
-                    top: '4px',
-                    right: '4px',
-                    opacity: 0.25,
-                    pointerEvents: 'none',
-                    zIndex: 1
-                }}
-            />
+        <EfPanel padding="md" style={{ position: 'relative', marginBottom: '24px', overflow: 'hidden', border: `2px solid ${colors.border}` }}>
             {goalBurstActive && (
-                <div
-                    className="ef-anim-goal-burst"
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        zIndex: 10,
-                        pointerEvents: 'none'
-                    }}
-                />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(57, 255, 20, 0.2)', animation: 'pulse 1s infinite', pointerEvents: 'none', zIndex: 1 }} />
             )}
-            {goalBurstActive && (
-                <div
-                    className="ef-anim-ball-kick"
-                    aria-hidden="true"
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '12%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 9,
-                        pointerEvents: 'none'
-                    }}
-                />
-            )}
-            {eventOverlay && (
-                <div className={`ef-event-overlay ef-event-icon ${eventOverlay}`} />
-            )}
-            {eventOverlay === 'ef-event-save' && (
-                <div
-                    className="ef-anim-gk-save"
-                    aria-hidden="true"
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        right: '12%',
-                        transform: 'translateY(-50%)',
-                        zIndex: 9,
-                        pointerEvents: 'none'
-                    }}
-                />
-            )}
-
-            {/* Top Info Bar */}
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: '24px',
-                marginBottom: '16px',
-                fontFamily: "'Press Start 2P', monospace",
-                fontSize: '0.8rem',
-                color: '#FFD700',
-                textShadow: '2px 2px 0 #000'
-            }}>
-                <div style={{ flex: 1, textAlign: 'right' }}>HOME</div>
-                <div style={{
-                    backgroundColor: '#000',
-                    border: '2px solid',
-                    borderColor: '#111 #333 #333 #111',
-                    padding: '4px 8px',
-                    color: '#FF6B00'
-                }}>
-                    HALF: {half.includes('1') ? '1st' : '2nd'}
+            
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px', marginBottom: '16px', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 'bold', color: colors.warning, position: 'relative', zIndex: 2 }}>
+                <div style={{ flex: 1, textAlign: 'right', letterSpacing: '0.1em' }}>MANDANTE</div>
+                <div style={{ backgroundColor: colors.bg, padding: '6px 12px', borderRadius: '4px', border: `1px solid ${colors.border}`, color: colors.accent, fontFamily: 'var(--font-mono)' }}>
+                    {half}
                 </div>
-                <div style={{ flex: 1, textAlign: 'left' }}>VISITOR</div>
+                <div style={{ flex: 1, textAlign: 'left', letterSpacing: '0.1em' }}>VISITANTE</div>
             </div>
 
-            <div className="match-teams" style={{display:'flex',alignItems:'center',justifyContent:'space-around',gap:'1rem'}}>
-                <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px'}}>
-                    <EfClubBadge name={result.home} size="lg" />
-                    <span className="team-name" style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.6rem'}}>{result.home}</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: '16px', position: 'relative', zIndex: 2 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', flex: 1 }}>
+                    <EfClubBadge name={result.home} size="xl" />
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 'bold', color: colors.text, textAlign: 'center' }}>{result.home}</span>
                 </div>
                 
-                <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px'}}>
-                    {/* Score LED Block */}
-                    <div style={{
-                        display: 'flex',
-                        gap: '8px',
-                        backgroundColor: '#0A0A0A',
-                        padding: '12px 24px',
-                        border: '4px solid',
-                        borderColor: '#050505 #222 #222 #050505',
-                        boxShadow: 'inset 0 0 10px #000'
-                    }}>
-                        <div className={`match-score ${goalBurstActive ? 'ef-anim-counter' : ''}`} style={{
-                            fontFamily: "monospace", 
-                            fontWeight: 900,
-                            fontSize: '4rem',
-                            color: '#FF3333',
-                            textShadow: '0 0 10px rgba(255,51,51,0.5)',
-                            lineHeight: 1
-                        }}>{runningScore.home}</div>
-                        <div style={{
-                            fontFamily: "monospace", 
-                            fontWeight: 900,
-                            fontSize: '4rem',
-                            color: '#444',
-                            lineHeight: 1,
-                            margin: '0 8px'
-                        }}>-</div>
-                        <div className={`match-score ${goalBurstActive ? 'ef-anim-counter' : ''}`} style={{
-                            fontFamily: "monospace", 
-                            fontWeight: 900,
-                            fontSize: '4rem',
-                            color: '#FF3333',
-                            textShadow: '0 0 10px rgba(255,51,51,0.5)',
-                            lineHeight: 1
-                        }}>{runningScore.away}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.bg, padding: '16px 32px', borderRadius: '8px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{runningScore.home}</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2rem', color: colors.border, lineHeight: 1 }}>-</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{runningScore.away}</div>
                     </div>
                     
-                    {/* Time LED Block */}
-                    <div style={{
-                        backgroundColor: '#0A0A0A',
-                        padding: '6px 16px',
-                        border: '2px solid',
-                        borderColor: '#050505 #222 #222 #050505',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center'
-                    }}>
-                        <span style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.5rem', color: '#6ABC3A', marginBottom: '4px'}}>TIME</span>
-                        <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
-                            <span style={{
-                                fontFamily: "'Press Start 2P', monospace",
-                                fontSize: '1.2rem',
-                                color: isPlaying ? '#FFD700' : '#888',
-                                textShadow: isPlaying ? '0 0 5px rgba(255,215,0,0.5)' : 'none'
-                            }}>
-                                {String(currentMinute).padStart(2, '0')}:00
-                            </span>
-                            {isPlaying && <span className="pulse live-indicator" style={{fontSize:'0.5rem',color:'#FF3333', marginTop: '2px'}}>●REC</span>}
-                        </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', backgroundColor: colors.bg, padding: '8px 24px', borderRadius: '24px', border: `1px solid ${colors.border}` }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', color: isPlaying ? colors.accent : colors.textMuted, fontWeight: 'bold' }}>
+                            {String(currentMinute).padStart(2, '0')}:00
+                        </span>
+                        {isPlaying && <div style={{ width: '8px', height: '8px', backgroundColor: colors.danger, borderRadius: '50%', animation: 'pulse 1s infinite' }} />}
                     </div>
                 </div>
 
-                <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'8px'}}>
-                    <EfClubBadge name={result.away} size="lg" />
-                    <span className="team-name" style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.6rem'}}>{result.away}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', flex: 1 }}>
+                    <EfClubBadge name={result.away} size="xl" />
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 'bold', color: colors.text, textAlign: 'center' }}>{result.away}</span>
                 </div>
             </div>
-        </div>
+        </EfPanel>
     );
 
-    // === FIRST HALF ===
-    if (phase === 'firsthalf') {
-        return (
-            <div className="ef-anim-fade-in ef-layout-pitch" style={{ backgroundImage: `url(${bgStadium})`, backgroundPosition: 'center' }}>
-                <div className="ef-layout-container">
-                <Scoreboard half="1º Tempo" />
+    // === LIVE MATCH RENDERER ===
+    const renderLiveMatch = (half) => (
+        <div style={{ padding: '24px', width: '100%', minHeight: '100dvh', backgroundColor: colors.bg, overflowY: 'auto' }}>
+            <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <Scoreboard half={half} />
 
-                <div className="narration-log" ref={logRef}>
-                    {displayedEvents.filter(e => e && e.minute <= 45).map((n, i) => (
-                        <div key={i} className={`${n.text?.includes('⚽') ? 'goal-line' : ''} ${n.text?.includes('🟨') ? 'card-line' : ''}`}
-                             style={{animation: 'slideUp 0.2s ease-out'}}>
-                            <strong style={{fontFamily:"'Press Start 2P', monospace",color:'#FFD700',fontSize:'0.5rem',marginRight:'8px'}}>{n.minute}'</strong>
-                            {n.text}
-                        </div>
-                    ))}
-                </div>
+                <EfPanel padding="md" style={{ height: '400px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }} scrollRef={logRef}>
+                    {displayedEvents.map((n, i) => {
+                        const isGoal = n.text?.includes('⚽');
+                        const isCard = n.text?.includes('🟨') || n.text?.includes('🟥');
+                        const isSub = n.text?.includes('🔄');
+                        const isInjury = n.text?.includes('🤕');
+                        
+                        let bgColor = colors.panelElevated;
+                        let borderColor = 'transparent';
+                        if (isGoal) { bgColor = 'rgba(57, 255, 20, 0.1)'; borderColor = colors.accent; }
+                        else if (isCard) { bgColor = 'rgba(255, 215, 0, 0.1)'; borderColor = colors.warning; }
+                        else if (isSub) { bgColor = 'rgba(64, 186, 247, 0.1)'; borderColor = colors.secondary; }
+                        else if (isInjury) { bgColor = 'rgba(255, 51, 51, 0.1)'; borderColor = colors.danger; }
 
-                <div style={{display:'flex',gap:'8px',marginTop:'0.5rem',flexWrap:'wrap'}}>
-                    {/* Speed + Pause controls */}
-                    <div style={{display:'flex',gap:'4px',flex:1}}>
-                        <EfButton size="sm" variant={!paused && speed === 400 ? 'primary' : 'secondary'}
-                            onClick={() => { setSpeed(400); setPaused(false); pausedRef.current = false; }}>1x</EfButton>
-                        <EfButton size="sm" variant={!paused && speed === 200 ? 'primary' : 'secondary'}
-                            onClick={() => { setSpeed(200); setPaused(false); pausedRef.current = false; }}>2x</EfButton>
-                        <EfButton size="sm" variant={!paused && speed === 80 ? 'primary' : 'secondary'}
-                            onClick={() => { setSpeed(80); setPaused(false); pausedRef.current = false; }}>5x</EfButton>
-                        <EfButton size="sm" variant={paused ? 'primary' : 'secondary'}
-                            title="Pausar partida (substituições/táticas)"
-                            onClick={() => {
-                                const next = !paused;
-                                setPaused(next);
-                                pausedRef.current = next;
-                                if (next) setLiveModalOpen(true);
-                            }}>{paused ? '▶️' : '⏸️'}</EfButton>
+                        return (
+                            <div key={i} style={{ display: 'flex', gap: '16px', padding: '12px 16px', backgroundColor: bgColor, borderRadius: '6px', borderLeft: `4px solid ${borderColor}`, fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.text, alignItems: 'center' }}>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', color: colors.textMuted, minWidth: '40px' }}>{n.minute}'</div>
+                                <div style={{ flex: 1 }}>{n.text}</div>
+                            </div>
+                        );
+                    })}
+                </EfPanel>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: '8px', backgroundColor: colors.panelElevated, padding: '8px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                        <EfButton size="md" variant={!paused && speed === 400 ? 'primary' : 'secondary'} onClick={() => { setSpeed(400); setPaused(false); pausedRef.current = false; }}>1x</EfButton>
+                        <EfButton size="md" variant={!paused && speed === 200 ? 'primary' : 'secondary'} onClick={() => { setSpeed(200); setPaused(false); pausedRef.current = false; }}>2x</EfButton>
+                        <EfButton size="md" variant={!paused && speed === 80 ? 'primary' : 'secondary'} onClick={() => { setSpeed(80); setPaused(false); pausedRef.current = false; }}>5x</EfButton>
+                        <EfButton size="md" variant={paused ? 'primary' : 'secondary'} onClick={() => { const next = !paused; setPaused(next); pausedRef.current = next; if (next) setLiveModalOpen(true); }}>
+                            {paused ? <Play weight="fill" /> : <Pause weight="fill" />} {paused ? 'RETOMAR' : 'PAUSAR / TÁTICA'}
+                        </EfButton>
                     </div>
-                    <EfButton size="sm" variant="secondary" onClick={() => {
-                        skipToEnd(narration.filter(e => e && e.minute <= 45), 45, null);
-                    }}>⏭️ Pular</EfButton>
+                    <EfButton size="md" variant="secondary" onClick={() => skipToEnd(narration, half === '1º TEMPO' ? 45 : 90, null)}>
+                        PULAR <FastForward weight="fill" />
+                    </EfButton>
                 </div>
 
-                <EfButton variant="primary" style={{width:'100%',marginTop:'0.5rem',justifyContent:'center'}}
-                    disabled={isPlaying}
-                    onClick={() => setPhase('halftime')}>
-                    ⏸️ INTERVALO
-                </EfButton>
+                {half === '1º TEMPO' ? (
+                    <EfButton variant="primary" style={{ padding: '16px', fontSize: '1.1rem', justifyContent: 'center' }} disabled={isPlaying} onClick={() => setPhase('halftime')}>
+                        <Pause weight="fill" /> INTERVALO
+                    </EfButton>
+                ) : (
+                    <EfButton variant="primary" style={{ padding: '16px', fontSize: '1.1rem', justifyContent: 'center' }} disabled={isPlaying} onClick={() => setPhase('fulltime')}>
+                        <CheckCircle weight="fill" /> FIM DE JOGO
+                    </EfButton>
+                )}
 
                 {liveModalOpen && (
                     <LiveSquadEditModal
@@ -620,17 +574,15 @@ export function MatchView() {
                         currentMinute={currentMinute}
                         liveSubsCount={liveSubsCount}
                         onSubMade={() => { setLiveSubsCount(c => c + 1); forceUpdate(); }}
-                        onClose={() => {
-                            setLiveModalOpen(false);
-                            setPaused(false);
-                            pausedRef.current = false;
-                        }}
+                        onClose={() => { setLiveModalOpen(false); setPaused(false); pausedRef.current = false; }}
                     />
                 )}
             </div>
-            </div>
-        );
-    }
+        </div>
+    );
+
+    if (phase === 'firsthalf') return renderLiveMatch('1º TEMPO');
+    if (phase === 'secondhalf') return renderLiveMatch('2º TEMPO');
 
     // === HALF TIME ===
     if (phase === 'halftime') {
@@ -638,252 +590,205 @@ export function MatchView() {
         const tiredPlayers = team.squad.filter(p => p.isTitular && p.energy < 50);
 
         return (
-            <div className="ef-anim-fade-in ef-layout-pitch" style={{ backgroundImage: `url(${bgStadium})`, backgroundPosition: 'center' }}>
-                <div className="ef-layout-container">
-                <EfPanel variant="elev" padding="md" style={{ textAlign: 'center' }}>
-                    <h3 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.8rem',color:'#FFD700',marginBottom:'8px',textShadow:'3px 3px 0 #000'}}>⏸️ INTERVALO</h3>
-                    <div className="match-teams" style={{display:'flex',alignItems:'center',justifyContent:'space-around',gap:'1rem'}}>
-                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-                            <EfClubBadge name={result.home} size="md" />
-                            <span className="team-name">{result.home}</span>
+            <div style={{ padding: '24px', width: '100%', minHeight: '100dvh', backgroundColor: colors.bg, overflowY: 'auto' }}>
+                <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    <EfPanel padding="lg" style={{ textAlign: 'center', border: `2px solid ${colors.secondary}` }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
+                            <Pause size={32} color={colors.warning} weight="fill" />
+                            <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.8rem', color: colors.text, margin: 0 }}>INTERVALO</h2>
                         </div>
-                        <div className="match-score">{halfTimeData?.homeGoals ?? 0} — {halfTimeData?.awayGoals ?? 0}</div>
-                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-                            <EfClubBadge name={result.away} size="md" />
-                            <span className="team-name">{result.away}</span>
-                        </div>
-                    </div>
-                </EfPanel>
-
-                {/* Tactic change */}
-                {!tacticChanged && (
-                    <EfPanel variant="elev" padding="md">
-                        <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FFD700',marginBottom:'8px',textShadow:'2px 2px 0 #000'}}>⚔️ AJUSTE TÁTICO</h4>
-                        <div className="action-bar" style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
-                            {Object.entries(TACTICS).map(([k, v]) => (
-                                <EfButton key={k} size="sm" variant={engine.currentTactic === k ? 'primary' : 'secondary'}
-                                    onClick={() => {
-                                        engine.setTactic(k);
-                                        setTacticChanged(true);
-                                        forceUpdate();
-                                    }}>
-                                    {v.name}
-                                </EfButton>
-                            ))}
-                        </div>
-                    </EfPanel>
-                )}
-
-                {/* Substitution */}
-                {!subUsed && tiredPlayers.length > 0 && subs.length > 0 && (
-                    <EfPanel variant="elev" padding="md">
-                        <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FFD700',marginBottom:'8px',textShadow:'2px 2px 0 #000'}}>🔄 SUBSTITUIÇÃO</h4>
-                        {tiredPlayers.slice(0, 3).map(p => (
-                            <div key={p.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'0.25rem 0',fontSize:'0.8rem'}}>
-                                <span style={{color:'#FF3333'}}>
-                                    {p.name} ({p.position}) ⚡{p.energy}%
-                                </span>
-                                <EfButton variant="primary" size="sm" onClick={() => {
-                                    const sub = subs[0];
-                                    if (sub) {
-                                        p.isTitular = false;
-                                        sub.isTitular = true;
-                                        sub.energy = Math.min(100, sub.energy + 15);
-                                        setSubUsed(true);
-                                        forceUpdate();
-                                    }
-                                }}>
-                                    ← {subs[0]?.name} (⚡{subs[0]?.energy}%)
-                                </EfButton>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: '16px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                                <EfClubBadge name={result.home} size="lg" />
+                                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 'bold', color: colors.text }}>{result.home}</span>
                             </div>
-                        ))}
-                    </EfPanel>
-                )}
-
-                <EfButton variant="primary" style={{justifyContent:'center',padding:'16px',fontSize:'1.1rem'}} onClick={() => {
-                    setPhase('secondhalf');
-                    setTimeout(() => {
-                        startLiveTicker(narration, 46, 90, null);
-                    }, 300);
-                }}>
-                    ▶️ INICIAR 2º TEMPO
-                </EfButton>
-                </div>
-            </div>
-        );
-    }
-
-    // === SECOND HALF ===
-    if (phase === 'secondhalf') {
-        return (
-            <div className="ef-anim-fade-in ef-layout-pitch" style={{ backgroundImage: `url(${bgStadium})`, backgroundPosition: 'center' }}>
-                <div className="ef-layout-container">
-                <Scoreboard half="2º Tempo" />
-
-                <div className="narration-log" ref={logRef}>
-                    {displayedEvents.filter(e => e && e.minute > 45).map((n, i) => (
-                        <div key={i} className={`${n.text?.includes('⚽') ? 'goal-line' : ''} ${n.text?.includes('🟨') ? 'card-line' : ''}`}
-                             style={{animation: 'slideUp 0.2s ease-out'}}>
-                            <strong style={{fontFamily:"'Press Start 2P', monospace",color:'#FFD700',fontSize:'0.5rem',marginRight:'8px'}}>{n.minute}'</strong>
-                            {n.text}
+                            <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.panelElevated, padding: '12px 24px', borderRadius: '8px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2.5rem', color: colors.text, lineHeight: 1 }}>{halfTimeData?.homeGoals ?? 0}</div>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '1.5rem', color: colors.border, lineHeight: 1 }}>-</div>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2.5rem', color: colors.text, lineHeight: 1 }}>{halfTimeData?.awayGoals ?? 0}</div>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                                <EfClubBadge name={result.away} size="lg" />
+                                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 'bold', color: colors.text }}>{result.away}</span>
+                            </div>
                         </div>
-                    ))}
-                </div>
+                    </EfPanel>
 
-                <div style={{display:'flex',gap:'8px',marginTop:'0.5rem',flexWrap:'wrap'}}>
-                    <div style={{display:'flex',gap:'4px',flex:1}}>
-                        <EfButton size="sm" variant={!paused && speed === 400 ? 'primary' : 'secondary'}
-                            onClick={() => { setSpeed(400); setPaused(false); pausedRef.current = false; }}>1x</EfButton>
-                        <EfButton size="sm" variant={!paused && speed === 200 ? 'primary' : 'secondary'}
-                            onClick={() => { setSpeed(200); setPaused(false); pausedRef.current = false; }}>2x</EfButton>
-                        <EfButton size="sm" variant={!paused && speed === 80 ? 'primary' : 'secondary'}
-                            onClick={() => { setSpeed(80); setPaused(false); pausedRef.current = false; }}>5x</EfButton>
-                        <EfButton size="sm" variant={paused ? 'primary' : 'secondary'}
-                            title="Pausar partida"
-                            onClick={() => {
-                                const next = !paused;
-                                setPaused(next);
-                                pausedRef.current = next;
-                                if (next) setLiveModalOpen(true);
-                            }}>{paused ? '▶️' : '⏸️'}</EfButton>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+                        {!tacticChanged && (
+                            <EfPanel padding="md">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <Strategy size={24} color={colors.secondary} />
+                                    <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>AJUSTE TÁTICO</h3>
+                                </div>
+                                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                                    {Object.entries(TACTICS).map(([k, v]) => (
+                                        <EfButton key={k} variant={engine.currentTactic === k ? 'primary' : 'secondary'}
+                                            onClick={() => { engine.setTactic(k); setTacticChanged(true); forceUpdate(); }}>
+                                            {v.name}
+                                        </EfButton>
+                                    ))}
+                                </div>
+                            </EfPanel>
+                        )}
+
+                        {!subUsed && tiredPlayers.length > 0 && subs.length > 0 && (
+                            <EfPanel padding="md">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                    <ArrowsLeftRight size={24} color={colors.warning} />
+                                    <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>SUBSTITUIÇÃO (CANSAÇO)</h3>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    {tiredPlayers.slice(0, 3).map(p => (
+                                        <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                                <div style={{ color: colors.text, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>{p.name} <span style={{ color: colors.textMuted, fontSize: '0.8rem' }}>({p.position})</span></div>
+                                                <div style={{ color: getEnergyColor(p.energy), fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>COND: {p.energy}%</div>
+                                            </div>
+                                            <EfButton variant="primary" size="sm" onClick={() => {
+                                                const sub = subs[0];
+                                                if (sub) {
+                                                    p.isTitular = false;
+                                                    sub.isTitular = true;
+                                                    sub.energy = Math.min(100, sub.energy + 15);
+                                                    setSubUsed(true);
+                                                    forceUpdate();
+                                                }
+                                            }}>
+                                                <ArrowsLeftRight size={16} /> ENTRA {subs[0]?.name}
+                                            </EfButton>
+                                        </div>
+                                    ))}
+                                </div>
+                            </EfPanel>
+                        )}
                     </div>
-                    <EfButton size="sm" variant="secondary" onClick={() => {
-                        skipToEnd(narration, 90, null);
-                    }}>⏭️ Pular</EfButton>
+
+                    <EfButton variant="primary" style={{ padding: '20px', fontSize: '1.2rem', justifyContent: 'center' }} onClick={() => {
+                        setPhase('secondhalf');
+                        setTimeout(() => startLiveTicker(narration, 46, 90, null), 300);
+                    }}>
+                        <Play size={24} weight="fill" /> INICIAR 2º TEMPO
+                    </EfButton>
                 </div>
-
-                <EfButton variant="primary" style={{width:'100%',marginTop:'0.5rem',justifyContent:'center'}}
-                    disabled={isPlaying}
-                    onClick={() => setPhase('fulltime')}>
-                    🏁 FIM DE JOGO
-                </EfButton>
-
-                {liveModalOpen && (
-                    <LiveSquadEditModal
-                        team={team}
-                        engine={engine}
-                        currentMinute={currentMinute}
-                        liveSubsCount={liveSubsCount}
-                        onSubMade={() => { setLiveSubsCount(c => c + 1); forceUpdate(); }}
-                        onClose={() => {
-                            setLiveModalOpen(false);
-                            setPaused(false);
-                            pausedRef.current = false;
-                        }}
-                    />
-                )}
-            </div>
             </div>
         );
     }
 
     // === FULL TIME ===
     const lastMatchScorers = narration.filter(n => n && n.text?.includes('⚽'));
-    const lastMatchCards = narration.filter(n => n && n.text?.includes('🟨'));
+    const lastMatchCards = narration.filter(n => n && n.text?.includes('🟨') || n?.text?.includes('🟥'));
     const motmEntry = narration.find(n => n.text?.includes('⭐ Craque'));
 
     return (
-        <div className="ef-anim-fade-in" style={{
-            backgroundImage: `url(${bgStadium})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-            imageRendering: 'pixelated',
-            WebkitImageRendering: 'pixelated',
-            minHeight: '100dvh',
-            padding: '16px',
-            color: '#E2E8F0',
-            backgroundColor: '#0A130E'
-        }}>
-            <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {banner && <EfBanner type={banner} onDismiss={() => setBanner(null)} />}
-            <EfPanel variant="elev" padding="md" style={{ textAlign: 'center' }}>
-                <h2 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.9rem',marginBottom:'12px',color:'#FFD700',textShadow:'3px 3px 0 #000'}}>🏁 FIM DE JOGO</h2>
-                <div className="match-teams" style={{display:'flex',alignItems:'center',justifyContent:'space-around',gap:'1rem'}}>
-                    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-                        <EfClubBadge name={result?.home} size="lg" />
-                        <span className="team-name">{result?.home}</span>
+        <div style={{ padding: '24px', width: '100%', minHeight: '100dvh', backgroundColor: colors.bg, overflowY: 'auto' }}>
+            <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {banner && <EfBanner type={banner} onDismiss={() => setBanner(null)} />}
+                
+                <EfPanel padding="lg" style={{ textAlign: 'center', border: `2px solid ${colors.secondary}` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
+                        <CheckCircle size={32} color={colors.accent} weight="fill" />
+                        <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.8rem', color: colors.text, margin: 0 }}>FIM DE JOGO</h2>
                     </div>
-                    <div className="match-score">{result?.homeGoals} — {result?.awayGoals}</div>
-                    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-                        <EfClubBadge name={result?.away} size="lg" />
-                        <span className="team-name">{result?.away}</span>
-                    </div>
-                </div>
-                {motmEntry && <p style={{color:'#39FF14',fontFamily:"'Press Start 2P', monospace",fontSize:'0.5rem',marginTop:'8px'}}>{motmEntry.text}</p>}
-            </EfPanel>
-
-            {/* Scorers */}
-            {lastMatchScorers.length > 0 && (
-                <EfPanel variant="sunk" padding="md">
-                    <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FFD700',marginBottom:'8px',textShadow:'2px 2px 0 #000'}}>⚽ GOLS</h4>
-                    {lastMatchScorers.map((s, i) => (
-                        <div key={i} style={{fontSize:'0.78rem',color:'#E2E8F0',padding:'4px 0',borderBottom:'2px solid #111'}}>
-                            <strong style={{fontFamily:"'Press Start 2P', monospace",color:'#39FF14',marginRight:'8px',fontSize:'0.5rem'}}>{s.minute}'</strong>{s.text}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: '16px', marginBottom: '24px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                            <EfClubBadge name={result?.home} size="xl" />
+                            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: 'bold', color: colors.text }}>{result?.home}</span>
                         </div>
-                    ))}
-                </EfPanel>
-            )}
-
-            {/* Stats + Report */}
-            <EfPanel variant="elev" padding="md">
-                <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FFD700',marginBottom:'8px',textShadow:'2px 2px 0 #000'}}>📊 ESTATÍSTICAS</h4>
-                <ul className="stats-list">
-                    {matchStats && <>
-                        <li><span>Finalizações:</span> <strong>{matchStats.totalChances}</strong></li>
-                        <li><span>Gols:</span> <strong>{matchStats.goals}</strong></li>
-                    </>}
-                    <li><span>Tática:</span> <strong>{TACTICS[engine.currentTactic]?.name}</strong></li>
-                    {lastMatchCards.length > 0 && <li><span>🟨 Cartões:</span> <strong>{lastMatchCards.length}</strong></li>}
-                    {(engine.weekInjuries?.length ?? 0) > 0 && <li><span>🏥 Lesões:</span> <strong style={{color:'#FF3333'}}>{(engine.weekInjuries?.length ?? 0)}</strong></li>}
-                </ul>
-            </EfPanel>
-
-            {/* Injuries */}
-            {(engine.weekInjuries?.length ?? 0) > 0 && (
-                <EfPanel variant="elev" padding="md">
-                    <h4 style={{fontFamily:"'Press Start 2P', monospace",fontSize:'0.55rem',color:'#FF3333',marginBottom:'8px',textShadow:'2px 2px 0 #000'}}>🏥 LESÕES</h4>
-                    {(engine.weekInjuries || []).map((inj, i) => (
-                        <p key={i} style={{color:'#FF3333',fontSize:'0.75rem',padding:'2px 0'}}>{inj.emoji} {inj.player} — {inj.name} ({inj.weeksLeft} sem)</p>
-                    ))}
-                </EfPanel>
-            )}
-
-            {/* Board + Events */}
-            <EfPanel variant="elev" padding="md">
-                {engine.board && (
-                    <div style={{marginBottom:'0.5rem'}}>
-                        <p style={{fontSize:'0.78rem',color: engine.board.getStatus().color}}>
-                            {engine.board.getStatus().emoji} Diretoria: {engine.board.getStatus().label} ({engine.board.confidence}%)
-                        </p>
+                        <div style={{ display: 'flex', gap: '16px', backgroundColor: colors.panelElevated, padding: '16px 32px', borderRadius: '8px', border: `1px solid ${colors.border}`, alignItems: 'center' }}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{result?.homeGoals}</div>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '2rem', color: colors.border, lineHeight: 1 }}>-</div>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '3.5rem', color: colors.text, lineHeight: 1 }}>{result?.awayGoals}</div>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                            <EfClubBadge name={result?.away} size="xl" />
+                            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: 'bold', color: colors.text }}>{result?.away}</span>
+                        </div>
                     </div>
-                )}
-                {(engine.weekEvents?.length ?? 0) > 0 && (
-                    <div className="event-feed">
-                        {(engine.weekEvents || []).map((ev, i) => {
-                            const isGrowth = ev.includes('📈');
-                            const isDecline = ev.includes('📉') || ev.includes('☠️') || ev.includes('👴');
-                            const isGood = ev.includes('🎉') || ev.includes('📚') || ev.includes('🎂') || ev.includes('🇧🇷');
-                            return (
-                                <div key={i} className={`event-item ${isGrowth || isGood ? 'highlight' : ''} ${isDecline ? 'danger' : ''}`}>
-                                    {ev}
+                    {motmEntry && (
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(255, 215, 0, 0.1)', padding: '12px 24px', borderRadius: '24px', border: `1px solid ${colors.warning}`, color: colors.warning, fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
+                            <ChartBar size={20} weight="fill" /> {motmEntry.text}
+                        </div>
+                    )}
+                </EfPanel>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+                    <EfPanel padding="md">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                            <SoccerBall size={24} color={colors.text} />
+                            <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>GOLS & EVENTOS</h3>
+                        </div>
+                        {lastMatchScorers.length > 0 ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {lastMatchScorers.map((s, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                        <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 'bold', color: colors.accent, minWidth: '40px' }}>{s.minute}'</div>
+                                        <div style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: colors.text }}>{s.text}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', fontSize: '0.9rem', padding: '12px', textAlign: 'center', backgroundColor: colors.panelElevated, borderRadius: '6px' }}>
+                                Nenhum gol na partida.
+                            </div>
+                        )}
+                    </EfPanel>
+
+                    <EfPanel padding="md">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                            <ChartBar size={24} color={colors.secondary} />
+                            <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>ESTATÍSTICAS DA PARTIDA</h3>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>Finalizações</span>
+                                <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{matchStats?.totalChances || 0}</strong>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>Tática Utilizada</span>
+                                <strong style={{ color: colors.text, fontFamily: 'var(--font-sans)' }}>{TACTICS[engine.currentTactic]?.name}</strong>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: '6px' }}><Cardholder color={colors.warning} weight="fill" /> Cartões</span>
+                                <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{lastMatchCards.length}</strong>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px', backgroundColor: colors.panelElevated, borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                <span style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', display: 'flex', alignItems: 'center', gap: '6px' }}><FirstAid color={colors.danger} weight="fill" /> Lesões</span>
+                                <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{matchStats?.injuries || 0}</strong>
+                            </div>
+                        </div>
+                    </EfPanel>
+
+                    {engine.board && (
+                        <EfPanel padding="md">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                <Shield size={24} color={engine.board.getStatus().color} />
+                                <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>STATUS DA DIRETORIA</h3>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', backgroundColor: colors.panelElevated, borderRadius: '8px', border: `1px solid ${engine.board.getStatus().color}` }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                    <div style={{ color: colors.textMuted, fontFamily: 'var(--font-sans)', fontSize: '0.85rem' }}>Confiança</div>
+                                    <div style={{ color: engine.board.getStatus().color, fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1.1rem' }}>{engine.board.getStatus().label}</div>
                                 </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </EfPanel>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2rem', fontWeight: 'bold', color: engine.board.getStatus().color }}>
+                                    {engine.board.confidence}%
+                                </div>
+                            </div>
+                        </EfPanel>
+                    )}
+                </div>
 
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                <EfButton variant="primary" style={{justifyContent:'center', flex:1}} onClick={() => { setPhase('prematch'); setResult(null); setNarration([]); setDisplayedEvents([]); setCurrentMinute(0); setSubUsed(false); setTacticChanged(false); setPreStep(1); setTalkDone(false); changeView(getDashboardView()); }}>
-                    📊 VOLTAR AO DASHBOARD
-                </EfButton>
-                {/* SPEC-093 Press conf sempre pós-match */}
-                <EfButton variant="secondary" style={{justifyContent:'center', flex:1}} onClick={() => { setPhase('prematch'); setResult(null); setNarration([]); setDisplayedEvents([]); setCurrentMinute(0); setSubUsed(false); setTacticChanged(false); setPreStep(1); setTalkDone(false); changeView('press'); }}>
-                    🎙️ COLETIVA PÓS-JOGO
-                </EfButton>
-            </div>
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                    <EfButton variant="primary" style={{ justifyContent: 'center', flex: 1, padding: '16px', fontSize: '1.1rem' }} onClick={() => { setPhase('prematch'); setResult(null); setNarration([]); setDisplayedEvents([]); setCurrentMinute(0); setSubUsed(false); setTacticChanged(false); setPreStep(1); setTalkDone(false); changeView(getDashboardView()); }}>
+                        <ChartBar size={20} /> VOLTAR AO DASHBOARD
+                    </EfButton>
+                    <EfButton variant="secondary" style={{ justifyContent: 'center', flex: 1, padding: '16px', fontSize: '1.1rem' }} onClick={() => { setPhase('prematch'); setResult(null); setNarration([]); setDisplayedEvents([]); setCurrentMinute(0); setSubUsed(false); setTacticChanged(false); setPreStep(1); setTalkDone(false); changeView('press'); }}>
+                        <MicrophoneStage size={20} /> COLETIVA PÓS-JOGO
+                    </EfButton>
+                </div>
             </div>
         </div>
     );
 }
+
+export default MatchView;

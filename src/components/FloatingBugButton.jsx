@@ -10,6 +10,7 @@ import { MonitorService } from '../services/MonitorService';
 import { useGame } from '../context/GameContext';
 import { EfModal } from './ui/EfModal';
 import { EfButton } from './ui/EfButton';
+import { Bug, ChatCircleText, Note, CheckCircle } from '@phosphor-icons/react';
 
 export function FloatingBugButton() {
     const { gameState } = useGame();
@@ -19,6 +20,19 @@ export function FloatingBugButton() {
     const [confirm, setConfirm] = useState(false);
 
     const monitor = MonitorService.getInstance();
+
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
 
     function handleSubmit() {
         if (!text.trim()) return;
@@ -46,84 +60,130 @@ export function FloatingBugButton() {
                 title="Reportar bug / feedback / nota"
                 style={{
                     position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    width: '52px',
-                    height: '52px',
-                    borderRadius: '50%',
-                    background: '#FFD700',
+                    bottom: '24px',
+                    right: '24px',
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '28px',
+                    backgroundColor: colors.warning,
                     color: '#000',
-                    border: 'none',
+                    border: `2px solid #000`,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
-                    fontSize: '24px',
+                    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     zIndex: 9000,
-                    transition: 'transform 0.15s'
+                    transition: 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
                 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.1)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(255, 215, 0, 0.6)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(255, 215, 0, 0.4)'; }}
             >
-                🐛
+                <Bug size={28} weight="fill" />
             </button>
 
             {open && (
                 <EfModal
                     open={open}
                     onClose={() => setOpen(false)}
-                    title="🐛 Reportar"
+                    title={
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <Bug size={24} color={colors.warning} /> SISTEMA DE REPORT
+                        </div>
+                    }
                     size="md"
                     footer={!confirm && (
                         <>
                             <EfButton variant="secondary" size="sm" onClick={() => setOpen(false)}>Cancelar</EfButton>
-                            <EfButton variant="primary" size="sm" onClick={handleSubmit} disabled={!text.trim()}>Salvar</EfButton>
+                            <EfButton variant="primary" size="sm" onClick={handleSubmit} disabled={!text.trim()}>Registrar</EfButton>
                         </>
                     )}
                 >
                     {confirm ? (
-                        <div style={{ padding: '1rem', textAlign: 'center', color: '#39FF14' }}>
-                            ✅ Registrado!
+                        <div style={{ 
+                            padding: '32px', 
+                            textAlign: 'center', 
+                            color: colors.accent,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '16px',
+                            fontFamily: 'var(--font-mono)'
+                        }}>
+                            <CheckCircle size={64} weight="fill" />
+                            <span>REGISTRO SALVO COM SUCESSO</span>
                         </div>
                     ) : (
                         <>
-                            <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.75rem' }}>
-                                {['bug', 'feedback', 'note'].map(cat => (
-                                    <EfButton
-                                        key={cat}
-                                        variant={category === cat ? 'primary' : 'secondary'}
-                                        size="sm"
-                                        onClick={() => setCategory(cat)}
-                                    >
-                                        {cat === 'bug' ? '🐛 Bug' : cat === 'feedback' ? '💬 Feedback' : '📝 Nota'}
-                                    </EfButton>
-                                ))}
+                            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                                <EfButton
+                                    variant={category === 'bug' ? 'primary' : 'secondary'}
+                                    size="sm"
+                                    onClick={() => setCategory('bug')}
+                                    style={{ flex: 1, display: 'flex', gap: '6px' }}
+                                >
+                                    <Bug size={16} /> BUG
+                                </EfButton>
+                                <EfButton
+                                    variant={category === 'feedback' ? 'primary' : 'secondary'}
+                                    size="sm"
+                                    onClick={() => setCategory('feedback')}
+                                    style={{ flex: 1, display: 'flex', gap: '6px' }}
+                                >
+                                    <ChatCircleText size={16} /> FEEDBACK
+                                </EfButton>
+                                <EfButton
+                                    variant={category === 'note' ? 'primary' : 'secondary'}
+                                    size="sm"
+                                    onClick={() => setCategory('note')}
+                                    style={{ flex: 1, display: 'flex', gap: '6px' }}
+                                >
+                                    <Note size={16} /> NOTA
+                                </EfButton>
                             </div>
 
                             <textarea
                                 value={text}
                                 onChange={e => setText(e.target.value)}
                                 placeholder={
-                                    category === 'bug' ? 'Descreva o bug: o que aconteceu? o que esperava?' :
-                                    category === 'feedback' ? 'Sua opinião sobre essa parte do jogo...' :
-                                    'Nota livre — observação, ideia, lembrete...'
+                                    category === 'bug' ? 'Descreva o bug: o que aconteceu? O que era esperado?' :
+                                    category === 'feedback' ? 'Sua opinião sobre esta parte do jogo...' :
+                                    'Nota livre — observação, ideia, lembrete para depois...'
                                 }
-                                rows={5}
+                                rows={6}
                                 style={{
                                     width: '100%',
-                                    padding: '8px',
-                                    background: '#0A130E',
-                                    color: '#E2E8F0',
-                                    border: '4px inset #111417',
-                                    fontFamily: 'inherit',
-                                    fontSize: '0.85rem',
+                                    padding: '12px',
+                                    backgroundColor: colors.bg,
+                                    color: colors.text,
+                                    border: `1px solid ${colors.border}`,
+                                    borderRadius: '8px',
+                                    fontFamily: 'var(--font-sans)',
+                                    fontSize: '0.9rem',
                                     resize: 'vertical',
                                     outline: 'none',
-                                    boxSizing: 'border-box'
+                                    boxSizing: 'border-box',
+                                    transition: 'border-color 0.2s'
                                 }}
+                                onFocus={e => e.target.style.borderColor = colors.secondary}
+                                onBlur={e => e.target.style.borderColor = colors.border}
                             />
 
-                            <p style={{ fontSize: '0.72rem', color: '#888', marginTop: '0.5rem' }}>
-                                Salvo localmente. Acesse Monitor (no menu) pra ver tudo + exportar JSON.
-                            </p>
+                            <div style={{ 
+                                fontSize: '0.75rem', 
+                                color: colors.textMuted, 
+                                marginTop: '12px',
+                                fontFamily: 'var(--font-mono)',
+                                backgroundColor: 'rgba(255,255,255,0.05)',
+                                padding: '8px',
+                                borderRadius: '4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px'
+                            }}>
+                                <Note size={16} color={colors.secondary} />
+                                Salvo localmente. Acesse o Monitor no menu principal para visualizar ou exportar.
+                            </div>
                         </>
                     )}
                 </EfModal>

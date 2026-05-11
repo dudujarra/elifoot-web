@@ -10,32 +10,36 @@ import { useGame } from '../context/GameContext';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
 import bgTutorial from '../assets/environments/bg_tutorial.png';
+import { 
+    SoccerBall, ChartBar, Strategy, Television, Medal, 
+    ArrowRight, ArrowLeft, FastForward
+} from '@phosphor-icons/react';
 
 const STEPS = [
     {
-        title: '⚽ Bem-vindo ao Olé FUT',
-        body: 'Você é treinador (ou jogador) de futebol brasileiro. Conduza seu clube/jogador da Série D ao topo do mundo. Decisões táticas, transferências, narrativa profunda — tudo seu.',
-        icon: '🎮'
+        title: 'BEM-VINDO AO OLÉ FUT',
+        body: 'Você é o manager do seu clube brasileiro favorito. Conduza sua equipe da Série D ao topo do mundo. Decisões táticas, transferências e gestão financeira — tudo em suas mãos.',
+        icon: <SoccerBall size={64} weight="duotone" color="#39FF14" />
     },
     {
-        title: '📊 Dashboard',
-        body: 'Tela principal: vê estado do clube, próximo jogo, alertas, balanço. Aba "Treinamento", "Mercado", "Plantel" pra ações específicas. Botão "Avançar Semana" toca o tempo.',
-        icon: '📊'
+        title: 'O DASHBOARD',
+        body: 'Esta é sua central de comando. Veja o estado do clube, próximo jogo, alertas e balanço. As abas laterais dão acesso ao Plantel e Mercado. Clique em "Avançar Semana" para progredir no tempo.',
+        icon: <ChartBar size={64} weight="duotone" color="#40BAF7" />
     },
     {
-        title: '🎯 Tática + Formação',
-        body: 'Antes de cada jogo, escolha tática (6 estilos) + formação (8 esquemas). Pré-jogo mostra adversário forte/fraco em cada setor. Ajuste pra explorar fraquezas.',
-        icon: '⚔️'
+        title: 'TÁTICA E FORMAÇÃO',
+        body: 'Antes de cada jogo, escolha sua mentalidade tática e esquema. Analise o adversário no pré-jogo e ajuste sua equipe para explorar as fraquezas oponentes.',
+        icon: <Strategy size={64} weight="duotone" color="#FFD700" />
     },
     {
-        title: '⚽ Match Live',
-        body: 'Assista narração ao vivo + scoreboard. Pode pausar e fazer substituição (até 5/jogo). Eventos importantes mostram banner full-screen (gol, hat-trick, defesa épica).',
-        icon: '🥅'
+        title: 'SIMULAÇÃO AO VIVO',
+        body: 'Assista à narração do jogo e acompanhe as estatísticas em tempo real. Pause a qualquer momento para fazer substituições táticas e virar o placar.',
+        icon: <Television size={64} weight="duotone" color="#FF3333" />
     },
     {
-        title: '🏆 Conquistas + Lifestyle',
-        body: 'Modo Jogador: gaste seu dinheiro em casa, carro, festas, caridade. Compre traits especiais. Veja conquistas (60+) na tela "Conquistas". Bom jogo!',
-        icon: '🎖️'
+        title: 'CONQUISTAS E CARREIRA',
+        body: 'Sua jornada ficará na história. Acumule troféus, ganhe prestígio, mude de clube e desbloqueie as 60+ conquistas disponíveis no Hall da Fama.',
+        icon: <Medal size={64} weight="duotone" color="#FFD700" />
     }
 ];
 
@@ -44,6 +48,19 @@ const STORAGE_KEY = 'elifoot_tutorial_done';
 export function TutorialView() {
     const { changeView, getDashboardView } = useGame();
     const [step, setStep] = useState(0);
+
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
 
     const finish = () => {
         try { localStorage.setItem(STORAGE_KEY, 'true'); } catch { /* ignore */ }
@@ -67,70 +84,109 @@ export function TutorialView() {
     const cur = STEPS[step];
 
     return (
-        <div className="main-content fade-in" style={{
+        <div className="ef-anim-fade-in" style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '70vh',
-            gap: '1.5rem',
-            backgroundImage: `url(${bgTutorial})`,
+            minHeight: '100dvh',
+            padding: '24px',
+            backgroundColor: colors.bg,
+            backgroundImage: `linear-gradient(rgba(13, 17, 23, 0.85), rgba(13, 17, 23, 0.95)), url(${bgTutorial})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            imageRendering: 'pixelated'
+            backgroundAttachment: 'fixed',
+            imageRendering: 'pixelated',
+            color: colors.text,
+            fontFamily: 'var(--font-sans)'
         }}>
-            <EfPanel variant="elev" className="ef-anim-pop-in" style={{
-                padding: '2rem',
+            <EfPanel padding="lg" style={{
                 maxWidth: '600px',
-                width: '90%',
-                textAlign: 'center'
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                gap: '24px',
+                borderTop: `4px solid ${colors.secondary}`
             }}>
-                <div style={{ fontSize: '4rem', marginBottom: '1rem' }} className="ef-anim-pulse-glow">
+                <div className="ef-anim-pop-in" key={`icon-${step}`} style={{ 
+                    width: '120px', 
+                    height: '120px', 
+                    backgroundColor: colors.bg,
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: `1px solid ${colors.border}`,
+                    boxShadow: `0 0 30px rgba(64, 186, 247, 0.2)`
+                }}>
                     {cur.icon}
                 </div>
-                <h2 style={{ marginBottom: '1rem', color: '#FFD700' }}>{cur.title}</h2>
-                <p style={{ fontSize: '0.95rem', lineHeight: '1.5', marginBottom: '1.5rem', color: '#E2E8F0' }}>
-                    {cur.body}
-                </p>
+                
+                <div className="ef-anim-slide-up" key={`content-${step}`}>
+                    <h2 style={{ margin: '0 0 16px 0', fontSize: '1.5rem', color: colors.text, fontWeight: '900', fontFamily: 'var(--font-sans)' }}>
+                        {cur.title}
+                    </h2>
+                    <p style={{ margin: 0, fontSize: '1rem', lineHeight: '1.6', color: colors.textMuted }}>
+                        {cur.body}
+                    </p>
+                </div>
+                
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
-                    gap: '0.5rem',
-                    marginBottom: '1.5rem'
+                    gap: '8px',
+                    width: '100%',
+                    margin: '8px 0'
                 }}>
                     {STEPS.map((_, i) => (
                         <div
                             key={i}
                             style={{
-                                width: '40px',
-                                height: '6px',
-                                borderRadius: '3px',
-                                background: i === step ? '#FFD700' : i < step ? '#39FF14' : '#333',
-                                transition: 'background 200ms ease-out'
+                                flex: 1,
+                                height: '4px',
+                                borderRadius: '2px',
+                                backgroundColor: i === step ? colors.secondary : i < step ? colors.accent : colors.border,
+                                transition: 'background-color 300ms ease'
                             }}
                         />
                     ))}
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                
+                <div style={{ display: 'flex', gap: '12px', width: '100%', marginTop: '8px' }}>
                     {step > 0 && (
-                        <EfButton variant="secondary" onClick={prev}>← Anterior</EfButton>
+                        <EfButton variant="secondary" size="lg" onClick={prev} style={{ flex: 1 }}>
+                            <ArrowLeft size={20} /> ANTERIOR
+                        </EfButton>
                     )}
-                    <EfButton variant="primary" onClick={next}>
-                        {step < STEPS.length - 1 ? 'Próximo →' : '🎮 Começar!'}
+                    <EfButton variant="primary" size="lg" onClick={next} style={{ flex: step === 0 ? 1 : 2 }}>
+                        {step < STEPS.length - 1 ? (
+                            <>PRÓXIMO <ArrowRight size={20} /></>
+                        ) : (
+                            <>INICIAR CARREIRA <SoccerBall size={20} weight="fill" /></>
+                        )}
                     </EfButton>
                 </div>
-                <div style={{ marginTop: '1rem', fontSize: '0.7rem', color: '#888' }}>
-                    Etapa {step + 1} de {STEPS.length} • <button
+                
+                <div style={{ marginTop: '8px' }}>
+                    <button
                         onClick={skip}
                         style={{
                             background: 'none',
                             border: 'none',
-                            color: '#888',
-                            textDecoration: 'underline',
+                            color: colors.textMuted,
                             cursor: 'pointer',
-                            fontSize: '0.7rem'
+                            fontSize: '0.8rem',
+                            fontFamily: 'var(--font-mono)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
+                            padding: '8px'
                         }}
-                    >Pular tutorial</button>
+                    >
+                        <FastForward size={14} /> PULAR TUTORIAL
+                    </button>
                 </div>
             </EfPanel>
         </div>

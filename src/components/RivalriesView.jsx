@@ -1,37 +1,48 @@
-/**
- * RivalriesView — v2.0 (AKITA-142)
- *
- * Tabela de rivalidades usando engine.rivalryHistory (SPEC-080).
- * Mostra H2H real, score de rivalidade, e arcos nomeados do RivalryUpgradeSystem.
- * 
- * 16-BIT BRUTALIST ARCADE AESTHETIC
- */
-
 import React from 'react';
 import { useGame } from '../context/GameContext';
-import { EfButton } from './ui/EfButton';
-import { EfClubBadge } from './ui/EfClubBadge';
+import { EfButton, EfPanel, EfClubBadge } from './ui';
 import bgNewspaper from '../assets/environments/bg_newspaper.png';
 
+import { 
+    Fire, ArrowLeft, Users, Trophy, TrendUp, WarningCircle
+} from '@phosphor-icons/react';
+
 function getRivalryLabel(matchCount) {
-    if (matchCount >= 10) return { label: 'CONSOLIDADA', color: '#FF3333', icon: '🔴' };
-    if (matchCount >= 6) return { label: 'NOVO CLÁSSICO', color: '#FFD700', icon: '🟡' };
-    if (matchCount >= 3) return { label: 'CRESCENDO', color: '#FF8C00', icon: '🟠' };
-    return { label: 'INÍCIO', color: '#888', icon: '⚪' };
+    if (matchCount >= 10) return { label: 'CONSOLIDADA', color: '#FF3333', icon: <Fire weight="fill" /> };
+    if (matchCount >= 6) return { label: 'NOVO CLÁSSICO', color: '#FFD700', icon: <TrendUp weight="bold" /> };
+    if (matchCount >= 3) return { label: 'CRESCENDO', color: '#FF8C00', icon: <Trophy weight="bold" /> };
+    return { label: 'INÍCIO', color: '#888', icon: <WarningCircle weight="bold" /> };
 }
 
 function getRivalryBorderColor(matchCount) {
     if (matchCount >= 10) return '#FF3333';
     if (matchCount >= 6) return '#FFD700';
     if (matchCount >= 3) return '#FF8C00';
-    return '#333';
+    return '#2D3748'; // Default border color
 }
 
 export function RivalriesView() {
     const { getEngine, changeView, getDashboardView } = useGame();
     const engine = getEngine();
 
-    if (!engine) return <div style={{padding:'16px',color:'#FFF',fontFamily:"'Press Start 2P', monospace"}}>ENGINE NÃO INICIALIZADO.</div>;
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
+
+    if (!engine) return (
+        <div style={{ padding: '24px', color: colors.text, fontFamily: 'var(--font-mono)' }}>
+            ENGINE NÃO INICIALIZADO.
+        </div>
+    );
 
     const team = engine.getTeam(engine.manager?.teamId);
     const rivalryHistory = engine.rivalryHistory || {};
@@ -71,109 +82,121 @@ export function RivalriesView() {
             backgroundImage: `url(${bgNewspaper})`,
             imageRendering: 'pixelated',
             WebkitImageRendering: 'pixelated',
-            backgroundColor: '#0A130E',
+            backgroundColor: colors.bg,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment: 'fixed',
             minHeight: '100dvh',
-            padding: '16px',
-            color: '#E2E8F0',
-            fontFamily: "'Outfit', sans-serif"
+            padding: '24px',
+            color: colors.text,
+            fontFamily: 'var(--font-sans)',
+            overflowY: 'auto'
         }}>
-            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
                 {/* HEADER */}
-                <div style={{
-                    background: '#1E2124',
-                    border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    padding: '16px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
+                <EfPanel padding="lg" style={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
                     alignItems: 'center',
-                    boxShadow: '0 8px 0 rgba(0,0,0,0.8)'
+                    borderBottom: `2px solid ${colors.warning}`
                 }}>
-                    <div>
-                        <h2 style={{fontFamily: "'Press Start 2P', monospace", color: '#FFD700', margin: '0 0 8px 0', fontSize: '1rem', textShadow: '3px 3px 0 #000'}}>
-                            RIVALIDADES
-                        </h2>
-                        <span style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', color: '#888'}}>CONFRONTOS HISTÓRICOS</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{ width: '48px', height: '48px', backgroundColor: colors.panelElevated, borderRadius: '8px', display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${colors.border}` }}>
+                            <Fire size={28} color={colors.warning} weight="fill" />
+                        </div>
+                        <div>
+                            <h2 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', fontFamily: 'var(--font-sans)', color: colors.text, fontWeight: 'bold' }}>
+                                RIVALIDADES
+                            </h2>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: colors.textMuted }}>
+                                CONFRONTOS HISTÓRICOS E CLÁSSICOS
+                            </span>
+                        </div>
                     </div>
-                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>SAIR</EfButton>
-                </div>
+                    <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>
+                        <ArrowLeft size={16} /> SAIR
+                    </EfButton>
+                </EfPanel>
 
                 {/* RIVALRIES LIST */}
-                <div style={{
-                    background: '#1E2124',
-                    border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    padding: '16px',
-                    boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)'
-                }}>
+                <EfPanel padding="lg">
                     <div style={{
-                        background: '#111',
-                        padding: '8px',
-                        borderBottom: '2px solid #333',
-                        marginBottom: '16px',
-                        fontFamily: "'Press Start 2P', monospace",
-                        color: '#FFD700',
-                        fontSize: '0.65rem',
-                        textShadow: '2px 2px 0 #000'
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        fontFamily: 'var(--font-mono)',
+                        color: colors.warning,
+                        fontSize: '0.9rem',
+                        marginBottom: '20px',
+                        fontWeight: 'bold',
+                        borderBottom: `1px solid ${colors.border}`,
+                        paddingBottom: '8px'
                     }}>
-                        CONFRONTOS DIRETOS ({rivalries.length})
+                        <Users size={20} /> CONFRONTOS DIRETOS ({rivalries.length})
                     </div>
 
                     {rivalries.length === 0 ? (
                         <div style={{
-                            background: '#111',
+                            backgroundColor: colors.panelElevated,
                             padding: '32px',
                             textAlign: 'center',
-                            border: '4px dashed #333',
-                            fontFamily: "'Press Start 2P', monospace",
-                            fontSize: '0.6rem',
-                            color: '#888'
+                            borderRadius: '8px',
+                            border: `1px dashed ${colors.border}`,
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.9rem',
+                            color: colors.textMuted
                         }}>
                             NENHUMA RIVALIDADE DETECTADA. JOGUE MAIS PARTIDAS.
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             {rivalries.map(r => {
                                 const label = getRivalryLabel(r.matches);
                                 const oppTeam = r.isA ? r.clubB : r.clubA;
                                 const borderColor = getRivalryBorderColor(r.matches);
                                 return (
                                     <div key={r.key} style={{
-                                        background: '#111',
-                                        border: '4px solid',
-                                        borderColor: '#333 #000 #000 #333',
+                                        backgroundColor: colors.panelElevated,
+                                        border: `1px solid ${colors.border}`,
                                         borderLeftColor: borderColor,
                                         borderLeftWidth: '6px',
+                                        borderRadius: '8px',
                                         padding: '16px',
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         alignItems: 'center'
                                     }}>
-                                        <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
-                                            {oppTeam?.name && <EfClubBadge name={oppTeam.name} size="sm" />}
+                                        <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
+                                            {oppTeam?.name ? (
+                                                <EfClubBadge name={oppTeam.name} size="md" />
+                                            ) : (
+                                                <div style={{ width: '48px', height: '48px', backgroundColor: colors.bg, borderRadius: '50%' }} />
+                                            )}
                                             <div>
-                                                <div style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.75rem', color: '#FFF', marginBottom: '8px'}}>
-                                                    VS {(oppTeam?.name || '???').toUpperCase()}
+                                                <div style={{fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1.1rem', color: colors.text, marginBottom: '4px'}}>
+                                                    VS {(oppTeam?.name || '???')}
                                                 </div>
-                                                <div style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', color: '#888'}}>
-                                                    {r.matches} JOGOS •{' '}
-                                                    <span style={{color: '#39FF14'}}>{r.wins}V</span>{' '}
-                                                    <span style={{color: '#FFD700'}}>{r.draws}E</span>{' '}
-                                                    <span style={{color: '#FF3333'}}>{r.losses}D</span>
+                                                <div style={{fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: colors.textMuted, display: 'flex', alignItems: 'center', gap: '8px'}}>
+                                                    <span>{r.matches} JOGOS</span> •{' '}
+                                                    <span style={{color: colors.accent, fontWeight: 'bold'}}>{r.wins}V</span>{' '}
+                                                    <span style={{color: colors.warning, fontWeight: 'bold'}}>{r.draws}E</span>{' '}
+                                                    <span style={{color: colors.danger, fontWeight: 'bold'}}>{r.losses}D</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div style={{
-                                            background: borderColor === '#333' ? '#222' : 'rgba(0,0,0,0.5)',
-                                            border: `2px solid ${borderColor}`,
-                                            padding: '4px 12px',
-                                            fontFamily: "'Press Start 2P', monospace",
-                                            fontSize: '0.5rem',
-                                            color: label.color
+                                            backgroundColor: colors.bg,
+                                            border: `1px solid ${borderColor}`,
+                                            borderRadius: '4px',
+                                            padding: '6px 12px',
+                                            fontFamily: 'var(--font-mono)',
+                                            fontSize: '0.8rem',
+                                            fontWeight: 'bold',
+                                            color: label.color,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '6px'
                                         }}>
                                             {label.icon} {label.label}
                                         </div>
@@ -182,50 +205,55 @@ export function RivalriesView() {
                             })}
                         </div>
                     )}
-                </div>
+                </EfPanel>
 
                 {/* Former Companions (SPEC-081) */}
                 {(engine.formerCompanions?.length || 0) > 0 && (
-                    <div style={{
-                        background: '#1E2124',
-                        border: '4px solid',
-                        borderColor: '#4A5059 #111417 #111417 #4A5059',
-                        padding: '16px'
-                    }}>
+                    <EfPanel padding="lg">
                         <div style={{
-                            background: '#111',
-                            padding: '8px',
-                            borderBottom: '2px solid #333',
-                            marginBottom: '16px',
-                            fontFamily: "'Press Start 2P', monospace",
-                            color: '#FFD700',
-                            fontSize: '0.65rem',
-                            textShadow: '2px 2px 0 #000'
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            fontFamily: 'var(--font-mono)',
+                            color: colors.secondary,
+                            fontSize: '0.9rem',
+                            marginBottom: '20px',
+                            fontWeight: 'bold',
+                            borderBottom: `1px solid ${colors.border}`,
+                            paddingBottom: '8px'
                         }}>
-                            EX-COMPANHEIROS ({engine.formerCompanions.length})
+                            <Users size={20} /> EX-COMPANHEIROS ({engine.formerCompanions.length})
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
                             {engine.formerCompanions.map((p, i) => (
                                 <div key={i} style={{
-                                    background: '#111',
-                                    border: '4px solid',
-                                    borderColor: '#333 #000 #000 #333',
-                                    padding: '12px',
+                                    backgroundColor: colors.panelElevated,
+                                    border: `1px solid ${colors.border}`,
+                                    borderRadius: '8px',
+                                    padding: '16px',
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                     alignItems: 'center'
                                 }}>
-                                    <div style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.7rem', color: '#FFF'}}>
-                                        {p.name.toUpperCase()}
-                                        <span style={{color: '#888', marginLeft: '8px', fontSize: '0.55rem'}}>({p.position})</span>
+                                    <div style={{fontFamily: 'var(--font-sans)', fontWeight: 'bold', fontSize: '1rem', color: colors.text}}>
+                                        {p.name}
+                                        <span style={{color: colors.secondary, marginLeft: '8px', fontSize: '0.85rem', fontFamily: 'var(--font-mono)'}}>({p.position})</span>
                                     </div>
-                                    <div style={{fontFamily: "'Press Start 2P', monospace", fontSize: '0.55rem', color: '#888'}}>
+                                    <div style={{
+                                        backgroundColor: colors.bg,
+                                        padding: '4px 8px',
+                                        borderRadius: '4px',
+                                        border: `1px solid ${colors.border}`,
+                                        fontFamily: 'var(--font-mono)', 
+                                        fontSize: '0.8rem', 
+                                        color: colors.textMuted
+                                    }}>
                                         OVR {p.ovr} • TEMP {p.season || '?'}
                                     </div>
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </EfPanel>
                 )}
             </div>
         </div>

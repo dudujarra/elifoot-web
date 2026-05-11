@@ -4,170 +4,167 @@ import { Tooltip } from './Tooltip';
 import { Help } from './Help';
 import { EfClubBadge, EfPanel, EfButton, EfModal } from './ui';
 import bgLockerRoom from '../assets/environments/bg_locker_room.png';
+import { Sword, MapPin, Trophy, ShieldChevron, Warning, GameController } from '@phosphor-icons/react';
 
-/**
- * PreMatchScreen — 3-panel layout pre-match info
- *
- * Layout (estilo ELIFOOT clássico):
- *  - Left: nosso campo + formação (FormationBoard editable)
- *  - Center: VS + scoreboard
- *  - Right: adversário info (sectors, formação típica, H2H, casa/fora, competição)
- *
- * Props:
- *  - team
- *  - context: { opponent, isHome, location, tournament, h2h, oppSectors, opponentStyle, ... }
- *  - sectors (our team sectors)
- *  - engine
- *  - onSaveLayout: (newLayout) => void
- */
 export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout }) {
     const [showFormationModal, setShowFormationModal] = useState(false);
 
     if (!team) return null;
     const opp = context?.opponent;
 
-    // SPEC-104 Detect derby (clássico) — same state opponents
+    // Detect derby
     const isDerby = context?.opponent?.zone === team.zone && context?.opponent?.division === team.division &&
         ['Flamengo', 'Fluminense', 'Vasco', 'Botafogo', 'Corinthians', 'Palmeiras', 'São Paulo', 'Santos',
          'Grêmio', 'Internacional', 'Atlético-MG', 'Cruzeiro'].includes(context?.opponent?.name) &&
         ['Flamengo', 'Fluminense', 'Vasco', 'Botafogo', 'Corinthians', 'Palmeiras', 'São Paulo', 'Santos',
          'Grêmio', 'Internacional', 'Atlético-MG', 'Cruzeiro'].includes(team.name);
 
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333',
+        derby: '#D62828'
+    };
+
     return (
-        <div
-            className={`prematch-screen ef-art-bg ef-art-locker-room ${isDerby ? 'ef-anim-pulse-glow' : ''}`}
-            style={{
-                ...(isDerby ? { border: '3px solid #D62828', borderRadius: '4px', boxShadow: '0 0 20px rgba(214,40,40,0.4)' } : {}),
-                backgroundImage: `url(${bgLockerRoom})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                imageRendering: 'pixelated'
-            }}
-        >
-            <EfPanel variant="elev" padding="lg">
+        <div style={{ width: '100%' }}>
+            <EfPanel padding="lg" style={{ 
+                border: isDerby ? `2px solid ${colors.derby}` : `1px solid ${colors.border}`,
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
                 {isDerby && (
                     <div style={{
-                        marginBottom: '0.5rem',
-                        padding: '0.4rem 0.75rem',
-                        background: '#D62828',
+                        position: 'absolute',
+                        top: 0, left: 0, right: 0,
+                        padding: '6px',
+                        backgroundColor: colors.derby,
                         color: '#FFF',
                         textAlign: 'center',
-                        fontWeight: 700,
-                        fontSize: '0.95rem',
+                        fontWeight: 'bold',
+                        fontFamily: 'var(--font-sans)',
                         letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
-                        borderRadius: '4px',
-                        animation: 'ef-anim-shake 800ms ease-in-out 3'
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '8px'
                     }}>
-                        🔥 CLÁSSICO! 🔥
+                        <Warning weight="fill" /> CLÁSSICO <Warning weight="fill" />
                     </div>
                 )}
-                <h3 style={{margin:'0 0 0.6rem 0'}}>⚽ Pré-Jogo</h3>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px', marginTop: isDerby ? '24px' : '0' }}>
+                    <GameController size={24} color={colors.secondary} />
+                    <h3 style={{ margin: 0, fontFamily: 'var(--font-sans)', color: colors.text }}>PRÉ-JOGO — INFORMAÇÕES DA PARTIDA</h3>
+                </div>
 
                 <div style={{
                     display:'grid',
-                    gridTemplateColumns: 'minmax(0,1fr) auto minmax(0,1fr)',
-                    gap:'1rem',
+                    gridTemplateColumns: '1fr auto 1fr',
+                    gap:'24px',
                     alignItems:'start'
                 }}>
                     {/* LEFT: Nosso time */}
-                    <div>
-                        <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'0.4rem'}}>
+                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                             <EfClubBadge name={team.name} size="md" />
-                            <Tooltip content="Sectors do seu time: GOL/DEF/MEI/ATA">
-                                <h4 style={{fontSize:'0.85rem',color:'#888',margin:0}}>NOSSO TIME — {team.name}</h4>
-                            </Tooltip>
+                            <div>
+                                <h4 style={{ margin: 0, fontSize: '1rem', color: colors.text, fontFamily: 'var(--font-sans)' }}>{team.name}</h4>
+                                <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)' }}>MANDANTE</div>
+                            </div>
                         </div>
-                        <div className="inline-stats" style={{justifyContent:'space-between'}}>
-                            <Help id="sector.gol"><div className="inline-stat"><span className="stat-value">{sectors?.goalkeeper ?? '-'}</span><span className="stat-label">GOL</span></div></Help>
-                            <Help id="sector.def"><div className="inline-stat"><span className="stat-value">{sectors?.defense ?? '-'}</span><span className="stat-label">DEF</span></div></Help>
-                            <Help id="sector.mei"><div className="inline-stat"><span className="stat-value">{sectors?.midfield ?? '-'}</span><span className="stat-label">MEI</span></div></Help>
-                            <Help id="sector.ata"><div className="inline-stat"><span className="stat-value">{sectors?.attack ?? '-'}</span><span className="stat-label">ATA</span></div></Help>
+                        
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', backgroundColor: colors.bg, padding: '12px', borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                            <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{sectors?.goalkeeper ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>GOL</div></div>
+                            <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{sectors?.defense ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>DEF</div></div>
+                            <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{sectors?.midfield ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>MEI</div></div>
+                            <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.danger, fontFamily: 'var(--font-mono)' }}>{sectors?.attack ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>ATA</div></div>
                         </div>
-                        <div style={{marginTop:'0.4rem',fontSize:'0.78rem',color:'#888'}}>
-                            Formação: <strong>{team.formation || '4-3-3'}</strong>
+                        
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                            <span style={{ fontSize: '0.85rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>Formação Atual</span>
+                            <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{team.formation || '4-3-3'}</strong>
                         </div>
-                        <EfButton
-                            variant="primary"
-                            size="sm"
-                            style={{marginTop:'0.5rem',width:'100%'}}
-                            onClick={() => setShowFormationModal(true)}
-                        >
-                            🎯 Editar Posicionamento
+                        
+                        <EfButton variant="secondary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => setShowFormationModal(true)}>
+                            <ShieldChevron size={16} /> EDITAR POSIÇÕES
                         </EfButton>
                     </div>
 
                     {/* CENTER: VS */}
-                    <div style={{textAlign:'center',minWidth:'80px'}}>
-                        <div className="ef-anim-pulse-glow" style={{fontSize:'1.8rem',fontWeight:700,color:'#FFD700',display:'inline-block',padding:'4px 12px'}}>VS</div>
-                        <Tooltip content={context?.isHome ? 'Você joga em casa: +5% bilheteria, +3 moral' : 'Você joga fora: público adversário, sem boost casa'}>
-                            <div style={{
-                                fontSize:'0.78rem',
-                                fontWeight:700,
-                                padding:'0.2rem 0.5rem',
-                                borderRadius:0,
-                                background: context?.isHome ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.1)',
-                                color: context?.isHome ? '#39FF14' : '#FF3333',
-                                marginTop:'0.3rem'
-                            }}>
-                                {context?.location || 'CASA'}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', paddingTop: '24px' }}>
+                        <div style={{ backgroundColor: colors.bg, padding: '16px', borderRadius: '50%', border: `2px solid ${colors.warning}`, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '64px', height: '64px' }}>
+                            <Sword size={32} color={colors.warning} />
+                        </div>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '4px', backgroundColor: colors.panelElevated, border: `1px solid ${context?.isHome ? colors.accent : colors.danger}`, color: context?.isHome ? colors.accent : colors.danger, fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 'bold' }}>
+                                <MapPin weight="fill" /> {context?.location || 'CASA'}
                             </div>
-                        </Tooltip>
-                        <div style={{fontSize:'0.7rem',color:'#888',marginTop:'0.4rem'}}>
-                            Sem {context?.seasonWeek}/38
+                            <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)' }}>
+                                SEMANA {context?.seasonWeek}/38
+                            </div>
                         </div>
                     </div>
 
                     {/* RIGHT: Adversário */}
-                    <div>
-                        <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'0.4rem'}}>
-                            {opp?.name && <EfClubBadge name={opp.name} size="md" />}
-                            <Tooltip content="Estilo derivado da tática preferida do adversário">
-                                <h4 style={{fontSize:'0.85rem',color:'#888',margin:0}}>
-                                    ADVERSÁRIO — {opp?.name || '—'}
-                                </h4>
-                            </Tooltip>
+                    <div style={{ backgroundColor: colors.panelElevated, padding: '16px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                            {opp?.name ? <EfClubBadge name={opp.name} size="md" /> : <div style={{ width: '48px', height: '48px', backgroundColor: colors.bg, borderRadius: '50%' }} />}
+                            <div>
+                                <h4 style={{ margin: 0, fontSize: '1rem', color: colors.text, fontFamily: 'var(--font-sans)' }}>{opp?.name || '—'}</h4>
+                                <div style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-mono)' }}>VISITANTE</div>
+                            </div>
                         </div>
+                        
                         {opp && (
                             <>
-                                <div className="inline-stats" style={{justifyContent:'space-between'}}>
-                                    <Tooltip content="Goleiro adversário"><div className="inline-stat"><span className="stat-value">{context.oppSectors?.goalkeeper ?? '-'}</span><span className="stat-label">GOL</span></div></Tooltip>
-                                    <Tooltip content="Defesa adversária"><div className="inline-stat"><span className="stat-value">{context.oppSectors?.defense ?? '-'}</span><span className="stat-label">DEF</span></div></Tooltip>
-                                    <Tooltip content="Meio-campo adversário"><div className="inline-stat"><span className="stat-value">{context.oppSectors?.midfield ?? '-'}</span><span className="stat-label">MEI</span></div></Tooltip>
-                                    <Tooltip content="Ataque adversário"><div className="inline-stat"><span className="stat-value">{context.oppSectors?.attack ?? '-'}</span><span className="stat-label">ATA</span></div></Tooltip>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', backgroundColor: colors.bg, padding: '12px', borderRadius: '6px', border: `1px solid ${colors.border}` }}>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.warning, fontFamily: 'var(--font-mono)' }}>{context.oppSectors?.goalkeeper ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>GOL</div></div>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.secondary, fontFamily: 'var(--font-mono)' }}>{context.oppSectors?.defense ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>DEF</div></div>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.accent, fontFamily: 'var(--font-mono)' }}>{context.oppSectors?.midfield ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>MEI</div></div>
+                                    <div style={{ textAlign: 'center' }}><div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: colors.danger, fontFamily: 'var(--font-mono)' }}>{context.oppSectors?.attack ?? '-'}</div><div style={{ fontSize: '0.7rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>ATA</div></div>
                                 </div>
-                                <div style={{marginTop:'0.4rem',fontSize:'0.78rem',color:'#888'}}>
-                                    Formação: <strong>{opp.formation || '4-3-3'}</strong>
-                                    <br />
-                                    Estilo: <strong>{context.opponentStyle}</strong>
+                                
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.85rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>Formação Típica</span>
+                                        <strong style={{ color: colors.text, fontFamily: 'var(--font-mono)' }}>{opp.formation || '4-3-3'}</strong>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.85rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>Estilo de Jogo</span>
+                                        <strong style={{ color: colors.secondary, fontFamily: 'var(--font-sans)' }}>{context.opponentStyle}</strong>
+                                    </div>
                                 </div>
-                                <div style={{marginTop:'0.4rem',fontSize:'0.78rem'}}>
-                                    🏆 {context.tournament}
+                                
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', color: colors.text, fontFamily: 'var(--font-sans)', backgroundColor: colors.bg, padding: '8px', borderRadius: '4px', border: `1px solid ${colors.border}` }}>
+                                    <Trophy size={16} color={colors.warning} /> {context.tournament}
                                 </div>
+                                
                                 {context.h2h && context.h2h.length > 0 && (
-                                    <div style={{marginTop:'0.4rem'}}>
-                                        <span style={{fontSize:'0.72rem',color:'#888'}}>H2H últimos {context.h2h.length}:</span>
-                                        <div style={{display:'flex',gap:'0.2rem',marginTop:'0.2rem'}}>
+                                    <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <span style={{ fontSize: '0.8rem', color: colors.textMuted, fontFamily: 'var(--font-sans)' }}>H2H Recente:</span>
+                                        <div style={{ display: 'flex', gap: '4px' }}>
                                             {context.h2h.map((m, i) => {
                                                 const ourGoals = m.home === team.id ? m.homeGoals : m.awayGoals;
                                                 const theirGoals = m.home === team.id ? m.awayGoals : m.homeGoals;
                                                 const result = ourGoals > theirGoals ? 'V' : ourGoals < theirGoals ? 'D' : 'E';
-                                                const color = result === 'V' ? '#10B981' : result === 'D' ? '#EF4444' : '#FBBF24';
+                                                const bg = result === 'V' ? colors.accent : result === 'D' ? colors.danger : colors.warning;
                                                 return (
-                                                    <Tooltip key={i} content={`${ourGoals}x${theirGoals} — Sem ${m.week ?? '?'}`}>
-                                                        <span style={{
-                                                            display:'inline-block',
-                                                            width:'18px',
-                                                            height:'18px',
-                                                            borderRadius:'50%',
-                                                            background: color,
-                                                            color:'#000',
-                                                            fontSize:'0.65rem',
-                                                            fontWeight:700,
-                                                            textAlign:'center',
-                                                            lineHeight:'18px'
-                                                        }}>{result}</span>
-                                                    </Tooltip>
+                                                    <div key={i} style={{
+                                                        width: '24px', height: '24px', borderRadius: '4px', backgroundColor: bg,
+                                                        color: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center',
+                                                        fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 'bold'
+                                                    }} title={`${ourGoals}x${theirGoals} — Sem ${m.week ?? '?'}`}>
+                                                        {result}
+                                                    </div>
                                                 );
                                             })}
                                         </div>
@@ -179,12 +176,11 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                 </div>
             </EfPanel>
 
-            {/* Formation modal */}
             {showFormationModal && (
                 <EfModal
                     open={showFormationModal}
                     onClose={() => setShowFormationModal(false)}
-                    title="🎯 Posicionamento Tático"
+                    title="🎯 POSICIONAMENTO TÁTICO"
                     size="lg"
                     footer={null}
                 >

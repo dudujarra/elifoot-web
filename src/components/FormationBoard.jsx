@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FORMATION_PRESETS, getPreset, FORMATION_KEYS } from '../engine/FormationLayout';
-import { Tooltip } from './Tooltip';
-import { EfButton } from './ui/EfButton';
+import { EfTooltip, EfButton } from './ui';
+import { ArrowsClockwise, FloppyDisk } from '@phosphor-icons/react';
 
 const FIELD_W = 600;
 const FIELD_H = 400;
@@ -25,6 +25,23 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
     const [draggedSlot, setDraggedSlot] = useState(null);
     const fieldRef = useRef(null);
 
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333',
+        field: '#1E3A2F', // Darker, more premium green
+        fieldLines: 'rgba(253, 251, 247, 0.25)',
+        jerseyBlue: '#1E40AF',
+        jerseyGold: '#B8860B' // Premium gold for GK
+    };
+
     useEffect(() => {
         // When formation changes, reset to preset layout (preserve player assignments by role)
         const preset = getPreset(formation);
@@ -41,7 +58,8 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
         });
         setLayout(newLayout);
         if (onChange) onChange(newLayout);
-    }, [formation]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formation, team]);
 
     function handlePointerDown(e, slotIdx) {
         if (!editable) return;
@@ -88,32 +106,38 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
         if (onSave) onSave({ formation, layout });
     }
 
-    if (!team) return <div>Time não encontrado.</div>;
+    if (!team) return <div style={{ color: colors.textMuted, fontFamily: 'var(--font-mono)' }}>Time não encontrado.</div>;
 
     const playerById = {};
     (team.squad || []).forEach(p => { playerById[p.id] = p; });
 
     return (
-        <div className="formation-board" style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
+        <div className="formation-board" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Formation selector */}
-            <div style={{display:'flex',gap:'0.4rem',alignItems:'center',flexWrap:'wrap'}}>
-                <span style={{fontSize:'0.85rem',color:'#888'}}>Formação:</span>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', backgroundColor: colors.panelBg, padding: '12px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                <span style={{ fontSize: '0.85rem', color: colors.textMuted, fontFamily: 'var(--font-mono)', marginRight: '8px' }}>ESQUEMA:</span>
                 {FORMATION_KEYS.map(k => (
-                    <Tooltip key={k} content={`Mudar para ${k} — reorganiza posições padrão`}>
+                    <EfTooltip key={k} content={`Mudar para ${k} — reorganiza posições padrão`}>
                         <EfButton
                             variant={formation === k ? 'primary' : 'secondary'} size="sm"
                             onClick={() => setFormation(k)}
                         >
                             {k}
                         </EfButton>
-                    </Tooltip>
+                    </EfTooltip>
                 ))}
-                <Tooltip content="Voltar para posições padrão da formação atual">
-                    <EfButton variant="secondary" size="sm" onClick={resetToPreset}>↺ Reset</EfButton>
-                </Tooltip>
+                
+                <div style={{ flex: 1 }} />
+                
+                <EfTooltip content="Voltar para posições padrão da formação atual">
+                    <EfButton variant="secondary" size="sm" onClick={resetToPreset} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <ArrowsClockwise size={16} /> RESET
+                    </EfButton>
+                </EfTooltip>
+                
                 {onSave && (
-                    <EfButton variant="primary" size="sm" onClick={handleSave} style={{marginLeft:'auto'}}>
-                        💾 Salvar
+                    <EfButton variant="primary" size="sm" onClick={handleSave} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <FloppyDisk size={16} weight="fill" /> SALVAR
                     </EfButton>
                 )}
             </div>
@@ -126,28 +150,41 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                     maxWidth: FIELD_W,
                     aspectRatio: `${FIELD_W} / ${FIELD_H}`,
                     position: 'relative',
-                    background: '#2D6A4F',
-                    border: '3px solid #6B4226',
-                    borderRadius: '4px',
+                    background: `linear-gradient(180deg, ${colors.field} 0%, #152A22 100%)`,
+                    border: `4px solid ${colors.panelElevated}`,
+                    borderRadius: '8px',
                     overflow: 'hidden',
                     cursor: draggedSlot !== null ? 'grabbing' : 'default',
-                    touchAction: 'none'
+                    touchAction: 'none',
+                    margin: '0 auto',
+                    boxShadow: `inset 0 0 40px rgba(0,0,0,0.5)`
                 }}
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerLeave={handlePointerUp}
             >
-                <svg viewBox={`0 0 ${FIELD_W} ${FIELD_H}`} width="100%" height="100%" style={{display:'block'}}>
+                <svg viewBox={`0 0 ${FIELD_W} ${FIELD_H}`} width="100%" height="100%" style={{ display: 'block' }}>
                     {/* Field lines */}
-                    <rect x="2" y="2" width={FIELD_W - 4} height={FIELD_H - 4} fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-                    <line x1="0" y1={FIELD_H / 2} x2={FIELD_W} y2={FIELD_H / 2} stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-                    <circle cx={FIELD_W / 2} cy={FIELD_H / 2} r="48" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <rect x="4" y="4" width={FIELD_W - 8} height={FIELD_H - 8} fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <line x1="0" y1={FIELD_H / 2} x2={FIELD_W} y2={FIELD_H / 2} stroke={colors.fieldLines} strokeWidth="2" />
+                    <circle cx={FIELD_W / 2} cy={FIELD_H / 2} r="48" fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <circle cx={FIELD_W / 2} cy={FIELD_H / 2} r="3" fill={colors.fieldLines} />
+                    
                     {/* Top goal box */}
-                    <rect x={FIELD_W / 2 - 80} y="0" width="160" height="60" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-                    <rect x={FIELD_W / 2 - 36} y="0" width="72" height="22" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <rect x={FIELD_W / 2 - 100} y="0" width="200" height="70" fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <rect x={FIELD_W / 2 - 40} y="0" width="80" height="24" fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <path d={`M ${FIELD_W / 2 - 40} 70 A 40 40 0 0 0 ${FIELD_W / 2 + 40} 70`} fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    
                     {/* Bottom goal box */}
-                    <rect x={FIELD_W / 2 - 80} y={FIELD_H - 60} width="160" height="60" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-                    <rect x={FIELD_W / 2 - 36} y={FIELD_H - 22} width="72" height="22" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <rect x={FIELD_W / 2 - 100} y={FIELD_H - 70} width="200" height="70" fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <rect x={FIELD_W / 2 - 40} y={FIELD_H - 24} width="80" height="24" fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <path d={`M ${FIELD_W / 2 - 40} ${FIELD_H - 70} A 40 40 0 0 1 ${FIELD_W / 2 + 40} ${FIELD_H - 70}`} fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+
+                    {/* Corner arcs */}
+                    <path d={`M 0 16 A 16 16 0 0 0 16 0`} fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <path d={`M ${FIELD_W - 16} 0 A 16 16 0 0 0 ${FIELD_W} 16`} fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <path d={`M 0 ${FIELD_H - 16} A 16 16 0 0 1 16 ${FIELD_H}`} fill="none" stroke={colors.fieldLines} strokeWidth="2" />
+                    <path d={`M ${FIELD_W - 16} ${FIELD_H} A 16 16 0 0 1 ${FIELD_W} ${FIELD_H - 16}`} fill="none" stroke={colors.fieldLines} strokeWidth="2" />
 
                     {/* Jerseys (11 slots) */}
                     {Object.entries(layout).map(([slotIdx, pos]) => {
@@ -155,22 +192,42 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                         const cx = pos.x * FIELD_W;
                         const cy = pos.y * FIELD_H;
                         const isDragging = draggedSlot === Number(slotIdx);
-                        const fillColor = pos.role === 'GOL' ? '#FFD700' : '#1E40AF';
+                        const isGk = pos.role === 'GOL';
+                        const fillColor = isGk ? colors.jerseyGold : colors.jerseyBlue;
+                        const strokeColor = isGk ? '#8B6508' : '#1E3A8A';
+                        
                         return (
                             <g
                                 key={slotIdx}
                                 transform={`translate(${cx}, ${cy})`}
-                                style={{ cursor: editable ? 'grab' : 'default' }}
+                                style={{ cursor: editable ? 'grab' : 'default', transition: isDragging ? 'none' : 'transform 0.2s ease-out' }}
                                 onPointerDown={(e) => handlePointerDown(e, Number(slotIdx))}
                             >
-                                <circle r={JERSEY_R} fill={fillColor} stroke="#000" strokeWidth="2" opacity={isDragging ? 0.7 : 1} />
-                                <text y="3" textAnchor="middle" fill="#FFD700" fontSize="13" fontWeight="700" fontFamily="monospace">
+                                {/* Shadow */}
+                                <circle r={JERSEY_R} fill="rgba(0,0,0,0.4)" cy={isDragging ? 8 : 4} cx={isDragging ? 4 : 2} />
+                                
+                                {/* Jersey Base */}
+                                <circle r={JERSEY_R} fill={fillColor} stroke={colors.text} strokeWidth="2" opacity={isDragging ? 0.8 : 1} 
+                                        style={{ filter: isDragging ? 'brightness(1.2)' : 'none' }} />
+                                
+                                {/* OVR */}
+                                <text y="4" textAnchor="middle" fill={colors.text} fontSize="14" fontWeight="bold" fontFamily="var(--font-mono)">
                                     {player?.ovr || '?'}
                                 </text>
-                                <text y="32" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="600" fontFamily="sans-serif">
-                                    {player?.name?.split(' ')[0]?.slice(0, 8) || 'Vazio'}
+                                
+                                {/* Player Name Background */}
+                                <rect x="-30" y="24" width="60" height="14" rx="4" fill="rgba(13, 17, 23, 0.8)" />
+                                
+                                {/* Player Name */}
+                                <text y="34" textAnchor="middle" fill={colors.text} fontSize="9" fontWeight="600" fontFamily="var(--font-sans)">
+                                    {player?.name?.split(' ')[0]?.slice(0, 8) || 'VAZIO'}
                                 </text>
-                                <text y="44" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9" fontFamily="monospace">
+                                
+                                {/* Role Badge Background */}
+                                <rect x="-16" y="40" width="32" height="12" rx="2" fill={colors.panelElevated} stroke={colors.border} strokeWidth="1" />
+                                
+                                {/* Role */}
+                                <text y="49" textAnchor="middle" fill={colors.secondary} fontSize="8" fontWeight="bold" fontFamily="var(--font-mono)">
                                     {pos.role}
                                 </text>
                             </g>
@@ -179,8 +236,8 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                 </svg>
             </div>
 
-            <div style={{fontSize:'0.75rem',color:'#888',textAlign:'center'}}>
-                {editable ? '👆 Arraste as camisas para ajustar posicionamento (mais avançado/recuado/lados)' : '👁️ Visualização da formação'}
+            <div style={{ fontSize: '0.8rem', color: colors.textMuted, textAlign: 'center', fontFamily: 'var(--font-mono)', padding: '8px', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '4px' }}>
+                {editable ? '👆 ARRASTE OS JOGADORES PARA AJUSTAR O POSICIONAMENTO EM CAMPO' : '👁️ VISUALIZAÇÃO DA FORMAÇÃO TÁTICA'}
             </div>
         </div>
     );

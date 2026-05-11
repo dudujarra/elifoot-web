@@ -11,26 +11,30 @@
 
 import React from 'react';
 import { useGame } from '../context/GameContext';
+import { 
+    House, Users, ShoppingCart, ListNumbers, Trophy, 
+    MicrophoneStage, Storefront, Swords, Scroll, FloppyDisk, Robot 
+} from '@phosphor-icons/react';
 
 const NAV_ITEMS_MANAGER = [
-    { view: 'dashboard',    icon: '🏠', label: 'DASHBOARD' },
-    { view: 'squad',        icon: '👥', label: 'PLANTEL' },
-    { view: 'market',       icon: '🛒', label: 'MERCADO' },
-    { view: 'standings',    icon: '📊', label: 'TABELA' },
-    { view: 'achievements', icon: '🏆', label: 'CONQUISTAS' },
-    { view: 'press',        icon: '🎙️', label: 'COLETIVA' },
-    { view: 'shop',         icon: '🛍️', label: 'LOJA' },
-    { view: 'rivalries',    icon: '⚔️', label: 'RIVALIDADES' },
-    { view: 'chronicle',    icon: '📜', label: 'CRÔNICA' },
-    { view: 'saves',        icon: '💾', label: 'SAVES' },
-    { view: 'autoplay',     icon: '🤖', label: 'AUTOPLAY' }
+    { view: 'dashboard',    icon: House, label: 'DASHBOARD' },
+    { view: 'squad',        icon: Users, label: 'PLANTEL' },
+    { view: 'market',       icon: ShoppingCart, label: 'MERCADO' },
+    { view: 'standings',    icon: ListNumbers, label: 'TABELA' },
+    { view: 'achievements', icon: Trophy, label: 'CONQUISTAS' },
+    { view: 'press',        icon: MicrophoneStage, label: 'COLETIVA' },
+    { view: 'shop',         icon: Storefront, label: 'LOJA' },
+    { view: 'rivalries',    icon: Swords, label: 'RIVALIDADES' },
+    { view: 'chronicle',    icon: Scroll, label: 'CRÔNICA' },
+    { view: 'saves',        icon: FloppyDisk, label: 'SAVES' },
+    { view: 'autoplay',     icon: Robot, label: 'AUTOPLAY' }
 ];
 
 const NAV_ITEMS_PLAYER = [
-    { view: 'player_dashboard', icon: '🏠', label: 'DASHBOARD' },
-    { view: 'standings',        icon: '📊', label: 'TABELA' },
-    { view: 'achievements',     icon: '🏆', label: 'CONQUISTAS' },
-    { view: 'saves',            icon: '💾', label: 'SAVES' }
+    { view: 'player_dashboard', icon: House, label: 'DASHBOARD' },
+    { view: 'standings',        icon: ListNumbers, label: 'TABELA' },
+    { view: 'achievements',     icon: Trophy, label: 'CONQUISTAS' },
+    { view: 'saves',            icon: FloppyDisk, label: 'SAVES' }
 ];
 
 export function Sidebar() {
@@ -42,21 +46,35 @@ export function Sidebar() {
     const items = gameState.mode === 'player' ? NAV_ITEMS_PLAYER : NAV_ITEMS_MANAGER;
     const currentView = gameState.view;
 
+    const colors = {
+        bg: '#0D1117',
+        panelBg: '#161B22',
+        panelElevated: '#1A1F24',
+        border: '#2D3748',
+        text: '#FDFBF7',
+        textMuted: '#8E9E94',
+        accent: '#39FF14',
+        secondary: '#40BAF7',
+        warning: '#FFD700',
+        danger: '#FF3333'
+    };
+
     return (
         <aside
             className="elifoot-sidebar"
             style={{
                 width: '180px',
                 minWidth: '180px',
-                background: '#0B0D0F', // Slightly darker than main bg to recede
-                borderRight: '4px solid #4A5059',
+                background: colors.bg,
+                borderRight: `2px solid ${colors.border}`,
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100dvh',
                 position: 'sticky',
                 top: 0,
                 zIndex: 998,
-                overflowY: 'auto'
+                overflowY: 'auto',
+                boxShadow: `4px 0 20px rgba(0,0,0,0.5)`
             }}
         >
             <div style={{
@@ -67,20 +85,22 @@ export function Sidebar() {
             }}>
                 {/* Mode label */}
                 <div style={{
-                    fontFamily: "'Press Start 2P', monospace",
-                    fontSize: '0.5rem',
-                    color: '#888',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.65rem',
+                    color: colors.textMuted,
                     padding: '0 8px 12px',
-                    borderBottom: '2px solid #333',
+                    borderBottom: `1px solid ${colors.border}`,
                     marginBottom: '12px',
                     textAlign: 'center',
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    fontWeight: 'bold'
                 }}>
-                    {gameState.mode === 'player' ? '⚽ JOGADOR' : '🧑‍💼 TÉCNICO'}
+                    {gameState.mode === 'player' ? '⚽ MODO JOGADOR' : '🧑‍💼 MODO TÉCNICO'}
                 </div>
 
                 {items.map(item => {
                     const isActive = currentView === item.view;
+                    const IconComponent = item.icon;
                     return (
                         <div
                             key={item.view}
@@ -92,31 +112,37 @@ export function Sidebar() {
                                 width: '100%',
                                 padding: '12px 10px',
                                 cursor: 'pointer',
-                                background: isActive ? '#1E2124' : 'transparent',
-                                borderLeft: isActive ? '4px solid var(--primary)' : '4px solid transparent',
-                                borderRight: isActive ? '2px solid #4A5059' : '2px solid transparent',
+                                backgroundColor: isActive ? colors.panelBg : 'transparent',
+                                borderLeft: isActive ? `4px solid ${colors.accent}` : '4px solid transparent',
+                                borderRadius: '0 8px 8px 0',
                                 boxSizing: 'border-box',
-                                transition: 'background 0.1s, border-left-color 0.1s'
+                                transition: 'all 0.15s ease'
                             }}
                             onMouseEnter={(e) => {
                                 if (!isActive) {
-                                    e.currentTarget.style.background = '#14171A';
-                                    e.currentTarget.style.borderLeftColor = '#333';
+                                    e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)';
+                                    e.currentTarget.style.borderLeftColor = colors.border;
                                 }
                             }}
                             onMouseLeave={(e) => {
                                 if (!isActive) {
-                                    e.currentTarget.style.background = 'transparent';
+                                    e.currentTarget.style.backgroundColor = 'transparent';
                                     e.currentTarget.style.borderLeftColor = 'transparent';
                                 }
                             }}
                         >
-                            <span style={{ fontSize: '1rem', filter: isActive ? 'none' : 'grayscale(0.5)' }}>{item.icon}</span>
+                            <span style={{ 
+                                color: isActive ? colors.accent : colors.textMuted,
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}>
+                                <IconComponent size={20} weight={isActive ? "fill" : "regular"} />
+                            </span>
                             <span style={{
-                                fontFamily: "'Press Start 2P', monospace",
-                                fontSize: '0.5rem',
-                                color: isActive ? 'var(--primary)' : '#888',
-                                textShadow: isActive ? '1px 1px 0 #000' : 'none'
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '0.75rem',
+                                color: isActive ? colors.text : colors.textMuted,
+                                fontWeight: isActive ? 'bold' : 'normal'
                             }}>
                                 {item.label}
                             </span>
