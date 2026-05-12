@@ -523,7 +523,7 @@ export function MatchView() {
             <div className="ef-view-container">
                 <Scoreboard half={half} />
 
-                <EfPanel padding="md" style={{ height: '400px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }} scrollRef={logRef}>
+                <EfPanel padding="md" className="ef-match-pitch-bg" style={{ height: '400px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }} scrollRef={logRef}>
                     {displayedEvents.map((n, i) => {
                         const isGoal = n.text?.includes('⚽');
                         const isCard = n.text?.includes('🟨') || n.text?.includes('🟥');
