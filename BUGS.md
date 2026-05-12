@@ -28,6 +28,7 @@
 | `tests/regression/BUG-055-draws-only.test.js` | BUG-055 | ✅ |
 | `tests/regression/BUG-078.test.js` | BUG-078 | ✅ |
 | `tests/regression/BUG-079.test.js` | BUG-079 | ✅ |
+| `tests/regression/BUG-083-save-reload-error-boundary.test.js` | BUG-083 | ✅ (save→reload error boundary — `llmNarrative` + services RFCT-019.* faltavam em `ENGINE_CLASS_FIELDS`) |
 | `tests/regression/SPEC-117-skip-auto-restore.test.js` | AKITA-204 NPC brain bug (5 testes) | ✅ (Mandamento #6 — 3-artefact completo via SPEC-154) |
 
 **Bugs abertos (Akita 3-artefact pendente — Mandamento #6)**:
@@ -261,4 +262,16 @@ npm run test:ci    # roda testes + build (pipeline)
 - **Fix:** TODO
 - **Teste:** `tests/regression/BUG-079.test.js`
 - **Status:** OPEN (2026-05-10)
+
+
+---
+
+### BUG-083 ✅ RESOLVIDO — save→reload error boundary em DashboardView (`llmNarrative` perdia métodos após restore)
+- **Arquivo:** `src/context/GameContext.jsx:113` (`ENGINE_CLASS_FIELDS`)
+- **Branch:** `claude/spec171-save-reload-fix`
+- **Repro:** Start career → save via botão 💾 → F5 → DashboardView crashava com "An error occurred in component"
+- **Root cause:** `engine.llmNarrative` (LLMNarrativeService, SPEC-167) e os services `_npcWeekProcessor`, `_transferService`, `_scoutingService`, `_loanService`, `_facilityService`, `_formationService`, `_pressService`, `_sectorService`, `_gameInitializer` (RFCT-019.*) **não estavam** em `ENGINE_CLASS_FIELDS`. O JSON round-trip transformava as instâncias em plain objects (`{}` após serialização), perdendo métodos. Primeiro consumer (`DashboardView.handleAuxiliarAdvice` → `engine.llmNarrative.managerAdvice(...)`) crashava com `TypeError: ...is not a function`.
+- **Fix:** Adicionado todos esses fields à `ENGINE_CLASS_FIELDS`. Save os pula; constructor da Engine recria-os frescos no reload.
+- **Teste:** `tests/regression/BUG-083-save-reload-error-boundary.test.js` (6 testes — Mandamento #6 — 3-artefact completo). Inclui sentinel que detecta automaticamente qualquer nova class-instance field ausente do skip-list.
+- **Status:** CLOSED (2026-05-12)
 
