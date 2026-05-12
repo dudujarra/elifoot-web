@@ -6,9 +6,16 @@
  *
  * Heavy 4px bevel borders, pixel-perfect press feedback,
  * Press Start 2P for labels, zero border-radius.
+ *
+ * SPEC-169 (Bloco 3.3): wrapped em React.memo. EfButton aparece em listas
+ * grandes (mercado, elenco, standings) — sem memo, todo render do parent
+ * propagava cascata. Memoize evita re-render quando props referenciais
+ * forem estáveis (handlers via useCallback no consumer).
  */
 
-export function EfButton({
+import { memo } from 'react';
+
+function EfButtonImpl({
     variant = 'primary',
     size = 'md',
     icon,
@@ -41,5 +48,8 @@ export function EfButton({
         </button>
     );
 }
+
+export const EfButton = memo(EfButtonImpl);
+EfButton.displayName = 'EfButton';
 
 export default EfButton;
