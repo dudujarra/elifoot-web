@@ -7,6 +7,19 @@ import { defaultExclude } from 'vitest/config'
 export default defineConfig({
   plugins: [react()],
   base: process.env.NODE_ENV === 'production' ? '/elifoot-web/' : '/',
+  build: {
+    rollupOptions: {
+      output: {
+        // Vite 8 / Rolldown: manualChunks must be a function, not an object.
+        manualChunks(id) {
+          // SPEC-159: realPlayers.json (2MB) must NOT be in the index chunk.
+          if (id.includes('realPlayers.json')) return 'player-data';
+          // ML/learning subsystem — heavy, split into its own chunk
+          if (id.includes('/services/learning/')) return 'ml-brain';
+        },
+      },
+    },
+  },
   test: {
     exclude: [
       ...defaultExclude,

@@ -27,6 +27,8 @@ import { detectMonotonyHeuristic, generateGameDesignInsights } from './learning/
 import { smartSellDecision, rankCandidates, computeTransferReward } from './learning/SmartMarketEngine.js';
 import { checkChallengeWin, getAllChallengeModes } from '../engine/ChallengeModes.js';
 import { SessionMetrics } from '../components/GDDSystems.jsx';
+import { AutoPlayLLMBridge } from './AutoPlayLLMBridge.js';
+import { AutoPlayPersistence } from './AutoPlayPersistence.js';
 
 import { rng as systemRng } from '../engine/rng.js';
 
@@ -138,7 +140,7 @@ export class AutoPlayController {
 
         // BUG-066 fix: restore stats from localStorage. Was zeroing on refresh
         // even though _save() wrote them — only brain had its own restore path.
-        this._restoreStats();
+        AutoPlayPersistence.restoreStats(this.stats);
 
         // §14.2: Challenge mode tracking
         this._challengeModesAvailable = getAllChallengeModes();
@@ -146,119 +148,11 @@ export class AutoPlayController {
         // §17: Session time metrics
         this._sessionMetrics = new SessionMetrics();
 
-        // SPEC-119: LLM Bridge instance — satisfies UI contract in AutoPlayView
-        // Modes: 'heuristic' (pure functions, always available) | 'webllm' (dynamic import)
-        this.llmBridge = {
-            _mode: 'heuristic',
-            _loadStatus: 'idle',    // idle | loading | ready | error
-            _loadProgress: 0,
-            _errorMsg: null,
-            _webllmEngine: null,
-
-            status() {
-                return {
-                    mode: this._mode,
-                    loadStatus: this._loadStatus,
-                    loadProgress: this._loadProgress,
-                    error: this._errorMsg,
-                };
-            },
-
-            setMode(mode) {
-                this._mode = mode;
-                if (mode === 'heuristic') {
-                    this._loadStatus = 'idle';
-                    this._loadProgress = 0;
-                    this._webllmEngine = null;
-                    this._errorMsg = null;
-                }
-            },
-
-            async init() {
-                if (this._mode !== 'webllm') return;
-                this._loadStatus = 'loading';
-                this._loadProgress = 0;
-                this._errorMsg = null;
-
-                try {
-                    // Check WebGPU support first
-                    if (!navigator.gpu) {
-                        throw new Error('WebGPU não suportado neste navegador. Use Chrome 113+ ou Edge 113+.');
-                    }
-
-                    // Dynamic import — only downloads @mlc-ai/web-llm when needed
-                    const webllm = await import(/* @vite-ignore */ 'https://esm.run/@mlc-ai/web-llm');
-                    const engine = await webllm.CreateMLCEngine(
-                        'Llama-3.2-1B-Instruct-q4f16_1-MLC',
-                        {
-                            initProgressCallback: (report) => {
-                                this._loadProgress = report.progress || 0;
-                                console.log(`[SPEC-119] WebLLM: ${(this._loadProgress * 100).toFixed(0)}% — ${report.text || ''}`);
-                            }
-                        }
-                    );
-                    this._webllmEngine = engine;
-                    this._loadStatus = 'ready';
-                    this._loadProgress = 1;
-                    console.log('[SPEC-119] WebLLM engine ready');
-                } catch (err) {
-                    this._loadStatus = 'error';
-                    this._errorMsg = err.message || String(err);
-                    console.error('[SPEC-119] WebLLM init failed:', err);
-                }
-            },
-
-            /**
-             * Ask the LLM for a buy/sell decision.
-             * Falls back to heuristic if not in webllm mode or engine not ready.
-             */
-            async decide(prompt) {
-                if (this._mode === 'webllm' && this._webllmEngine && this._loadStatus === 'ready') {
-                    try {
-                        const reply = await this._webllmEngine.chat.completions.create({
-                            messages: [{ role: 'user', content: prompt }],
-                            max_tokens: 200,
-                            temperature: 0.3,
-                        });
-                        return { source: 'webllm', text: reply.choices?.[0]?.message?.content || '' };
-                    } catch (err) {
-                        console.warn('[SPEC-119] WebLLM decide error, falling back:', err);
-                    }
-                }
-                // Fallback: heuristic (the existing pure functions handle this elsewhere)
-                return { source: 'heuristic', text: null };
-            }
-        };
+        // SPEC-119 / RFCT-018: LLM Bridge extracted to AutoPlayLLMBridge.js
+        this.llmBridge = new AutoPlayLLMBridge();
     }
 
-    /**
-     * Restore session stats from localStorage. Brain restores separately.
-     */
-    _restoreStats() {
-        try {
-            if (typeof localStorage === 'undefined') return;
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return;
-            const saved = JSON.parse(raw);
-            if (!saved || typeof saved !== 'object') return;
-            // Merge saved counters + insights, preserve current empty arrays for fresh logs
-            const preserveArrays = ['anomalies', 'successes', 'decisions'];
-            for (const key of Object.keys(saved)) {
-                if (preserveArrays.includes(key)) {
-                    // Restore last 100 entries to avoid unbounded growth
-                    if (Array.isArray(saved[key])) {
-                        this.stats[key] = saved[key].slice(-100);
-                    }
-                } else if (key === 'insights' && saved.insights) {
-                    this.stats.insights = { ...this.stats.insights, ...saved.insights };
-                } else if (saved[key] !== undefined) {
-                    this.stats[key] = saved[key];
-                }
-            }
-            // Don't restore startTime/running — fresh session is paused initially
-            this.stats.startTime = null;
-        } catch { /* ignore */ }
-    }
+    // _restoreStats: RFCT-018 — moved to AutoPlayPersistence.restoreStats()
 
     start(weekDelayMs = 100) {
         if (this.running) return;
@@ -283,9 +177,7 @@ export class AutoPlayController {
     }
 
     _save() {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.stats));
-        } catch { /* ignore */ }
+        AutoPlayPersistence.saveStats(this.stats);
     }
 
     _logSuccess(type, msg, ctx = {}) {
