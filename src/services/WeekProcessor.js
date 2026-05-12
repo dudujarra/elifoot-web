@@ -26,6 +26,7 @@ import { processPlayerDevelopment, updateForm, processDressingRoom } from '../en
 import { processMoraleEvents, processMentoring } from '../engine/PlayerTraits';
 import { processLoans } from '../engine/YouthAcademy';
 import { getCalendarEvent } from '../engine/SeasonSystem';
+import { getSeasonalEvent } from '../engine/SeasonalBREvents';
 import { apply as applyBoardTension } from '../engine/BoardTensionSystem';
 import { evaluate as evaluateHumiliation } from '../engine/HumiliationCascadeSystem';
 import { evaluate as evaluateLossStreak, recordResult as recordStreakResult } from '../engine/LossStreakResponseSystem';
@@ -45,6 +46,15 @@ export class WeekProcessor {
     process(engine, weekResults) {
         const team = engine.getTeam(engine.manager.teamId);
         if (!team) return;
+
+        // SPEC-C6: surface seasonal BR event if currentWeek matches trigger
+        try {
+            const seasonalEvent = getSeasonalEvent(engine.currentWeek);
+            if (seasonalEvent) {
+                engine.pendingSeasonalEvent = seasonalEvent;
+                engine.weekEvents.push(`🇧🇷 ${seasonalEvent.title}: ${seasonalEvent.text}`);
+            }
+        } catch { /* defensive */ }
 
         // Energy management based on training
         team.squad.forEach(p => {
