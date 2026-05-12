@@ -41,6 +41,7 @@ import { ScoutingService } from '../services/ScoutingService';
 import { LoanService } from '../services/LoanService';
 import { FacilityService } from '../services/FacilityService';
 import { FormationService } from '../services/FormationService';
+import { PressService } from '../services/PressService';
 import { apply as applyBoardTension } from './BoardTensionSystem';
 import { onBoardSellAttempt as checkStarProtection } from './StarProtectionSystem';
 
@@ -73,6 +74,8 @@ export class Engine {
         this._facilityService = new FacilityService();
         // RFCT-019.6: FormationService — formation/tactic/training/teamtalk/sub + getMatchContext
         this._formationService = new FormationService();
+        // RFCT-019.7: PressService — press conference + contract renewal + coach proposal response
+        this._pressService = new PressService();
         // RFCT-007: MythService — Camada 5 (Mito) Hall de Lendas (stateless)
         this._mythService = new MythService();
         // RFCT-008/010: RelationshipService — Camada 3 (Relacional) (stateless)
@@ -322,55 +325,7 @@ export class Engine {
      * @returns {{ success: boolean, newTeamId?: number, msg: string }}
      */
     respondCoachProposal(accept) {
-        const proposal = this.pendingCoachProposal;
-        if (!proposal) return { success: false, msg: 'Sem proposta pendente' };
-
-        this.pendingCoachProposal = null;
-
-        if (!accept) {
-            return { success: false, msg: `Recusou proposta de ${proposal.fromClubName}` };
-        }
-
-        // Validar clube destino
-        const newTeamId = proposal.fromClubId;
-        const newTeam = this.getTeam(newTeamId);
-        if (!newTeam) {
-            return { success: false, msg: `Clube destino não encontrado: ${newTeamId}` };
-        }
-
-        // Cobrar exit fee se aplicável
-        const currentTeam = this.getTeam(this.manager?.teamId);
-        if (proposal.exitFee > 0 && currentTeam) {
-            currentTeam.balance = (currentTeam.balance || 0) - proposal.exitFee;
-        }
-
-        // Mudar manager para novo clube
-        const oldTeamId = this.manager.teamId;
-        this.manager.teamId = newTeam.id;
-
-        // Boost de reputação
-        if (proposal.reputationBoost) {
-            this.manager.reputation = Math.min(100, (this.manager.reputation || 10) + proposal.reputationBoost);
-        }
-
-        // Resetar stats de temporada (começar do zero no novo clube)
-        this.managerStats = { wins: 0, draws: 0, losses: 0, streak: 0, lossStreak: 0, rollingForm: [], goalsFor: 0, goalsAgainst: 0 };
-
-        // Limpar estado contextual do clube anterior
-        this.boardTension = 0;
-        this.lastContractResolution = null;
-
-        // Log na carreira do manager
-        if (!Array.isArray(this.manager.careerHistory)) this.manager.careerHistory = [];
-        this.manager.careerHistory.push({
-            clubName: currentTeam?.name || 'Clube Anterior',
-            leftFor: newTeam.name,
-            season: this.seasonNumber,
-        });
-
-        this.weekEvents.push(`✈️ ${this.manager.name} assina com ${newTeam.name}! (saiu de ${currentTeam?.name || oldTeamId})`);
-
-        return { success: true, newTeamId: newTeam.id, msg: `Aceitou proposta de ${newTeam.name}` };
+        return this._pressService.respondCoachProposal(this, accept);
     }
 
     // SPEC-135: consulta UI se view está acessível
@@ -606,23 +561,13 @@ export class Engine {
         return this._transferService.sellPlayer(this, playerId, amount);
     }
 
-    // === CONTRATOS ===
+    // === CONTRATOS (RFCT-019.7 delegators) ===
     getRenewalOffer(playerId) {
-        const team = this.getTeam(this.manager.teamId);
-        if (!team) return null;
-        const player = team.squad.find(p => p.id === playerId);
-        if (!player) return null;
-        return generateRenewalOffer(player);
+        return this._pressService.getRenewalOffer(this, playerId);
     }
 
     renewContract(playerId) {
-        const team = this.getTeam(this.manager.teamId);
-        if (!team) return { success: false, msg: 'Time não encontrado.' };
-        const player = team.squad.find(p => p.id === playerId);
-        if (!player) return { success: false, msg: 'Jogador não encontrado.' };
-        const offer = generateRenewalOffer(player);
-        if (!offer.willRenew) return { success: false, msg: offer.reason };
-        return acceptRenewal(player, offer);
+        return this._pressService.renewContract(this, playerId);
     }
 
     // === PACING FRICTION (AUDIT-FIX #17) ===
@@ -715,30 +660,13 @@ export class Engine {
         return events;
     }
 
-    // === COLETIVA DE IMPRENSA ===
+    // === COLETIVA DE IMPRENSA (RFCT-019.7 delegators) ===
     checkPressConference() {
-        if (this.mode !== 'manager') return null;
-        const team = this.getTeam(this.manager.teamId);
-        if (!team) return null;
-        const standings = this.getStandings(team.zone, team.division);
-        const pos = standings.findIndex(s => s.teamId === team.id) + 1;
-        if (shouldTriggerPress(this.managerStats.streak, this.currentWeek, pos, standings.length)) {
-            const avgMorale = team.squad.reduce((s, p) => s + (p.moral || 50), 0) / (team.squad.length || 1);
-            this.pressQuestion = generateQuestion(this.managerStats.streak, pos, standings.length, avgMorale);
-            return this.pressQuestion;
-        }
-        return null;
+        return this._pressService.checkPressConference(this);
     }
 
     answerPress(optionId) {
-        if (!this.pressQuestion) return null;
-        const option = this.pressQuestion.options.find(o => o.id === optionId);
-        if (!option) return null;
-        const team = this.getTeam(this.manager.teamId);
-        applyPressEffect(team, this.board, option.effect);
-        const result = { answer: option.text, effect: option.effect };
-        this.pressQuestion = null;
-        return result;
+        return this._pressService.answerPress(this, optionId);
     }
 
     // ============================================================
