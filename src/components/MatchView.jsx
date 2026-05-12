@@ -5,6 +5,8 @@ import { getFormEmoji } from '../engine/PlayerDevelopment';
 import { sfx } from '../utils/sound';
 import { LiveSquadEditModal } from './LiveSquadEditModal';
 import { PreMatchScreen } from './PreMatchScreen';
+import { MatchPostMortem } from './MatchPostMortem';
+import { analyzeMatch } from '../engine/MatchAnalyst';
 import { EfClubBadge, EfBanner } from './ui';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
@@ -711,6 +713,26 @@ export function MatchView() {
                         </div>
                     )}
                 </EfPanel>
+
+                {/* SPEC-A4: Match Post-Mortem painel decisão */}
+                {result && (
+                    <MatchPostMortem
+                        analysis={analyzeMatch({
+                            result: {
+                                home: result.home,
+                                away: result.away,
+                                homeGoals: result.homeGoals,
+                                awayGoals: result.awayGoals,
+                                isHomeTeam: engine.getTeam(gameState.teamId)?.name === result.home,
+                            },
+                            tacticUsed: engine.tactic || 'Normal',
+                            formationUsed: engine.getTeam(gameState.teamId)?.formation || '4-3-3',
+                            opponentStyle: result.opponentStyle || 'Normal',
+                            recentForm: engine.managerStats?.rollingForm?.slice(-5) || [],
+                            subsUsed: result.subsUsed || 0,
+                        })}
+                    />
+                )}
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
                     <EfPanel padding="md">
