@@ -245,10 +245,10 @@ PR linkado a SPEC-XXX / BUG-XXX → CI verde → merge
 
 | Métrica | Valor | Fonte |
 |---------|-------|-------|
-| Tests | **1096/1096** ✅ default + **18/18** ✅ test:soak (deep-soak isolado) | `vitest run` 2026-05-12 |
-| Test files | 95 | `find tests -name "*.test.js"` |
-| Specs totais | **116** | `find specs -name "SPEC-*.md"` |
-| Bugs com regression test | 13 arquivos em `tests/regression/` (BUG-080/081 não precisaram — fix via config + lint disable docs) | — |
+| Tests | **1108/1108** ✅ default + **18/18** ✅ test:soak (deep-soak isolado) | `vitest run` 2026-05-12 |
+| Test files | 97 | `find tests -name "*.test.js"` |
+| Specs totais | **117** | `find specs -name "SPEC-*.md"` |
+| Bugs com regression test | 14 arquivos em `tests/regression/` (BUG-080/081 não precisaram — fix via config + lint disable docs) | — |
 | AKITA commits | ~170+ | `git log --grep AKITA` |
 | Clubes | 170 (BR + EU + SA) | `src/engine/db/` |
 | Build | ✅ limpo, ~1.1s, initial chunk **376KB** (gzip 110KB) | `vite build` |

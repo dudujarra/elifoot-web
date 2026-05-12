@@ -46,6 +46,16 @@
   --radius: 8px;
   --radius-sm: 4px;
   --radius-xs: 2px;
+
+  /* SPEC-171: Font CSS tokens (alias sem prefixo --ef-).
+     ~401 referências em components usam var(--font-mono)/var(--font-sans).
+     Sem essas definições, todo header/label/data-row resolvia silenciosamente
+     pro `body { font-family }` (Pixelify Sans), descaracterizando a tipografia.
+     Stacks refletem fallbacks já usados inline em luxury-arcade.css
+     (linhas 307/355: 'Geist Mono', 'Courier Prime') + tokens canónicos
+     em src/styles/tokens/typography.css. */
+  --font-mono: 'Geist Mono', 'JetBrains Mono', 'IBM Plex Mono', 'SF Mono', Consolas, 'Courier Prime', monospace;
+  --font-sans: 'Inter', 'Pixelify Sans', system-ui, -apple-system, sans-serif;
 }
 
 /* ==========================================================================
