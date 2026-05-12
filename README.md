@@ -6,7 +6,7 @@
 🎮 **Live demo**: https://dudujarra.github.io/elifoot-web/
 
 [![CI](https://github.com/dudujarra/elifoot-web/actions/workflows/ci.yml/badge.svg)](https://github.com/dudujarra/elifoot-web/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-1055%2F1055-brightgreen)](https://github.com/dudujarra/elifoot-web/tree/main/tests)
+[![Tests](https://img.shields.io/badge/tests-1041%2F1041-brightgreen)](https://github.com/dudujarra/elifoot-web/tree/main/tests)
 [![Specs](https://img.shields.io/badge/specs-110-blue)](https://github.com/dudujarra/elifoot-web/tree/main/specs)
 [![SDD](https://img.shields.io/badge/SDD-100%25-purple)](https://github.com/dudujarra/elifoot-web/blob/main/specs/SPEC-RULES.md)
 [![Bugs Tracked](https://img.shields.io/badge/bugs%20regression-13-orange)](https://github.com/dudujarra/elifoot-web/blob/main/BUGS.md)
