@@ -110,10 +110,17 @@ function clearStorage() {
 // Campos engine que são instâncias de classes — skip em save (recriam em constructor).
 // AKITA-RFCT-017: includes services (Myth/Relationship/Narrative/Career + MatchSimulator).
 // AKITA-052: includes InheritanceService.
+// BUG-083 fix: `llmNarrative` (SPEC-167) + restantes services RFCT-019.* faltavam.
+// Sem isso, JSON round-trip transforma instâncias em plain objects e perde métodos
+// (managerAdvice, etc) → DashboardView crash em handleAuxiliarAdvice.
 const ENGINE_CLASS_FIELDS = [
     'staff', 'board', 'legacy',
+    'llmNarrative',
     '_matchSimulator', '_mythService', '_relationshipService', '_narrativeService', '_careerService',
-    '_inheritanceService', '_weekProcessor', '_seasonProcessor', '_aiDirector'
+    '_inheritanceService', '_weekProcessor', '_seasonProcessor', '_aiDirector',
+    '_npcWeekProcessor', '_transferService', '_scoutingService', '_loanService',
+    '_facilityService', '_formationService', '_pressService', '_sectorService',
+    '_gameInitializer'
 ];
 
 function serializeEngine(engine) {

@@ -4,6 +4,38 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [fix] BUG-083 + SPEC-171 — save→reload error boundary + font CSS tokens (2026-05-12)
+
+**BUG-083** — `engine.llmNarrative` (SPEC-167) e nove services RFCT-019.*
+(`_npcWeekProcessor`, `_transferService`, `_scoutingService`, `_loanService`,
+`_facilityService`, `_formationService`, `_pressService`, `_sectorService`,
+`_gameInitializer`) **não estavam** em `ENGINE_CLASS_FIELDS`. JSON round-trip
+do save degradava as instâncias para plain objects, perdendo métodos.
+DashboardView crashava em `handleAuxiliarAdvice` (`managerAdvice is not a
+function`) após reload.
+
+- Fix: `src/context/GameContext.jsx` — adicionados os 10 fields à skip-list.
+- Regression test: `tests/regression/BUG-083-save-reload-error-boundary.test.js`
+  (6 testes incluindo sentinel automático para futuras class-instances).
+- Mandamento #6 — 3-artefact completo (ticket BUGS.md + fix + regression test).
+
+**SPEC-171** — `var(--font-mono)` e `var(--font-sans)` referenciados em ~401
+sites na app, mas **nunca definidos** em `:root`. Silent fallback pra body
+font (`'Pixelify Sans'`), descaracterizando art direction.
+
+- Fix: `src/styles/luxury-arcade.css` — `:root` agora declara `--font-mono`
+  (Geist Mono / JetBrains Mono / IBM Plex Mono stack) e `--font-sans`
+  (Inter / Pixelify Sans / system-ui).
+- Spec: `specs/SPEC-171-font-tokens-fix.md`.
+- Harness: `tests/specs/SPEC-171-font-tokens.test.js` (6 testes).
+
+**Métricas pós-fix:**
+- Tests: 1097 passed (+12 sobre baseline 1085) | 4 skipped
+- Lint: 0 errors, 120 warnings (cosméticos)
+- Build: 1.06s, initial chunk 380KB (within budget)
+
+---
+
 ### [feat] AKITA-204 — Bundle code-split + lint + isolation + skipAutoRestore + cleanup (2026-05-11)
 
 PR único consolidando múltiplas frentes (commit `4b54cd4`).
