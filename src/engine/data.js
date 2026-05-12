@@ -2,24 +2,40 @@ import { rng } from './rng.js';
 import { calcMarketValue } from './MarketPricer.js';
 import realPlayers from '../data/realPlayers.json';
 
-const FIRST_NAMES = [];
-const LAST_NAMES = [];
+// SPEC-169 (Bloco 3.3): índices construídos lazy.
+// Antes esses dois forEachs rodavam no module-eval (~11k iterações × 2),
+// pagando ~3-5ms no TTI mesmo se nenhum player fosse gerado naquela sessão.
+// Agora os índices são construídos sob demanda no primeiro Data.* call.
+let _FIRST_NAMES = null;
+let _LAST_NAMES = null;
+let _PLAYERS_BY_TEAM = null;
 
-realPlayers.forEach(p => {
-    const nameStr = p.shortName || p.name;
-    const parts = nameStr.split(' ');
-    if (parts.length > 1) {
-        FIRST_NAMES.push(parts[0]);
-        LAST_NAMES.push(parts[parts.length - 1]);
-    } else {
-        FIRST_NAMES.push(parts[0]);
+function ensureNames() {
+    if (_FIRST_NAMES) return;
+    _FIRST_NAMES = [];
+    _LAST_NAMES = [];
+    for (let i = 0; i < realPlayers.length; i++) {
+        const p = realPlayers[i];
+        const nameStr = p.shortName || p.name;
+        const parts = nameStr.split(' ');
+        if (parts.length > 1) {
+            _FIRST_NAMES.push(parts[0]);
+            _LAST_NAMES.push(parts[parts.length - 1]);
+        } else {
+            _FIRST_NAMES.push(parts[0]);
+        }
     }
-});
-const PLAYERS_BY_TEAM = {};
-realPlayers.forEach(p => {
-    if (!PLAYERS_BY_TEAM[p.team]) PLAYERS_BY_TEAM[p.team] = [];
-    PLAYERS_BY_TEAM[p.team].push(p);
-});
+}
+
+function ensureTeams() {
+    if (_PLAYERS_BY_TEAM) return;
+    _PLAYERS_BY_TEAM = {};
+    for (let i = 0; i < realPlayers.length; i++) {
+        const p = realPlayers[i];
+        if (!_PLAYERS_BY_TEAM[p.team]) _PLAYERS_BY_TEAM[p.team] = [];
+        _PLAYERS_BY_TEAM[p.team].push(p);
+    }
+}
 
 // Position translator from SoFIFA to Elifoot (GOL, DEF, MEI, ATA)
 const mapSofifaPosition = (pos) => {
@@ -93,8 +109,9 @@ const FOOT = ["Destro", "Canhoto", "Ambidestro"];
 
 export const Data = {
     generatePlayerName() {
-        if (FIRST_NAMES.length > 0 && LAST_NAMES.length > 0) {
-            return `${rng.pick(FIRST_NAMES)} ${rng.pick(LAST_NAMES)}`;
+        ensureNames();
+        if (_FIRST_NAMES.length > 0 && _LAST_NAMES.length > 0) {
+            return `${rng.pick(_FIRST_NAMES)} ${rng.pick(_LAST_NAMES)}`;
         }
         return `Jogador ${rng.int(1, 9999)}`;
     },
@@ -251,8 +268,11 @@ export const Data = {
         
         // Copiar os jogadores reais do time (se houver) para consumirmos durante a escalação
         let realRoster = [];
-        if (teamName && PLAYERS_BY_TEAM[teamName]) {
-            realRoster = [...PLAYERS_BY_TEAM[teamName]];
+        if (teamName) {
+            ensureTeams();
+            if (_PLAYERS_BY_TEAM[teamName]) {
+                realRoster = [..._PLAYERS_BY_TEAM[teamName]];
+            }
         }
 
         const pickRealPlayer = (pos) => {

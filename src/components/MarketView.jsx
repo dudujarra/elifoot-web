@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useGame } from '../context/GameContext';
 import { SCOUT_REGIONS } from '../engine/StadiumSystem';
 import { PlayerAvatar } from '../utils/avatar';
@@ -21,10 +21,15 @@ export function MarketView() {
 
     const engine = getEngine();
     const team = engine.getTeam(gameState.teamId);
-    if (!team) return null;
 
-    const handleBuy = (player) => {
-        if (team.balance < player.value) return;
+    // SPEC-169 (Bloco 3.3): handlers memoizados — referência estável
+    // entre renders evita re-renders desnecessários em EfButtons leaf.
+    // Mandamento #2: engine é mutável por design (ref instance), UI usa
+    // forceUpdate pra invalidar after-mutation. react-hooks/immutability
+    // não captura essa intenção — silenciado especificamente neste handler.
+    /* eslint-disable react-hooks/immutability */
+    const handleBuy = useCallback((player) => {
+        if (!team || team.balance < player.value) return;
         const idx = engine.marketPlayers.findIndex(p => p.id === player.id);
         if (idx === -1) return;
         team.balance -= player.value;
@@ -35,29 +40,60 @@ export function MarketView() {
         engine.marketPlayers.splice(idx, 1);
         setLog(`✅ CONTRATADO: ${player.name} (R$ ${(player.value / 1000000).toFixed(1)}M)`);
         forceUpdate();
-    };
+    }, [engine, team, forceUpdate]);
+    /* eslint-enable react-hooks/immutability */
 
-    const handleSell = (player) => {
+    const handleSell = useCallback((player) => {
         const value = player.ovr * 100000;
         setNegotiation({ player, round: 0, counterAmount: value, msg: `VALOR DE MERCADO: R$ ${(value / 1000000).toFixed(1)}M. DESEJA VENDER?` });
-    };
+    }, []);
 
-    const confirmSell = () => {
+    const confirmSell = useCallback(() => {
         if (!negotiation) return;
         const p = negotiation.player;
         const result = engine.sellPlayer(p.id, negotiation.counterAmount);
         setLog(`💰 ${result.msg.toUpperCase()}`);
         setNegotiation(null);
         forceUpdate();
-    };
+    }, [engine, negotiation, forceUpdate]);
 
-    const handleScout = (regionId) => {
+    const handleScout = useCallback((regionId) => {
         const result = engine.scoutRegionAction(regionId);
         setLog(result.msg.toUpperCase() || `SCOUT: ENCONTRADOS ${result.players?.length || 0} JOGADORES!`);
         forceUpdate();
-    };
+    }, [engine, forceUpdate]);
 
-    const sellable = team.squad.filter(p => !p.isTitular && !p.injury);
+    // SPEC-169: filter+sort do mercado memoizado.
+    // Antes: IIFE re-executava a cada render (search digit, tab click, etc).
+    // marketPlayers pode ter dezenas/centenas de itens — sort O(n log n) por
+    // keystroke era desperdício. Agora só recalcula quando filtro/busca muda.
+    const filteredMarket = useMemo(() => {
+        const sorts = {
+            ovr: (a, b) => b.ovr - a.ovr,
+            price: (a, b) => (b.value || 0) - (a.value || 0),
+            age: (a, b) => b.age - a.age,
+            name: (a, b) => a.name.localeCompare(b.name)
+        };
+        let market = [...(engine.marketPlayers || [])];
+        if (marketFilter !== 'all') market = market.filter(p => p.position === marketFilter);
+        if (marketSearch.trim()) {
+            const q = marketSearch.toLowerCase();
+            market = market.filter(p => p.name.toLowerCase().includes(q));
+        }
+        market.sort(sorts[marketSort] || sorts.ovr);
+        return market;
+    }, [engine.marketPlayers, marketFilter, marketSearch, marketSort]);
+
+    // SPEC-169: sellable list memoizado por mesmo motivo.
+    const sellable = useMemo(() => {
+        if (!team) return [];
+        return team.squad
+            .filter(p => !p.isTitular && !p.injury)
+            .sort((a, b) => b.ovr - a.ovr);
+    }, [team]);
+
+    if (!team) return null;
+
     const fontMono = { fontFamily: "'JetBrains Mono', 'Geist Mono', monospace" };
 
     return (
@@ -184,29 +220,13 @@ export function MarketView() {
                             </div>
                         </div>
 
-                        {(() => {
-                            let market = [...(engine.marketPlayers || [])];
-                            if (marketFilter !== 'all') market = market.filter(p => p.position === marketFilter);
-                            if (marketSearch.trim()) {
-                                const q = marketSearch.toLowerCase();
-                                market = market.filter(p => p.name.toLowerCase().includes(q));
-                            }
-                            const sorts = {
-                                ovr: (a, b) => b.ovr - a.ovr,
-                                price: (a, b) => (b.value || 0) - (a.value || 0),
-                                age: (a, b) => b.age - a.age,
-                                name: (a, b) => a.name.localeCompare(b.name)
-                            };
-                            market.sort(sorts[marketSort] || sorts.ovr);
-                            return (
-                                <>
-                                    {market.length === 0 ? (
-                                        <div style={{ background: 'var(--bg-sunk)', padding: '32px', textAlign: 'center', border: '2px dashed var(--border-panel)', color: 'var(--text-muted)', ...fontMono }}>
-                                            NENHUM JOGADOR ENCONTRADO.
-                                        </div>
-                                    ) : (
-                                        <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
-                                            {market.map(p => (
+                        {filteredMarket.length === 0 ? (
+                            <div style={{ background: 'var(--bg-sunk)', padding: '32px', textAlign: 'center', border: '2px dashed var(--border-panel)', color: 'var(--text-muted)', ...fontMono }}>
+                                NENHUM JOGADOR ENCONTRADO.
+                            </div>
+                        ) : (
+                            <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
+                                {filteredMarket.map(p => (
                                                 <div key={p.id} className="ef-anim-fade-in" style={{
                                                     display:'flex', justifyContent:'space-between', alignItems:'center', padding:'12px',
                                                     background: 'var(--bg-sunk)', border: '1px solid var(--border-panel)',
@@ -235,12 +255,9 @@ export function MarketView() {
                                                         </EfButton>
                                                     </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </>
-                            );
-                        })()}
+                                ))}
+                            </div>
+                        )}
                     </EfPanel>
                 )}
 
@@ -257,7 +274,7 @@ export function MarketView() {
                             </div>
                         ) : (
                             <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
-                                {sellable.sort((a,b) => b.ovr - a.ovr).map(p => (
+                                {sellable.map(p => (
                                     <div key={p.id} style={{
                                         display:'flex', justifyContent:'space-between', alignItems:'center', padding:'12px',
                                         background: 'var(--bg-sunk)', border: '1px solid var(--border-panel)'

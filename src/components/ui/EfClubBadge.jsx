@@ -15,6 +15,7 @@
  * Sizes: sm 24, md 48, lg 96, xl 128 (8px grid)
  */
 
+import { memo } from 'react';
 import { HIGH_END_SHIELDS } from '../../assets/shields/high_end';
 
 const SIZE_PX = {
@@ -25,7 +26,9 @@ const SIZE_PX = {
     xxl: 180
 };
 
-export function EfClubBadge({
+// SPEC-169 (Bloco 3.3): memoizado — aparece em listas de standings, market,
+// dashboard; props (name+size) raramente mudam por linha.
+function EfClubBadgeImpl({
     name,
     size = 'md',
     style = {},
@@ -79,5 +82,8 @@ export function EfClubBadge({
         </div>
     );
 }
+
+export const EfClubBadge = memo(EfClubBadgeImpl);
+EfClubBadge.displayName = 'EfClubBadge';
 
 export default EfClubBadge;

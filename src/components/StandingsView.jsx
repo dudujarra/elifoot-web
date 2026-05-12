@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { Tooltip } from './Tooltip';
 import { EfClubBadge } from './ui/EfClubBadge';
@@ -45,15 +45,28 @@ export function StandingsView() {
     const [activeState, setActiveState] = useState(null);
 
     // SPEC-168: detectar estaduais ativos (Tournament.id em STATE_CHAMPIONSHIPS map)
-    const stateTournaments = (engine.tournaments || []).filter(
-        t => t && ['paulistao', 'carioca', 'mineiro', 'gaucho'].includes(t.id)
+    const stateTournaments = useMemo(
+        () => (engine.tournaments || []).filter(
+            t => t && ['paulistao', 'carioca', 'mineiro', 'gaucho'].includes(t.id)
+        ),
+        [engine]
     );
 
-    const standings = activeState
-        ? (stateTournaments.find(t => t.id === activeState)?.getStandings?.() || [])
-        : engine.getStandings(activeZone, activeDiv);
-    const zones = [...new Set(engine.teams.map(t => t.zone))];
-    const divs = [...new Set(engine.teams.filter(t => t.zone === activeZone).map(t => t.division))].sort();
+    // SPEC-169 (Bloco 3.3): standings/zones/divs memoizados pra evitar re-compute em renders frequentes (hover, tooltips).
+    const standings = useMemo(
+        () => activeState
+            ? (stateTournaments.find(t => t.id === activeState)?.getStandings?.() || [])
+            : engine.getStandings(activeZone, activeDiv),
+        [engine, activeState, activeZone, activeDiv, stateTournaments]
+    );
+    const zones = useMemo(
+        () => [...new Set(engine.teams.map(t => t.zone))],
+        [engine]
+    );
+    const divs = useMemo(
+        () => [...new Set(engine.teams.filter(t => t.zone === activeZone).map(t => t.division))].sort(),
+        [engine, activeZone]
+    );
 
     const back = gameState.mode === 'player' ? 'player_dashboard' : 'dashboard';
     const fontMono = { fontFamily: "'JetBrains Mono', 'Geist Mono', monospace" };

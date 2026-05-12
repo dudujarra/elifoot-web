@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { Engine } from '../engine/engine';
 import { Tournament } from '../engine/tournaments/Tournament';
 import { League } from '../engine/tournaments/League';
@@ -214,7 +214,10 @@ function restoreEngine(engine, snapshot) {
 export const GameProvider = ({ children }) => {
     const engineRef = useRef(new Engine());
     const [, setTick] = useState(0);
-    const forceUpdate = () => setTick(t => t + 1);
+    // SPEC-169 (Bloco 3.3): forceUpdate memoizado pra estabilidade
+    // referencial — antes recriava-se a cada render do provider, forçando
+    // todos os consumers de useGame() a re-renderizar.
+    const forceUpdate = useCallback(() => setTick(t => t + 1), []);
 
     // v1.7: Auto-instrument engine for monitor (sem user action)
     React.useEffect(() => {
@@ -253,7 +256,9 @@ export const GameProvider = ({ children }) => {
         }
     }, [gameState]);
 
-    const startGame = (name, teamId, scenario = 'livre', mode = 'manager', position = 'ATA', personality = 'maverick') => {
+    // SPEC-169: handlers memoizados pra evitar invalidação do context value
+    // a cada render. gameState.mode/view só são lidos onde mudam.
+    const startGame = useCallback((name, teamId, scenario = 'livre', mode = 'manager', position = 'ATA', personality = 'maverick') => {
         clearStorage(); // limpa save antigo ao começar nova carreira
         engineRef.current.initGame(name, teamId, mode, scenario, position);
         if (mode === 'player' && engineRef.current.proPlayer) {
@@ -273,32 +278,44 @@ export const GameProvider = ({ children }) => {
             teamId,
             mode
         });
-    };
+    }, []);
 
-    const changeView = (view) => {
-        try {
-            MonitorService.getInstance().recordGameplay('NAV', {
-                from: gameState.view,
-                to: view
-            });
-        } catch { /* ignore */ }
-        setGameState(prev => ({ ...prev, view }));
-    };
+    const changeView = useCallback((view) => {
+        setGameState(prev => {
+            try {
+                MonitorService.getInstance().recordGameplay('NAV', {
+                    from: prev.view,
+                    to: view
+                });
+            } catch { /* ignore */ }
+            return { ...prev, view };
+        });
+    }, []);
 
     // BUG-022 fix: mode-aware dashboard route (avoid player→manager unintended switch)
-    const getDashboardView = () => gameState.mode === 'player' ? 'player_dashboard' : 'dashboard';
+    const getDashboardView = useCallback(
+        () => gameState.mode === 'player' ? 'player_dashboard' : 'dashboard',
+        [gameState.mode]
+    );
 
-    const saveGame = () => saveToStorage(engineRef.current, gameState);
-    const resetGame = () => {
+    const saveGame = useCallback(() => saveToStorage(engineRef.current, gameState), [gameState]);
+    const resetGame = useCallback(() => {
         clearStorage();
         engineRef.current = new Engine();
         setGameState({ started: false, view: 'start', manager: '', teamId: null, mode: 'manager' });
-    };
+    }, []);
 
-    const getEngine = () => engineRef.current;
+    const getEngine = useCallback(() => engineRef.current, []);
+
+    // SPEC-169: value memoizado. Só muda quando gameState muda
+    // (handlers estáveis via useCallback). Consumers de useGame() agora
+    // re-renderizam apenas quando state real muda — não a cada render do provider.
+    const value = useMemo(() => ({
+        gameState, startGame, changeView, getEngine, forceUpdate, saveGame, resetGame, getDashboardView
+    }), [gameState, startGame, changeView, getEngine, forceUpdate, saveGame, resetGame, getDashboardView]);
 
     return (
-        <GameContext.Provider value={{ gameState, startGame, changeView, getEngine, forceUpdate, saveGame, resetGame, getDashboardView }}>
+        <GameContext.Provider value={value}>
             {children}
         </GameContext.Provider>
     );
