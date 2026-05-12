@@ -4,6 +4,7 @@ import { MatchCardsDEF } from './decks/MatchCardsDEF';
 import { MatchCardsGOL } from './decks/MatchCardsGOL';
 
 import { rng as systemRng } from './rng.js';
+import { getAtmosphere } from './BrazilianAtmosphere.js';
 
 export const MatchEventsDeck = {
     ATA: MatchCardsATA,
@@ -44,4 +45,29 @@ export function drawCard(position, renown = 0, personality = null) {
     }
 
     return eligible[eligible.length - 1];
+}
+
+/**
+ * SPEC-B6.2: Wrap card com atmosfera BR baseada em eventType/seed.
+ * Pure: retorna cópia do card com text prefixado por atmosphere string.
+ * Caller passa eventType ('goal','card','derby','late_drama','save','miss').
+ *
+ * @param {object} card — card from drawCard
+ * @param {string} eventType — chave de BrazilianAtmosphere
+ * @param {number} seed — seed determinístico
+ * @returns {object} new card with enriched text
+ */
+export function enrichCardWithAtmosphere(card, eventType, seed = 0) {
+    if (!card) return card;
+    try {
+        const atmo = getAtmosphere(eventType, seed);
+        if (!atmo.flavorString) return card;
+        return {
+            ...card,
+            text: `${atmo.flavorString} ${card.text || ''}`.trim(),
+            _atmosphereApplied: eventType,
+        };
+    } catch {
+        return card;
+    }
 }
