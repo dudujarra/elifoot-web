@@ -3,9 +3,16 @@
  *
  * Heavy metal beveled container with zero transparency.
  * Variants: default | elev | sunk | hero | warning | danger
+ *
+ * SPEC-169 (Bloco 3.3): wrapped em React.memo. Panel é container leaf
+ * que aparece dezenas de vezes por tela (dashboard tem 8+ panels).
+ * children muda quando algo dentro muda; com memo, panels-irmãos
+ * estáveis não re-renderizam.
  */
 
-export function EfPanel({
+import { memo } from 'react';
+
+function EfPanelImpl({
     variant = 'default',
     title,
     icon,
@@ -37,5 +44,8 @@ export function EfPanel({
         </div>
     );
 }
+
+export const EfPanel = memo(EfPanelImpl);
+EfPanel.displayName = 'EfPanel';
 
 export default EfPanel;

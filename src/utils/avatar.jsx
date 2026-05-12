@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { HIGH_END_FACES } from '../assets/faces/high_end';
 
 function getFaceIndex(name = '') {
@@ -9,7 +10,9 @@ function getFaceIndex(name = '') {
     return Math.abs(hash) % HIGH_END_FACES.length;
 }
 
-export function PlayerAvatar({ name, size = 28 }) {
+// SPEC-169 (Bloco 3.3): memoizado — avatar aparece em listas de jogadores
+// (market, squad, scout); name+size raramente mudam por linha.
+function PlayerAvatarImpl({ name, size = 28 }) {
     const faceIndex = getFaceIndex(name);
     const faceSrc = HIGH_END_FACES[faceIndex];
 
@@ -18,9 +21,9 @@ export function PlayerAvatar({ name, size = 28 }) {
             src={faceSrc}
             alt={`Avatar ${name}`}
             className="player-avatar"
-            style={{ 
-                width: size, 
-                height: size, 
+            style={{
+                width: size,
+                height: size,
                 objectFit: 'cover',
                 borderRadius: '0px',
                 border: '1px solid #334155',
@@ -30,6 +33,9 @@ export function PlayerAvatar({ name, size = 28 }) {
         />
     );
 }
+
+export const PlayerAvatar = memo(PlayerAvatarImpl);
+PlayerAvatar.displayName = 'PlayerAvatar';
 
 export function getInitials(name) {
     if (!name) return '?';
