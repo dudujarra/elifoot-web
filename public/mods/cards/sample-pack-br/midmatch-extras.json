@@ -1,0 +1,70 @@
+{
+  "deck": "mid_match_manager",
+  "name": "Sample BR Pack — Mid-Match Extras",
+  "author": "ELIFOOT Community",
+  "version": "1.0",
+  "license": "CC-BY-SA 4.0",
+  "cards": [
+    {
+      "id": "carnival_celebration",
+      "text": "Carnaval esquentou Salvador. Time veio para o jogo com a galera ainda no embalo.",
+      "tier": "uncommon",
+      "options": [
+        {
+          "label": "Aproveitar a energia, atacar",
+          "effect": { "moralDelta": 6, "energyDelta": -5, "tacticShift": "offensive" },
+          "resultText": "Time joga solto, povo da arquibancada vibra junto."
+        },
+        {
+          "label": "Manter cabeça, jogo normal",
+          "effect": { "moralDelta": 2 },
+          "resultText": "Profissionalismo. Carnaval fica pro fim de semana."
+        },
+        {
+          "label": "Cobrar concentração, pulso firme",
+          "effect": { "moralDelta": -2, "energyDelta": 3 },
+          "resultText": "Galera engole, mas joga com responsabilidade."
+        }
+      ]
+    },
+    {
+      "id": "maracana_fortress",
+      "text": "Maracanã lotado, torcida única. Pressão pra cima do adversário desde o inicio.",
+      "tier": "rare",
+      "options": [
+        {
+          "label": "Pressing alto desde apito inicial",
+          "effect": { "moralDelta": 8, "energyDelta": -10, "tacticShift": "pressing" },
+          "resultText": "Sufoco total. Time adversário não respira."
+        },
+        {
+          "label": "Posse de bola, controle calmo",
+          "effect": { "moralDelta": 4, "tacticShift": "possession" },
+          "resultText": "Bola rola devagar. Torcida grita, time toca."
+        }
+      ]
+    },
+    {
+      "id": "veteran_speech_halftime",
+      "text": "No intervalo, capitão veterano puxa elenco no vestiário. Discurso na raça.",
+      "tier": "common",
+      "options": [
+        {
+          "label": "Deixar o capitão liderar",
+          "effect": { "moralDelta": 7 },
+          "resultText": "Time sai pro segundo tempo com fogo no peito."
+        },
+        {
+          "label": "Falar você mesmo",
+          "effect": { "moralDelta": 4, "energyDelta": -2 },
+          "resultText": "Sua voz vale também. Capitão respeita."
+        },
+        {
+          "label": "Análise tática fria",
+          "effect": { "moralDelta": 0, "energyDelta": 2 },
+          "resultText": "Numeros e estrategia. Sem emocao."
+        }
+      ]
+    }
+  ]
+}
