@@ -1,5 +1,13 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import { evaluateGrowth } from '../../src/engine/GrowthEventSystem';
+import { setGlobalSeed } from '../../src/engine/rng.js';
+
+// BUG-082: SPEC-134 era flaky em CI (0.03% por trial youth_breakthrough,
+// 0.2% por trial hot_streak — mas em runs sequenciais a probabilidade
+// composta passou de 0.5%). Fix: seed determinístico por teste.
+beforeEach(() => {
+    setGlobalSeed(12345);
+});
 
 function makePlayer(overrides = {}) {
     return {
