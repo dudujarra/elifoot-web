@@ -43,7 +43,9 @@ test.describe('SPEC-164 §6: Responsive mobile', () => {
         const sidebar = page.locator('aside.olefut-sidebar');
         await expect(sidebar).toBeVisible();
 
-        for (const label of ['PLANTEL', 'TABELA', 'SAVES']) {
+        // Rookie sidebar (SPEC-A1) hides SAVES/MERCADO/etc até unlock. Usar apenas
+        // ROOKIE_CORE_VIEWS + TUTORIAL (sempre visíveis em save fresco).
+        for (const label of ['PLANTEL', 'TABELA', 'TUTORIAL']) {
             await sidebar.getByText(label, { exact: true }).first().click();
             await page.waitForFunction(() => {
                 const main = document.querySelector('main');
