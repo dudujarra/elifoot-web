@@ -12,6 +12,7 @@
 @import './styles/achievements-view.css';
 @import './styles/tutorial-view.css';
 @import './styles/rivalries-view.css';
+@import './styles/chronicle-view.css';
 
 /* SPEC-A11y Focus visible (WCAG 2.1 AA) */
 *:focus-visible {
