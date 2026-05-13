@@ -57,7 +57,7 @@ export function EfModal({
                     width: '100%',
                     maxWidth: SIZE_MAP[size] || SIZE_MAP.md,
                     maxHeight: '90vh',
-                    backgroundColor: '#1E2124',
+                    backgroundColor: 'var(--color-panel-tone)',
                     border: '4px solid',
                     borderColor: 'var(--border-panel) var(--bg-dark) var(--bg-dark) var(--border-panel)',
                     boxShadow: '0 16px 0 var(--color-shadow-deep)',
@@ -94,7 +94,7 @@ export function EfModal({
                             style={{
                                 background: 'var(--danger)',
                                 border: '2px solid',
-                                borderColor: '#FF9999 #880000 #880000 #FF9999',
+                                borderColor: 'var(--color-input-error-bg) var(--color-input-error-deep) var(--color-input-error-deep) var(--color-input-error-bg)',
                                 color: '#FFF',
                                 fontSize: '10px',
                                 fontFamily: "'Press Start 2P', monospace",
@@ -127,7 +127,7 @@ export function EfModal({
                     <div style={{
                         padding: '12px 16px',
                         borderTop: '4px solid var(--bg-dark)',
-                        background: '#1A1C20',
+                        background: 'var(--color-tooltip-bg)',
                         display: 'flex',
                         justifyContent: 'flex-end',
                         gap: '12px'

@@ -14,12 +14,12 @@ export function EfStatLine({
     icon,
     bold = false
 }) {
-    let valColor = color || '#E2E8F0';
+    let valColor = color || 'var(--color-soft-text)';
 
     if (!color && typeof barValue === 'number') {
         const pct = (barValue / barMax) * 100;
         if (pct >= 80) valColor = 'var(--primary)';
-        else if (pct >= 60) valColor = '#6ABC3A';
+        else if (pct >= 60) valColor = 'var(--color-success-mid)';
         else if (pct >= 35) valColor = 'var(--accent)';
         else valColor = 'var(--danger)';
     }

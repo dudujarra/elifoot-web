@@ -271,7 +271,7 @@ export function PlayerDashboardView() {
                                     </EfPanel>
 
                                     {offPitchResult && (
-                                        <EfPanel padding="md" style={{ borderColor: 'var(--accent)', background: '#2D2916' }}>
+                                        <EfPanel padding="md" style={{ borderColor: 'var(--accent)', background: 'var(--color-yellow-warn-bg)' }}>
                                             <div className="ef-sans ef-text-accent" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '8px' }}><WarningCircle weight="fill" /> ÚLTIMO EVENTO</div>
                                             <p className="ef-sans ef-text-main" style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>{offPitchResult}</p>
                                         </EfPanel>

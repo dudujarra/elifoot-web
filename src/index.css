@@ -22,6 +22,7 @@
 @import './styles/player-match-view.css';
 @import './styles/styleguide-view.css';
 @import './styles/autoplay-view.css';
+@import './styles/ef-banner.css';
 
 /* SPEC-A11y Focus visible (WCAG 2.1 AA) */
 *:focus-visible {

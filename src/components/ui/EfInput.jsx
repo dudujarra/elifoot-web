@@ -72,7 +72,7 @@ export function EfInput({
                         paddingLeft: icon ? '32px' : sizing.padding.split(' ')[1],
                         fontSize: sizing.fontSize,
                         fontFamily: 'monospace',
-                        color: '#E2E8F0',
+                        color: 'var(--color-soft-text)',
                         background: 'var(--bg-dark)',
                         border: '4px solid',
                         borderColor: error

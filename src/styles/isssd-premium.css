@@ -30,6 +30,20 @@
   --color-soft-border: #2D3748; /* Cleanup pass token */
   --color-bg-deep: #0E1418; /* Cleanup pass token */
   --color-shadow-deep: #040805; /* Cleanup pass token */
+  --color-soft-text: #E2E8F0;
+  --color-input-error-bg: #FF9999;
+  --color-input-error-deep: #880000;
+  --color-success-mid: #6ABC3A;
+  --color-panel-tone: #1E2124;
+  --color-tooltip-bg: #1A1C20;
+  --color-gold-arcade: #C7A75D;
+  --color-purple-wonder: #C084FC;
+  --color-purple-dark: #2D162D;
+  --color-amber-warning: #f59e0b;
+  --color-red-bright: #ef4444;
+  --color-yellow-warn-bg: #2D2916;
+  --color-emerald-confirm: #10B981;
+  --color-forest-pulse: #1B4332;
   --text-inverse: #040805;
 
   /* Borders & Shadows */

@@ -18,7 +18,7 @@ function MiniBar({ value, max = 100, label }) {
     const pct = Math.max(0, Math.min(100, (value / max) * 100));
     let color = 'var(--danger)';
     if (pct >= 80) color = 'var(--primary)';
-    else if (pct >= 60) color = '#6ABC3A';
+    else if (pct >= 60) color = 'var(--color-success-mid)';
     else if (pct >= 35) color = 'var(--accent)';
 
     return (

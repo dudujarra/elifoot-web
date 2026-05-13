@@ -238,7 +238,7 @@ export function SquadView() {
                                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                                         <div className="ef-text-main" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 'bold', fontSize: '0.9rem' }}>
                                                             {p.isSuper && <Star weight="fill" color="var(--accent)" size={14} />}
-                                                            {p.isWonderkid && <Sparkle weight="fill" color="#C084FC" size={14} />}
+                                                            {p.isWonderkid && <Sparkle weight="fill" color="var(--color-purple-wonder)" size={14} />}
                                                             {p.nickname ? `"${p.nickname}" ${p.name.split(' ').pop()}` : p.name}
                                                             {getFormTrendIcon(p.form?.trend)}
                                                             {p.injury && <FirstAid weight="fill" color="var(--danger)" size={16} style={{ marginLeft: '4px' }}/>}
@@ -317,7 +317,7 @@ export function SquadView() {
                                                                     </div>
                                                                 </div>
                                                                 {p.personality && (
-                                                                    <div className="ef-sans" style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#2D162D', padding: '6px 12px', border: '1px solid #C084FC', color: '#C084FC', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                                    <div className="ef-sans" style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--color-purple-dark)', padding: '6px 12px', border: '1px solid var(--color-purple-wonder)', color: 'var(--color-purple-wonder)', fontSize: '0.8rem', fontWeight: 'bold' }}>
                                                                         <Heartbeat weight="fill" /> PERFIL: {p.personality}
                                                                     </div>
                                                                 )}
@@ -388,7 +388,7 @@ export function SquadView() {
                 )}
 
                 {loanedOut.length > 0 && (
-                    <EfPanel padding="md" style={{ background: '#2D2916', borderColor: 'var(--accent)' }}>
+                    <EfPanel padding="md" style={{ background: 'var(--color-yellow-warn-bg)', borderColor: 'var(--accent)' }}>
                         <div className="ef-section-header" style={{ color: 'var(--accent)' }}>
                             <PaperPlaneRight size={24} color="var(--accent)" weight="fill" />
                             <h3 style={{ color: 'var(--accent)' }}>JOGADORES EMPRESTADOS ({loanedOut.length})</h3>

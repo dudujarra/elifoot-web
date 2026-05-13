@@ -140,7 +140,7 @@ export function MarketView() {
                 {/* NOTIFICATION LOG */}
                 {log && (
                     <div className="ef-anim-pulse-glow ef-toast-success" onClick={() => setLog('')}>
-                        <CheckCircle size={20} weight="fill" color="#10B981" />
+                        <CheckCircle size={20} weight="fill" color="var(--color-emerald-confirm)" />
                         {log}
                     </div>
                 )}

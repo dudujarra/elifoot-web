@@ -90,9 +90,9 @@ export function AutoPlayLabView() {
             <div className="ef-view-container" style={{ maxWidth: '1100px', padding: '24px' }}>
 
                 {/* HEADER */}
-                <EfPanel padding="lg" style={{ marginBottom: '20px', borderBottom: '2px solid #C7A75D' }}>
+                <EfPanel padding="lg" style={{ marginBottom: '20px', borderBottom: '2px solid var(--color-gold-arcade)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <Flask size={28} color="#C7A75D" weight="fill" />
+                        <Flask size={28} color="var(--color-gold-arcade)" weight="fill" />
                         <div style={{ flex: 1 }}>
                             <h2 style={{ margin: 0, fontSize: '1.4rem', color: 'var(--text-main)', fontFamily: 'var(--font-sans)' }}>
                                 AUTOPLAY LAB
@@ -222,7 +222,7 @@ export function AutoPlayLabView() {
                                     <div style={{
                                         height: '6px',
                                         width: `${progress * 100}%`,
-                                        backgroundColor: '#C7A75D',
+                                        backgroundColor: 'var(--color-gold-arcade)',
                                         transition: 'width 0.2s',
                                     }} />
                                 </div>
@@ -235,7 +235,7 @@ export function AutoPlayLabView() {
                 {analysis && (
                     <EfPanel padding="md" style={{ marginBottom: '20px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                            <div style={{ fontSize: '0.75rem', color: '#C7A75D', fontFamily: 'var(--font-sans)', fontWeight: 'bold', letterSpacing: '0.1em' }}>
+                            <div style={{ fontSize: '0.75rem', color: 'var(--color-gold-arcade)', fontFamily: 'var(--font-sans)', fontWeight: 'bold', letterSpacing: '0.1em' }}>
                                 RESULTADOS — {preset?.label?.toUpperCase()}
                             </div>
                         </div>
