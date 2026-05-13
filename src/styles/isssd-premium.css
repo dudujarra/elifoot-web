@@ -109,11 +109,6 @@ h1, h2, h3, h4 {
   letter-spacing: 0.05em;
 }
 
-.pixel-font {
-  font-family: 'Press Start 2P', monospace;
-  image-rendering: pixelated;
-}
-
 /* ==========================================================================
    EfButton Component
    ========================================================================== */
