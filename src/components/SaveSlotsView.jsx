@@ -1,3 +1,10 @@
+/**
+ * SaveSlotsView — Memory Card Save Manager
+ * Stitch v1.1 port (AKITA-396): match docs/stitch-designs/v1.1-all/24-memory-card-ol-fut-save-manager.html
+ * Tokens-only — zero raw hex. Press Start 2P + Pixelify Sans + IBM Plex Mono via tokens.
+ * Preserves all SaveSlotsService logic (save/load/delete/export/import + slot metadata).
+ */
+
 import { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import {
@@ -13,7 +20,7 @@ import '../styles/save-slots-view.css';
 
 import {
     FloppyDisk, ArrowLeft, DownloadSimple, UploadSimple,
-    Trash, FileCode, WarningCircle, CheckCircle
+    Trash, WarningCircle, SimCard, Database
 } from '@phosphor-icons/react';
 
 export function SaveSlotsView() {
@@ -41,9 +48,7 @@ export function SaveSlotsView() {
     };
 
     const handleExport = (slotNum) => {
-        if (exportSlotJSON(slotNum)) {
-            // Download triggered
-        } else {
+        if (!exportSlotJSON(slotNum)) {
             alert('Slot vazio');
         }
     };
@@ -56,19 +61,35 @@ export function SaveSlotsView() {
         setImportingSlot(null);
     };
 
-    return (
-        <div className="ef-anim-fade-in ef-scene-shell" style={{ backgroundImage: `url(${bgManagerOffice})` }}>
-            <div className="ef-view-container ef-view-container--narrow">
+    const formatDate = (iso) => {
+        const d = new Date(iso);
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+    };
 
-                {/* HEADER */}
-                <EfPanel padding="lg" className="ef-view-header ef-save-slots__header-panel">
+    return (
+        <div
+            className="ef-anim-fade-in ef-scene-shell ef-mc"
+            style={{ backgroundImage: `url(${bgManagerOffice})` }}
+        >
+            <div className="ef-mc__scanlines" aria-hidden="true" />
+            <div className="ef-view-container ef-view-container--wide">
+
+                {/* ============ HEADER ============ */}
+                <EfPanel padding="lg" className="ef-view-header ef-mc__header">
                     <div className="ef-view-header__identity">
-                        <div className="ef-view-header__icon-box">
-                            <FloppyDisk size={28} color="var(--info)" />
+                        <div className="ef-view-header__icon-box ef-mc__icon-box">
+                            <SimCard size={28} className="ef-mc__header-icon" />
                         </div>
                         <div>
-                            <h2 className="ef-view-header__title">MEMORY CARD</h2>
-                            <span className="ef-view-header__subtitle">GERENCIADOR DE SAVES</span>
+                            <h2 className="ef-view-header__title ef-mc__title">
+                                MEMORY CARD
+                            </h2>
+                            <span className="ef-view-header__subtitle ef-mc__subtitle">
+                                GERENCIADOR DE SAVES &middot; SLOT MANAGER
+                            </span>
                         </div>
                     </div>
                     <EfButton variant="secondary" size="md" onClick={() => changeView(getDashboardView())}>
@@ -76,105 +97,142 @@ export function SaveSlotsView() {
                     </EfButton>
                 </EfPanel>
 
-                {/* SLOTS */}
-                <div className="ef-save-slots__container">
-                    {slots.map(slot => (
-                        <EfPanel key={slot.slot} padding="lg" className={`ef-save-slots__slot-panel ${!slot.empty ? 'ef-save-slots__slot-panel--filled' : ''}`}>
-                            <div className="ef-save-slots__slot-header">
-                                <div className="ef-save-slots__slot-info">
-                                    <div className="ef-save-slots__slot-number">
-                                        SLOT {slot.slot}
-                                    </div>
-                                    {slot.empty ? (
-                                        <div className={`ef-save-slots__slot-status ${slot.corrupted ? 'ef-save-slots__slot-status--corrupted' : ''}`}>
-                                            {slot.corrupted ? (
-                                                <><WarningCircle size={16} color="var(--danger)" /> CORROMPIDO</>
-                                            ) : (
-                                                <><FileCode size={16} /> VAZIO</>
-                                            )}
-                                        </div>
+                {/* ============ SLOTS GRID ============ */}
+                <div className="ef-mc__grid">
+                    {slots.map(slot => {
+                        const filled = !slot.empty;
+                        return (
+                            <div
+                                key={slot.slot}
+                                className={`ef-mc__slot ${filled ? 'ef-mc__slot--filled' : 'ef-mc__slot--empty'} ${slot.corrupted ? 'ef-mc__slot--corrupted' : ''}`}
+                            >
+                                {/* SLOT CARD */}
+                                <div className="ef-mc__card">
+                                    <div className="ef-mc__slot-tag">SLOT {slot.slot}</div>
+
+                                    {filled ? (
+                                        <>
+                                            <div className="ef-mc__screen">
+                                                <div className="ef-mc__screen-glyph" aria-hidden="true">
+                                                    <Database size={48} weight="duotone" />
+                                                </div>
+                                                <div className="ef-mc__screen-mark">
+                                                    {(slot.teamName || 'CLUB').slice(0, 3).toUpperCase()}
+                                                </div>
+                                            </div>
+
+                                            <div className="ef-mc__rows">
+                                                <div className="ef-mc__row">
+                                                    <p className="ef-mc__row-label">MANAGER</p>
+                                                    <p className="ef-mc__row-value">
+                                                        {(slot.managerName || 'MISTER X').toUpperCase()}
+                                                    </p>
+                                                </div>
+                                                <div className="ef-mc__row">
+                                                    <p className="ef-mc__row-label">CLUB</p>
+                                                    <p className="ef-mc__row-value">
+                                                        {(slot.teamName || 'UNITED FC').toUpperCase()}
+                                                    </p>
+                                                </div>
+                                                <div className="ef-mc__row-meta">
+                                                    <div className="ef-mc__meta-col">
+                                                        <p className="ef-mc__meta-label">INFO</p>
+                                                        <p className="ef-mc__meta-value">
+                                                            SEASON {slot.seasonNumber ?? '-'}/W{slot.week ?? '-'}
+                                                        </p>
+                                                    </div>
+                                                    <div className="ef-mc__meta-col ef-mc__meta-col--right">
+                                                        <p className="ef-mc__meta-label">DATE</p>
+                                                        <p className="ef-mc__meta-value">
+                                                            {slot.savedAt ? formatDate(slot.savedAt) : '--/--/----'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
                                     ) : (
-                                        <div className="ef-save-slots__slot-data">
-                                            <div className="ef-save-slots__slot-title">
-                                                <CheckCircle size={16} /> {slot.managerName} — {slot.teamName}
-                                            </div>
-                                            <div className="ef-save-slots__slot-info-row">
-                                                TEMPORADA {slot.seasonNumber} • SEMANA {slot.week}
-                                            </div>
-                                            <div className="ef-save-slots__slot-info-row--date">
-                                                SALVO EM: {new Date(slot.savedAt).toLocaleString('pt-BR')}
-                                            </div>
+                                        <div className="ef-mc__empty">
+                                            <WarningCircle size={56} weight="duotone" className="ef-mc__empty-icon" />
+                                            <p className="ef-mc__empty-title">
+                                                {slot.corrupted ? 'CORRUPTED DATA' : 'EMPTY SLOT'}
+                                            </p>
+                                            <p className="ef-mc__empty-sub">
+                                                {slot.corrupted ? 'CHECKSUM FAILED' : 'NO DATA DETECTED'}
+                                            </p>
                                         </div>
                                     )}
                                 </div>
 
-                                {/* Memory card icon indicator */}
-                                <div className={`ef-save-slots__slot-icon ${!slot.empty ? 'ef-save-slots__slot-icon--filled' : ''}`}>
-                                    <FloppyDisk size={24} weight={slot.empty ? "regular" : "fill"} />
-                                </div>
-                            </div>
-
-                            {/* ACTION BUTTONS */}
-                            <div className="ef-save-slots__actions">
-                                <EfButton
-                                    className="ef-save-slots__action-button"
-                                    variant="primary"
-                                    onClick={() => handleSave(slot.slot)}
-                                >
-                                    <FloppyDisk size={16} /> SALVAR JOGO
-                                </EfButton>
-
-                                {!slot.empty && (
-                                    <>
-                                        <EfButton
-                                            className="ef-save-slots__action-button ef-save-slots__action-button--export"
-                                            variant="secondary"
-                                            onClick={() => handleExport(slot.slot)}
-                                        >
-                                            <DownloadSimple size={16} /> EXPORTAR
-                                        </EfButton>
-                                        <EfButton
-                                            className="ef-save-slots__action-button ef-save-slots__action-button--delete"
-                                            variant="secondary"
-                                            onClick={() => handleDelete(slot.slot)}
-                                        >
-                                            <Trash size={16} /> DELETAR
-                                        </EfButton>
-                                    </>
-                                )}
-
-                                <EfButton
-                                    className="ef-save-slots__action-button ef-save-slots__action-button--import"
-                                    variant="secondary"
-                                    onClick={() => setImportingSlot(slot.slot)}
-                                >
-                                    <UploadSimple size={16} /> IMPORTAR
-                                </EfButton>
-                            </div>
-
-                            {/* IMPORT FILE INPUT */}
-                            {importingSlot === slot.slot && (
-                                <div className="ef-save-slots__import-section">
-                                    <div className="ef-save-slots__import-label">
-                                        Selecione o arquivo de save (.json):
-                                    </div>
-                                    <input
-                                        type="file"
-                                        accept="application/json"
-                                        onChange={(e) => handleImport(slot.slot, e.target.files?.[0])}
-                                        className="ef-save-slots__file-input"
-                                    />
+                                {/* ACTIONS */}
+                                <div className="ef-mc__actions">
+                                    <EfButton
+                                        variant="primary"
+                                        size="sm"
+                                        className="ef-mc__btn"
+                                        onClick={() => handleSave(slot.slot)}
+                                    >
+                                        <FloppyDisk size={14} /> SALVAR
+                                    </EfButton>
                                     <EfButton
                                         variant="secondary"
                                         size="sm"
-                                        onClick={() => setImportingSlot(null)}
+                                        className="ef-mc__btn"
+                                        onClick={() => handleExport(slot.slot)}
+                                        disabled={!filled}
                                     >
-                                        CANCELAR
+                                        <DownloadSimple size={14} /> EXPORTAR
+                                    </EfButton>
+                                    <EfButton
+                                        variant="secondary"
+                                        size="sm"
+                                        className="ef-mc__btn ef-mc__btn--danger"
+                                        onClick={() => handleDelete(slot.slot)}
+                                        disabled={!filled}
+                                    >
+                                        <Trash size={14} /> DELETAR
+                                    </EfButton>
+                                    <EfButton
+                                        variant="secondary"
+                                        size="sm"
+                                        className="ef-mc__btn"
+                                        onClick={() => setImportingSlot(slot.slot)}
+                                    >
+                                        <UploadSimple size={14} /> IMPORTAR
                                     </EfButton>
                                 </div>
-                            )}
-                        </EfPanel>
-                    ))}
+
+                                {/* IMPORT FILE INPUT (collapsible per slot) */}
+                                {importingSlot === slot.slot && (
+                                    <div className="ef-mc__import">
+                                        <div className="ef-mc__import-label">
+                                            SELECIONE ARQUIVO (.json)
+                                        </div>
+                                        <input
+                                            type="file"
+                                            accept="application/json"
+                                            onChange={(e) => handleImport(slot.slot, e.target.files?.[0])}
+                                            className="ef-mc__file-input"
+                                        />
+                                        <EfButton
+                                            variant="secondary"
+                                            size="sm"
+                                            onClick={() => setImportingSlot(null)}
+                                        >
+                                            CANCELAR
+                                        </EfButton>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* ============ WARNING STRIP ============ */}
+                <div className="ef-mc__warning">
+                    <WarningCircle size={20} weight="fill" className="ef-mc__warning-icon" />
+                    <p className="ef-mc__warning-text">
+                        NÃO REMOVA O MEMORY CARD ENQUANTO O INDICADOR DE ACESSO ESTIVER PISCANDO.
+                    </p>
                 </div>
             </div>
         </div>
