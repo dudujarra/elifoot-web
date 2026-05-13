@@ -35,7 +35,7 @@ export function DashboardView() {
     const [pendingAchievement, setPendingAchievement] = useState(null);
     const [pacingQueue, setPacingQueue] = useState([]);
     const [showTutorial, setShowTutorial] = useState(() => {
-        try { return !localStorage.getItem('elifoot_tutorial_done') && (engine?.seasonNumber || 1) === 1; }
+        try { return !localStorage.getItem('olefut_tutorial_done') && (engine?.seasonNumber || 1) === 1; }
         catch { return false; }
     });
     // SPEC-167: manager advice panel state
