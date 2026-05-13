@@ -19,6 +19,7 @@ test.describe('SPEC-164 §6: Responsive mobile', () => {
             try {
                 localStorage.clear();
                 localStorage.setItem('olefut_tutorial_done', 'true');
+                localStorage.setItem('olefut_onboarding_done', 'true');
             } catch { /* ignore */ }
         });
         await page.goto('/');
