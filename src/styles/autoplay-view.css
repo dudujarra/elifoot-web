@@ -17,3 +17,75 @@
   --ef-ap-bg-danger-deep: #1A0A0A;
   --ef-ap-info: #40BAF7;
 }
+
+.ef-ap__panel-mb-sm {
+  margin-bottom: 0.75rem;
+}
+
+.ef-ap__chip-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.ef-ap__chip-input {
+  flex: 1;
+  font-size: 0.75rem;
+}
+
+.ef-ap__row-spread {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ef-ap__label-tag {
+  color: var(--ef-ap-info-grey);
+  font-size: 0.65rem;
+}
+
+.ef-ap__container-md {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ef-ap__container-sm {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ef-ap__chip-wrap {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.ef-ap__chip-wrap-mb {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.ef-ap__heading-grey {
+  color: var(--ef-ap-info-grey);
+  margin-bottom: 4px;
+}
+
+.ef-ap__header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ef-ap__field-label {
+  font-size: 0.75rem;
+  color: var(--ef-ap-info-grey);
+  display: block;
+  margin-bottom: 4px;
+}
