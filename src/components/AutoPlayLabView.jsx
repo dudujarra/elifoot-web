@@ -4,7 +4,7 @@
  * Single view: dropdown preset + config + RUN + results + export.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
 import { EfPanel, EfButton } from './ui';
 import { runBatch, seedRange, randomSeeds } from '../services/AutoPlayLab/BatchRunner';
@@ -24,6 +24,9 @@ export function AutoPlayLabView() {
     const [results, setResults] = useState(null);
     const [analysis, setAnalysis] = useState(null);
     const [eta, setEta] = useState('');
+    // Bug-fix V11: track mount pra skip setState após unmount
+    const mountedRef = useRef(true);
+    useEffect(() => () => { mountedRef.current = false; }, []);
 
     const preset = PRESETS[presetId];
 
@@ -42,12 +45,14 @@ export function AutoPlayLabView() {
                 seeds,
                 weeks,
                 onProgress: (done, total) => {
+                    if (!mountedRef.current) return;
                     setProgress(done / total);
                     const elapsedMs = Date.now() - startTs;
                     const eta_ms = elapsedMs / done * (total - done);
                     setEta(`${Math.ceil(eta_ms / 1000)}s`);
                 },
             });
+            if (!mountedRef.current) return;
             setResults(batchResults);
             try {
                 const ana = preset.analyze(batchResults, preset);
@@ -56,8 +61,10 @@ export function AutoPlayLabView() {
                 setAnalysis({ error: e.message });
             }
         } finally {
-            setRunning(false);
-            setEta('');
+            if (mountedRef.current) {
+                setRunning(false);
+                setEta('');
+            }
         }
     }, [running, preset, saves, weeks, seedStart, useRandomSeeds]);
 
