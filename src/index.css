@@ -16,6 +16,7 @@
 @import './styles/lineage-view.css';
 @import './styles/hexagon-chart.css';
 @import './styles/monitor-view.css';
+@import './styles/prematch-screen.css';
 
 /* SPEC-A11y Focus visible (WCAG 2.1 AA) */
 *:focus-visible {
