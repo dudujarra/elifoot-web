@@ -6,7 +6,7 @@
 🎮 **Live demo**: https://dudujarra.github.io/olefut/
 
 [![CI](https://github.com/dudujarra/olefut/actions/workflows/ci.yml/badge.svg)](https://github.com/dudujarra/olefut/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-1619%2F1619-brightgreen)](https://github.com/dudujarra/olefut/tree/main/tests)
+[![Tests](https://img.shields.io/badge/tests-1625%2F1625-brightgreen)](https://github.com/dudujarra/olefut/tree/main/tests)
 [![Specs](https://img.shields.io/badge/specs-124%2B-blue)](https://github.com/dudujarra/olefut/tree/main/specs)
 [![SDD](https://img.shields.io/badge/SDD-100%25-purple)](https://github.com/dudujarra/olefut/blob/main/specs/SPEC-RULES.md)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
