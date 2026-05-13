@@ -4,6 +4,92 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [feat] V2 GAME-DESIGN delivery — AKITA-298..308 (2026-05-12)
+
+V2 do roadmap entregue após análise brutal #1. 11 PRs cobrindo Fases F1-F6
+do `specs/GAME-DESIGN-ROADMAP-V2-POST-BRUTAL-2026-05-12.md`.
+
+**F1 — Match Pause + Decisões:**
+- AKITA-305 MatchHighlightModal pulse em gol/vermelho
+- AKITA-306 ReactiveCards + StarImpactToast
+
+**F2 — Features mortas wire:**
+- AKITA-299 Win Streak wire MatchSimulator + Legends wire CareerService + ModLoader auto-load
+- AKITA-300 BrazilianAtmosphere wire em Manager mode
+
+**F3 — Conteúdo BR profundo:**
+- AKITA-300 BrazilianAtmosphere expansion 36→90 + regional weather
+- AKITA-301 ClubVoiceSystem 20 clubes BR + wire MatchSimulator
+
+**F4 — Chronicle + Star com VOZ:**
+- AKITA-302 StarPlayerNarrative + frase semanal wire DashboardView
+- AKITA-304 Chronicle enrichment topScorer/starPlayer + PNG destaques
+
+**F5 + F6:**
+- AKITA-303 AhaMoments engine + Telemetry opt-in
+- AKITA-307 OnboardingTriggers (8 views) + Playtest plan doc
+- AKITA-308 Replay tutorial UI em TutorialView
+
+### [fix] Gap fixes pós-análise brutal #2 — AKITA-309 (2026-05-12)
+
+Análise brutal #2 detectou 8 lacunas reais nos 11 PRs V2:
+1. ✅ Highlight modal pausa ticker durante exibição (auto-resume on dismiss)
+2. ✅ Aha moments wired em DashboardView (banner dourado dismissable)
+3. ✅ Onboarding triggers wired em 8 views (Market, Squad, Standings, Press, Chronicle, Rivalries, Lineage, Achievements) via novo ViewOnboarding component
+4. ✅ Reactive cards wired em MatchView ticker (opponent_goal trigger 2.6s pós-highlight)
+5. ✅ Win Streak feature flag default ON (override via globalThis.ENABLE_WIN_STREAK=false em testes)
+6. ✅ ClubVoiceSystem nomes corrigidos: "Vasco"→"Vasco da Gama", "Sport"→"Sport Recife" pra match data.js exact
+7. ✅ CHANGELOG V2 entries (este bloco)
+8. ⏸️ Smoke test browser pendente (Dudu deve rodar `npm run dev` + jogar 5min)
+
+### [feat+docs] GAME-DESIGN ROADMAP delivery — AKITA-263..288 (2026-05-12)
+
+26 PRs cobrindo Fase A (5/5), Fase B (6/6), Fase C (5/6) do
+`specs/GAME-DESIGN-ROADMAP-2026-05-12.md`. Cada PR commit individual.
+Auto-push hook fired 26/26.
+
+**Fase A — Tornar JOGÁVEL (5/5):**
+- AKITA-264 SPEC-A1 Rookie Sidebar (sidebar 4 entradas na 1ª temp)
+- AKITA-265 SPEC-A2 OnboardingCoach (4 tooltips dentro do dashboard)
+- AKITA-266 SPEC-A3 PreMatch Decision-Ready (forma WWLDD + sugestão auxiliar)
+- AKITA-267 SPEC-A4 MatchPostMortem (3 cards causal-effect pós-jogo)
+- AKITA-268 SPEC-A5 RookieHandicap (decay -10% → -3% primeiras 3 partidas)
+
+**Fase B — Tornar PRAZEROSO (6/6):**
+- AKITA-269 SPEC-B6 BrazilianAtmosphere catalog (36 strings cultura BR)
+- AKITA-270 SPEC-B5 TacticFormatter (modifier preview concreto)
+- AKITA-271 SPEC-B3 ChronicleSeasonEndModal (full-screen + auto-trigger)
+- AKITA-272 SPEC-B2 MidMatchManagerDeck (8 cartas mid-match manager)
+- AKITA-273 SPEC-B1 MatchEventClassifier + pitch-bg CSS
+- AKITA-276 SPEC-B2.2 MidMatchCardModal componente
+- AKITA-279 SPEC-B1.2 pitch backdrop wire MatchView
+- AKITA-280 SPEC-B2.2 wire modal em MatchView ticker
+- AKITA-282 SPEC-B3 PNG export (canvas, sem deps)
+- AKITA-285 SPEC-B6.2 enrichCardWithAtmosphere helper
+- AKITA-287 SPEC-B1.3 MatchBallSprite animation
+
+**Fase C — Tornar MEMORÁVEL (5/6 — C2.2 deferred):**
+- AKITA-274 SPEC-C4 ModLoader (JSON cartas custom)
+- AKITA-275 SPEC-C6 SeasonalBREvents catalog (4 eventos Jan/Jun/Out/Dez)
+- AKITA-277 SPEC-C6 wire WeekProcessor (auto-trigger por week)
+- AKITA-278 SPEC-C6.2 SeasonalEventModal renderer
+- AKITA-281 SPEC-C2 StarPlayerLink (groundwork unified mode)
+- AKITA-283 SPEC-C1.2 wire LLM post-match narrative em UI
+- AKITA-284 SPEC-C4.2 sample BR mod pack + /docs/MODDING.md
+- AKITA-286 SPEC-C5.2 DerbyDetector + UI highlight próximo derby
+
+**Apoio:**
+- AKITA-263 SPEC-180 Win Streak + SPEC-181 Legends Cross-Save Pool (DRAFTs)
+- AKITA-288 Etapa 5 statistical baseline (20 saves) + report
+
+**Métricas finais:**
+- Suite testes: 1431 pass
+- Lint: 0 errors
+- Build: 757ms
+- Sem regressão golden master
+
+**Único deferred:** C2.2 unified mode full migration (14h arquitetural).
+
 ### [docs] SPEC-179 — Player Mode Features Scope + dist/audio policy (2026-05-12)
 
 Auditoria pass-2 expôs duas pendências sem decisão: (a) `dist/audio` ~465 MB

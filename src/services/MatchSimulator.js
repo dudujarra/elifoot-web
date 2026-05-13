@@ -21,6 +21,10 @@ import { TACTICS } from '../engine/ManagerSystems';
 import { drawCard } from '../engine/MatchEventsDeck.js';
 import { TACTIC_COUNTERS, TACTIC_NARRATION, getFormModifier } from '../engine/PlayerDevelopment';
 import { getDifficulty, calcOpponentBoost } from '../engine/systems/DifficultyModes.js';
+import { getRookieHandicapFromEngine } from '../engine/RookieHandicap.js';
+import { getModifiersForMatch as getWinStreakBonus, recordResult as recordWinStreak } from '../engine/WinStreakModifierSystem.js';
+import { getAtmosphere } from '../engine/BrazilianAtmosphere.js';
+import { getClubVoice } from '../engine/ClubVoiceSystem.js';
 import { getTraitMatchModifier, hasTrait, initCareerStats, recordMatchStats, getGoalConversionBonus, getDefenseSectorBonus, getSetPieceBonus, getPenaltySaveBonus, getPenaltyConversionBonus } from '../engine/PlayerTraits';
 import { recordNpcResult } from '../engine/NpcTacticAdvisor';
 import { npcFeedMatchResult } from './learning/NpcManagerAI.js';
@@ -101,6 +105,30 @@ export class MatchSimulator {
             }
         }
 
+        // SPEC-A5: Rookie Handicap — multiplica opponentBoost nas 3 primeiras
+        // partidas da 1ª temporada (decay 0.90 → 0.93 → 0.97 → 1.0).
+        // Só afeta o oponente do manager humano.
+        if (isManagerHome || isManagerAway) {
+            const rookieMult = getRookieHandicapFromEngine(engine);
+            opponentBoost *= rookieMult;
+        }
+
+        // SPEC-F2.1: Win Streak Bonus — aplica attrBonus aos sectors do manager
+        // se feature flag ENABLE_WIN_STREAK ativa.
+        if (isManagerHome) {
+            const bonus = getWinStreakBonus(engine.manager?.teamId || 0);
+            if (bonus.attrBonus > 0) {
+                homeSectors.attack = Math.floor(homeSectors.attack + bonus.attrBonus);
+                homeSectors.defense = Math.floor(homeSectors.defense + bonus.attrBonus);
+            }
+        } else if (isManagerAway) {
+            const bonus = getWinStreakBonus(engine.manager?.teamId || 0);
+            if (bonus.attrBonus > 0) {
+                awaySectors.attack = Math.floor(awaySectors.attack + bonus.attrBonus);
+                awaySectors.defense = Math.floor(awaySectors.defense + bonus.attrBonus);
+            }
+        }
+
         // Apply DDA physical sector boost (if applies)
         if (isManagerHome) {
             awaySectors.attack = Math.floor(awaySectors.attack * opponentBoost);
@@ -134,6 +162,19 @@ export class MatchSimulator {
         }
         if (isManagerHome || isManagerAway) {
             events.textLog.push({ minute: 0, text: `📋 Tática: ${tactic.name}` });
+        }
+        // SPEC-F2.4: atmosphere pre-match para Manager mode
+        if (isManagerHome || isManagerAway) {
+            const atmoSeed = (engine.currentWeek || 0) + (homeId || 0);
+            const preMatch = getAtmosphere('pre_match', atmoSeed);
+            if (preMatch.flavorString) {
+                events.textLog.push({ minute: 0, text: preMatch.flavorString });
+            }
+            // SPEC-F3.3: club voice na entrada do estádio (mandante)
+            const clubEntry = getClubVoice(homeTeam?.name, 'stadium_entry', atmoSeed);
+            if (clubEntry) {
+                events.textLog.push({ minute: 0, text: clubEntry });
+            }
         }
 
         // Performance tracker for MOTM
