@@ -98,7 +98,7 @@ export default function CareerInfoPanel({ controllerRef }) {
 
     const repBadge = formatRep(snapshot.reputation);
     const divName = DIV_NAMES[snapshot.division] || `Div ${snapshot.division}`;
-    const divColor = DIV_COLOR[snapshot.division] || '#888';
+    const divColor = DIV_COLOR[snapshot.division] || 'var(--text-muted)';
     const titlesByDiv = snapshot.titles.reduce((acc, t) => {
         acc[t] = (acc[t] || 0) + 1;
         return acc;
@@ -122,7 +122,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                 }}
             >
                 <span><SoccerBall size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />CARREIRA INFO {open ? '▼' : '▶'}</span>
-                <span style={{ fontSize: '0.72rem', color: '#888' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                     Season {snapshot.seasonNumber} · Wk {snapshot.currentWeek}
                 </span>
             </div>
@@ -139,32 +139,32 @@ export default function CareerInfoPanel({ controllerRef }) {
                         flexWrap: 'wrap'
                     }}>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: '#888' }}>TIME</div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>TIME</div>
                             <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{snapshot.team.name}</div>
                             <div style={{ color: divColor, fontWeight: 700 }}>
                                 {divName} ({snapshot.zone})
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: '#888' }}>POSIÇÃO</div>
-                            <div style={{ fontWeight: 700, fontSize: '1.2rem', color: snapshot.position <= 4 ? 'var(--color-success-mid)' : snapshot.position >= 17 ? '#c44' : 'var(--accent)' }}>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>POSIÇÃO</div>
+                            <div style={{ fontWeight: 700, fontSize: '1.2rem', color: snapshot.position <= 4 ? 'var(--color-success-mid)' : snapshot.position >= 17 ? 'var(--danger)' : 'var(--accent)' }}>
                                 {snapshot.position}º
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: '#888' }}>SQUAD</div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>SQUAD</div>
                             <div style={{ fontWeight: 700 }}>{snapshot.squadSize} jog · OVR {snapshot.avgOvr}</div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: '#888' }}>BALANÇO</div>
-                            <div style={{ fontWeight: 700, color: snapshot.balance < 0 ? '#c44' : 'var(--color-success-mid)' }}>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>BALANÇO</div>
+                            <div style={{ fontWeight: 700, color: snapshot.balance < 0 ? 'var(--danger)' : 'var(--color-success-mid)' }}>
                                 R$ {(snapshot.balance / 1_000_000).toFixed(1)}M
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: '#888' }}>REPUTAÇÃO</div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>REPUTAÇÃO</div>
                             <div style={{ color: repBadge.color, fontWeight: 700 }}><RepIcon rep={snapshot.reputation} />{repBadge.label}</div>
-                            <div style={{ fontSize: '0.7rem', color: '#888' }}>{snapshot.reputation}/100</div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{snapshot.reputation}/100</div>
                         </div>
                     </div>
 
@@ -175,7 +175,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                                 <Trophy size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />TÍTULOS ({snapshot.titles.length})
                             </div>
                             {snapshot.titles.length === 0 ? (
-                                <div style={{ fontSize: '0.7rem', color: '#888', fontStyle: 'italic' }}>
+                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
                                     Nenhum título ainda
                                 </div>
                             ) : (
@@ -199,13 +199,13 @@ export default function CareerInfoPanel({ controllerRef }) {
                                 <span>Maior goleada:</span>
                                 <strong>{snapshot.insights.biggestWin?.score || '—'}</strong>
                                 <span>Pior derrota:</span>
-                                <strong style={{ color: '#c44' }}>{snapshot.insights.worstLoss?.score || '—'}</strong>
+                                <strong style={{ color: 'var(--danger)' }}>{snapshot.insights.worstLoss?.score || '—'}</strong>
                                 <span>Clean sheets:</span>
                                 <strong>{snapshot.insights.cleanSheets ?? 0}</strong>
                                 <span>Promoções:</span>
                                 <strong style={{ color: 'var(--color-success-mid)' }}>{snapshot.insights.promotionsWon ?? 0}</strong>
                                 <span>Rebaixamentos:</span>
-                                <strong style={{ color: '#c44' }}>{snapshot.insights.relegationsTaken ?? 0}</strong>
+                                <strong style={{ color: 'var(--danger)' }}>{snapshot.insights.relegationsTaken ?? 0}</strong>
                             </div>
                         </div>
                     </div>
@@ -226,7 +226,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                                         <div style={{ flex: 1 }}>
                                             <div style={{ color: 'var(--accent)', fontSize: '0.7rem', fontWeight: 700, marginBottom: '4px' }}><Trophy size={11} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />DESTAQUE DA TEMPORADA</div>
                                             <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)' }}>{snapshot.topScorers[0].name}</div>
-                                            <div style={{ fontSize: '0.8rem', color: '#888', marginBottom: '8px' }}>
+                                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
                                                 {snapshot.topScorers[0].position} · OVR {snapshot.topScorers[0].ovr}
                                             </div>
                                             <div style={{ fontSize: '0.8rem' }}>
@@ -249,7 +249,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                                         borderBottom: i < snapshot.topScorers.length - 2 ? '1px solid var(--color-bg-deep)' : 'none'
                                     }}>
                                         <span>
-                                            <strong style={{ color: '#888' }}>{i + 2}.</strong>{' '}
+                                            <strong style={{ color: 'var(--text-muted)' }}>{i + 2}.</strong>{' '}
                                             {p.name} ({p.position} · OVR {p.ovr})
                                         </span>
                                         <span>
