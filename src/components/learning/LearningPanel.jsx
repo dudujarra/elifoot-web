@@ -27,7 +27,7 @@ function Sparkline({ data, width = 200, height = 40, color = '#6ABC3A' }) {
         return `${x},${y}`;
     }).join(' ');
     return (
-        <svg width={width} height={height} style={{ background: '#040805', }}>
+        <svg width={width} height={height} style={{ background: 'var(--color-shadow-deep)', }}>
             <polyline
                 points={points}
                 fill="none"
@@ -52,7 +52,7 @@ function ActionBar({ action, q, max }) {
             <div style={{ minWidth: '120px', fontFamily: 'monospace' }}>{action}</div>
             <div style={{
                 flex: 1,
-                background: '#040805',
+                background: 'var(--color-shadow-deep)',
                 height: '12px',
                 overflow: 'hidden'
             }}>
@@ -170,7 +170,7 @@ export default function LearningPanel({ controllerRef }) {
                                 <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '2px' }}>
                                     Transfers per season
                                 </div>
-                                <Sparkline data={transferSeries} color="#FFD700" />
+                                <Sparkline data={transferSeries} color="var(--accent)" />
                             </div>
                         </div>
                     )}
@@ -196,7 +196,7 @@ export default function LearningPanel({ controllerRef }) {
                             <div style={{
                                 maxHeight: '160px',
                                 overflowY: 'auto',
-                                background: '#040805',
+                                background: 'var(--color-shadow-deep)',
                                 padding: '4px'
                             }}>
                                 {memory.slice().reverse().map((m, i) => (

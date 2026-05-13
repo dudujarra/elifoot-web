@@ -131,9 +131,9 @@ export function PlayerDashboardView() {
         );
     };
 
-    const starStr = Array(player.starRating).fill(<Star weight="fill" color="#FFD700" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="#4A5059" size={16} />));
+    const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;
-    const stressColor = player.stress >= 75 ? '#FF3333' : player.stress >= 50 ? '#FFD700' : '#8E9E94';
+    const stressColor = player.stress >= 75 ? 'var(--danger)' : player.stress >= 50 ? 'var(--accent)' : 'var(--text-muted)';
 
     return (
         <div className="ef-view-shell ef-view-shell--fixed">
@@ -249,10 +249,10 @@ export function PlayerDashboardView() {
                                     <EfPanel padding="md">
                                         <div className="ef-sans ef-text-muted" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '16px' }}><Target weight="fill" /> ATRIBUTOS PRINCIPAIS</div>
                                         {[
-                                            { key: 'technique', label: 'Técnica', color: '#40BAF7' },
-                                            { key: 'pace',      label: 'Velocidade', color: '#39FF14' },
-                                            { key: 'power',     label: 'Força', color: '#FF3333' },
-                                            { key: 'vision',    label: 'Visão', color: '#FFD700' }
+                                            { key: 'technique', label: 'Técnica', color: 'var(--info)' },
+                                            { key: 'pace',      label: 'Velocidade', color: 'var(--primary)' },
+                                            { key: 'power',     label: 'Força', color: 'var(--danger)' },
+                                            { key: 'vision',    label: 'Visão', color: 'var(--accent)' }
                                         ].map(s => {
                                             const lvl = player.skills[s.key] ?? 0;
                                             const prog = player.skillProgress?.[s.key] ?? 0;
@@ -271,7 +271,7 @@ export function PlayerDashboardView() {
                                     </EfPanel>
 
                                     {offPitchResult && (
-                                        <EfPanel padding="md" style={{ borderColor: '#FFD700', background: '#2D2916' }}>
+                                        <EfPanel padding="md" style={{ borderColor: 'var(--accent)', background: '#2D2916' }}>
                                             <div className="ef-sans ef-text-accent" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '8px' }}><WarningCircle weight="fill" /> ÚLTIMO EVENTO</div>
                                             <p className="ef-sans ef-text-main" style={{ fontSize: '0.85rem', lineHeight: 1.5 }}>{offPitchResult}</p>
                                         </EfPanel>
@@ -308,7 +308,7 @@ export function PlayerDashboardView() {
                                     {showSubAttrs && player.subAttrs && (
                                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                                             {Object.entries(SUB_ATTRIBUTES).map(([base, subs]) => (
-                                                <div key={base} style={{ background: '#1A1F24', padding: '12px' }}>
+                                                <div key={base} style={{ background: 'var(--bg-panel)', padding: '12px' }}>
                                                     <div className="ef-sans ef-text-accent" style={{ fontSize: '0.75rem', fontWeight: 'bold', marginBottom: '12px', textTransform: 'uppercase' }}>{base}</div>
                                                     {subs.map(sub => {
                                                         const lvl = player.subAttrs[sub] ?? 0;
@@ -367,11 +367,11 @@ export function PlayerDashboardView() {
                         {tab === 'lifestyle' && (
                             <EfPanel padding="md">
                                 <div className="ef-sans ef-text-muted" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '16px' }}><House weight="fill" /> LIFESTYLE & BENS</div>
-                                <div className="ef-sans ef-text-main" style={{ display: 'flex', gap: '16px', marginBottom: '24px', fontSize: '0.85rem', background: '#1A1F24', padding: '12px' }}>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><House color="#40BAF7" weight="fill" /> {player.lifestyle?.ownedHouse ? LIFESTYLE_CATALOG[player.lifestyle.ownedHouse]?.name : 'Sem casa'}</span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Car color="#FFD700" weight="fill" /> {player.lifestyle?.ownedCar ? LIFESTYLE_CATALOG[player.lifestyle.ownedCar]?.name : 'Sem carro'}</span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart color="#FF3333" weight="fill" /> {player.lifestyle?.isMarried ? 'Casado' : 'Solteiro'}</span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Smiley color="#39FF14" weight="fill" /> Mood {player.lifestyle?.mood ?? 50}%</span>
+                                <div className="ef-sans ef-text-main" style={{ display: 'flex', gap: '16px', marginBottom: '24px', fontSize: '0.85rem', background: 'var(--bg-panel)', padding: '12px' }}>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><House color="var(--info)" weight="fill" /> {player.lifestyle?.ownedHouse ? LIFESTYLE_CATALOG[player.lifestyle.ownedHouse]?.name : 'Sem casa'}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Car color="var(--accent)" weight="fill" /> {player.lifestyle?.ownedCar ? LIFESTYLE_CATALOG[player.lifestyle.ownedCar]?.name : 'Sem carro'}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Heart color="var(--danger)" weight="fill" /> {player.lifestyle?.isMarried ? 'Casado' : 'Solteiro'}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Smiley color="var(--primary)" weight="fill" /> Mood {player.lifestyle?.mood ?? 50}%</span>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
                                     {Object.entries(LIFESTYLE_CATALOG).map(([id, it]) => {

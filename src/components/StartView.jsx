@@ -146,7 +146,7 @@ export function StartView() {
 
                     {/* Seleção de Time */}
                     <div className="ef-start-team-row">
-                        <MapPin size={24} color="#40BAF7" />
+                        <MapPin size={24} color="var(--info)" />
                         <select
                             id="select-team"
                             value={teamId}
@@ -213,7 +213,7 @@ export function StartView() {
                                 variant="secondary"
                                 size="md"
                                 onClick={handleAutoPlay}
-                                style={{ flex: 1, justifyContent: 'center', color: '#FF3333', borderColor: '#FF3333' }}
+                                style={{ flex: 1, justifyContent: 'center', color: 'var(--danger)', borderColor: 'var(--danger)' }}
                                 title="Inicia bot AutoPlay"
                             >
                                 <Robot size={20} /> AUTOPLAY

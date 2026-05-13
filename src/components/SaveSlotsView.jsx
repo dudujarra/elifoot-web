@@ -64,7 +64,7 @@ export function SaveSlotsView() {
                 <EfPanel padding="lg" className="ef-view-header ef-save-slots__header-panel">
                     <div className="ef-view-header__identity">
                         <div className="ef-view-header__icon-box">
-                            <FloppyDisk size={28} color="#40BAF7" />
+                            <FloppyDisk size={28} color="var(--info)" />
                         </div>
                         <div>
                             <h2 className="ef-view-header__title">MEMORY CARD</h2>
@@ -88,7 +88,7 @@ export function SaveSlotsView() {
                                     {slot.empty ? (
                                         <div className={`ef-save-slots__slot-status ${slot.corrupted ? 'ef-save-slots__slot-status--corrupted' : ''}`}>
                                             {slot.corrupted ? (
-                                                <><WarningCircle size={16} color="#FF3333" /> CORROMPIDO</>
+                                                <><WarningCircle size={16} color="var(--danger)" /> CORROMPIDO</>
                                             ) : (
                                                 <><FileCode size={16} /> VAZIO</>
                                             )}

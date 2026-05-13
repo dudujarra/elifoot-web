@@ -15,7 +15,7 @@ const BANNER_CONFIG = {
         icon: '🏆',
         title: 'CAMPEÃO!',
         subtitle: 'Título conquistado',
-        bg: '#FFD700',
+        bg: 'var(--accent)',
         color: '#0F1A14',
         spriteClass: 'ef-anim-trophy-unlock',
         duration: 4000
@@ -25,7 +25,7 @@ const BANNER_CONFIG = {
         title: 'PROMOÇÃO',
         subtitle: 'Subiu de divisão',
         bg: '#2D5A3D',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 3000
     },
     relegation: {
@@ -33,7 +33,7 @@ const BANNER_CONFIG = {
         title: 'REBAIXAMENTO',
         subtitle: 'Caiu de divisão',
         bg: '#6B0000',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 3000
     },
     fired: {
@@ -41,7 +41,7 @@ const BANNER_CONFIG = {
         title: 'DEMITIDO',
         subtitle: 'Diretoria encerrou contrato',
         bg: '#000000',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 3500
     },
     hired: {
@@ -49,7 +49,7 @@ const BANNER_CONFIG = {
         title: 'CONTRATADO',
         subtitle: 'Novo desafio',
         bg: '#002E63',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 3000
     },
     retirement: {
@@ -57,7 +57,7 @@ const BANNER_CONFIG = {
         title: 'APOSENTADORIA',
         subtitle: 'Fim de carreira lendária',
         bg: '#4A0E7A',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 4500
     },
     offer: {
@@ -97,7 +97,7 @@ const BANNER_CONFIG = {
         title: 'LESÃO',
         subtitle: 'Departamento médico',
         bg: '#4A0000',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 2500
     },
     suspension: {
@@ -105,7 +105,7 @@ const BANNER_CONFIG = {
         title: 'SUSPENSÃO',
         subtitle: 'Cartões acumulados',
         bg: '#000000',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 2500
     },
     cleanSheet: {
@@ -113,7 +113,7 @@ const BANNER_CONFIG = {
         title: 'JOGO SEM SOFRER GOLS',
         subtitle: 'Defesa intransponível',
         bg: '#2D5A3D',
-        color: '#FFFFFF',
+        color: 'var(--text-main)',
         duration: 2000
     }
 };
@@ -134,7 +134,7 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
             style={{
                 position: 'fixed',
                 inset: 0,
-                background: '#040805',
+                background: 'var(--color-shadow-deep)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -152,8 +152,8 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
                     padding: '32px 48px',
 
                     border: '4px solid',
-                    borderColor: '#4A5059 #111417 #111417 #4A5059',
-                    boxShadow: '0 8px 0 #040805, 0 0 40px #111417',
+                    borderColor: 'var(--border-panel) var(--bg-dark) var(--bg-dark) var(--border-panel)',
+                    boxShadow: '0 8px 0 var(--color-shadow-deep), 0 0 40px var(--bg-dark)',
                     textAlign: 'center',
                     minWidth: '320px',
                     maxWidth: '600px',
@@ -171,7 +171,7 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
                     textTransform: 'uppercase',
                     letterSpacing: '0.06em',
                     fontFamily: "'Press Start 2P', monospace",
-                    textShadow: '2px 2px 0 #040805'
+                    textShadow: '2px 2px 0 var(--color-shadow-deep)'
                 }}>
                     {customTitle || cfg.title}
                 </h2>

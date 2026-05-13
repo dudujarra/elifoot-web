@@ -27,6 +27,9 @@
   
   --text-main: #FDFBF7; /* Chalk White */
   --text-muted: #8E9E94; /* Silver Green */
+  --color-soft-border: #2D3748; /* Cleanup pass token */
+  --color-bg-deep: #0E1418; /* Cleanup pass token */
+  --color-shadow-deep: #040805; /* Cleanup pass token */
   --text-inverse: #040805;
 
   /* Borders & Shadows */

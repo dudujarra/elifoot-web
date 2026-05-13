@@ -50,10 +50,10 @@ export function EfTooltip({
     if (!content) return children;
 
     const HEADER_COLOR = {
-        info: '#40BAF7',
-        success: '#39FF14',
-        warning: '#FFD700',
-        danger: '#FF3333'
+        info: 'var(--info)',
+        success: 'var(--primary)',
+        warning: 'var(--accent)',
+        danger: 'var(--danger)'
     };
 
     return (
@@ -84,8 +84,8 @@ export function EfTooltip({
                         fontSize: '0.45rem',
                         lineHeight: 1.6,
                         border: '4px solid',
-                        borderColor: '#4A5059 #111417 #111417 #4A5059',
-                        boxShadow: '4px 8px 0 #040805',
+                        borderColor: 'var(--border-panel) var(--bg-dark) var(--bg-dark) var(--border-panel)',
+                        boxShadow: '4px 8px 0 var(--color-shadow-deep)',
                         borderTopWidth: '4px',
                         borderTopColor: HEADER_COLOR[color] || HEADER_COLOR.info,
                         pointerEvents: 'none',

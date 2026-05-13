@@ -59,7 +59,7 @@ function EfClubBadgeImpl({
             {img ? (
                 <img src={img} alt={name} style={{ width: px, height: px, imageRendering: 'pixelated', WebkitImageRendering: 'pixelated', objectFit: 'contain' }} />
             ) : (
-                <div style={{ width: px, height: px, backgroundColor: '#111417', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '3px solid #000' }}>
+                <div style={{ width: px, height: px, backgroundColor: 'var(--bg-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '3px solid #000' }}>
                     <span style={{ color: '#E2E8F0', fontSize: px/3, fontFamily: "'Press Start 2P', monospace" }}>?</span>
                 </div>
             )}

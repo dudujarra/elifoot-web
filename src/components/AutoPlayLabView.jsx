@@ -86,7 +86,7 @@ export function AutoPlayLabView() {
     });
 
     return (
-        <div className="ef-anim-fade-in ef-scene-shell" style={{ minHeight: '100dvh', backgroundColor: '#0D1117' }}>
+        <div className="ef-anim-fade-in ef-scene-shell" style={{ minHeight: '100dvh', backgroundColor: 'var(--bg-dark)' }}>
             <div className="ef-view-container" style={{ maxWidth: '1100px', padding: '24px' }}>
 
                 {/* HEADER */}
@@ -94,10 +94,10 @@ export function AutoPlayLabView() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <Flask size={28} color="#C7A75D" weight="fill" />
                         <div style={{ flex: 1 }}>
-                            <h2 style={{ margin: 0, fontSize: '1.4rem', color: '#FDFBF7', fontFamily: 'var(--font-sans)' }}>
+                            <h2 style={{ margin: 0, fontSize: '1.4rem', color: 'var(--text-main)', fontFamily: 'var(--font-sans)' }}>
                                 AUTOPLAY LAB
                             </h2>
-                            <div style={{ fontSize: '0.85rem', color: '#8E9E94', fontFamily: 'var(--font-mono)', marginTop: '4px' }}>
+                            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginTop: '4px' }}>
                                 Simula N saves headless. Valida engine, balance, IA, conteúdo.
                             </div>
                         </div>
@@ -111,15 +111,15 @@ export function AutoPlayLabView() {
                 <EfPanel padding="md" style={{ marginBottom: '20px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span style={{ fontSize: '0.75rem', color: '#8E9E94', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>PRESET</span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>PRESET</span>
                             <select
                                 value={presetId}
                                 onChange={e => setPresetId(e.target.value)}
                                 disabled={running}
                                 style={{
-                                    backgroundColor: '#161B22',
-                                    color: '#FDFBF7',
-                                    border: '1px solid #2D3748',
+                                    backgroundColor: 'var(--bg-panel)',
+                                    color: 'var(--text-main)',
+                                    border: '1px solid var(--color-soft-border)',
                                     padding: '8px',
                                     fontFamily: 'var(--font-mono)',
                                     fontSize: '0.85rem',
@@ -134,14 +134,14 @@ export function AutoPlayLabView() {
                                 ))}
                             </select>
                             {preset && (
-                                <div style={{ fontSize: '0.7rem', color: '#8E9E94', fontFamily: 'var(--font-sans)', marginTop: '4px' }}>
+                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', marginTop: '4px' }}>
                                     {preset.description}
                                 </div>
                             )}
                         </label>
 
                         <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span style={{ fontSize: '0.75rem', color: '#8E9E94', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SAVES</span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SAVES</span>
                             <input
                                 type="number"
                                 value={saves}
@@ -150,9 +150,9 @@ export function AutoPlayLabView() {
                                 min="1"
                                 max="1000"
                                 style={{
-                                    backgroundColor: '#161B22',
-                                    color: '#FDFBF7',
-                                    border: '1px solid #2D3748',
+                                    backgroundColor: 'var(--bg-panel)',
+                                    color: 'var(--text-main)',
+                                    border: '1px solid var(--color-soft-border)',
                                     padding: '8px',
                                     fontFamily: 'var(--font-mono)',
                                 }}
@@ -160,7 +160,7 @@ export function AutoPlayLabView() {
                         </label>
 
                         <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span style={{ fontSize: '0.75rem', color: '#8E9E94', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SEMANAS/SAVE</span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SEMANAS/SAVE</span>
                             <input
                                 type="number"
                                 value={weeks}
@@ -169,9 +169,9 @@ export function AutoPlayLabView() {
                                 min="1"
                                 max="380"
                                 style={{
-                                    backgroundColor: '#161B22',
-                                    color: '#FDFBF7',
-                                    border: '1px solid #2D3748',
+                                    backgroundColor: 'var(--bg-panel)',
+                                    color: 'var(--text-main)',
+                                    border: '1px solid var(--color-soft-border)',
                                     padding: '8px',
                                     fontFamily: 'var(--font-mono)',
                                 }}
@@ -179,16 +179,16 @@ export function AutoPlayLabView() {
                         </label>
 
                         <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span style={{ fontSize: '0.75rem', color: '#8E9E94', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SEED START</span>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SEED START</span>
                             <input
                                 type="number"
                                 value={seedStart}
                                 onChange={e => setSeedStart(parseInt(e.target.value) || 1000)}
                                 disabled={running}
                                 style={{
-                                    backgroundColor: '#161B22',
-                                    color: '#FDFBF7',
-                                    border: '1px solid #2D3748',
+                                    backgroundColor: 'var(--bg-panel)',
+                                    color: 'var(--text-main)',
+                                    border: '1px solid var(--color-soft-border)',
                                     padding: '8px',
                                     fontFamily: 'var(--font-mono)',
                                 }}
@@ -196,7 +196,7 @@ export function AutoPlayLabView() {
                         </label>
                     </div>
 
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px', fontSize: '0.8rem', color: '#FDFBF7', fontFamily: 'var(--font-sans)' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px', fontSize: '0.8rem', color: 'var(--text-main)', fontFamily: 'var(--font-sans)' }}>
                         <input
                             type="checkbox"
                             checked={useRandomSeeds}
@@ -211,12 +211,12 @@ export function AutoPlayLabView() {
                             <Play size={16} weight="fill" /> {running ? 'RODANDO...' : 'RODAR'}
                         </EfButton>
                         {running && (
-                            <div style={{ flex: 1, fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: '#8E9E94' }}>
+                            <div style={{ flex: 1, fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                                 Progress: {Math.round(progress * 100)}% · ETA {eta}
                                 <div style={{
                                     marginTop: '4px',
                                     height: '6px',
-                                    backgroundColor: '#2D3748',
+                                    backgroundColor: 'var(--color-soft-border)',
                                     width: '100%',
                                 }}>
                                     <div style={{
@@ -240,12 +240,12 @@ export function AutoPlayLabView() {
                             </div>
                         </div>
                         <pre style={{
-                            backgroundColor: '#0E1418',
-                            border: '1px solid #2D3748',
+                            backgroundColor: 'var(--color-bg-deep)',
+                            border: '1px solid var(--color-soft-border)',
                             padding: '12px',
                             fontFamily: 'var(--font-mono)',
                             fontSize: '0.78rem',
-                            color: '#FDFBF7',
+                            color: 'var(--text-main)',
                             overflow: 'auto',
                             maxHeight: '500px',
                             whiteSpace: 'pre-wrap',
@@ -259,7 +259,7 @@ export function AutoPlayLabView() {
                             <EfButton variant="secondary" size="md" onClick={handleExportJSON}>
                                 <Download size={14} /> EXPORT JSON
                             </EfButton>
-                            <div style={{ flex: 1, textAlign: 'right', fontSize: '0.75rem', color: '#8E9E94', fontFamily: 'var(--font-mono)', alignSelf: 'center' }}>
+                            <div style={{ flex: 1, textAlign: 'right', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', alignSelf: 'center' }}>
                                 {results?.length || 0} saves · {results?.filter(r => !r.crash).length || 0} OK · {results?.filter(r => r.crash).length || 0} crashes
                             </div>
                         </div>

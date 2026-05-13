@@ -90,11 +90,11 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
 
                     <div className="ef-trophy-banner">
                         <div className="ef-trophy-banner__title-row">
-                            <Trophy size={32} color="#FFD700" weight="fill" />
+                            <Trophy size={32} color="var(--accent)" weight="fill" />
                             <h1 className="ef-trophy-banner__title">
                                 {trophy.name}
                             </h1>
-                            <Trophy size={32} color="#FFD700" weight="fill" />
+                            <Trophy size={32} color="var(--accent)" weight="fill" />
                         </div>
                         <div className="ef-trophy-banner__sub">
                             CAMPEÃO — TEMPORADA {season?.year || '—'}
@@ -163,10 +163,10 @@ export default function TrophyCeremony({ trophy, season, onDismiss, visible }) {
 
             {/* Crowd atmosphere */}
             <div className="trophy-crowd ef-trophy-crowd">
-                <HandsClapping size={64} weight="duotone" color="#FDFBF7" className="ef-anim-crowd-wave ef-trophy-ceremony__crowd-clap" />
-                <HandsClapping size={64} weight="duotone" color="#FDFBF7" className="ef-anim-crowd-flag-wave ef-trophy-ceremony__crowd-clap--delayed-500" />
-                <HandsClapping size={64} weight="duotone" color="#FDFBF7" className="ef-anim-crowd-wave ef-trophy-ceremony__crowd-clap--delayed-200" />
-                <HandsClapping size={64} weight="duotone" color="#FDFBF7" className="ef-anim-crowd-flag-wave ef-trophy-ceremony__crowd-clap--delayed-700" />
+                <HandsClapping size={64} weight="duotone" color="var(--text-main)" className="ef-anim-crowd-wave ef-trophy-ceremony__crowd-clap" />
+                <HandsClapping size={64} weight="duotone" color="var(--text-main)" className="ef-anim-crowd-flag-wave ef-trophy-ceremony__crowd-clap--delayed-500" />
+                <HandsClapping size={64} weight="duotone" color="var(--text-main)" className="ef-anim-crowd-wave ef-trophy-ceremony__crowd-clap--delayed-200" />
+                <HandsClapping size={64} weight="duotone" color="var(--text-main)" className="ef-anim-crowd-flag-wave ef-trophy-ceremony__crowd-clap--delayed-700" />
             </div>
         </div>
     );

@@ -61,7 +61,7 @@ export function CosmeticShopView() {
                 <EfPanel padding="lg" className="ef-view-header ef-cosmetic-shop__header-panel">
                     <div className="ef-view-header__identity">
                         <div className="ef-view-header__icon-box">
-                            <Storefront size={28} color="#40BAF7" />
+                            <Storefront size={28} color="var(--info)" />
                         </div>
                         <div>
                             <h2 className="ef-view-header__title">LOJA DE COSMÉTICOS</h2>

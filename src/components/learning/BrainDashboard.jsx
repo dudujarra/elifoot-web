@@ -374,14 +374,14 @@ function MiniStat({ label, value, color }) {
 // Styles
 const cardStyle = {
     padding: '8px 10px',
-    background: '#111417',
-    border: '1px solid #111417',
+    background: 'var(--bg-dark)',
+    border: '1px solid var(--bg-dark)',
     };
 
 const titleStyle = {
     fontSize: '0.72rem',
     fontWeight: 700,
-    color: '#FFD700',
+    color: 'var(--accent)',
     marginBottom: '6px',
     textTransform: 'uppercase',
     letterSpacing: '0.5px',
