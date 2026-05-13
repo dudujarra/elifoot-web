@@ -5,6 +5,15 @@ import { getFormEmoji } from '../engine/PlayerDevelopment';
 import { sfx } from '../utils/sound';
 import { LiveSquadEditModal } from './LiveSquadEditModal';
 import { PreMatchScreen } from './PreMatchScreen';
+import { MatchPostMortem } from './MatchPostMortem';
+import { analyzeMatch } from '../engine/MatchAnalyst';
+import { MidMatchCardModal } from './MidMatchCardModal';
+import { shouldTriggerMidMatch, getMidMatchCard, getReactiveCard } from '../engine/MidMatchManagerDeck';
+import { MatchBallSprite } from './MatchBallSprite';
+import { applyToStarPlayer, getStarPlayer } from '../engine/StarPlayerLink';
+import { MatchHighlightModal, extractHighlightContext } from './MatchHighlightModal';
+import { isUnifiedMode, applyPlayerCardEffectToStar } from '../engine/UnifiedModeBridge';
+import { StarImpactToast } from './StarImpactToast';
 import { EfClubBadge, EfBanner } from './ui';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
@@ -46,6 +55,17 @@ export function MatchView() {
     const speedRef = useRef(200);
     const pausedRef = useRef(false);
 
+    // SPEC-B2.2: mid-match card state
+    const [midMatchCard, setMidMatchCard] = useState(null);
+    const triggeredMinutesRef = useRef(new Set());
+
+    // SPEC-F1.1: highlight modal state
+    const [highlightContext, setHighlightContext] = useState(null);
+    const highlightedEventsRef = useRef(new Set());
+
+    // SPEC-F1.3: star impact toast state
+    const [starToast, setStarToast] = useState(null);
+
     const cond = engine.matchCondition;
     const tactic = TACTICS[engine.currentTactic];
 
@@ -68,6 +88,100 @@ export function MatchView() {
         const oppGoals = isHome ? result?.awayGoals : result?.homeGoals;
         if (oppGoals === 0 && myGoals > 0) setBanner('cleanSheet');
     }, [phase, narration, result, team.name]);
+    /* eslint-enable react-hooks/set-state-in-effect */
+
+    // SPEC-B2.2: trigger mid-match decision card at minutes 15/30/45/60/75 (30% chance)
+    /* eslint-disable react-hooks/set-state-in-effect */
+    useEffect(() => {
+        if (phase !== 'firsthalf' && phase !== 'secondhalf') return;
+        if (midMatchCard) return; // already showing one
+        if (!shouldTriggerMidMatch(currentMinute, triggeredMinutesRef.current)) return;
+        // 30% chance (deterministic via minute+matchId hash if available)
+        const seed = (currentMinute * 7) + (result?.homeTeamId || 0);
+        const roll = (Math.abs(seed) % 100);
+        if (roll < 30) {
+            const card = getMidMatchCard(currentMinute, seed);
+            if (card) {
+                setMidMatchCard(card);
+                triggeredMinutesRef.current.add(currentMinute);
+            }
+        } else {
+            triggeredMinutesRef.current.add(currentMinute);
+        }
+    }, [currentMinute, phase, midMatchCard, result]);
+    /* eslint-enable react-hooks/set-state-in-effect */
+
+    const handleMidMatchChoose = (opt) => {
+        if (!opt) return;
+        try {
+            const t = engine.getTeam(gameState.teamId);
+            if (t && typeof opt.effect?.moralDelta === 'number') {
+                t.moral = Math.max(0, Math.min(100, (t.moral ?? 50) + opt.effect.moralDelta));
+            }
+            if (t && typeof opt.effect?.energyDelta === 'number' && Array.isArray(t.squad)) {
+                t.squad.forEach(p => {
+                    if (typeof p.energy === 'number') {
+                        p.energy = Math.max(0, Math.min(100, p.energy + opt.effect.energyDelta));
+                    }
+                });
+            }
+            if (typeof opt.effect?.tacticShift === 'string' && engine.setTactic) {
+                engine.setTactic(opt.effect.tacticShift);
+            }
+            // SPEC-C2.2: amplify effect na estrela do clube (xp +moral extra)
+            if (engine.starPlayerId) {
+                const starAmplify = {
+                    moralDelta: typeof opt.effect?.moralDelta === 'number' ? Math.round(opt.effect.moralDelta * 0.5) : 0,
+                    xpDelta: 5,
+                };
+                const r = applyToStarPlayer(engine, starAmplify);
+                // SPEC-F1.3: surface toast
+                if (r.applied) {
+                    const star = getStarPlayer(engine);
+                    if (star) {
+                        setStarToast({ starName: star.name, changes: r.changes });
+                    }
+                }
+            }
+            // SPEC-C2.3: unified mode — aplica effects player-perspective também
+            if (isUnifiedMode(engine)) {
+                applyPlayerCardEffectToStar(engine, {
+                    boss: typeof opt.effect?.moralDelta === 'number' ? Math.round(opt.effect.moralDelta * 0.3) : 0,
+                    teammates: typeof opt.effect?.moralDelta === 'number' ? Math.round(opt.effect.moralDelta * 0.2) : 0,
+                });
+            }
+        } catch { /* defensive */ }
+    };
+
+    // SPEC-F1.1: detecta novos highlight events e dispara modal
+    /* eslint-disable react-hooks/set-state-in-effect */
+    useEffect(() => {
+        if (phase !== 'firsthalf' && phase !== 'secondhalf') return;
+        if (!Array.isArray(displayedEvents) || displayedEvents.length === 0) return;
+        const last = displayedEvents[displayedEvents.length - 1];
+        if (!last) return;
+        const eventKey = `${last.minute}_${(last.text || '').slice(0, 30)}`;
+        if (highlightedEventsRef.current.has(eventKey)) return;
+        const ctx = extractHighlightContext(last);
+        if (ctx) {
+            highlightedEventsRef.current.add(eventKey);
+            setHighlightContext(ctx);
+            // Gap fix #1: pausa ticker durante modal pra player ver o lance
+            pausedRef.current = true;
+            setPaused(true);
+
+            // Gap fix #4: dispara reactive card pra opponent_goal se for gol contra
+            if (ctx.type === 'goal' && !midMatchCard) {
+                const ownTeam = engine.getTeam(gameState.teamId);
+                const isAgainstUs = ownTeam && last.text && !last.text.includes(ownTeam.name);
+                if (isAgainstUs) {
+                    const seed = (last.minute || 0) + (gameState.teamId || 0);
+                    const reactive = getReactiveCard('opponent_goal', seed);
+                    if (reactive) setTimeout(() => setMidMatchCard(reactive), 2600);
+                }
+            }
+        }
+    }, [displayedEvents, phase, midMatchCard, gameState.teamId, engine]);
     /* eslint-enable react-hooks/set-state-in-effect */
 
     // Auto-scroll narration log
@@ -518,10 +632,35 @@ export function MatchView() {
     // === LIVE MATCH RENDERER ===
     const renderLiveMatch = (half) => (
         <div className="ef-view-shell">
+            {/* SPEC-B2.2: mid-match decision overlay */}
+            <MidMatchCardModal
+                card={midMatchCard}
+                onChoose={handleMidMatchChoose}
+                onClose={() => setMidMatchCard(null)}
+            />
+            {/* SPEC-F1.1: highlight pulse modal pra goal/red — pausa+resume ticker */}
+            <MatchHighlightModal
+                context={highlightContext}
+                onDismiss={() => {
+                    setHighlightContext(null);
+                    pausedRef.current = false;
+                    setPaused(false);
+                }}
+                autoDismissMs={2500}
+            />
+            {/* SPEC-F1.3: star impact toast */}
+            <StarImpactToast
+                starName={starToast?.starName}
+                changes={starToast?.changes}
+                visible={!!starToast}
+                onDismiss={() => setStarToast(null)}
+            />
             <div className="ef-view-container">
                 <Scoreboard half={half} />
 
-                <EfPanel padding="md" style={{ height: '400px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }} scrollRef={logRef}>
+                <EfPanel padding="md" className="ef-match-pitch-bg" style={{ height: '400px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', position: 'relative' }} scrollRef={logRef}>
+                    {/* SPEC-B1.3: ball sprite traversing the pitch */}
+                    <MatchBallSprite intensity={goalBurstActive ? 'goal' : 'active'} />
                     {displayedEvents.map((n, i) => {
                         const isGoal = n.text?.includes('⚽');
                         const isCard = n.text?.includes('🟨') || n.text?.includes('🟥');
@@ -711,6 +850,41 @@ export function MatchView() {
                         </div>
                     )}
                 </EfPanel>
+
+                {/* SPEC-A4: Match Post-Mortem painel decisão */}
+                {result && (
+                    <MatchPostMortem
+                        analysis={analyzeMatch({
+                            result: {
+                                home: result.home,
+                                away: result.away,
+                                homeGoals: result.homeGoals,
+                                awayGoals: result.awayGoals,
+                                isHomeTeam: engine.getTeam(gameState.teamId)?.name === result.home,
+                            },
+                            tacticUsed: engine.tactic || 'Normal',
+                            formationUsed: engine.getTeam(gameState.teamId)?.formation || '4-3-3',
+                            opponentStyle: result.opponentStyle || 'Normal',
+                            recentForm: engine.managerStats?.rollingForm?.slice(-5) || [],
+                            subsUsed: result.subsUsed || 0,
+                        })}
+                    />
+                )}
+
+                {/* SPEC-C1.2: LLM post-match narrative surface */}
+                {engine?.lastMatchNarrative && (
+                    <EfPanel padding="md" style={{ border: '1px solid #40BAF7', backgroundColor: '#0E1418' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                            <MicrophoneStage size={18} color="#40BAF7" weight="fill" />
+                            <span style={{ fontSize: '0.75rem', color: '#40BAF7', fontFamily: 'var(--font-sans)', fontWeight: 'bold', letterSpacing: '0.05em' }}>
+                                ANÁLISE PÓS-JOGO
+                            </span>
+                        </div>
+                        <div style={{ fontSize: '0.9rem', color: '#FDFBF7', fontFamily: 'var(--font-sans)', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                            {engine.lastMatchNarrative}
+                        </div>
+                    </EfPanel>
+                )}
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
                     <EfPanel padding="md">

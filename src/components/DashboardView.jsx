@@ -3,6 +3,7 @@ import { AnimatedStat } from '../hooks/useCountUp';
 import { Help } from './Help';
 import { useGame } from '../context/GameContext';
 import { FORMATIONS, TACTICS, TEAM_TALKS, TRAINING_TYPES } from '../engine/ManagerSystems';
+import { getTacticModifierParts } from '../engine/TacticFormatter';
 import { STAFF_ROLES, SCOUT_REGIONS, getStadiumInfo } from '../engine/StadiumSystem';
 import { getAcademyUpgradeCost } from '../engine/YouthAcademy';
 import { ChallengesWidget } from './ChallengesWidget';
@@ -13,6 +14,10 @@ import { ScarcityBanner, DreadIndicator, useKeyboardNav, TutorialOverlay, Ironma
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
 import { EfModal } from './ui/EfModal';
+import { OnboardingCoach } from './OnboardingCoach';
+import { getUnifiedView } from '../engine/UnifiedModeBridge';
+import { getWeeklyQuote } from '../engine/StarPlayerNarrative';
+import { evaluateAhaMoments, markAhaSeen } from '../engine/AhaMomentsSystem';
 import { 
   Users, ShoppingCart, ChartBar, SoccerBall, TrendUp, TrendDown, Heartbeat,
   Newspaper, Lightning, Envelope, Wallet, Bank, Building, GraduationCap, Binoculars, 
@@ -37,10 +42,33 @@ export function DashboardView() {
         try { return !localStorage.getItem('elifoot_tutorial_done') && (engine?.seasonNumber || 1) === 1; }
         catch { return false; }
     });
+    // Gap fix #2: aha moments state
+    const [ahaMoment, setAhaMoment] = useState(null);
     // SPEC-167: manager advice panel state
     const [advicePanel, setAdvicePanel] = useState({ open: false, loading: false, text: '' });
 
     useKeyboardNav({ changeView, currentView: gameState?.view || 'dashboard' });
+
+    // Gap fix #2: aha moments detector (week change)
+    /* eslint-disable react-hooks/set-state-in-effect */
+    React.useEffect(() => {
+        if (!engine || ahaMoment) return;
+        try {
+            const stats = engine.managerStats || {};
+            const teamData = engine.getTeam?.(gameState.teamId);
+            const ctx = {
+                matchesPlayed: (stats.wins || 0) + (stats.draws || 0) + (stats.losses || 0),
+                firstInjuryDetected: (engine.weekInjuries?.length || 0) > 0 && (stats.matchesPlayed || 0) <= 5,
+                lowMoraleStreak: (stats.lossStreak || 0),
+                balance: teamData?.balance || engine.manager?.money || 100000,
+            };
+            const triggered = evaluateAhaMoments(ctx);
+            if (triggered.length > 0) {
+                setAhaMoment(triggered[0]);
+            }
+        } catch { /* defensive */ }
+    }, [engine?.currentWeek]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     // BUG-081 (SPEC-158): aceitável — abre modais em resposta a eventos da engine (unlock/achievement).
     // Event-subscriber side-effect. setState dispara render que mostra modal.
@@ -114,6 +142,70 @@ export function DashboardView() {
         <div style={{ padding: '24px', width: '100%', height: '100%', overflowY: 'auto', backgroundColor: 'var(--bg-dark, #0D1117)' }}>
             <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <TrophyCeremony trophy={engine.trophyCeremony?.trophy} season={engine.trophyCeremony?.season} visible={!!engine.trophyCeremony} onDismiss={() => { engine.trophyCeremony = null; forceUpdate(); }} />
+
+                {/* SPEC-A2: Onboarding Coach — semana 1 da 1ª temporada apenas */}
+                <OnboardingCoach
+                    show={(engine?.seasonNumber || 1) === 1 && (engine?.currentWeek || 1) === 1}
+                    onComplete={() => forceUpdate()}
+                />
+
+                {/* Gap fix #2: Aha moment banner */}
+                {ahaMoment && (
+                    <EfPanel padding="md" style={{ border: '1px solid #FFD700', backgroundColor: '#1A1408' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <Lightbulb size={24} color="#FFD700" weight="fill" />
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: '0.7rem', color: '#FFD700', fontFamily: 'var(--font-sans)', fontWeight: 'bold', letterSpacing: '0.1em', marginBottom: '4px' }}>
+                                    DICA ESTRATÉGICA
+                                </div>
+                                <div style={{ fontSize: '0.95rem', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontWeight: 'bold', marginBottom: '4px' }}>
+                                    {ahaMoment.title}
+                                </div>
+                                <div style={{ fontSize: '0.8rem', color: '#8E9E94', fontFamily: 'var(--font-sans)' }}>
+                                    {ahaMoment.body}
+                                </div>
+                            </div>
+                            <EfButton variant="secondary" size="sm" onClick={() => { markAhaSeen(ahaMoment.id); setAhaMoment(null); }}>
+                                ENTENDI
+                            </EfButton>
+                        </div>
+                    </EfPanel>
+                )}
+
+                {/* SPEC-C2.3 + F4.2: Unified Mode — Star Progress panel com frase semanal */}
+                {(() => {
+                    const view = getUnifiedView(engine);
+                    if (!view.isUnified || !view.star) return null;
+                    const s = view.star;
+                    // SPEC-F4.2: frase semanal rotativa
+                    const quoteSeed = (engine?.currentWeek || 0) + Math.floor((engine?.currentWeek || 0) / 4) + (s.id || 0);
+                    const weeklyQuote = getWeeklyQuote({ name: s.name }, quoteSeed);
+                    return (
+                        <EfPanel padding="md" style={{ border: '1px solid #FFD700', backgroundColor: '#1A1408' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontSize: '0.7rem', color: '#FFD700', fontFamily: 'var(--font-sans)', fontWeight: 'bold', letterSpacing: '0.1em', marginBottom: '4px' }}>
+                                        ESTRELA DO CLUBE
+                                    </div>
+                                    <div style={{ fontSize: '1.1rem', color: '#FDFBF7', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>
+                                        {s.name} <span style={{ fontSize: '0.8rem', color: '#8E9E94' }}>({s.position} · {s.age}a · OVR {s.skills.technique})</span>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px', fontSize: '0.75rem', color: '#8E9E94', fontFamily: 'var(--font-mono)' }}>
+                                        <span>Carreira: {s.careerApps}j · {s.careerGoals}g</span>
+                                        <span style={{ color: '#39FF14' }}>Boss {s.relationships.boss}</span>
+                                        <span style={{ color: '#40BAF7' }}>Torcida {s.relationships.fans}</span>
+                                        <span style={{ color: '#FFD700' }}>Equipe {s.relationships.teammates}</span>
+                                    </div>
+                                    {weeklyQuote && (
+                                        <div style={{ marginTop: '10px', fontSize: '0.8rem', color: '#C7A75D', fontFamily: 'var(--font-sans)', fontStyle: 'italic', borderLeft: '2px solid #C7A75D', paddingLeft: '10px' }}>
+                                            "{weeklyQuote}"
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </EfPanel>
+                    );
+                })()}
 
                 {/* === HEADER — LUXURY BENTO === */}
                 <EfPanel variant="hero" padding="lg" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -343,6 +435,16 @@ export function DashboardView() {
                                         ))}
                                     </div>
                                     <p style={{ color: '#8E9E94', fontSize: '0.85rem', marginTop: '16px', lineHeight: 1.5, fontFamily: 'var(--font-sans)' }}>{TACTICS[engine.currentTactic]?.description}</p>
+                                    {/* SPEC-B5: modifiers concretos para feedback de consequência */}
+                                    {(() => {
+                                        const parts = getTacticModifierParts(engine.currentTactic);
+                                        return (
+                                            <div style={{ marginTop: '8px', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
+                                                <span style={{ color: '#39FF14', marginRight: '12px' }}>ATA {parts.ata}</span>
+                                                <span style={{ color: '#40BAF7' }}>DEF {parts.def}</span>
+                                            </div>
+                                        );
+                                    })()}
                                 </EfPanel>
 
                                 <EfPanel padding="lg">

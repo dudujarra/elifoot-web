@@ -7,6 +7,8 @@ import { StartView } from './components/StartView';
 import { DashboardView } from './components/DashboardView';
 import { Sidebar } from './components/Sidebar';
 import { FloatingBugButton } from './components/FloatingBugButton';
+import { ChronicleSeasonEndModal } from './components/ChronicleSeasonEndModal';
+import { SeasonalEventModal } from './components/SeasonalEventModal';
 import { isSoundEnabled, setSoundEnabled, sfx } from './utils/sound';
 import { MonitorService } from './services/MonitorService';
 import { EfButton } from './components/ui/EfButton';
@@ -33,6 +35,7 @@ const SaveSlotsView = lazy(() => import('./components/SaveSlotsView').then(m => 
 const RivalriesView = lazy(() => import('./components/RivalriesView').then(m => ({ default: m.RivalriesView })));
 const ChronicleView = lazy(() => import('./components/ChronicleView').then(m => ({ default: m.ChronicleView })));
 const LineageView = lazy(() => import('./components/LineageView').then(m => ({ default: m.LineageView })));
+const AutoPlayLabView = lazy(() => import('./components/AutoPlayLabView').then(m => ({ default: m.AutoPlayLabView })));
 
 const Fallback = () => (
     <div style={{ padding: '24px', color: 'var(--text-muted)', fontFamily: "'JetBrains Mono', monospace" }}>
@@ -88,6 +91,7 @@ function App() {
             case 'rivalries': return <RivalriesView />;
             case 'chronicle': return <ChronicleView />;
             case 'lineage': return <LineageView />;
+            case 'autoplaylab': return <AutoPlayLabView />;
             default: return <StartView />;
         }
     };
@@ -151,6 +155,12 @@ function App() {
 
     return (
         <div style={{ display: 'flex', minHeight: '100dvh', backgroundColor: '#000' }}>
+            {/* SPEC-B3: Chronicle full-screen ao fim de temporada (auto-trigger) */}
+            <ChronicleSeasonEndModal />
+
+            {/* SPEC-C6: Evento sazonal BR (weeks 1/13/26/38 — auto-trigger) */}
+            <SeasonalEventModal />
+
             {gameState.started && gameState.view !== 'start' && gameState.view !== 'tutorial' && (
                 <Sidebar />
             )}

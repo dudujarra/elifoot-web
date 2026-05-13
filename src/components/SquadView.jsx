@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
+import { ViewOnboarding } from './ViewOnboarding';
+import { electStarPlayer } from '../engine/StarPlayerLink';
 import { Help } from './Help';
 import { EfClubBadge } from './ui/EfClubBadge';
 import { EfPanel } from './ui/EfPanel';
@@ -111,6 +113,7 @@ export function SquadView() {
 
     return (
         <div className="ef-view-shell ef-view-shell--fixed">
+            <ViewOnboarding viewId="squad" />
             <div className="ef-view-container ef-view-container--wide">
 
                 {/* === HEADER — LUXURY BENTO === */}
@@ -270,6 +273,14 @@ export function SquadView() {
                                                                 <UserMinus size={16} weight="bold" />
                                                             </button>
                                                         )}
+                                                        {/* SPEC-C2.2: eleger estrela */}
+                                                        <button
+                                                            title={engine.starPlayerId === p.id ? 'Estrela do clube' : 'Eleger como estrela'}
+                                                            onClick={(e) => { e.stopPropagation(); electStarPlayer(engine, engine.starPlayerId === p.id ? null : p.id); forceUpdate(); }}
+                                                            className={engine.starPlayerId === p.id ? 'ef-icon-btn ef-icon-btn--accent' : 'ef-icon-btn'}
+                                                        >
+                                                            <Star size={16} weight={engine.starPlayerId === p.id ? 'fill' : 'regular'} />
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
