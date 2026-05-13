@@ -111,12 +111,16 @@ export function DashboardView() {
     const handleAcceptOffer = (playerId) => { const result = engine.acceptTransferOffer(playerId); setLog(result.msg); forceUpdate(); };
     const handleRejectOffer = (playerId) => { engine.rejectTransferOffer(playerId); setLog('Oferta recusada.'); forceUpdate(); };
 
+    // SPEC-176/183: Stitch-aligned next-match preview data (real engine, no hallucinated names)
+    const nextOpponentName = (engine.nextMatch?.opponentName) || (engine.getNextOpponent?.()?.name) || 'PRÓXIMO ADVERSÁRIO';
+    const stadiumLabel = (stadiumInfo?.name || 'ESTÁDIO').toUpperCase();
+
     return (
         <div className="ef-dashboard-container">
             <div className="ef-dashboard-inner">
                 <TrophyCeremony trophy={engine.trophyCeremony?.trophy} season={engine.trophyCeremony?.season} visible={!!engine.trophyCeremony} onDismiss={() => { engine.trophyCeremony = null; forceUpdate(); }} />
 
-                {/* === HEADER — LUXURY BENTO === */}
+                {/* === HEADER — Stitch hero bar (team identity + balance + season) === */}
                 <EfPanel variant="hero" padding="lg" className="ef-dashboard-header">
                     <div className="ef-dashboard-header__left">
                         <div className="ef-dashboard-team-badge">
@@ -132,6 +136,7 @@ export function DashboardView() {
                     </div>
                     <div className="ef-dashboard-header__right">
                         <div className={`ef-dashboard-balance ${team.balance > 0 ? 'ef-dashboard-balance--positive' : 'ef-dashboard-balance--negative'}`}>
+                            <Wallet weight="fill" className="ef-dashboard-balance__icon" />
                             R$ {(team.balance / 1000000).toFixed(1)}M
                         </div>
                         {boardStatus && (
@@ -147,6 +152,50 @@ export function DashboardView() {
                             <div className="ef-progress ef-progress--xs">
                                 <div className="ef-progress__fill" style={{ width: `${(seasonWeek / 38) * 100}%` }} />
                             </div>
+                        </div>
+                    </div>
+                </EfPanel>
+
+                {/* === HERO MATCH — Stitch "Próximo Jogo" centerpiece === */}
+                <EfPanel variant="hero" padding="lg" className="ef-dashboard-hero-match">
+                    <div className="ef-dashboard-hero-match__tag">PRÓXIMO JOGO</div>
+                    <div className="ef-dashboard-hero-match__body">
+                        <div className="ef-dashboard-hero-match__teams">
+                            <div className="ef-dashboard-hero-match__team">
+                                <div className="ef-dashboard-hero-match__crest ef-dashboard-hero-match__crest--home">
+                                    <span className="ef-dashboard-hero-match__crest-letter">{(team.name?.[0] || 'F').toUpperCase()}</span>
+                                </div>
+                                <p className="ef-dashboard-hero-match__team-name">{team.name?.toUpperCase()}</p>
+                            </div>
+                            <div className="ef-dashboard-hero-match__vs">VS</div>
+                            <div className="ef-dashboard-hero-match__team">
+                                <div className="ef-dashboard-hero-match__crest ef-dashboard-hero-match__crest--away">
+                                    <span className="ef-dashboard-hero-match__crest-letter">{(nextOpponentName[0] || '?').toUpperCase()}</span>
+                                </div>
+                                <p className="ef-dashboard-hero-match__team-name">{String(nextOpponentName).toUpperCase()}</p>
+                            </div>
+                        </div>
+                        <div className="ef-dashboard-hero-match__meta">
+                            <div className="ef-dashboard-hero-match__info-box">
+                                <p className="ef-dashboard-hero-match__info-label">ESTÁDIO: {stadiumLabel}</p>
+                                <p className="ef-dashboard-hero-match__info-value">FORMAÇÃO: {team.formation}</p>
+                            </div>
+                            <EfButton
+                                variant="primary"
+                                size="lg"
+                                className="ef-dashboard-hero-match__cta"
+                                onClick={() => {
+                                    const events = engine.getPacingEvents?.() || [];
+                                    if (events.length > 0) {
+                                        setPacingQueue(events);
+                                    } else {
+                                        engine.checkPressConference();
+                                        if (!engine.pressQuestion) changeView('match'); else forceUpdate();
+                                    }
+                                }}
+                            >
+                                <SoccerBall weight="fill" /> ESCALAR E JOGAR
+                            </EfButton>
                         </div>
                     </div>
                 </EfPanel>
@@ -487,6 +536,24 @@ export function DashboardView() {
                         </EfButton>
                     ))}
                 </div>
+
+                {/* === STITCH FOOTER CTA — Avançar Semana === */}
+                <button
+                    type="button"
+                    className="ef-dashboard-footer-cta"
+                    title="Avança 1 semana (treino, finanças, lesões, eventos) e joga a próxima partida"
+                    onClick={() => {
+                        const events = engine.getPacingEvents?.() || [];
+                        if (events.length > 0) {
+                            setPacingQueue(events);
+                        } else {
+                            engine.checkPressConference();
+                            if (!engine.pressQuestion) changeView('match'); else forceUpdate();
+                        }
+                    }}
+                >
+                    AVANÇAR SEMANA
+                </button>
 
                 {/* Feedback log */}
                 {log && <div className="event-toast success" onClick={() => setLog('')}>{log}</div>}
