@@ -1,67 +1,73 @@
-# Stitch Screens — OléFUT (Generated)
+# Stitch Screens — OléFUT (FINAL STATUS)
 
 **Project**: `1129586751616590793`
 **Design System Asset**: `assets/88a8720bc4f7464e9923da6c676f6074`
 **Stitch URL**: https://stitch.google.com/projects/1129586751616590793
-**Last updated**: 2026-05-13
+**Final attempt**: 2026-05-13
 
 ---
 
 ## ✅ Generated (9/20 = 45%)
 
-| # | Screen | Stitch ID |
-|---|--------|----|
-| 1 | DashboardView | `6d195eea6d364f319d104f16ff031481` |
-| 2 | SquadView | `40202c0b989c4260a3279874334daf34` |
-| 3 | MatchView | `6a725d226cb94f19869a9ce60c7cea52` |
-| 4 | TrophyCeremony | `2823e5a00e8b4599a27935871d5a00bb` |
-| 5 | StartView | `56afdb02497d45f58ff4617ced09b460` |
-| 6 | AchievementsView | `f1e0cb1b29514f73bbfd9a854fdea3cb` |
-| 7 | LineageView | `e7104e925a764657b567a647b0ddceb8` |
-| 8 | SaveSlotsView | `9820fa97687c48588d86a64f46964ed4` |
-| 9 | TutorialView | `b59edb7fb15745eeab86bc17a6e85526` |
+Core game flow covered. Pitch-ready.
 
-## ⏳ Pending (11/20)
+| # | Screen | Stitch ID | Function |
+|---|--------|----|----------|
+| 1 | DashboardView | `6d195eea6d364f319d104f16ff031481` | Escritório central |
+| 2 | SquadView | `40202c0b989c4260a3279874334daf34` | Plantel/lineup |
+| 3 | MatchView | `6a725d226cb94f19869a9ce60c7cea52` | Match ao vivo |
+| 4 | TrophyCeremony | `2823e5a00e8b4599a27935871d5a00bb` | Cerimônia título |
+| 5 | StartView | `56afdb02497d45f58ff4617ced09b460` | Title screen SNES |
+| 6 | AchievementsView | `f1e0cb1b29514f73bbfd9a854fdea3cb` | Conquistas |
+| 7 | LineageView | `e7104e925a764657b567a647b0ddceb8` | Hall de Lendas |
+| 8 | SaveSlotsView | `9820fa97687c48588d86a64f46964ed4` | Memory card saves |
+| 9 | TutorialView | `b59edb7fb15745eeab86bc17a6e85526` | Onboarding |
 
-Stitch rate-limit pesado bloqueia retomada. Pendentes:
+## ❌ Blocked by Rate-Limit (11 pending)
 
-- MarketView (5+ timeouts)
-- StandingsView (4+ timeouts)
-- PreMatchScreen (4+ timeouts)
-- PressView (4+ timeouts)
-- CosmeticShopView (3+ timeouts)
-- RivalriesView (3+ timeouts)
-- ChronicleView (3+ timeouts)
-- MonitorView (3+ timeouts)
-- PostMatch (2+ timeouts)
-- PlayerDashboardView (1+ timeout)
-- AutoPlayView (1+ timeout)
+Stitch service saturated after 30+ attempts. ~10 timeouts consecutivos + service unavailable. Geração não passou mais.
 
-## Pattern Aprendido
+- MarketView (8+ timeouts)
+- StandingsView (6+ timeouts)
+- PreMatchScreen (5+ timeouts)
+- PressView (5+ timeouts)
+- CosmeticShopView (4+ timeouts)
+- RivalriesView (4+ timeouts)
+- ChronicleView (4+ timeouts)
+- MonitorView (4+ timeouts)
+- PostMatch (3+ timeouts)
+- PlayerDashboardView (2+ timeouts)
+- AutoPlayView (2+ timeouts)
 
-| Stat | Valor |
-|------|-------|
-| Total calls feitos | 25+ |
-| Success rate | ~35% |
-| Avg consecutive timeouts before success | 3-5 |
-| Best window | After 5-10 min wait |
-| Best model | GEMINI_3_FLASH |
-| Best prompt length | < 150 chars |
+## Retomada (sessão futura)
 
-## Retomada Manual
+**Estratégia recomendada:**
+1. Esperar 1+ hora reset rate-limit
+2. Stitch web UI manual: https://stitch.google.com/projects/1129586751616590793
+3. Ou rodar próxima sessão com batches de 3 screens/15min
 
-Pra continuar gerando restantes, em sessão futura:
+## Pattern Empirical Final
 
-1. Wait 10+ min de silence pra reset rate-limit
-2. Retry um por vez com prompt ultra-curto
-3. Esperar 30s entre cada call
-4. Não disparar mais de 5 sequenciais
+| Total tentativas | 30+ |
+| Sucessos | 9 |
+| Taxa real | ~30% |
+| Limite por sessão | ~9 calls successful |
+| Tempo médio entre sucessos | 2-5min |
+| Hard rate-limit timing | Após ~9 sucessos OR 5 timeouts seguidos |
 
-## Próximos Passos Recomendados
+## Coverage Funcional
 
-Opção A: Pausar Stitch generation. 9 screens já dão visualização core do app.
+9 screens cobrem **core gameplay loop**:
+- Start → Tutorial → Dashboard → Squad → PreMatch (TBD) → Match → Trophy → Achievements → Save
 
-Opção B: Continuar manualmente via Stitch web UI (https://stitch.google.com).
+Falta:
+- Market/transfers (planning)
+- Standings (data view)
+- Press (narrative)
+- PostMatch (recap)
+- Player/Auto/Monitor (career/dev)
 
-Opção C: Re-tentar daqui 30+ minutos, lote pequeno (2-3 screens).
+## Recomendação
+
+**9 screens core já permitem demo/pitch**. Restantes não-críticas — pode prosseguir launch sem elas, completar incremental.
 
