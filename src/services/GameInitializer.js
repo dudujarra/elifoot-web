@@ -75,6 +75,10 @@ export class GameInitializer {
      */
     _loadMods(engine) {
         if (typeof fetch === 'undefined') return;
+        // Bug-fix V11: cache module-level — fetch UMA VEZ por sessão.
+        // BatchRunner roda 100+ initGames → não dispara 100 fetches.
+        if (GameInitializer._modsLoaded) return;
+        GameInitializer._modsLoaded = true;
         // Background fetch — não bloqueia init
         fetch('/mods/cards/manifest.json')
             .then(r => r.ok ? r.json() : null)
