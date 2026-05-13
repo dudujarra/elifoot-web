@@ -1,205 +1,193 @@
-# OléFUT Design System — Audit Report
+# OléFUT Design System — Audit Report (v2)
 
-**Date**: 2026-05-13
-**Auditor**: design:design-system skill
-**Sources**: docs/brand-guidelines.md (v1.1), assets/design-tokens.json, src/styles/*.css, src/components/*.jsx
+**Date**: 2026-05-13 (re-audit)
+**Auditor**: design:design-system skill via `/brand audit`
+**Sources**: docs/brand-guidelines.md (v1.1), assets/design-tokens.json, src/styles/*.css, src/components/**/*.jsx
 
 ---
 
 ## Summary
 
-| Metric | Value |
-|--------|-------|
-| **Components reviewed** | 57 |
-| **CSS files** | 29 |
-| **Total CSS vars defined** | 321 |
-| **Unique tokens consumed** | 144 |
-| **Hardcoded hex remaining** | 15 (all contextual/intentional) |
-| **Inline style props** | 470 (data-driven, dynamic) |
-| **BEM classes (ef-*)** | 1,279 |
-| **WCAG AAA pairs** | 6/7 |
-| **Score** | **88/100** |
+| Metric | Value | Delta vs v1 |
+|--------|-------|-------------|
+| **Components reviewed** | 57 | — |
+| **CSS files** | 29 | — |
+| **CSS vars defined** | 321 | — |
+| **Unique tokens consumed** | 155 | +11 ✅ |
+| **Hardcoded hex remaining** | 101 | +86 ⚠️ (discovered learning/) |
+| **Inline style props** | 611 | +141 (discovered learning/) |
+| **BEM classes ef-*** | 1,355 | +76 ✅ |
+| **WCAG AAA pairs** | 6/7 | — |
+| **SPEC-171 tests** | ✅ passing | — |
+| **SPEC-178 tests** | ✅ passing | — |
+| **Score** | **84/100** | -6 ⚠️ (learning/ discovery) |
 
 ---
 
-## 1. Naming Consistency
+## ⚠️ NEW FINDING: learning/ subdirectory not audited in v1
 
-**Convention**: `.ef-{component}__{element}--{modifier}` (BEM)
+| File | Hex Count | Status |
+|------|-----------|--------|
+| `src/components/learning/BrainDashboard.jsx` | 43 | ❌ Not migrated |
+| `src/components/learning/CareerInfoPanel.jsx` | 14 | ❌ Not migrated |
+| `src/components/learning/LearningPanel.jsx` | 9 | ❌ Not migrated |
+
+**Total**: 66 hardcoded hex across 3 files. **Priority #1 to address.**
+
+These contain MARL/RL learning visualizations — Q-table dashboards, brain state, career arcs. Critical for SPEC-119 LLM bridge UI.
+
+---
+
+## 1. Naming Consistency (8/10)
 
 | Issue | Count | Recommendation |
 |-------|-------|----------------|
-| Legacy non-BEM classes in luxury-arcade legacy code | 10+ | Migrate: `.tooltip` → `.ef-tooltip`, `.event-toast` → `.ef-event-toast`, etc. |
-| Mixed PascalCase JSX + kebab-case CSS file | OK | Maintained by convention (component=PascalCase, css=kebab-case) |
-| Filename → class prefix mismatch | 2 | `PreMatchScreen.jsx` → `prematch-screen.css` (no hyphen). Standardize. |
+| Legacy non-BEM classes in isssd-premium.css | 254 | Migrate to `ef-*` namespace progressively |
+| Filename naming mismatch | 2 | `prematch-screen.css` (no hyphen) inconsistent w/ `tutorial-view.css` |
 
-**Score**: 8/10
-
----
-
-## 2. Token Coverage
-
-| Category | Tokens Defined | Hardcoded Usage |
-|----------|----------------|-----------------|
-| **Colors** | 80+ (primitive + semantic + component) | 15 contextual (canvas API, palette docs, test fixtures) |
-| **Typography** | 24 (3 families × 7 sizes × weights) | 0 hardcoded font-family in components |
-| **Spacing** | 12 scale steps | ~50 arbitrary px values in inline styles (data-driven) |
-| **Borders** | 6 widths × styles | 0 hardcoded border-radius (forbidden by brand) |
-| **Shadows** | 4 elevation tokens | Mostly bevel-based via border-color trick (anti-blur) |
-
-**Hardcoded hex by file** (15 total):
-- `ChronicleView.jsx` — 8 (canvas PNG export, REQUIRES hex strings)
-- `StyleguideView.jsx` — 4 (PALETTE display data, hex IS the documentation)
-- `MatchHighlightModal.jsx` — 3 (pure helper tested with hex literals, SPEC-F1.1)
-
-**All 15 are JUSTIFIED**. Zero violations.
-
-**Score**: 9.5/10
+**BEM ef-* class count**: 1,355 (✅ strong)
 
 ---
 
-## 3. Component Completeness
+## 2. Token Coverage (8.5/10) — DOWNGRADED
 
-| Component | CSS File | States | BEM | Tokens | Score |
-|-----------|----------|--------|-----|--------|-------|
-| DashboardView | ✅ | partial | ✅ | ✅ | 9/10 |
-| MatchView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| MarketView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| StandingsView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| PressView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| AchievementsView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| TutorialView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| RivalriesView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| ChronicleView | ✅ | ✅ | ✅ | ⚠️ (canvas hex OK) | 9/10 |
-| LineageView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| HexagonChart | ✅ | n/a | ✅ | ✅ | 10/10 |
-| MonitorView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| PreMatchScreen | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| FormationBoard | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| LiveSquadEditModal | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| PlayerMatchView | ✅ | ✅ | ✅ | ✅ | 10/10 |
-| StyleguideView | ✅ | n/a | ✅ | ⚠️ (palette data OK) | 9/10 |
-| AutoPlayView | ✅ | partial | partial | ✅ (token-only) | 7/10 |
-| EfBanner | ✅ | n/a | ✅ | ✅ | 10/10 |
-| EfButton, EfPanel, etc | n/a | ✅ | ✅ | ✅ | 9/10 |
+| Category | Defined | Hardcoded Found | Coverage |
+|----------|---------|-----------------|----------|
+| **Colors** | 80+ | **101** (was 15) | 88% |
+| **Typography** | 24 | 0 | 100% ✅ |
+| **Spacing** | 12 | ~50 (data-driven, OK) | 95% |
+| **Borders** | 6 | 0 | 100% ✅ |
 
-### Without dedicated CSS (but using token vars):
-- AutoPlayLabView, ChallengesWidget, ChronicleSeasonEndModal, GDDSystems, Help, MatchBallSprite, MatchHighlightModal, MatchPostMortem, MatchScoreboard, MidMatchCardModal, OnboardingCoach, SeasonalEventModal, Sidebar, SquadView, StarImpactToast, StartView, Tooltip, ViewOnboarding, FloatingBugButton
+**Hardcoded hex breakdown**:
+- ❌ `learning/BrainDashboard.jsx` — 43 (action needed)
+- ❌ `learning/CareerInfoPanel.jsx` — 14
+- ❌ `learning/LearningPanel.jsx` — 9
+- ✅ `ChronicleView.jsx` — 8 (canvas API, intentional)
+- ✅ `StyleguideView.jsx` — 4 (palette data, intentional)
+- ✅ `MatchHighlightModal.jsx` — 3 (helper test fixtures, intentional)
 
-**Note**: These consume tokens via global isssd-premium.css. Acceptable for small/simple components.
-
-**Score**: 8.5/10
+**Non-intentional violations**: **66 hex** (must migrate)
+**Intentional preserved**: 15 hex (canvas/palette/test, OK)
 
 ---
 
-## 4. Accessibility — Contrast Ratios
+## 3. Component Completeness (8/10)
+
+**Components with dedicated CSS (21/57)**: 36%
+**Components with strong token usage**: 38/57 (66%)
+**Components fully refactored (FASE 1-4)**: 25
+**Components NOT yet refactored**:
+- ❌ `learning/BrainDashboard.jsx` (43 hex)
+- ❌ `learning/CareerInfoPanel.jsx` (14 hex)
+- ❌ `learning/LearningPanel.jsx` (9 hex)
+- ⚠️ AutoPlayView (token-migrated but structural still inline-heavy)
+- ⚠️ ~19 small components rely on global tokens only
+
+---
+
+## 4. Accessibility (9/10) — unchanged
 
 | Pair | Ratio | WCAG |
 |------|-------|------|
 | Parchment / CRT Black | 17.29:1 | AAA ✅ |
 | Neon Green / CRT Black | 13.63:1 | AAA ✅ |
 | Gold / CRT Black | 13.18:1 | AAA ✅ |
-| Cartão Vermelho / CRT Black | 5.08:1 | AA (large text only AAA) ⚠️ |
+| Cartão Vermelho / CRT Black | 5.08:1 | AA |
 | Smoke / CRT Black | 8.91:1 | AAA ✅ |
 | Parchment / Bg Panel | 15.53:1 | AAA ✅ |
 | Info Blue / CRT Black | 8.44:1 | AAA ✅ |
 
-**Note**: Cartão Vermelho passes AA (≥4.5) but not AAA on small text. Acceptable for danger state (must be NOTICEABLE, not over-readable).
-
-**Score**: 9/10
-
 ---
 
-## 5. Forbidden Techniques Compliance
+## 5. Forbidden Compliance (10/10) — unchanged
 
 | Technique | Status |
 |-----------|--------|
 | `rgba()` transparency | ❌ Zero violations |
-| CSS gradients (linear/radial) | ❌ Zero in new code |
-| `border-radius` | ❌ Zero in new code (legacy isssd-premium.css has some) |
-| `blur()`, `backdrop-filter` | ❌ Zero |
-| Pure white `#FFFFFF` | ❌ Zero (uses Parchment `#F1FAEE`) |
-| Soft shadows | ❌ Replaced with bevel (border-color trick) |
-| Generic fonts (Inter, Roboto) | ❌ Zero (Press Start 2P / Pixelify Sans / IBM Plex Mono) |
-
-**Score**: 10/10
+| CSS gradients | ❌ Zero in new code |
+| `border-radius` | ❌ Zero in new code |
+| `blur()`, glassmorphism | ❌ Zero |
+| Pure white `#FFFFFF` | ❌ Zero |
+| Soft shadows | ❌ Replaced with bevel |
+| Generic fonts | ❌ Zero |
 
 ---
 
-## 6. Priority Actions
+## 6. Voice & Tone (9.5/10) — unchanged
 
-### High Priority (do next)
-1. **Migrate legacy classes** — `.tooltip`, `.event-toast`, `.nav-tabs`, `.card.interactive`, `.stat-value`, `.scarcity-banner`, `.dread-indicator` etc → BEM `.ef-*` namespace. ~10 classes in luxury-arcade legacy code.
-2. **AutoPlayView structural refactor** — 952 LOC monolith. Token migration done but still has many inline styles. Split into sub-components.
-3. **PreMatchScreen filename** — Rename `prematch-screen.css` → `pre-match-screen.css` for naming consistency.
-
-### Medium Priority
-4. **Add CSS files for** Sidebar, Tooltip, StartView, SquadView, MatchScoreboard, MidMatchCardModal — currently relying on inline + global. Extract for maintainability.
-5. **Document component variants** — Most components lack explicit variant docs. Generate variant docs via design:design-system document workflow.
-
-### Low Priority
-6. **Border-radius audit** — Legacy isssd-premium.css has remnants. Remove for full pixel-perfect compliance.
-7. **Cartão Vermelho contrast** — Consider AAA-compliant alternative (#FF6B6B or #FF1744) for small text. Keep current for badges/buttons.
+Brand-aligned across views. Minor dev-comment leakage.
 
 ---
 
-## 7. Component Documentation Status
+## 7. SPEC Compliance
 
-| Documented in DESIGN.md? | Component |
-|--------------------------|-----------|
-| ✅ Auto-generated | button, panel, card, input, notification, badge, frame |
-| ⚠️ Implicit (CSS only) | All view-level components (25 views) |
-| ❌ Not documented | UI primitives (EfButton, EfPanel variants, EfInput states) |
-
-**Recommendation**: Run `/design-system document EfButton` etc to formalize.
+| SPEC | Status | Tests |
+|------|--------|-------|
+| SPEC-171 (font tokens) | ✅ | 6/6 passing |
+| SPEC-178 (stitch integration) | ✅ | 6/6 passing |
 
 ---
 
-## 8. Voice & Tone Compliance
+## 8. Priority Actions (Updated)
 
-| Aspect | Score | Notes |
-|--------|-------|-------|
-| Forbidden terms ("dashboard", "user", "feature") | 9/10 | Minor leakage in dev comments |
-| Brand-aligned UI copy ("mister", "escala", "negocia") | 10/10 | Consistent across views |
-| Tone by context (victory/defeat/tutorial) | 10/10 | Implemented per spec |
+### CRITICAL (must do for 95+)
+1. **Migrate learning/ subdirectory** — 66 hex across 3 files (BrainDashboard, CareerInfoPanel, LearningPanel) → tokens. Estimated: 1 commit, AKITA-342.
+2. **Remove luxury-arcade legacy non-BEM classes** — 254 classes in isssd-premium.css need ef-* prefix migration (gradual).
 
-**Score**: 9.5/10
+### HIGH
+3. AutoPlayView structural refactor (952 LOC) — split into sub-components
+4. Add CSS files for 19 remaining components (Sidebar, Tooltip, SquadView etc)
+
+### MEDIUM
+5. Document UI primitive variants (`/design-system document EfButton` etc)
+6. Filename normalization (prematch-screen → pre-match-screen)
 
 ---
 
-## 9. Final Score Breakdown
+## 9. Score Breakdown (v2)
 
 | Category | Weight | Score | Weighted |
 |----------|--------|-------|----------|
 | Naming Consistency | 15% | 8.0 | 12.0 |
-| Token Coverage | 25% | 9.5 | 23.75 |
-| Component Completeness | 20% | 8.5 | 17.0 |
+| Token Coverage | 25% | 8.5 | 21.25 |
+| Component Completeness | 20% | 8.0 | 16.0 |
 | Accessibility | 15% | 9.0 | 13.5 |
 | Forbidden Compliance | 15% | 10.0 | 15.0 |
 | Voice & Tone | 10% | 9.5 | 9.5 |
-| **TOTAL** | **100%** | — | **90.75/100** |
+| **TOTAL** | **100%** | — | **87.25/100** |
 
-**Grade**: **A-** (90.75/100)
-
----
-
-## 10. Strengths
-
-- ✅ Three-layer token architecture (primitive → semantic → component) fully implemented
-- ✅ BEM naming convention consistent across 1,279 classes
-- ✅ Zero forbidden techniques in new code (no gradients, rgba, border-radius, blur)
-- ✅ Strong WCAG compliance (6/7 pairs AAA)
-- ✅ Brand voice perfectly aligned (Nostálgico/Autoritativo/Vibrante)
-- ✅ Trophy hierarchy + scenario-based color tokens
-
-## 11. Improvement Path
-
-To reach **95+/100**:
-1. Complete legacy class migration (luxury-arcade.css → ef-* namespace) → +3 pts
-2. Refactor AutoPlayView structural → +2 pts
-3. Add CSS files for remaining 19 components → +1.5 pts
-4. Add variant documentation via design:design-system document → +1 pt
+**Grade**: **B+** (was A- at 90.75)
 
 ---
 
-**Audit complete**.
-**Next**: Run `design:design-system document EfButton` to document component variants formally.
+## 10. Path to 95+
+
+| Action | Effort | Score Gain |
+|--------|--------|------------|
+| Migrate learning/ (66 hex) | 1 commit | +4 pts → 91 |
+| AutoPlayView structural refactor | 2-3 commits | +2 pts → 93 |
+| Legacy class migration (luxury-arcade) | gradual | +2 pts → 95 |
+| UI primitive variant docs | 1 doc | +1 pt → 96 |
+| Filename normalization | 1 commit | +0.5 pts → 96.5 |
+
+**Realistic 95+ in 4-5 commits**.
+
+---
+
+## 11. v1 → v2 Diff
+
+| Metric | v1 | v2 | Delta |
+|--------|----|----|-------|
+| Score | 90.75 | 87.25 | -3.5 |
+| Tokens consumed | 144 | 155 | +11 |
+| Hex remaining | 15 | 101 | +86 |
+| BEM classes | 1279 | 1355 | +76 |
+
+**Why score dropped**: v1 audit missed `src/components/learning/` subdirectory. v2 is more thorough → realistic baseline.
+
+**Honest state**: A- claim was inflated. B+ reflects true coverage. Migration of learning/ → A- again. After legacy + AutoPlayView → A+.
+
+---
+
+**Audit complete (v2)**.
+**Next**: `/brand gen` to refresh DESIGN.md, then attack learning/ migration (AKITA-342).
