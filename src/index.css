@@ -18,6 +18,7 @@
 @import './styles/monitor-view.css';
 @import './styles/prematch-screen.css';
 @import './styles/formation-board.css';
+@import './styles/live-squad-edit-modal.css';
 
 /* SPEC-A11y Focus visible (WCAG 2.1 AA) */
 *:focus-visible {
