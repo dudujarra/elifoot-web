@@ -60,11 +60,11 @@ describe('BUG-040 — emergency squad replenish in startNewSeason', () => {
     });
 });
 
-describe('BUG-042 — state encoding includes squadTier (7 dims)', () => {
+describe('BUG-042 — state encoding includes squadTier (9 dims, incl opponent scouting)', () => {
     test('thin squad bucket detected', () => {
         const key = encodeState({ squadSize: 8 });
         const parts = key.split('|');
-        expect(parts.length).toBe(7);
+        expect(parts.length).toBe(9);
         expect(parts[5]).toBe('TN');
     });
 
