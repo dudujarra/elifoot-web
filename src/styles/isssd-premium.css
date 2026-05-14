@@ -152,7 +152,7 @@ h1, h2, h3, h4 {
 
 .ef-btn:active {
   transform: translateY(2px);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-pressed);
 }
 
 /* Button Sizes */
@@ -165,7 +165,7 @@ h1, h2, h3, h4 {
   background: #0A1A0A;
   color: var(--primary);
   border-color: var(--bezel-primary-light) var(--bezel-primary-dark) var(--bezel-primary-dark) var(--bezel-primary-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-raised);
   text-shadow: 1px 1px 0 #000;
 }
 .ef-btn-primary:hover {
@@ -177,7 +177,7 @@ h1, h2, h3, h4 {
   background: var(--bg-panel);
   color: var(--text-main);
   border-color: var(--bezel-light) var(--bezel-dark) var(--bezel-dark) var(--bezel-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-raised);
   text-shadow: 1px 1px 0 #000;
 }
 .ef-btn-secondary:hover {
@@ -189,7 +189,7 @@ h1, h2, h3, h4 {
   background: #1A0A0A;
   color: var(--danger);
   border-color: var(--bezel-danger-light) var(--bezel-danger-dark) var(--bezel-danger-dark) var(--bezel-danger-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-raised);
   text-shadow: 1px 1px 0 #000;
 }
 .ef-btn-danger:hover {
@@ -201,7 +201,7 @@ h1, h2, h3, h4 {
   background: transparent;
   color: var(--text-muted);
   border-color: #333 #111 #111 #333;
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-raised);
 }
 .ef-btn-ghost:hover {
   background: var(--bg-panel);
@@ -243,31 +243,31 @@ h1, h2, h3, h4 {
 .ef-panel-default, .ef-panel-elev {
   background: var(--bg-panel);
   border-color: var(--bezel-light) var(--bezel-dark) var(--bezel-dark) var(--bezel-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-elevated);
 }
 
 .ef-panel-sunk {
   background: var(--bg-dark);
   border-color: var(--bezel-dark) var(--bezel-light) var(--bezel-light) var(--bezel-dark);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-pressed);
 }
 
 .ef-panel-hero {
   background: #0B2015;
   border-color: var(--bezel-primary-light) var(--bezel-primary-dark) var(--bezel-primary-dark) var(--bezel-primary-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-elevated), var(--component-glow-neon-soft);
 }
 
 .ef-panel-warning {
   background: #1A1A0A;
   border-color: var(--bezel-accent-light) var(--bezel-accent-dark) var(--bezel-accent-dark) var(--bezel-accent-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-elevated);
 }
 
 .ef-panel-danger {
   background: #1A0A0A;
   border-color: var(--bezel-danger-light) var(--bezel-danger-dark) var(--bezel-danger-dark) var(--bezel-danger-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-elevated);
 }
 
 /* ==========================================================================
@@ -279,7 +279,7 @@ h1, h2, h3, h4 {
   background: #1E2124;
   border: 4px solid;
   border-color: var(--bezel-light) var(--bezel-dark) var(--bezel-dark) var(--bezel-light);
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-raised);
   transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
   position: relative;
 }
@@ -308,7 +308,7 @@ h1, h2, h3, h4 {
 
 .ef-card-player.ef-selected {
   border-color: #40BAF7;
-  /* box-shadow removed for brand compliance */
+  box-shadow: var(--component-bevel-raised), 0 0 0 3px #40BAF7;
 }
 
 .ef-card-player-info {

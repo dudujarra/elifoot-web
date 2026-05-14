@@ -220,6 +220,20 @@
   --frame-metallic-highlight: #FFFFFF;
   --frame-metallic-shadow: #8B7500;
 
+  /* Bevel Box-Shadows — Stitch styleGuidelines 32-Bit Bevel.
+     Highlight top-left + shadow bottom-right simulates CRT arcade cabinet raised surface.
+     Source: Stitch project 1129586751616590793 — OléFUT Design System ISSSD-Premium 32-bit. */
+  --component-bevel-raised: 2px 2px 0 0 var(--frame-bevel-shadow), -2px -2px 0 0 var(--frame-bevel-highlight);
+  --component-bevel-pressed: inset 2px 2px 0 0 var(--frame-bevel-shadow), inset -2px -2px 0 0 var(--frame-bevel-highlight);
+  --component-bevel-elevated: 2px 2px 0 0 var(--frame-bevel-shadow), -2px -2px 0 0 var(--frame-bevel-highlight), 4px 4px 0 0 rgba(4, 8, 5, 0.4);
+
+  /* Neon Glow — Stitch styleGuidelines: 0px blur, 4px spread CRT phosphor emissive.
+     Active buttons + notifications + focus pulses ONLY. */
+  --component-glow-neon: 0 0 0 4px var(--primitive-color-green-neon);
+  --component-glow-neon-soft: 0 0 0 2px var(--primitive-color-green-neon);
+  --component-glow-trophy: 0 0 0 3px var(--primitive-color-gold-trophy);
+  --component-glow-danger: 0 0 0 3px var(--primitive-color-red-danger);
+
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
   /* ACCESSIBILITY & RESPONSIVE                       */
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */

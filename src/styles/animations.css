@@ -99,9 +99,10 @@
 }
 
 @keyframes ef-pulse-glow {
-    /* Highlight pulsing — focus rings, important badges */
-    0%, 100% { /* box-shadow removed for brand compliance */ }
-    50%      { /* box-shadow removed for brand compliance */ }
+    /* Highlight pulsing — focus rings, important badges.
+       Stitch styleGuideline: CRT phosphor emissive glow on critical elements. */
+    0%, 100% { box-shadow: var(--component-glow-neon-soft); }
+    50%      { box-shadow: var(--component-glow-neon); }
 }
 
 @keyframes ef-counter {
@@ -229,7 +230,7 @@ button:not(.no-anim):not([disabled]):active {
 .card.clickable:hover {
     transform: translateY(-2px);
     transition: transform 100ms steps(1);
-    /* box-shadow removed for brand compliance */
+    box-shadow: var(--component-bevel-elevated);
 }
 
 /* Stat counter pulse on update */

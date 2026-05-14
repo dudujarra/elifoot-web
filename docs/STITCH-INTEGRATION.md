@@ -64,9 +64,21 @@ Stitch parsed and codified:
 - **Brand philosophy**: "Premium Nostalgia" rejecting clinical spreadsheet UX
 - **Aesthetic**: Retro/Vaporwave + Brutalism, 16-bit/32-bit era SNES reference (ISSSD)
 - **Grid**: 4px baseline, 12-col desktop / 4-col mobile
-- **Depth**: Bold borders + tonal layering (NO soft shadows, NO gradients)
-- **CRT atmosphere**: Scanline overlay recommendation
-- **Components**: Button (3 states), Panel, Input (terminal feel), Chips, Progress bars
+- **Depth**: 2-tone bevel (highlight `#2D6A4F` top-left + shadow `#040805` bottom-right) + bold borders + tonal layering. NO soft shadows with blur, NO gradients. Hard box-shadow with 0px blur ALLOWED for bevel + CRT phosphor glow on active/critical elements.
+- **CRT atmosphere**: Scanline overlay recommendation. Neon glow `0 0 0 4px` spread (no blur) simulates phosphor emissive.
+- **Components**: Button (4 states: default/hover/active/danger), Panel (bevel + optional header bg `#1B4332`), Input (abyss bg + pulsing neon focus), Badges (Press Start 2P 8-10px), List items (1px Forest Dark separator, full-row Pitch Green hover).
+
+### Bevel + Glow Utility Tokens (SPEC-185, 2026-05-13)
+
+| Token | Use |
+|-------|-----|
+| `--component-bevel-raised` | Buttons default, cards default — raised surface |
+| `--component-bevel-pressed` | Buttons :active, sunk panels, inputs — pressed inset |
+| `--component-bevel-elevated` | Panels, cards, popups — raised + drop |
+| `--component-glow-neon` | Active CTAs, focused notifications — `0 0 0 4px` Primary Neon |
+| `--component-glow-neon-soft` | Subtle hover/focus indicators — `0 0 0 2px` Primary Neon |
+| `--component-glow-trophy` | Achievement popups — `0 0 0 3px` Trophy Gold |
+| `--component-glow-danger` | Errors, danger pulses — `0 0 0 3px` Danger Red |
 
 ## Workflow
 

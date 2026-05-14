@@ -47,8 +47,8 @@
 }
 
 @keyframes dreadPulse {
-    0%, 100% { border-color: #111417 /* Fallback CRT Black */; /* box-shadow removed for brand compliance */ }
-    50% { border-color: #111417 /* Fallback CRT Black */; /* box-shadow removed for brand compliance */ }
+    0%, 100% { border-color: #111417 /* Fallback CRT Black */; box-shadow: var(--component-glow-danger); }
+    50% { border-color: var(--primitive-color-red-danger); box-shadow: var(--component-glow-danger), 0 0 0 6px rgba(255, 51, 51, 0.3); }
 }
 
 @keyframes dreadTextPulse {
@@ -81,7 +81,7 @@
     padding: 2rem 2.5rem;
     max-width: 420px;
     width: 90%;
-    /* box-shadow removed for brand compliance */
+    box-shadow: var(--component-bevel-elevated);
 }
 
 .tutorial-progress {

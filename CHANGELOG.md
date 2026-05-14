@@ -4,6 +4,15 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [fix] Stitch-Wins Bevel System Restoration — SPEC-185 (2026-05-13)
+
+Restaurou 27 box-shadow bevels que tinham sido removidos por engano com comentário `/* box-shadow removed for brand compliance */`. Brand compliance EXIGE bevel — Stitch design system (project `1129586751616590793` "OléFUT ISSSD-Premium 32-bit") define 2-tone bevel + neon glow para simular cabinet arcade CRT.
+
+- Tokens novos em `assets/design-tokens.css`: `--component-bevel-raised`, `--component-bevel-pressed`, `--component-bevel-elevated`, `--component-glow-neon`, `--component-glow-neon-soft`, `--component-glow-trophy`, `--component-glow-danger`.
+- Restored bevels em: `isssd-premium.css` (13 selectors: ef-btn states + ef-panel variants + ef-card-player), `animations.css` (ef-pulse-glow keyframe + card hover lift), `index.css` (.btn-primary/secondary/danger/accent/cta + .card + .glass-panel + .top-bar + .tooltip-bubble + form inputs + .mode-btn.active + .nav-tab.active + @keyframes goalPulse), `progressive-disclosure.css` (unlock-tooltip + achievement-popup), `gdd-systems.css` (dreadPulse keyframe + tutorial-card), `dashboard.css` (ef-dash-header + ef-dash-progress-fill).
+- Harness: `tests/specs/SPEC-185-bevel-tokens.test.js` (6 testes — token existence, zero orphan comments, button states, keyframe, panel hero combination).
+- Aligned React → Stitch ground truth. PR open: TBD.
+
 ### [feat] AutoPlayLab platform — AKITA-310..312 (2026-05-12)
 
 Plataforma headless de simulação batch pra validar engine/balance/IA/conteúdo:
