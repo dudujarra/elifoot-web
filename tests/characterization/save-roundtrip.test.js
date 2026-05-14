@@ -20,6 +20,7 @@ import { League } from '../../src/engine/tournaments/League.js';
 import { KnockoutCup } from '../../src/engine/tournaments/KnockoutCup.js';
 import { ContinentalCup } from '../../src/engine/tournaments/ContinentalCup.js';
 import { StateChampionship } from '../../src/engine/tournaments/StateChampionship.js';
+import { WorldClubCup } from '../../src/engine/tournaments/WorldClubCup.js';
 
 function createSeededRng(seed) {
     let state = seed >>> 0;
@@ -33,7 +34,7 @@ function createSeededRng(seed) {
 }
 
 const ENGINE_CLASS_FIELDS = ['staff', 'board', 'legacy'];
-const TOURNAMENT_CLASSES = { Tournament, League, KnockoutCup, ContinentalCup, StateChampionship };
+const TOURNAMENT_CLASSES = { Tournament, League, KnockoutCup, ContinentalCup, StateChampionship, WorldClubCup };
 
 function tournamentClassFromShape(t) {
     if (!t || typeof t !== 'object') return Tournament;
@@ -196,8 +197,8 @@ describe('Save round-trip preservation (RFCT-002)', () => {
         // All tournaments have __class tag
         for (const t of serialized.tournaments) {
             expect(t.__class).toBeDefined();
-            // SPEC-168: StateChampionship adicionado em Bloco 2.2
-            expect(['Tournament', 'League', 'KnockoutCup', 'ContinentalCup', 'StateChampionship']).toContain(t.__class);
+            // SPEC-168: StateChampionship, SPEC-180: WorldClubCup
+            expect(['Tournament', 'League', 'KnockoutCup', 'ContinentalCup', 'StateChampionship', 'WorldClubCup']).toContain(t.__class);
         }
     });
 

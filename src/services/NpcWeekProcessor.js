@@ -86,11 +86,8 @@ export class NpcWeekProcessor {
 
             const formationResult = npcFormationDecision(t, engine);
             if (formationResult.changed) {
-                if (engine._formationService) {
-                    engine._formationService.setFormation(t, formationResult.formation);
-                } else {
-                    t.formation = formationResult.formation;
-                }
+                // BUG-FIX: NPCs set formation directly; FormationService is for human player only
+                t.formation = formationResult.formation;
             }
 
             // NPC buy decisions every 4 weeks (only if near player's division for perf)

@@ -10,7 +10,7 @@ import {
 } from '../../src/services/learning/AdaptiveBrain.js';
 
 describe('SPEC-115/116 — encodeState', () => {
-    test('encodes all 7 dimensions (BUG-042 added squadTier, divTier)', () => {
+    test('encodes all 9 dimensions (BUG-042 squadTier, divTier + opponent scouting)', () => {
         const key = encodeState({
             position: 1,
             totalTeams: 20,
@@ -21,7 +21,7 @@ describe('SPEC-115/116 — encodeState', () => {
             squadSize: 22
         });
         expect(typeof key).toBe('string');
-        expect(key.split('|').length).toBe(7);
+        expect(key.split('|').length).toBe(9);
     });
 
     test('top4 vs bottom positioning', () => {
