@@ -13,10 +13,11 @@ import { ScarcityBanner, DreadIndicator, useKeyboardNav, TutorialOverlay, Ironma
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
 import { EfModal } from './ui/EfModal';
-import { 
+import {
   Users, ShoppingCart, ChartBar, SoccerBall, TrendUp, TrendDown, Heartbeat,
-  Newspaper, Lightning, Envelope, Wallet, Bank, Building, GraduationCap, Binoculars, 
-  Megaphone, Microphone, MicrophoneStage, Lightbulb, WarningCircle, ChartLineUp
+  Newspaper, Lightning, Envelope, Wallet, Bank, Building, GraduationCap, Binoculars,
+  Megaphone, Microphone, MicrophoneStage, Lightbulb, WarningCircle, ChartLineUp,
+  Trophy, Flame, Bell, WarningOctagon, Gavel, ListNumbers, Bandaids
 } from '@phosphor-icons/react';
 
 import '../styles/trophy-ceremony.css';
@@ -115,75 +116,85 @@ export function DashboardView() {
     const nextOpponentName = (engine.nextMatch?.opponentName) || (engine.getNextOpponent?.()?.name) || 'PRÓXIMO ADVERSÁRIO';
     const stadiumLabel = (stadiumInfo?.name || 'ESTÁDIO').toUpperCase();
 
+    // SPEC-186 helpers: top 5 scorers from team squad (sort by goals desc)
+    const topScorers = [...(team.squad || [])]
+        .filter(p => (p.goals || 0) > 0)
+        .sort((a, b) => (b.goals || 0) - (a.goals || 0))
+        .slice(0, 5);
+    const initial = (s) => (s?.[0] || '?').toUpperCase();
+
     return (
-        <div className="ef-dashboard-container">
-            <div className="ef-dashboard-inner">
-                <TrophyCeremony trophy={engine.trophyCeremony?.trophy} season={engine.trophyCeremony?.season} visible={!!engine.trophyCeremony} onDismiss={() => { engine.trophyCeremony = null; forceUpdate(); }} />
+        <div className="min-h-screen crt-scanlines text-on-background font-body-md">
+            <TrophyCeremony trophy={engine.trophyCeremony?.trophy} season={engine.trophyCeremony?.season} visible={!!engine.trophyCeremony} onDismiss={() => { engine.trophyCeremony = null; forceUpdate(); }} />
 
-                {/* === HEADER — Stitch hero bar (team identity + balance + season) === */}
-                <EfPanel variant="hero" padding="lg" className="ef-dashboard-header">
-                    <div className="ef-dashboard-header__left">
-                        <div className="ef-dashboard-team-badge">
-                            {pos}º • SÉRIE {['A','B','C','D'][team.division - 1]}
-                        </div>
-                        <h2 className="ef-dashboard-team-name">
-                            {team.name}
-                        </h2>
-                        <span className="ef-dashboard-team-stats">
-                            {stats.wins}V {stats.draws}E {stats.losses}D
-                            {stats.streak > 0 ? <span className="ef-dashboard-team-stats__win"><TrendUp weight="bold"/> {stats.streak}</span> : stats.streak < 0 ? <span className="ef-dashboard-team-stats__loss"><TrendDown weight="bold"/> {Math.abs(stats.streak)}</span> : ''}
-                        </span>
+            {/* === STITCH TOP NAV (sticky) === */}
+            <nav className="bg-forest-dark flex justify-between items-center w-full px-4 md:px-margin-desktop h-16 z-50 border-b-4 border-pitch sticky top-0">
+                <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 border-2 border-neon p-0.5 bg-forest-dark flex items-center justify-center">
+                        <span className="font-headline-sm text-headline-sm text-trophy">{initial(team.name)}</span>
                     </div>
-                    <div className="ef-dashboard-header__right">
-                        <div className={`ef-dashboard-balance ${team.balance > 0 ? 'ef-dashboard-balance--positive' : 'ef-dashboard-balance--negative'}`}>
-                            <Wallet weight="fill" className="ef-dashboard-balance__icon" />
-                            R$ {(team.balance / 1000000).toFixed(1)}M
-                        </div>
-                        {boardStatus && (
-                            <div className="ef-dashboard-board-status" title={`Diretoria: ${boardStatus.label} (${engine.board?.confidence ?? 60}%).`}>
-                                <span>{boardStatus.emoji}</span> {boardStatus.label}
-                            </div>
-                        )}
-                        <div className="ef-dashboard-season-progress">
-                            <div className="ef-dashboard-season-progress__info">
-                                <span>SEM {seasonWeek}/38</span>
-                                <span>TEMP {engine.seasonNumber}</span>
-                            </div>
-                            <div className="ef-progress ef-progress--xs">
-                                <div className="ef-progress__fill" style={{ width: `${(seasonWeek / 38) * 100}%` }} />
-                            </div>
-                        </div>
+                    <h1 className="font-headline-lg text-headline-lg text-neon drop-shadow-[2px_2px_0px_rgba(0,0,0,1)] hidden md:block">{team.name?.toUpperCase()}</h1>
+                </div>
+                <div className="hidden md:flex gap-8">
+                    <button onClick={() => changeView('squad')} className="text-parchment font-label-lg text-label-lg opacity-80 hover:text-neon transition-colors">PLANTEL</button>
+                    <button onClick={() => setTab('tactics')} className={`${tab === 'tactics' ? 'text-neon border-b-4 border-neon pb-1' : 'text-parchment opacity-80 hover:text-neon'} font-label-lg text-label-lg transition-colors`}>TÁTICAS</button>
+                    <button onClick={() => changeView('market')} className="text-parchment font-label-lg text-label-lg opacity-80 hover:text-neon transition-colors">MERCADO</button>
+                    <button onClick={() => changeView('standings')} className="text-parchment font-label-lg text-label-lg opacity-80 hover:text-neon transition-colors">TABELA</button>
+                </div>
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 bg-abyss px-3 py-1 border-2 border-pitch">
+                        <Wallet weight="fill" className="text-trophy" size={16} />
+                        <span className="font-label-lg text-label-lg text-trophy">R$ {(team.balance / 1000000).toFixed(1)}M</span>
                     </div>
-                </EfPanel>
+                    {boardStatus && (
+                        <div className="hidden sm:flex items-center gap-1 bg-abyss px-2 py-1 border-2 border-pitch" title={`Diretoria: ${boardStatus.label}`}>
+                            <span className="text-label-md">{boardStatus.emoji}</span>
+                            <span className="font-label-md text-label-md text-smoke">{boardStatus.label}</span>
+                        </div>
+                    )}
+                    <Bell weight="fill" className="text-neon cursor-pointer" size={24} />
+                </div>
+            </nav>
 
-                {/* === HERO MATCH — Stitch "Próximo Jogo" centerpiece === */}
-                <EfPanel variant="hero" padding="lg" className="ef-dashboard-hero-match">
-                    <div className="ef-dashboard-hero-match__tag">PRÓXIMO JOGO</div>
-                    <div className="ef-dashboard-hero-match__body">
-                        <div className="ef-dashboard-hero-match__teams">
-                            <div className="ef-dashboard-hero-match__team">
-                                <div className="ef-dashboard-hero-match__crest ef-dashboard-hero-match__crest--home">
-                                    <span className="ef-dashboard-hero-match__crest-letter">{(team.name?.[0] || 'F').toUpperCase()}</span>
+            {/* === MAIN CANVAS === */}
+            <main className="p-margin-mobile md:p-margin-desktop bg-crt-black/60 max-w-[1400px] mx-auto">
+
+                {/* Season/position header strip */}
+                <div className="mb-gutter flex flex-wrap items-center justify-between gap-3 px-2">
+                    <div className="flex items-center gap-3">
+                        <span className="bg-amber text-crt-black px-3 py-1 font-headline-sm text-headline-sm">SEM {seasonWeek}/38 • TEMP {engine.seasonNumber}</span>
+                        <span className="bg-forest-dark border-2 border-pitch px-3 py-1 font-label-md text-label-md text-parchment">{pos}º • SÉRIE {['A','B','C','D'][team.division - 1]}</span>
+                        <span className="font-label-md text-label-md text-smoke">{stats.wins}V {stats.draws}E {stats.losses}D</span>
+                        {stats.streak > 0 && <span className="inline-flex items-center gap-1 font-label-md text-label-md text-neon"><TrendUp weight="bold" /> {stats.streak}</span>}
+                        {stats.streak < 0 && <span className="inline-flex items-center gap-1 font-label-md text-label-md text-danger"><TrendDown weight="bold" /> {Math.abs(stats.streak)}</span>}
+                    </div>
+                </div>
+
+                {/* === HERO PANEL — PRÓXIMO JOGO (Stitch faithful) === */}
+                <section className="mb-gutter bg-forest-dark border-4 border-pitch p-6 relative overflow-hidden crt-bevel">
+                    <div className="absolute top-0 right-0 p-2 bg-pitch text-crt-black font-headline-sm text-headline-sm">PRÓXIMO JOGO</div>
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-8 mt-4">
+                        <div className="flex items-center gap-8 md:gap-12">
+                            <div className="text-center group">
+                                <div className="w-24 h-24 md:w-32 md:h-32 border-4 border-neon bg-abyss flex items-center justify-center group-hover:scale-105 transition-transform">
+                                    <span className="font-headline-lg text-[40px] md:text-[56px] text-neon">{initial(team.name)}</span>
                                 </div>
-                                <p className="ef-dashboard-hero-match__team-name">{team.name?.toUpperCase()}</p>
+                                <p className="font-headline-sm text-headline-sm text-parchment mt-4">{team.name?.toUpperCase()}</p>
                             </div>
-                            <div className="ef-dashboard-hero-match__vs">VS</div>
-                            <div className="ef-dashboard-hero-match__team">
-                                <div className="ef-dashboard-hero-match__crest ef-dashboard-hero-match__crest--away">
-                                    <span className="ef-dashboard-hero-match__crest-letter">{(nextOpponentName[0] || '?').toUpperCase()}</span>
+                            <div className="font-headline-lg text-headline-lg text-smoke animate-pulse">VS</div>
+                            <div className="text-center group">
+                                <div className="w-24 h-24 md:w-32 md:h-32 border-4 border-danger bg-abyss flex items-center justify-center group-hover:scale-105 transition-transform">
+                                    <span className="font-headline-lg text-[40px] md:text-[56px] text-danger">{initial(nextOpponentName)}</span>
                                 </div>
-                                <p className="ef-dashboard-hero-match__team-name">{String(nextOpponentName).toUpperCase()}</p>
+                                <p className="font-headline-sm text-headline-sm text-parchment mt-4">{String(nextOpponentName).toUpperCase()}</p>
                             </div>
                         </div>
-                        <div className="ef-dashboard-hero-match__meta">
-                            <div className="ef-dashboard-hero-match__info-box">
-                                <p className="ef-dashboard-hero-match__info-label">ESTÁDIO: {stadiumLabel}</p>
-                                <p className="ef-dashboard-hero-match__info-value">FORMAÇÃO: {team.formation}</p>
+                        <div className="w-full md:w-auto text-center md:text-right space-y-4">
+                            <div className="bg-abyss border-2 border-smoke p-4 inline-block">
+                                <p className="font-label-md text-label-md text-smoke mb-1">ESTÁDIO: {stadiumLabel}</p>
+                                <p className="font-label-md text-label-md text-neon">FORMAÇÃO: {team.formation} • {TACTICS[engine.currentTactic]?.name?.toUpperCase()}</p>
                             </div>
-                            <EfButton
-                                variant="primary"
-                                size="lg"
-                                className="ef-dashboard-hero-match__cta"
+                            <button
                                 onClick={() => {
                                     const events = engine.getPacingEvents?.() || [];
                                     if (events.length > 0) {
@@ -193,75 +204,176 @@ export function DashboardView() {
                                         if (!engine.pressQuestion) changeView('match'); else forceUpdate();
                                     }
                                 }}
+                                className="w-full md:w-auto px-8 py-4 bg-neon text-crt-black font-headline-md text-headline-md border-b-4 border-r-4 border-green-800 hover:bg-primary-fixed active:translate-y-1 active:border-0 transition-all"
                             >
-                                <SoccerBall weight="fill" /> ESCALAR E JOGAR
-                            </EfButton>
+                                <span className="inline-flex items-center gap-2"><SoccerBall weight="fill" /> ESCALAR E JOGAR</span>
+                            </button>
                         </div>
                     </div>
-                </EfPanel>
+                </section>
 
-                {/* === ALERTS === */}
-                {(injured.length > 0 || expiringContracts.length > 0 || avgEnergy < 50 || (engine.transferOffers?.length ?? 0) > 0) && (
-                    <div className="ef-dashboard-alerts">
-                        {injured.length > 0 && <EfPanel padding="sm" className="ef-dashboard-alert ef-dashboard-alert--injury"><Heartbeat color="var(--danger)" weight="fill" /><span className="ef-dashboard-alert__text ef-dashboard-alert__text--danger">{injured.length} LESIONADO{injured.length > 1 ? 'S' : ''}</span></EfPanel>}
-                        {expiringContracts.length > 0 && <EfPanel padding="sm" className="ef-dashboard-alert ef-dashboard-alert--contract"><Newspaper color="var(--accent)" weight="fill" /><span className="ef-dashboard-alert__text ef-dashboard-alert__text--secondary">{expiringContracts.length} CONTRATO{expiringContracts.length > 1 ? 'S' : ''}</span></EfPanel>}
-                        {avgEnergy < 50 && <EfPanel padding="sm" className="ef-dashboard-alert ef-dashboard-alert--energy"><Lightning color="var(--danger)" weight="fill" /><span className="ef-dashboard-alert__text ef-dashboard-alert__text--danger">CANSADO ({avgEnergy.toFixed(0)}%)</span></EfPanel>}
-                        {(engine.transferOffers?.length ?? 0) > 0 && <EfPanel padding="sm" className="ef-dashboard-alert ef-dashboard-alert--transfer" style={{ cursor: 'pointer' }} onClick={() => setTab('transfers')}><Envelope color="var(--info)" weight="fill" /><span className="ef-dashboard-alert__text ef-dashboard-alert__text--info">{(engine.transferOffers?.length ?? 0)} OFERTA{(engine.transferOffers?.length ?? 0) > 1 ? 'S' : ''}</span></EfPanel>}
-                    </div>
-                )}
+                {/* === 3-COLUMN BENTO GRID === */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-gutter">
 
-                {/* === BENTO GRID LAYOUT === */}
-                <div className="ef-dashboard-main-grid">
-                    {/* LEFT COLUMN: Navigation & Actions */}
-                    <div className="ef-dashboard-nav">
-                        <EfPanel padding="md" className="ef-dashboard-nav__tabs">
-                            {[{id:'overview',label:'Visão Geral'},{id:'tactics',label:'Táticas'},{id:'training',label:'Treino'},{id:'club',label:'Clube'},...((engine.transferOffers?.length ?? 0) > 0 ? [{id:'transfers',label:'Ofertas'}] : [])].map(t => (
-                                <EfButton key={t.id} variant={tab === t.id ? 'primary' : 'secondary'} size="md" onClick={() => setTab(t.id)} style={{ width: '100%', justifyContent: 'flex-start', fontFamily: 'var(--font-sans)', fontWeight: '600' }}>
-                                    {t.label}
-                                </EfButton>
-                            ))}
-                        </EfPanel>
-
-                        <div className="ef-dashboard-nav__actions">
-                            {/* SPEC-167: Conselho do Auxiliar */}
-                            <EfButton variant="secondary" size="md" title="Sugestão tática do auxiliar técnico baseada no adversário" style={{ width: '100%', justifyContent: 'center', fontFamily: 'var(--font-sans)', fontWeight: '600', gap: '8px' }} onClick={handleAuxiliarAdvice}>
-                                <GraduationCap weight="bold" /> Conselho do Auxiliar
-                            </EfButton>
-                            <EfButton variant="primary" size="lg" title="Joga a próxima partida e avança 1 semana (processa treino, finanças, lesões, eventos)" style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', padding: '24px', fontFamily: 'var(--font-sans)', fontWeight: 'bold', gap: '8px' }} onClick={() => {
-                                // AUDIT-FIX #17: Check pacing friction before match
-                                const events = engine.getPacingEvents?.() || [];
-                                if (events.length > 0) {
-                                    setPacingQueue(events);
-                                } else {
-                                    engine.checkPressConference();
-                                    if (!engine.pressQuestion) changeView('match'); else forceUpdate();
-                                }
-                            }}>
-                                <SoccerBall weight="fill" /> JOGAR PARTIDA
-                            </EfButton>
+                    {/* Column 1: Alertas */}
+                    <div className="bg-forest-dark border-4 border-pitch flex flex-col crt-bevel">
+                        <div className="p-3 bg-pitch flex justify-between items-center">
+                            <h3 className="font-headline-sm text-headline-sm text-crt-black">ALERTAS</h3>
+                            <WarningOctagon weight="fill" className="text-crt-black" size={20} />
                         </div>
-                    </div>
-
-                    {/* RIGHT COLUMN: Content Area */}
-                    <div className="ef-dashboard-content">
-                        {/* NEXT MATCH INFO (Always visible above tabs) */}
-                        <EfPanel padding="md" className="ef-dashboard-match-info">
-                            <div className="ef-dashboard-match-info__left">
-                                <span className="ef-dashboard-match-info__label">Formação Atual</span>
-                                <div className="ef-dashboard-match-info__formation">
-                                    <span className="ef-dashboard-match-info__formation-name">{team.formation}</span>
-                                    <span className="ef-dashboard-match-info__separator">•</span>
-                                    <span className="ef-dashboard-match-info__tactics">{TACTICS[engine.currentTactic]?.name}</span>
+                        <div className="p-4 space-y-3 flex-1">
+                            {injured.length === 0 && expiringContracts.length === 0 && avgEnergy >= 50 && (engine.transferOffers?.length ?? 0) === 0 && stats.streak < 3 && (
+                                <p className="font-label-md text-label-md text-smoke text-center py-4">Sem alertas. Clube em paz.</p>
+                            )}
+                            {injured.length > 0 && (
+                                <div className="flex items-center gap-3 bg-abyss p-3 border-l-4 border-danger">
+                                    <Bandaids weight="fill" className="text-danger" size={20} />
+                                    <div className="flex-1">
+                                        <p className="font-label-lg text-label-lg text-parchment">LESÃO</p>
+                                        <p className="font-label-md text-label-md text-danger">{injured.length} JOGADOR{injured.length > 1 ? 'ES' : ''} FORA</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="ef-dashboard-match-info__right">
-                                <div className="ef-stat-cell"><span className="ef-stat-cell__value ef-text-accent"><AnimatedStat value={sectors.goalkeeper} /></span><span className="ef-stat-cell__label"><Help id="sector.gol" />GOL</span></div>
-                                <div className="ef-stat-cell"><span className="ef-stat-cell__value ef-text-info"><AnimatedStat value={sectors.defense} /></span><span className="ef-stat-cell__label"><Help id="sector.def" />DEF</span></div>
-                                <div className="ef-stat-cell"><span className="ef-stat-cell__value ef-text-primary"><AnimatedStat value={sectors.midfield} /></span><span className="ef-stat-cell__label"><Help id="sector.mei" />MEI</span></div>
-                                <div className="ef-stat-cell"><span className="ef-stat-cell__value ef-text-danger"><AnimatedStat value={sectors.attack} /></span><span className="ef-stat-cell__label"><Help id="sector.ata" />ATA</span></div>
-                            </div>
-                        </EfPanel>
+                            )}
+                            {expiringContracts.length > 0 && (
+                                <div className="flex items-center gap-3 bg-abyss p-3 border-l-4 border-amber">
+                                    <Gavel weight="fill" className="text-amber" size={20} />
+                                    <div className="flex-1">
+                                        <p className="font-label-lg text-label-lg text-parchment">CONTRATO EXPIRA</p>
+                                        <p className="font-label-md text-label-md text-amber">{expiringContracts.length} JOGADOR{expiringContracts.length > 1 ? 'ES' : ''}</p>
+                                    </div>
+                                </div>
+                            )}
+                            {avgEnergy < 50 && (
+                                <div className="flex items-center gap-3 bg-abyss p-3 border-l-4 border-danger">
+                                    <Lightning weight="fill" className="text-danger" size={20} />
+                                    <div className="flex-1">
+                                        <p className="font-label-lg text-label-lg text-parchment">PLANTEL CANSADO</p>
+                                        <p className="font-label-md text-label-md text-danger">{avgEnergy.toFixed(0)}% ENERGIA</p>
+                                    </div>
+                                </div>
+                            )}
+                            {(engine.transferOffers?.length ?? 0) > 0 && (
+                                <button onClick={() => setTab('transfers')} className="flex w-full items-center gap-3 bg-abyss p-3 border-l-4 border-pitch hover:border-neon transition-colors text-left">
+                                    <Envelope weight="fill" className="text-pitch" size={20} />
+                                    <div className="flex-1">
+                                        <p className="font-label-lg text-label-lg text-parchment">OFERTAS</p>
+                                        <p className="font-label-md text-label-md text-pitch">{engine.transferOffers.length} RECEBIDA{engine.transferOffers.length > 1 ? 'S' : ''}</p>
+                                    </div>
+                                </button>
+                            )}
+                            {stats.streak >= 3 && (
+                                <div className="flex items-center gap-3 bg-abyss p-3 border-l-4 border-neon">
+                                    <Flame weight="fill" className="text-neon" size={20} />
+                                    <div className="flex-1">
+                                        <p className="font-label-lg text-label-lg text-neon">HOT STREAK!</p>
+                                        <p className="font-label-md text-label-md text-smoke">{stats.streak} VITÓRIAS SEGUIDAS</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
+                    {/* Column 2: Ações Rápidas */}
+                    <div className="bg-forest-dark border-4 border-pitch flex flex-col crt-bevel">
+                        <div className="p-3 bg-pitch flex justify-between items-center">
+                            <h3 className="font-headline-sm text-headline-sm text-crt-black">AÇÕES RÁPIDAS</h3>
+                            <Lightning weight="fill" className="text-crt-black" size={20} />
+                        </div>
+                        <div className="p-4 grid grid-cols-1 gap-3 flex-1">
+                            <button onClick={() => changeView('squad')} className="flex items-center gap-4 bg-forest p-4 border-2 border-pitch hover:border-neon group transition-all">
+                                <Users weight="fill" className="text-neon group-hover:scale-110 transition-transform" size={24} />
+                                <span className="font-headline-sm text-headline-sm text-parchment group-hover:text-neon">PLANTEL</span>
+                            </button>
+                            <button onClick={() => changeView('market')} className="flex items-center gap-4 bg-forest p-4 border-2 border-pitch hover:border-neon group transition-all">
+                                <ShoppingCart weight="fill" className="text-neon group-hover:scale-110 transition-transform" size={24} />
+                                <span className="font-headline-sm text-headline-sm text-parchment group-hover:text-neon">MERCADO</span>
+                            </button>
+                            <button onClick={() => changeView('standings')} className="flex items-center gap-4 bg-forest p-4 border-2 border-pitch hover:border-neon group transition-all">
+                                <ListNumbers weight="fill" className="text-neon group-hover:scale-110 transition-transform" size={24} />
+                                <span className="font-headline-sm text-headline-sm text-parchment group-hover:text-neon">TABELA</span>
+                            </button>
+                            <button onClick={handleAuxiliarAdvice} className="flex items-center gap-4 bg-forest p-4 border-2 border-pitch hover:border-neon group transition-all">
+                                <GraduationCap weight="fill" className="text-neon group-hover:scale-110 transition-transform" size={24} />
+                                <span className="font-headline-sm text-headline-sm text-parchment group-hover:text-neon">AUXILIAR</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Column 3: Top Scorers / Recent Form */}
+                    <div className="bg-forest-dark border-4 border-pitch flex flex-col crt-bevel">
+                        <div className="p-3 bg-pitch flex justify-between items-center">
+                            <h3 className="font-headline-sm text-headline-sm text-crt-black">ARTILHEIROS</h3>
+                            <Trophy weight="fill" className="text-crt-black" size={20} />
+                        </div>
+                        <div className="p-4 space-y-2 flex-1">
+                            {topScorers.length === 0 ? (
+                                <p className="font-label-md text-label-md text-smoke text-center py-4">Nenhum gol marcado ainda.</p>
+                            ) : (
+                                topScorers.map((p, i) => (
+                                    <div key={p.id || i} className={`flex justify-between items-center p-2 bg-abyss${i === 0 ? '' : '/50'} border-b-2 border-pitch${i === 0 ? '' : '/50'}`}>
+                                        <span className={`font-label-lg text-label-lg ${i === 0 ? 'text-trophy' : 'text-parchment'}`}>{i + 1}. {p.name?.toUpperCase()}</span>
+                                        <span className={`font-headline-sm text-headline-sm ${i === 0 ? 'text-neon' : 'text-smoke'}`}>{String(p.goals).padStart(2, '0')} GOLS</span>
+                                    </div>
+                                ))
+                            )}
+                            {stats.rollingForm && stats.rollingForm.length > 0 && (
+                                <div className="pt-2 border-t-2 border-pitch/50 mt-3">
+                                    <p className="font-label-md text-label-md text-smoke mb-2">FORMA RECENTE</p>
+                                    <div className="flex gap-1">
+                                        {stats.rollingForm.map((r, i) => {
+                                            const color = r === 'V' ? 'bg-neon text-crt-black' : r === 'E' ? 'bg-amber text-crt-black' : 'bg-danger text-parchment';
+                                            return <span key={i} className={`${color} font-headline-sm text-headline-sm px-2 py-1 inline-block`}>{r}</span>;
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* === SECTORS STRIP (compact, with Help tooltips P1-7 regression) === */}
+                <div className="mb-gutter bg-forest-dark border-4 border-pitch p-4 crt-bevel grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="flex flex-col items-center bg-abyss p-3 border-2 border-pitch">
+                        <span className="font-headline-lg text-headline-lg text-amber"><AnimatedStat value={sectors.goalkeeper} /></span>
+                        <span className="font-label-md text-label-md text-smoke mt-1 inline-flex items-center gap-1"><Help id="sector.gol" />GOL</span>
+                    </div>
+                    <div className="flex flex-col items-center bg-abyss p-3 border-2 border-pitch">
+                        <span className="font-headline-lg text-headline-lg text-pitch"><AnimatedStat value={sectors.defense} /></span>
+                        <span className="font-label-md text-label-md text-smoke mt-1 inline-flex items-center gap-1"><Help id="sector.def" />DEF</span>
+                    </div>
+                    <div className="flex flex-col items-center bg-abyss p-3 border-2 border-pitch">
+                        <span className="font-headline-lg text-headline-lg text-neon"><AnimatedStat value={sectors.midfield} /></span>
+                        <span className="font-label-md text-label-md text-smoke mt-1 inline-flex items-center gap-1"><Help id="sector.mei" />MEI</span>
+                    </div>
+                    <div className="flex flex-col items-center bg-abyss p-3 border-2 border-pitch">
+                        <span className="font-headline-lg text-headline-lg text-danger"><AnimatedStat value={sectors.attack} /></span>
+                        <span className="font-label-md text-label-md text-smoke mt-1 inline-flex items-center gap-1"><Help id="sector.ata" />ATA</span>
+                    </div>
+                </div>
+
+                {/* === TAB CONTENT AREA (Stitch panel wrapper) === */}
+                <div className="bg-forest-dark border-4 border-pitch crt-bevel mb-gutter">
+                    <div className="p-3 bg-pitch flex justify-between items-center flex-wrap gap-2">
+                        <h3 className="font-headline-sm text-headline-sm text-crt-black">
+                            {tab === 'overview' && 'VISÃO GERAL'}
+                            {tab === 'tactics' && 'TÁTICAS'}
+                            {tab === 'training' && 'TREINO'}
+                            {tab === 'club' && 'CLUBE'}
+                            {tab === 'transfers' && 'OFERTAS'}
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {[{id:'overview',label:'GERAL'},{id:'tactics',label:'TÁTICAS'},{id:'training',label:'TREINO'},{id:'club',label:'CLUBE'},...((engine.transferOffers?.length ?? 0) > 0 ? [{id:'transfers',label:'OFERTAS'}] : [])].map(t => (
+                                <button
+                                    key={t.id}
+                                    onClick={() => setTab(t.id)}
+                                    className={`px-3 py-1 font-headline-sm text-headline-sm border-2 transition-all ${tab === t.id ? 'bg-crt-black border-neon text-neon' : 'bg-abyss border-crt-black text-smoke hover:text-parchment hover:border-pitch'}`}
+                                >
+                                    {t.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="p-4 md:p-6">
                         {/* TAB CONTENTS */}
                         {tab === 'overview' && (
                             <div className="ef-dashboard-overview">
@@ -528,32 +640,42 @@ export function DashboardView() {
                     </div>
                 </div>
 
-                {/* BOTTOM NAVIGATION */}
-                <div className="ef-dashboard-bottom-nav">
-                    {[{view:'squad',icon:<Users weight="fill"/>,label:'Plantel'},{view:'market',icon:<ShoppingCart weight="fill"/>,label:'Mercado'},{view:'standings',icon:<ChartBar weight="fill"/>,label:'Tabela'}].map(n => (
-                        <EfButton key={n.view} variant="secondary" size="lg" className="ef-flex-1 ef-dashboard-bottom-nav__btn" onClick={() => changeView(n.view)}>
-                            {n.icon} {n.label}
-                        </EfButton>
-                    ))}
+                {/* === STITCH GIANT FOOTER CTA — AVANÇAR SEMANA === */}
+                <div className="mt-gutter pb-24 md:pb-8">
+                    <button
+                        type="button"
+                        title="Avança 1 semana (treino, finanças, lesões, eventos) e joga a próxima partida"
+                        onClick={() => {
+                            const events = engine.getPacingEvents?.() || [];
+                            if (events.length > 0) {
+                                setPacingQueue(events);
+                            } else {
+                                engine.checkPressConference();
+                                if (!engine.pressQuestion) changeView('match'); else forceUpdate();
+                            }
+                        }}
+                        className="w-full py-6 bg-neon text-crt-black font-headline-lg text-headline-lg border-b-8 border-r-8 border-green-900 active:translate-y-1 active:translate-x-1 active:border-b-4 active:border-r-4 transition-all hover:brightness-110"
+                    >
+                        AVANÇAR SEMANA
+                    </button>
                 </div>
+            </main>
 
-                {/* === STITCH FOOTER CTA — Avançar Semana === */}
-                <button
-                    type="button"
-                    className="ef-dashboard-footer-cta"
-                    title="Avança 1 semana (treino, finanças, lesões, eventos) e joga a próxima partida"
-                    onClick={() => {
-                        const events = engine.getPacingEvents?.() || [];
-                        if (events.length > 0) {
-                            setPacingQueue(events);
-                        } else {
-                            engine.checkPressConference();
-                            if (!engine.pressQuestion) changeView('match'); else forceUpdate();
-                        }
-                    }}
-                >
-                    AVANÇAR SEMANA
+            {/* === STITCH MOBILE BOTTOM NAV (fixed) === */}
+            <nav className="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 md:hidden bg-crt-black border-t-4 border-pitch z-50">
+                <button onClick={() => changeView('squad')} className="flex flex-col items-center justify-center text-smoke p-2 flex-1 h-full hover:bg-forest-dark hover:text-neon transition-colors">
+                    <Users weight="fill" size={20} />
+                    <span className="font-label-md text-label-md mt-1">PLANTEL</span>
                 </button>
+                <button onClick={() => changeView('market')} className="flex flex-col items-center justify-center text-smoke p-2 flex-1 h-full hover:bg-forest-dark hover:text-neon transition-colors">
+                    <ShoppingCart weight="fill" size={20} />
+                    <span className="font-label-md text-label-md mt-1">MERCADO</span>
+                </button>
+                <button onClick={() => changeView('standings')} className="flex flex-col items-center justify-center text-smoke p-2 flex-1 h-full hover:bg-forest-dark hover:text-neon transition-colors">
+                    <ChartBar weight="fill" size={20} />
+                    <span className="font-label-md text-label-md mt-1">TABELA</span>
+                </button>
+            </nav>
 
                 {/* Feedback log */}
                 {log && <div className="event-toast success" onClick={() => setLog('')}>{log}</div>}
@@ -638,7 +760,6 @@ export function DashboardView() {
                         </EfModal>
                     );
                 })()}
-            </div>
         </div>
     );
 }

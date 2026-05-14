@@ -1,0 +1,196 @@
+/**
+ * Stitch Theme — Tailwind v4 @theme tokens
+ *
+ * Source: Stitch project 1129586751616590793 "OléFUT ISSSD-Premium 32-bit"
+ * design system, dashboard.html tailwind.config inline.
+ *
+ * SPEC-186: Stitch-wins port (DashboardView first).
+ *
+ * Usage: import this CSS file once in main.jsx. Tailwind v4 @theme directive
+ * registers these tokens as Tailwind utility classes automatically.
+ *   bg-neon, text-pitch, border-trophy, font-headline-lg, etc.
+ */
+
+@import "tailwindcss";
+
+@theme {
+  /* === Colors (Stitch named brand) === */
+  --color-neon: #39FF14;
+  --color-pitch: #52B788;
+  --color-forest: #1B4332;
+  --color-forest-dark: #0E1F14;
+  --color-trophy: #FFD700;
+  --color-amber: #FBBF24;
+  --color-danger: #FF3333;
+  --color-danger-dark: #8B0000;
+  --color-crt-black: #111417;
+  --color-abyss: #040805;
+  --color-smoke: #A0BAAE;
+  --color-parchment: #F1FAEE;
+
+  /* Material Design surface containers (auto-gen) */
+  --color-surface: #111417;
+  --color-surface-bright: #37393d;
+  --color-surface-container: #1d2023;
+  --color-surface-container-high: #272a2d;
+  --color-surface-container-highest: #323538;
+  --color-surface-container-low: #191c1f;
+  --color-surface-container-lowest: #0b0e11;
+  --color-surface-dim: #111417;
+  --color-surface-variant: #323538;
+  --color-surface-tint: #2ae500;
+
+  --color-primary: #efffe3;
+  --color-primary-container: #39ff14;
+  --color-primary-fixed: #79ff5b;
+  --color-primary-fixed-dim: #2ae500;
+  --color-on-primary: #053900;
+  --color-on-primary-container: #107100;
+  --color-inverse-primary: #106e00;
+
+  --color-secondary: #fff9ef;
+  --color-secondary-container: #ffdb3c;
+  --color-secondary-fixed: #ffe16d;
+  --color-secondary-fixed-dim: #e9c400;
+  --color-on-secondary: #3a3000;
+  --color-on-secondary-container: #725f00;
+
+  --color-tertiary: #e9ffef;
+  --color-tertiary-container: #8cf1be;
+  --color-tertiary-fixed: #92f7c3;
+  --color-tertiary-fixed-dim: #75daa8;
+  --color-on-tertiary: #003823;
+  --color-on-tertiary-container: #006f4a;
+
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+
+  --color-on-surface: #e1e2e7;
+  --color-on-surface-variant: #baccb0;
+  --color-outline: #85967c;
+  --color-outline-variant: #3c4b35;
+  --color-background: #111417;
+  --color-on-background: #e1e2e7;
+  --color-inverse-surface: #e1e2e7;
+  --color-inverse-on-surface: #2e3134;
+
+  /* === Spacing (Stitch 4px baseline) === */
+  --spacing-base: 4px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-gutter: 16px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 32px;
+  --spacing-container-max: 1200px;
+
+  /* === Fonts (Stitch v1.1 Pixelify FINAL) === */
+  --font-headline-lg: 'Press Start 2P', monospace;
+  --font-headline-md: 'Press Start 2P', monospace;
+  --font-headline-sm: 'Press Start 2P', monospace;
+  --font-body-lg: 'Pixelify Sans', system-ui, sans-serif;
+  --font-body-md: 'Pixelify Sans', system-ui, sans-serif;
+  --font-body-sm: 'Pixelify Sans', system-ui, sans-serif;
+  --font-label-lg: 'IBM Plex Mono', monospace;
+  --font-label-md: 'IBM Plex Mono', monospace;
+  --font-data-mono: 'IBM Plex Mono', monospace;
+  --font-stats-mono: 'IBM Plex Mono', monospace;
+  --font-code: 'IBM Plex Mono', monospace;
+  --font-badge-display: 'Press Start 2P', monospace;
+  --font-micro-pixel: 'Press Start 2P', monospace;
+}
+
+/* Stitch-specific utilities not covered by @theme */
+@utility crt-bevel {
+  box-shadow: inset 4px 4px 0 0 rgba(255, 255, 255, 0.1),
+              inset -4px -4px 0 0 rgba(0, 0, 0, 0.5);
+}
+
+@utility crt-bevel-pressed {
+  box-shadow: inset -4px -4px 0 0 rgba(255, 255, 255, 0.1),
+              inset 4px 4px 0 0 rgba(0, 0, 0, 0.5);
+}
+
+/* CRT scanline background overlay — apply on body via class */
+@utility crt-scanlines {
+  background-color: #0c1609;
+  background-image:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06)
+    );
+  background-size: 100% 4px, 3px 100%;
+  image-rendering: pixelated;
+}
+
+/* === Custom font sizes per Stitch typography scale === */
+@utility text-headline-lg {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+}
+@utility text-headline-md {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+@utility text-headline-sm {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+@utility text-body-lg {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 400;
+}
+@utility text-body-md {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+@utility text-body-sm {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+@utility text-label-lg {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+@utility text-label-md {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+@utility text-data-mono {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+@utility text-stats-mono {
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
+}
+@utility text-badge-display {
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 400;
+}
+@utility text-micro-pixel {
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 400;
+}

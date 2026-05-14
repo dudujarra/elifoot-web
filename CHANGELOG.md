@@ -4,6 +4,26 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [feat] Stitch Dashboard Port — SPEC-186 (2026-05-13)
+
+Port faithful do Stitch `dashboard.html` para `DashboardView.jsx`. Layout completo reescrito com Tailwind v4 + classes Stitch-aligned. Preserva 100% game logic (hooks, modais, tabs, data binding).
+
+- **Tailwind v4 instalado** (`tailwindcss@^4.3.0` + `@tailwindcss/vite@^4.3.0`)
+- `src/styles/stitch-theme.css` novo: `@theme` directive com 50+ tokens (cores, spacing, fontes) + utilities `crt-bevel`, `crt-scanlines`, `text-headline-*`
+- `vite.config.js`: plugin Tailwind
+- `src/main.jsx`: import theme antes de index.css
+- `DashboardView.jsx` refactor visual:
+  - Top nav sticky (h-16, border-pitch, club crest + nav links + R$ wallet + bell)
+  - Hero match panel "PRÓXIMO JOGO" exato como Stitch (border-4 border-pitch crt-bevel)
+  - 3-col bento grid (ALERTAS / AÇÕES RÁPIDAS / ARTILHEIROS) — Stitch faithful
+  - Sectors strip compacto com Help tooltips (P1-7 regression)
+  - Tab content panel com tab switcher horizontal Stitch-styled
+  - Giant footer CTA "AVANÇAR SEMANA" (border-b-8 border-r-8, primary-fixed hover)
+  - Mobile bottom nav fixed (md:hidden)
+- Phosphor icons adicionados: Trophy, Flame, Bell, WarningOctagon, Gavel, ListNumbers, Bandaids
+- Bundle: initial 290→315KB (gzip +6KB) — dentro do budget
+- Specs futuras: SPEC-187..195 para outras views
+
 ### [fix] Stitch-Wins Bevel System Restoration — SPEC-185 (2026-05-13)
 
 Restaurou 27 box-shadow bevels que tinham sido removidos por engano com comentário `/* box-shadow removed for brand compliance */`. Brand compliance EXIGE bevel — Stitch design system (project `1129586751616590793` "OléFUT ISSSD-Premium 32-bit") define 2-tone bevel + neon glow para simular cabinet arcade CRT.
