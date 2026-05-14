@@ -88,7 +88,12 @@
   --spacing-margin-desktop: 32px;
   --spacing-container-max: 1200px;
 
-  /* === Fonts (Stitch v1.1 Pixelify FINAL) === */
+  /* === Fonts (Stitch v1.1 Pixelify FINAL) ===
+     Brand: Press Start 2P (display/headline), Pixelify Sans (body), IBM Plex Mono (data/label).
+     ZERO SERIF. Override Tailwind v4 defaults that include Georgia/Cambria/Times. */
+  --font-sans: 'Pixelify Sans', system-ui, sans-serif;
+  --font-serif: 'Pixelify Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
   --font-headline-lg: 'Press Start 2P', monospace;
   --font-headline-md: 'Press Start 2P', monospace;
   --font-headline-sm: 'Press Start 2P', monospace;
@@ -102,6 +107,17 @@
   --font-code: 'IBM Plex Mono', monospace;
   --font-badge-display: 'Press Start 2P', monospace;
   --font-micro-pixel: 'Press Start 2P', monospace;
+  --default-font-family: 'Pixelify Sans', system-ui, sans-serif;
+}
+
+/* Hard kill: any descendant of body that uses `font-serif` class gets brand body font. */
+@layer base {
+  *, *::before, *::after {
+    font-family: inherit;
+  }
+  html, body {
+    font-family: 'Pixelify Sans', system-ui, sans-serif;
+  }
 }
 
 /* Stitch-specific utilities not covered by @theme */
