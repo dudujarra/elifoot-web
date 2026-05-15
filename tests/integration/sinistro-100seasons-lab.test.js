@@ -62,6 +62,22 @@ describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
         // CRITICAL: clean state
         localStorage.clear();
 
+        // 0. Continual Learning: inject master brain if requested
+        if (process.env.CONTINUE_BRAIN === '1') {
+            try {
+                const fs = await import('fs');
+                if (fs.existsSync('.agent/sinistro-master-brain.json')) {
+                    const brainData = fs.readFileSync('.agent/sinistro-master-brain.json', 'utf8');
+                    localStorage.setItem('olefut_autoplay_brain', brainData);
+                    console.log(`\n🧠 [CONTINUAL LEARNING] Carregado cérebro existente de .agent/sinistro-master-brain.json`);
+                } else {
+                    console.warn(`\n⚠️ [CONTINUAL LEARNING] Arquivo .agent/sinistro-master-brain.json não encontrado. Começando do zero.`);
+                }
+            } catch (e) {
+                console.warn('\n⚠️ Falha ao carregar cérebro existente, iniciando do zero.', e.message);
+            }
+        }
+
         // 1. Set difficulty to SINISTRO before init
         setDifficulty('sinistro');
         expect(DIFFICULTY_MODES.sinistro).toBeDefined();
