@@ -4,6 +4,11 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [fix] AKITA-320 — Memory leak bound limit on transferOffers (2026-05-14)
+- Fixed memory leak in `engine.transferOffers` causing exponential slow-down during 10,000 season MARL soak testing in Sinistro difficulty.
+- `transferOffers` are now cleared at the end of each season in `SeasonProcessor`.
+- The bot now actively rejects unaccepted offers in `AutoPlayDecisions` to prevent offer queue stagnation.
+
 ### [feat] AutoPlayLab platform — AKITA-310..312 (2026-05-12)
 
 Plataforma headless de simulação batch pra validar engine/balance/IA/conteúdo:
