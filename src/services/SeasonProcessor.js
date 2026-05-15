@@ -659,6 +659,8 @@ export class SeasonProcessor {
 
         engine.currentWeek = 0;
         engine.seasonNumber++;
+        // BUG-FIX: Clear transfer offers at season end to prevent unbounded growth across seasons
+        engine.transferOffers = [];
         // SPEC-135: seasonsCompleted view unlock
         engine.viewUnlockState.seasonsCompleted = engine.seasonNumber - 1;
         if (engine.managerStats) {

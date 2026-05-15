@@ -367,7 +367,9 @@ export class AutoPlayDecisions {
                                     biases: decision.biases || []
                                 }, 0);
                             }
-                        } else if (offer.deadline && engine.currentWeek >= offer.deadline) {
+                        } else {
+                            // BUG-FIX: Bot immediately rejects offers it doesn't want to accept
+                            // rather than letting them clog up the queue.
                             engine.rejectTransferOffer?.(offer.playerId);
                         }
                     }
