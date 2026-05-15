@@ -105,7 +105,18 @@ export class NpcWeekProcessor {
         const npcOvr = Math.round(t.squad.reduce((s, p) => s + (p.ovr || 50), 0) / (t.squad.length || 1));
         const oppOvr = oppTeam ? Math.round(oppTeam.squad.reduce((s, p) => s + (p.ovr || 50), 0) / (oppTeam.squad.length || 1)) : npcOvr;
         // Contexto para tática profunda (Home/Away, Posição no campeonato)
-        const nextMatch = engine.state?.schedule?.[engine.currentWeek]?.find(m => m.home === t.id || m.away === t.id);
+        let nextMatch = null;
+        for (const tourney of engine.tournaments) {
+            if (tourney.fixtures && tourney.fixtures[engine.currentWeek]) {
+                const match = tourney.fixtures[engine.currentWeek].find(m => m.home === t.id || m.away === t.id);
+                if (match) { nextMatch = match; break; }
+            } else if (tourney.scheduleWeeks && tourney.scheduleWeeks[tourney.currentPhaseIndex] === engine.currentWeek) {
+                if (tourney.currentMatches) {
+                    const match = tourney.currentMatches.find(m => m.home === t.id || m.away === t.id);
+                    if (match) { nextMatch = match; break; }
+                }
+            }
+        }
         const isHome = nextMatch ? nextMatch.home === t.id : true;
         const standings = engine.getStandings(t.zone, t.division) || [];
         const position = (standings.findIndex(s => s.teamId === t.id) + 1) || 10;

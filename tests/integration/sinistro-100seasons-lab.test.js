@@ -43,10 +43,10 @@ if (typeof globalThis.localStorage === 'undefined') {
     };
 }
 
-describe('💀 Lab: Iguatu × Sinistro — 500 Seasons Stress Test', () => {
+describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
     let bot, stats, engine;
     let teamId;
-    const SEASONS = 500;
+    const SEASONS = parseInt(process.env.SOAK_SEASONS) || 10000;
     const MAX_WEEKS = SEASONS * 38 + 500; // safety margin
 
     // Tracking
@@ -58,7 +58,7 @@ describe('💀 Lab: Iguatu × Sinistro — 500 Seasons Stress Test', () => {
     let tickTimesMs = [];
     let divisionHistory = [];
 
-    beforeAll(() => {
+    beforeAll(async () => {
         // CRITICAL: clean state
         localStorage.clear();
 
@@ -160,6 +160,22 @@ describe('💀 Lab: Iguatu × Sinistro — 500 Seasons Stress Test', () => {
 
         stats = bot.getStats();
 
+        // Salvar o cérebro
+        try {
+            const fs = await import('fs');
+            const brainData = {
+                qTable: bot.brain.qTable,
+                visitCount: bot.brain.visitCount,
+                totalUpdates: bot.brain.totalUpdates,
+                personality: bot.brain.personality,
+                emotions: bot.brain.emotions.serialize(),
+            };
+            fs.writeFileSync('.agent/sinistro-master-brain.json', JSON.stringify(brainData, null, 2));
+            console.log(`\n🧠 [BRAIN EXPORT] Cérebro mestre salvo em .agent/sinistro-master-brain.json`);
+        } catch (e) {
+            console.error('Falha ao exportar cérebro', e);
+        }
+
         // Summary
         console.log(`\n${'='.repeat(70)}`);
         console.log(`📊 RESULTADO: ${stats.weeksPlayed} weeks | ${stats.seasonsPlayed} seasons | ${totalErrors} errors (test loop)`);
@@ -181,11 +197,11 @@ describe('💀 Lab: Iguatu × Sinistro — 500 Seasons Stress Test', () => {
             console.log(`📈 Divisão: ${trajectory.slice(0, 20).join(' → ')}`);
             if (trajectory.length > 20) console.log(`   ... +${trajectory.length - 20} temporadas`);
         }
-    }, 3_600_000); // 60 min timeout
+    }, 36_000_000); // 10 horas de timeout
 
     // === CORE STABILITY ===
 
-    it('1. Zero crashes over 500 seasons', () => {
+    it('1. Zero crashes over 10000 seasons', () => {
         expect(stats.seasonsPlayed).toBeGreaterThanOrEqual(SEASONS);
         expect(stats.errorCount).toBe(0);
     });
@@ -257,7 +273,7 @@ describe('💀 Lab: Iguatu × Sinistro — 500 Seasons Stress Test', () => {
         expect(summary.totalUpdates).toBeGreaterThan(50);
     });
 
-    it('10. Alpha decayed after 500 seasons', () => {
+    it('10. Alpha decayed after 10000 seasons', () => {
         const updates = bot.brain.totalUpdates;
         const effectiveAlpha = Math.max(0.01, 0.1 / (1 + updates * 0.0001));
         console.log(`  α effective: ${effectiveAlpha.toFixed(5)} (${updates} updates)`);
@@ -297,12 +313,12 @@ describe('💀 Lab: Iguatu × Sinistro — 500 Seasons Stress Test', () => {
         expect(stats.anomalies?.length).toBeLessThanOrEqual(2500);
     });
 
-    it('15. Anomaly count within tolerance (< 500 for sinistro)', () => {
+    it('15. Anomaly count within tolerance (< 15000 for sinistro)', () => {
         const anomalyCount = stats.anomalies?.length || 0;
         console.log(`  Anomalies: ${anomalyCount}`);
         // Sinistro will generate more anomalies (negative balance, low energy)
-        // but shouldn't be insane — scaled for 500 seasons
-        expect(anomalyCount).toBeLessThan(1000);
+        // but shouldn't be insane — scaled for 10000 seasons
+        expect(anomalyCount).toBeLessThan(15000);
     });
 
     // === SEASON HISTORY ===
@@ -338,10 +354,10 @@ describe('💀 Lab: Iguatu × Sinistro — 500 Seasons Stress Test', () => {
         expect(relegations).toBeGreaterThanOrEqual(0);
     });
 
-    it('19. At least some promotions over 500 seasons (engine allows recovery)', () => {
+    it('19. At least some promotions over 10000 seasons (engine allows recovery)', () => {
         const promotions = stats.insights?.promotionsWon || 0;
         console.log(`  Promotions: ${promotions}`);
-        // Even with the worst team on sinistro, ML should learn enough to earn at least 1 promo in 500 seasons
+        // Even with the worst team on sinistro, ML should learn enough to earn at least 1 promo in 10000 seasons
         // But this is not guaranteed on sinistro, so we're lenient
         expect(promotions).toBeGreaterThanOrEqual(0);
     });
