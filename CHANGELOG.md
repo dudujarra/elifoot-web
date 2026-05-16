@@ -4,6 +4,41 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [refactor] AKITA-404 — Backend Hardening v3: God Object Decapitation + Memory Guards (2026-05-16)
+
+Refatoração sistêmica do backend para eliminar God Objects, dead imports, anti-patterns CJS, e riscos de memory leak.
+
+**God Object Decapitation:**
+- **ClubVoiceSystem** 1700→51L: dados extraídos para `src/engine/db/club-voices.json` (76KB JSON puro). Loader em 51L stateless.
+- **MatchSimulator**: extraído `MatchPostMatch.js` (148L) — side effects pós-partida (NPC feed, audio events) desacoplados do simulador.
+- **WeekProcessor** 605→414L: extraído `WeekMatchResult.js` (241L) — W/D/L tracking, board tension, humiliation cascade, loss streak response, rivalry H2H, LLM narrative.
+
+**Dependency Hygiene:**
+- **SeasonProcessor + 14 módulos season/**: purga de ~370 dead imports (-120L orquestrador + ~253L módulos)
+- **MarketPricer + processNPCSeasonEnd**: CJS `require()` → ESM `import` estático (zero lazy-loads restantes)
+- **AmbitionEngine/ManagerSystems/PlayerDevelopment/AutoPlayPacing/AutoPlaySimulator/CareerService/NarrativeService**: dead import cleanup
+- **Zero `require()` em todo backend** (ES modules puros)
+- **Zero dead imports** em engine/ + services/
+
+**Memory Safety:**
+- **weekEvents hard cap** (50 eventos/semana) no `WeekProcessor` — previne crescimento ilimitado em soak tests 10.000+ seasons
+
+**Métricas:**
+| Métrica | Antes | Depois |
+|---|---|---|
+| Total backend | ~24.500L | ~22.269L (-9%) |
+| Maior arquivo | 1700L (ClubVoice) | 643L (AutoPlayDecisions) |
+| Dead imports | ~280+ | 0 |
+| require() CJS | 2 | 0 |
+| weekEvents cap | ∞ | 50 |
+| Test suite | 61/61 | 61/61 (23.7s, -16%) |
+
+**Novos módulos criados:**
+- `src/services/WeekMatchResult.js` (241L)
+- `src/services/MatchPostMatch.js` (148L)
+- `src/engine/db/club-voices.json` (76KB dados puros)
+
+
 ### [fix] AKITA-321 — Cap unbound arrays for 10,000-season soak tests (2026-05-14)
 - Identified and purged unbounded data structures (`seasonHistory`, `chronicles`, `manager.careerHistory`, `legacy.titles`) during seasonal rollovers in `SeasonProcessor`.
 - Cleared dormant `rivalryHistory` combinations to prevent key bloat during ultra-long stress tests.

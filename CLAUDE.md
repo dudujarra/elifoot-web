@@ -99,17 +99,18 @@ Detalhes de isolamento de engine, OOP, padronização de dados, build validation
 ```
 src/
 ├── engine/                   # Motor de simulação (headless, zero React)
-│   ├── engine.js             # Orchestrator (1522 linhas — god-class, em refactor)
+│   ├── engine.js             # Orchestrator (540 linhas — refatorado AKITA-404)
 │   ├── data.js               # Geração de jogadores/times (OVR, nomes)
 │   ├── rng.js                # PRNG determinístico
-│   ├── db/                   # Times reais (170 clubes)
+│   ├── db/                   # Times reais (170 clubes) + dados estáticos
 │   │   ├── brazil.js
 │   │   ├── europe.js
 │   │   ├── south_america.js
+│   │   ├── club-voices.json  # Vozes regionais (ex-ClubVoiceSystem 1700L→JSON)
 │   │   └── index.js
 │   ├── tournaments/          # Tournament (abstract), League, KnockoutCup, ContinentalCup, StateChampionship
 │   ├── decks/                # MatchCards (GOL/DEF/MEI/ATA)
-│   ├── systems/              # AchievementsSystem, DifficultyModes
+│   ├── systems/              # AchievementsSystem, DifficultyModes, FormSystem, DressingRoomSystem
 │   ├── simulate_season.js    # Harness Node (Mandamento #3 — testabilidade sem tela)
 │   ├── simulate_player_career.js
 │   └── [40+ sistemas]        # PlayerCareer, InjurySystem, BoardSystem, YouthAcademy, etc.
@@ -121,7 +122,8 @@ src/
 ├── context/                  # GameContext (ponte Engine↔React)
 ├── data/                     # Static data (fora da engine)
 ├── hooks/
-├── services/
+├── services/                 # WeekProcessor, WeekMatchResult, MatchSimulator, MatchPostMatch,
+│                             # SeasonProcessor + 14 season/ modules, AutoPlayService, CareerService
 ├── audio/
 ├── styles/                   # design-tokens.css, animations.css (32bit SNES theme)
 ├── utils/
@@ -247,32 +249,38 @@ PR linkado a SPEC-XXX / BUG-XXX → CI verde → merge
 
 ---
 
-## 📊 Estado do projeto (snapshot)
+## 📊 Estado do projeto (snapshot 2026-05-16)
 
 | Métrica | Valor | Fonte |
 |---------|-------|-------|
-| Tests | **1666/1666** ✅ default + **18/18** ✅ test:soak (deep-soak isolado) | `vitest run` 2026-05-16 |
+| Tests | **1666/1666** ✅ default + **18/18** ✅ test:soak | `vitest run` 2026-05-16 |
+| Core regression suite | **61/61** ✅ (system-integration + engine-golden + marl-e2e) | 23.7s |
 | Test files | 138 | `find tests -name "*.test.js"` |
 | Specs totais | **144** | `find specs -name "SPEC-*.md"` |
-| Bugs com regression test | 17 arquivos em `tests/regression/` (BUG-080/081 não precisaram — fix via config + lint disable docs) | — |
-| AKITA commits | **283** | `git log --grep AKITA` |
+| Bugs com regression test | 17 arquivos em `tests/regression/` | — |
+| AKITA commits | **404+** | `git log --grep AKITA` |
 | Clubes | 170 (BR + EU + SA) | `src/engine/db/` |
+| Backend total | **~22.269 linhas** (engine/ + services/) | `wc -l` |
+| Maior arquivo backend | 643L (AutoPlayDecisions) | — |
+| Dead imports | **0** | auditado AKITA-404 |
+| CJS require() | **0** | migrado para ESM puro |
 | Build | ✅ limpo, ~1.1s, initial chunk **376KB** (gzip 110KB) | `vite build` |
 | Build budget gate | ✅ 4/4 tests (initial ≤500KB, chunk ≤800KB, total ≤3MB) | `tests/integration/build-budget.test.js` |
-| Lint | ✅ 0 erros, 115 warnings cosméticos (era 130 — BUG-081 zerou 14 react-hooks) | `eslint .` |
+| Lint | ✅ 0 erros | `eslint .` |
 
-### ⚠️ Débitos atuais (2026-05-12)
-- ~~marl-e2e `NPC EmotionalEngine` failing em main~~ **resolvido AKITA-107**: `AdaptiveBrain` ctor aceita `{ skipAutoRestore }`; engine passa para NPCs (que compartilhavam STORAGE_KEY do autoplay = persona única em prod).
-- ~~Bundle 1.56MB sem code-split~~ **resolvido AKITA-108**: `index.js` 376KB (-76%), views via `React.lazy`. Isolamento de localStorage entre testes corrigido (`setupFiles` limpando state — root cause de flakies que main mitigava com `fileParallelism: false`).
-- ~~MarketView rules-of-hooks bugs (6)~~ **resolvido AKITA-108**: early-return movido para depois dos hooks.
-- ~~spec-check.sh local ausente~~ **resolvido AKITA-108**: `scripts/spec-check.sh` copiado de `~/bin/`.
-- ~~180+ lint warnings~~ → **130 warnings** (cosméticos: no-unused-vars de imports não-React). 0 errors. 47 `import React` mortos removidos via codemod (React 19 JSX runtime); main usava `/* eslint-disable no-unused-vars */` band-aid.
-- ~~Root clutter (4.5MB)~~ **resolvido AKITA-109**: screenshots, logs, vitest_report.json, audit HTMLs, 11 scripts órfãos deletados. `.gitignore` previne regressão.
-- ~~**`deep-soak-100seasons.test.js`** flaky em suite-load~~ **resolvido AKITA-207** (SPEC-157/BUG-080): mov pra `npm run test:soak` solo via env-flag `SOAK=1` (vite.config exclude condicional). `npm test` 1031/1031 verde; `npm run test:soak` 18/18 verde isolado.
-- ~~**14 lint warnings `react-hooks/set-state-in-effect`**~~ **resolvido AKITA-207** (BUG-081/SPEC-158): 3 refactor reais (useState initializer em PressView/SaveSlotsView/CosmeticShopView), 11 silenciados com block disable + classification comment. 0 warnings restantes.
-- ~~**Build budget regression risk**~~ **resolvido AKITA-207** (SPEC-159): `tests/integration/build-budget.test.js` falha CI se initial >500KB, chunk individual >800KB, ou total >3MB. Snapshot atual: 376/652/~1900 KB ✅.
-- **`engine.js` 440 linhas** — god-class. Refactor em 17 PRs documentado em `specs/refactor/AKITA-RFCT-000..017`. **AKITA-207 kickoff**: RFCT-001/002/003 verificadas done (characterization + save-roundtrip + stryker baseline). RFCT-004 (Extract MatchSimulator, ~10h) próximo. Release **v1.0.5**.
-- **EfButton chunk 652KB** — contém player DB inteiro (170 clubes × ~30 jogadores). Dentro do ceiling (800KB), mas candidato a SPEC-160 (code-split DB) se crescer.
+### ⚠️ Débitos atuais (2026-05-16)
+- ~~marl-e2e `NPC EmotionalEngine` failing~~ **resolvido AKITA-107**
+- ~~Bundle 1.56MB sem code-split~~ **resolvido AKITA-108**: 376KB (-76%)
+- ~~MarketView rules-of-hooks bugs~~ **resolvido AKITA-108**
+- ~~180+ lint warnings~~ **resolvido**: 0 errors, warnings cosméticos
+- ~~God Object ClubVoiceSystem 1700L~~ **resolvido AKITA-404**: extraído para JSON (51L loader)
+- ~~MatchSimulator God Object~~ **resolvido AKITA-404**: MatchPostMatch extraído (148L)
+- ~~WeekProcessor 605L monolítico~~ **resolvido AKITA-404**: WeekMatchResult extraído (241L + 414L)
+- ~~370 dead imports~~ **resolvido AKITA-404**: zero dead imports em engine/ + services/
+- ~~CJS require() em ES modules~~ **resolvido AKITA-404**: MarketPricer + processNPCSeasonEnd convertidos
+- ~~weekEvents unbounded growth~~ **resolvido AKITA-404**: hard cap 50 eventos/semana
+- **`engine.js` 540 linhas** — último orchestrator grande. Fatiar requer spec formal (risco alto).
+- **EfButton chunk 652KB** — contém player DB inteiro. Candidato a SPEC-160 (code-split DB).
 
 ---
 

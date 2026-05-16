@@ -68,11 +68,13 @@ Construído via **SDD (Spec-Driven Development)** + **Protocolo AKITA**. Cada fe
 | Métrica | Valor |
 |---------|-------|
 | Tests | 1666/1666 ✅ |
-| Specs | 124+ |
+| Core regression | 61/61 ✅ |
+| Specs | 144+ |
 | Build | ~600ms, initial 376KB (gzip 110KB) |
 | Lint | 0 errors |
 | Clubes reais | 170 (10 países) |
-| AKITA commits | 313+ |
+| Backend LOC | ~22.269 (ESM puro, zero require()) |
+| AKITA commits | 404+ |
 
 ---
 
@@ -121,18 +123,21 @@ CI auto-roda series em todo PR. Templates forçam 3-artefact checklist.
 ```
 src/
 ├── engine/          # Headless engine (zero React)
-│   ├── engine.js
+│   ├── engine.js    # Orchestrator (540L — refatorado)
 │   ├── data.js
-│   ├── db/          # 170 clubes BR/EU/SA
+│   ├── db/          # 170 clubes BR/EU/SA + club-voices.json
+│   ├── systems/     # FormSystem, DressingRoom, Achievements...
 │   ├── tournaments/
 │   └── [40+ systems] PlayerCareer, InjurySystem, BoardSystem...
 ├── components/      # React UI (read-only)
-├── services/        # AutoPlayLab, GameInitializer, SaveService
+├── services/        # WeekProcessor, WeekMatchResult, MatchSimulator,
+│                    # MatchPostMatch, SeasonProcessor + 14 season/ modules,
+│                    # AutoPlayLab, GameInitializer, SaveService
 ├── context/         # GameContext (ponte Engine↔React)
 └── styles/          # design-tokens, animations (SNES theme)
 
-specs/               # 124+ specs (SDD source of truth)
-tests/               # 1619 tests (unit + integration + regression + e2e)
+specs/               # 144+ specs (SDD source of truth)
+tests/               # 1666 tests (unit + integration + regression + e2e)
 ```
 
 Detalhes: [`CLAUDE.md`](CLAUDE.md).
