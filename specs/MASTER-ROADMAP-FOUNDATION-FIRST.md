@@ -474,3 +474,10 @@ Domingo:  OFF
 **Este doc é fonte ÚNICA do plano estratégico.** Qualquer outro doc de roadmap (`ROADMAP-NARRATIVE-MASTER.md` etc.) é SUBORDINADO a este até BLOCO 1 terminar. Após BLOCO 1, podemos atacar narrativas (v1.0.7+, v1.1+).
 
 **Update obrigatório**: a cada PR mergeado relevante a este roadmap, atualizar seção "PROGRESSO" acima.
+
+#### Fase 5 — Deep Tactical Engine (2026-05-15/16)
+- [x] Migração de estrutura de dados para objetos aninhados (46 atributos, escala 1-20)
+- [x] Retrocompatibilidade (ensureAttributes e getLegacyPentagonStats) mantendo UI legado intacta
+- [x] Normalização de Potencial e Taxonomia Posicional (SPEC-080, SPEC-009)
+- [x] 100% Regression Tests Passing (1666 testes)
+- [x] Git History Cleanup (remoção de assets binários massivos) e push limpo

@@ -63,11 +63,11 @@ Construído via **SDD (Spec-Driven Development)** + **Protocolo AKITA**. Cada fe
 
 ---
 
-## 📊 Estado (snapshot 2026-05-12)
+## 📊 Estado (snapshot 2026-05-16)
 
 | Métrica | Valor |
 |---------|-------|
-| Tests | 1619/1619 ✅ |
+| Tests | 1666/1666 ✅ |
 | Specs | 124+ |
 | Build | ~600ms, initial 376KB (gzip 110KB) |
 | Lint | 0 errors |

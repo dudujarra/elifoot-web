@@ -4,7 +4,7 @@
 > Toda decisão arquitetural, comando, fluxo, dependência mora aqui.
 > README humano-amigável aponta pra cá.
 
-**Última atualização**: 2026-05-13
+**Última atualização**: 2026-05-16
 **Owner**: Dudu (Eduardo Jarra) — dudujarra@corapost.com
 **Repo público**: https://github.com/dudujarra/olefut
 **Demo**: https://dudujarra.github.io/olefut/
@@ -251,7 +251,7 @@ PR linkado a SPEC-XXX / BUG-XXX → CI verde → merge
 
 | Métrica | Valor | Fonte |
 |---------|-------|-------|
-| Tests | **1625/1625** ✅ default + **18/18** ✅ test:soak (deep-soak isolado) | `vitest run` 2026-05-12 |
+| Tests | **1666/1666** ✅ default + **18/18** ✅ test:soak (deep-soak isolado) | `vitest run` 2026-05-16 |
 | Test files | 138 | `find tests -name "*.test.js"` |
 | Specs totais | **144** | `find specs -name "SPEC-*.md"` |
 | Bugs com regression test | 17 arquivos em `tests/regression/` (BUG-080/081 não precisaram — fix via config + lint disable docs) | — |
