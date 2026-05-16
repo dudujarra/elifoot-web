@@ -15,6 +15,7 @@ import { Data } from '../engine/data';
 import { rng as systemRng } from '../engine/rng.js';
 import { onBoardSellAttempt as checkStarProtection } from '../engine/StarProtectionSystem';
 import { apply as applyBoardTension } from '../engine/BoardTensionSystem';
+import { EngineLogger } from '../engine/EngineLogger.js';
 
 export class TransferService {
     constructor() {
@@ -51,7 +52,7 @@ export class TransferService {
                 engine.weekEvents.push(`⚠️ ${starEvent.publicReaction}`);
                 if (bt.thresholdChanged && bt.boardMessage) engine.weekEvents.push(`🏛️ ${bt.boardMessage}`);
             }
-        } catch { /* defensive */ }
+        } catch (err) { EngineLogger.capture(err, 'TransferService.starProtection'); }
 
         // Track former companion for FilhosRegen (SPEC-081)
         try {
@@ -70,7 +71,7 @@ export class TransferService {
                     engine.formerCompanions = engine.formerCompanions.slice(-50);
                 }
             }
-        } catch { /* defensive */ }
+        } catch (err) { EngineLogger.capture(err, 'TransferService.formerCompanion'); }
 
         const soldPlayer = team.squad.find(p => p.id === offerId);
         team.squad = team.squad.filter(p => p.id !== offerId);

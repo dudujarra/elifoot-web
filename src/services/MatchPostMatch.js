@@ -15,6 +15,7 @@ import { npcFeedMatchResult } from './learning/NpcManagerAI.js';
 import { emitGameEvent, GameEvents } from '../audio/EventBus.js';
 import { MATCH_BASE_DRAIN_MIN, MATCH_BASE_DRAIN_RANGE, WORKHORSE_ENERGY_SAVE, LEADER_WIN_MORAL_BOOST } from '../engine/constants.js';
 import { rng as systemRng } from '../engine/rng.js';
+import { EngineLogger } from '../engine/EngineLogger.js';
 
 /**
  * Process MOTM (Man of the Match) from performance map.
@@ -121,11 +122,11 @@ export function feedNpcResults(engine, homeTeam, awayTeam, homeId, awayId, homeG
 
     if (homeTeam && homeId !== engine.manager.teamId && homeTeam.npcTacticState) {
         homeTeam.npcTacticState = recordNpcResult(homeTeam.npcTacticState, homeResult);
-        try { npcFeedMatchResult(homeTeam, homeResult, engine); } catch { /* defensive */ }
+        try { npcFeedMatchResult(homeTeam, homeResult, engine); } catch (err) { EngineLogger.capture(err, 'MatchPostMatch.npcFeedHome'); }
     }
     if (awayTeam && awayId !== engine.manager.teamId && awayTeam.npcTacticState) {
         awayTeam.npcTacticState = recordNpcResult(awayTeam.npcTacticState, awayResult);
-        try { npcFeedMatchResult(awayTeam, awayResult, engine); } catch { /* defensive */ }
+        try { npcFeedMatchResult(awayTeam, awayResult, engine); } catch (err) { EngineLogger.capture(err, 'MatchPostMatch.npcFeedAway'); }
     }
 
     if (!engine._lastNpcOpponent) engine._lastNpcOpponent = {};

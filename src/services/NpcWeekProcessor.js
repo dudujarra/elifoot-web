@@ -9,6 +9,7 @@
 import { adviseTactic, initNpcTacticState, applyNpcTacticAdvice } from '../engine/NpcTacticAdvisor';
 import { checkSquadHealth } from '../engine/SquadHealthMonitor';
 import { npcTacticDecision, npcBuyDecision, npcFormationDecision, shouldUseFullBrain } from './learning/NpcManagerAI.js';
+import { EngineLogger } from '../engine/EngineLogger.js';
 
 export class NpcWeekProcessor {
     constructor() {
@@ -94,7 +95,7 @@ export class NpcWeekProcessor {
 
             // NPC buy decisions every 4 weeks (only if near player's division for perf)
             if (engine.currentWeek % 4 === 0) {
-                try { npcBuyDecision(t, engine); } catch { /* defensive */ }
+                try { npcBuyDecision(t, engine); } catch (err) { EngineLogger.capture(err, 'NpcWeekProcessor.npcBuy'); }
             }
             return;
         }
@@ -162,6 +163,6 @@ export class NpcWeekProcessor {
                 if (t.id === playerTeam.id || !t.brain || t.division !== playerDiv) continue;
                 t.brain._aiDirectorMod = dirMods.aggressionMod;
             }
-        } catch { /* defensive — never break advanceWeek */ }
+        } catch (err) { EngineLogger.capture(err, 'NpcWeekProcessor.aiDirector'); }
     }
 }

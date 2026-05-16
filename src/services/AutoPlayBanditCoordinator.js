@@ -15,6 +15,7 @@
 
 import { TRAINING_TYPES } from '../engine/ManagerSystems';
 import { encodeState, computeReward } from './learning/AdaptiveBrain.js';
+import { EngineLogger } from '../engine/EngineLogger.js';
 
 const TRAINING_ROTATION = (TRAINING_TYPES || []).map(t => t.id).filter(Boolean);
 
@@ -117,7 +118,7 @@ export class AutoPlayBanditCoordinator {
         parent.brain.observe(parent._lastStateKey, parent._lastAction, reward, nextStateKey, nextActions);
 
         // Fase 3 ML: Feed reward to SARSA emotional modifier learner
-        try { parent.brain.emotions.feedReward(reward); } catch { /* defensive */ }
+        try { parent.brain.emotions.feedReward(reward); } catch (err) { EngineLogger.capture(err, 'BanditCoordinator.emotionFeed'); }
 
         // Fase 2 ML: Thompson Sampling feedback for team talk
         // Match result feeds back to the last team talk choice
