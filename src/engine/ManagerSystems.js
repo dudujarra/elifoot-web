@@ -1,6 +1,8 @@
 import { rng as systemRng } from './rng.js';
+import { ATTRIBUTE_CATEGORIES, calculateOvrFromAttributes } from './PlayerAttributes.js';
 import { getDifficulty } from './systems/DifficultyModes.js';
 import { getTicketFinanceModifiers } from './TicketPricingSystem.js';
+import Morphocycle from './training/Morphocycle.js';
 /**
  * ManagerSystems.js — Sistemas avançados do Modo Treinador
  * 
@@ -94,52 +96,40 @@ export const TEAM_TALKS = [
 // SCHEMA-UNIFIED: attrBoost usa chaves root-level
 export const TRAINING_TYPES = [
     {
-        id: "fitness",
-        name: "🏃 Preparação Física",
-        description: "Foco em resistência e recuperação.",
-        effect: { energyRecovery: 20, attrBoost: "attacking", attrAmount: 1, moralCost: -2 }
+        id: "RECOVERY",
+        name: "🏃 MD+1 Recuperação (Tática)",
+        description: "Baixo impacto neuromuscular. Foco na organização defensiva/ofensiva.",
+        effect: { moralCost: 0 }
     },
     {
-        id: "tactical",
-        name: "📋 Treino Tático",
-        description: "Ensaios de jogadas e posicionamento.",
-        effect: { energyRecovery: 5, attrBoost: "tactical", attrAmount: 1, moralCost: 0 }
+        id: "TENSION",
+        name: "💪 MD-4 Tensão (Espaços Curtos)",
+        description: "Jogos 3v3 / 4v4. Foco em força excêntrica e aceleração.",
+        effect: { moralCost: -1 }
     },
     {
-        id: "technical",
-        name: "⚽ Treino Técnico",
-        description: "Passe, controle de bola e visão de jogo.",
-        effect: { energyRecovery: 5, attrBoost: "technical", attrAmount: 1, moralCost: 0 }
+        id: "DURATION",
+        name: "🫁 MD-3 Duração (Campo Aberto)",
+        description: "11v11 ou 8v8. Foco em stamina, visão e posicionamento inter-setorial.",
+        effect: { moralCost: -2 }
     },
     {
-        id: "attack",
-        name: "🎯 Treino de Ataque",
-        description: "Movimentação ofensiva e finalização.",
-        effect: { energyRecovery: 5, attrBoost: "attacking", attrAmount: 1, moralCost: -1 }
+        id: "SPEED",
+        name: "⚡ MD-2 Velocidade",
+        description: "Ações sem oposição forte. Sprints e finalização.",
+        effect: { moralCost: 0 }
     },
     {
-        id: "creativity",
-        name: "🧠 Treino Criativo",
-        description: "Passes decisivos, dribles e improviso.",
-        effect: { energyRecovery: 5, attrBoost: "creativity", attrAmount: 1, moralCost: 0 }
+        id: "ACTIVATION",
+        name: "🧠 MD-1 Ativação",
+        description: "Bolas paradas e ajustes finos (Quiet Eye). Carga reduzida.",
+        effect: { moralCost: 1 }
     },
     {
-        id: "defense",
-        name: "🛡️ Treino Defensivo",
-        description: "Marcação, posicionamento e desarmes.",
-        effect: { energyRecovery: 5, attrBoost: "defending", attrAmount: 1, moralCost: 0 }
-    },
-    {
-        id: "rest",
+        id: "REST",
         name: "😴 Folga Total",
-        description: "Sem treino. Recuperação máxima.",
-        effect: { energyRecovery: 35, attrBoost: null, attrAmount: 0, moralCost: 3 }
-    },
-    {
-        id: "double",
-        name: "💀 Treino Dobrado",
-        description: "Dois períodos. Ganho máximo mas desgasta.",
-        effect: { energyRecovery: -15, attrBoost: "ALL", attrAmount: 1, moralCost: -8 }
+        description: "Dia livre. Recuperação muscular plena.",
+        effect: { moralCost: 3 }
     }
 ];
 
@@ -298,9 +288,6 @@ export function calculateSquadMoral(team) {
     return Math.round(avg);
 }
 
-// SCHEMA-UNIFIED: Training opera direto nas chaves root-level do player
-const STAT_KEYS_TRAINING = ['attacking', 'technical', 'tactical', 'defending', 'creativity'];
-
 export function applyTraining(team, trainingType) {
     const training = TRAINING_TYPES.find(t => t.id === trainingType);
     if (!training) return { success: false, msg: "Tipo de treino inválido.", improvements: [] };
@@ -308,54 +295,63 @@ export function applyTraining(team, trainingType) {
     const improvements = [];
 
     team.squad.forEach(player => {
-        // SCHEMA-UNIFIED: garantir atributos root-level
-        for (const k of STAT_KEYS_TRAINING) {
-            if (player[k] === undefined) player[k] = player.ovr || 50;
+        if (!player.attributes) return;
+
+        // Apply Morphocycle Load
+        const loadResult = Morphocycle.calculateDailyLoad(player, trainingType);
+        
+        // Energy drain based on sRPE Load
+        const energyDrain = Math.round(loadResult.load / 30);
+        if (trainingType === "REST") {
+            player.energy = Math.min(100, player.energy + 30);
+        } else if (trainingType === "RECOVERY" || trainingType === "ACTIVATION") {
+            player.energy = Math.min(100, player.energy + 10 - energyDrain);
+        } else {
+            player.energy = Math.max(0, player.energy - energyDrain);
         }
-        // Energy
-        player.energy = Math.max(0, Math.min(100, player.energy + training.effect.energyRecovery));
-        // Moral
+
         player.moral = Math.max(0, Math.min(100, (player.moral || 50) + training.effect.moralCost));
-        // Attribute boost
-        if (training.effect.attrBoost === "ALL") {
-            const boosted = [];
-            STAT_KEYS_TRAINING.forEach(attr => {
-                const old = player[attr] || 50;
-                player[attr] = Math.min(99, old + training.effect.attrAmount);
-                if (player[attr] > old) boosted.push({ attr, old, now: player[attr] });
-            });
-            if (boosted.length > 0) improvements.push({ name: player.name, changes: boosted });
-        } else if (training.effect.attrBoost) {
-            const attr = training.effect.attrBoost;
-            const old = player[attr] || 50;
-            player[attr] = Math.min(99, old + training.effect.attrAmount);
-            if (player[attr] > old) {
-                improvements.push({ name: player.name, changes: [{ attr, old, now: player[attr] }] });
+
+        // Training Growth
+        const deltas = Morphocycle.applyTrainingGrowth(player, trainingType);
+        let boosted = [];
+        
+        for (const cat in deltas) {
+            for (const attr in deltas[cat]) {
+                const growth = deltas[cat][attr];
+                if (growth > 0 && player.attributes[cat][attr]) {
+                    // Use systemRng to keep deterministic consistency
+                    if (systemRng() < growth) {
+                        const old = player.attributes[cat][attr];
+                        if (old < 20) {
+                            player.attributes[cat][attr] = Math.min(20, old + 1);
+                            boosted.push({ attr, old, now: player.attributes[cat][attr] });
+                        }
+                    }
+                }
             }
+        }
+        
+        if (boosted.length > 0) {
+            improvements.push({ name: player.name, changes: boosted });
         }
     });
 
     // Recalculate OVR — SCHEMA-UNIFIED: weighted average por posição
     team.squad.forEach(p => {
-        for (const k of STAT_KEYS_TRAINING) {
-            if (p[k] === undefined) p[k] = p.ovr || 50;
-        }
-        switch (p.position) {
-            case 'GOL': p.ovr = Math.floor(p.defending * 0.45 + p.tactical * 0.25 + p.technical * 0.20 + p.creativity * 0.05 + p.attacking * 0.05); break;
-            case 'DEF': p.ovr = Math.floor(p.defending * 0.50 + p.tactical * 0.25 + p.attacking * 0.10 + p.technical * 0.10 + p.creativity * 0.05); break;
-            case 'MEI': p.ovr = Math.floor(p.creativity * 0.30 + p.technical * 0.25 + p.tactical * 0.20 + p.defending * 0.10 + p.attacking * 0.15); break;
-            case 'ATA': p.ovr = Math.floor(p.attacking * 0.45 + p.technical * 0.20 + p.creativity * 0.20 + p.tactical * 0.10 + p.defending * 0.05); break;
-            default: p.ovr = Math.floor((p.attacking + p.technical + p.tactical + p.defending + p.creativity) / 5);
+        if (p.attributes) {
+            const macroPos = ['GOL', 'DEF', 'MEI', 'ATA'].includes(p.position) ? p.position : 'MEI';
+            p.ovr = calculateOvrFromAttributes(p.attributes, macroPos);
         }
     });
 
     const impText = improvements.slice(0, 5).map(i =>
-        `${i.name}: ${i.changes.map(c => `${c.attr} ${c.old}→${c.now}`).join(', ')}`
+        `${i.name}: ${i.changes.map(c => `+1 ${c.attr}`).join(', ')}`
     ).join(' | ');
 
     return {
         success: true,
-        msg: `Treino "${training.name}" aplicado.${impText ? ' 📈 ' + impText : ''}`,
+        msg: `Treino Morfociclo "${training.name}" aplicado.${impText ? ' 📈 ' + impText : ''}`,
         improvements,
     };
 }

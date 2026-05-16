@@ -17,6 +17,7 @@
  * follow-up.
  */
 import { rng as systemRng } from './rng.js';
+import { generateDetailedAttributes, calculateOvrFromAttributes } from './PlayerAttributes.js';
 // === SPEC-062 SUB-ATTRIBUTES (16 attrs in 4 groups) ===
 export const SUB_ATTRIBUTES = {
     technique: ['dribbling', 'passing', 'shooting', 'firstTouch'],
@@ -136,6 +137,10 @@ export class ProPlayer {
         this.defending  = this.skills.power;
         this.creativity = this.skills.vision;
         this.tactical   = 50;
+
+        const pentagonBaseOvr = Math.round((this.attacking + this.technical + this.tactical + this.defending + this.creativity) / 5);
+        this.attributes = generateDetailedAttributes(pentagonBaseOvr, this.position, this.age, true);
+        this.ovr = calculateOvrFromAttributes(this.attributes, this.position);
 
         // Energia e economia
         this.energy = 100;

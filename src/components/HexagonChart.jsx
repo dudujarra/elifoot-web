@@ -5,6 +5,7 @@
  * SVG-based, sem libs externas.
  */
 import '../styles/hexagon-chart.css';
+import { getLegacyPentagonStats } from '../engine/PlayerAttributes.js';
 
 export function HexagonChart({ player, size = 200, showLabels = true }) {
     const cx = size / 2;
@@ -15,24 +16,26 @@ export function HexagonChart({ player, size = 200, showLabels = true }) {
 
     const p = player || {};
 
-    // SCHEMA-UNIFIED: lê direto das chaves root-level geradas por data.js
+    // SCHEMA-UNIFIED: lê direto das chaves root-level geradas por data.js ou da ponte getLegacyPentagonStats
     let chartAttrs = [];
+    const stats = getLegacyPentagonStats(p);
+    
     if (p.position === 'GOL' || p.naturalPosition === 'GOL') {
         chartAttrs = [
-            { key: 'DEF', label: 'REF', value: p.defending || 50, color: 'var(--ef-hex-azure)' },
-            { key: 'TAC', label: 'POS', value: p.tactical || 50, color: 'var(--ef-hex-purple)' },
-            { key: 'TEC', label: 'TEC', value: p.technical || 50, color: 'var(--accent)' },
-            { key: 'CRI', label: 'SAI', value: p.creativity || 50, color: 'var(--ef-hex-salmon)' },
+            { key: 'DEF', label: 'REF', value: stats.defending || 50, color: 'var(--ef-hex-azure)' },
+            { key: 'TAC', label: 'POS', value: stats.tactical || 50, color: 'var(--ef-hex-purple)' },
+            { key: 'TEC', label: 'TEC', value: stats.technical || 50, color: 'var(--accent)' },
+            { key: 'CRI', label: 'SAI', value: stats.creativity || 50, color: 'var(--ef-hex-salmon)' },
             { key: 'OVR', label: 'OVR', value: p.ovr || 50, color: 'var(--primary)' },
             { key: 'POT', label: 'POT', value: p.potential || p.ovr || 50, color: 'var(--ef-hex-info)' }
         ];
     } else {
         chartAttrs = [
-            { key: 'ATK', label: 'ATK', value: p.attacking || 50, color: 'var(--ef-hex-red)' },
-            { key: 'TEC', label: 'TEC', value: p.technical || 50, color: 'var(--ef-hex-azure)' },
-            { key: 'CRI', label: 'CRI', value: p.creativity || 50, color: 'var(--accent)' },
-            { key: 'TAC', label: 'TAC', value: p.tactical || 50, color: 'var(--ef-hex-purple)' },
-            { key: 'DEF', label: 'DEF', value: p.defending || 50, color: 'var(--ef-hex-forest-dark)' },
+            { key: 'ATK', label: 'ATK', value: stats.attacking || 50, color: 'var(--ef-hex-red)' },
+            { key: 'TEC', label: 'TEC', value: stats.technical || 50, color: 'var(--ef-hex-azure)' },
+            { key: 'CRI', label: 'CRI', value: stats.creativity || 50, color: 'var(--accent)' },
+            { key: 'TAC', label: 'TAC', value: stats.tactical || 50, color: 'var(--ef-hex-purple)' },
+            { key: 'DEF', label: 'DEF', value: stats.defending || 50, color: 'var(--ef-hex-forest-dark)' },
             { key: 'OVR', label: 'OVR', value: p.ovr || 50, color: 'var(--primary)' }
         ];
     }

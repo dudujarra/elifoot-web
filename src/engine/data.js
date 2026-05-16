@@ -1,5 +1,6 @@
 import { rng } from './rng.js';
 import { calcMarketValue } from './MarketPricer.js';
+import { generateDetailedAttributes } from './PlayerAttributes.js';
 
 // SPEC-177: realPlayers split into 4 regional JSON chunks for code-splitting.
 // Top-level await keeps Data API synchronous for 43 existing test call sites,
@@ -202,19 +203,9 @@ export const Data = {
         const specialty = rng.pick(specialtyPool);
         specialtyName = specialty.name;
 
-        // Distribuir os atributos ao redor do OVR para gerar assimetria no hexágono (Radar Chart)
-        const stats = {};
-        const statKeys = ['attacking', 'technical', 'tactical', 'defending', 'creativity'];
-        
-        let attrMax = isSuperFinal ? 99 : (maxOvrForTier + 8);
-
-        for (const attr of statKeys) {
-            const bias = specialty.bias[attr] || 1.0;
-            // MEGA PATCH: Aumentado MUITO o fator de "ruído" na geração de stats.
-            // Em vez de ±15% (0.85 a 1.15), agora é ±35% (0.65 a 1.35)
-            let biased = Math.round(ovr * bias * (0.65 + (rng() * 0.7)));
-            stats[attr] = Math.max(10, Math.min(attrMax, biased));
-        }
+        // Gerar os 38 atributos baseados no motor profundo (Fase 1)
+        const macroPos = ['GOL', 'DEF', 'MEI', 'ATA'].includes(position) ? position : 'MEI';
+        const attributes = generateDetailedAttributes(ovr, macroPos, age, isWonderkidFinal);
 
         // Físico
         const heightByPos = { GOL: [185, 200], DEF: [175, 195], MEI: [168, 185], ATA: [170, 190] };
@@ -238,7 +229,7 @@ export const Data = {
             nickname,
             position,
             specialty: specialtyName,
-            ...stats, // Espalha attacking, technical, tactical, defending, creativity direto no player
+            attributes, // Fase 1 do Motor Tático Profundo (38 atributos de 1 a 20)
             ovr,
             potential,
             age,

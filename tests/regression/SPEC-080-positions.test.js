@@ -15,7 +15,8 @@ import {
     getMacroPosition,
     migrateLegacyPosition,
     mapSofaScorePosition
-} from '../../src/engine/Positions';
+} from '../../src/engine/Positions.js';
+import { ensureAttributes } from '../../src/engine/PlayerDevelopment.js';
 
 describe('SPEC-080 18-Position Taxonomy (BR)', () => {
     test('exactly 18 positions defined', () => {
@@ -79,20 +80,20 @@ describe('SPEC-080 18-Position Taxonomy (BR)', () => {
     });
 
     test('rating for position uses pentagon weights', () => {
-        const pedro = {
-            attacking: 73,
-            technical: 57,
-            tactical: 64,
-            defending: 39,
-            creativity: 55
-        };
+        // We create an attacker, ensuring attributes bias towards attacking
+        const pedro = ensureAttributes({
+            id: 1, name: 'Pedro', position: 'CTA', ovr: 75, age: 24
+        });
+        
+        // Since pedro is an attacker (CTA), his attributes are optimized for ATA.
         const cfRating = calculateRatingForPosition(pedro, 'CTA');
         const cbRating = calculateRatingForPosition(pedro, 'ZAG');
+        
         expect(cfRating).toBeGreaterThan(cbRating);
     });
 
     test('effective rating respects fit', () => {
-        const player = { naturalPosition: 'CTA', attacking: 80, technical: 70, tactical: 60, defending: 30, creativity: 70 };
+        const player = ensureAttributes({ naturalPosition: 'CTA', position: 'CTA', ovr: 80 });
         const naturalRating = calculateEffectiveRating(player, 'CTA');
         const distantRating = calculateEffectiveRating(player, 'ZAG');
         expect(naturalRating).toBeGreaterThan(distantRating);

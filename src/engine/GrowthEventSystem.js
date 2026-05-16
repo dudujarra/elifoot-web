@@ -144,12 +144,23 @@ function countTrailingWins(results) {
     return count;
 }
 
-// SCHEMA-UNIFIED: opera direto nas chaves root-level
 function applyAttrsBoost(player, amount) {
-    const statKeys = ['attacking', 'technical', 'tactical', 'defending', 'creativity'];
-    // Boost 1-2 random attributes
-    const picks = statKeys.sort(() => systemRng() - 0.5).slice(0, 2);
-    picks.forEach(attr => {
-        player[attr] = Math.min(99, (player[attr] || 50) + amount);
-    });
+    if (player.attributes && player.attributes.technical) {
+        // Boost new schema (1-20 scale)
+        const scaleAmount = Math.max(1, Math.round(amount / 5));
+        const cats = ['technical', 'mental', 'physical'];
+        const cat = cats[Math.floor(systemRng() * cats.length)];
+        const keys = Object.keys(player.attributes[cat]);
+        const picks = keys.sort(() => systemRng() - 0.5).slice(0, 2);
+        picks.forEach(attr => {
+            player.attributes[cat][attr] = Math.min(20, (player.attributes[cat][attr] || 10) + scaleAmount);
+        });
+    } else {
+        // Legacy 1-100 scale
+        const statKeys = ['attacking', 'technical', 'tactical', 'defending', 'creativity'];
+        const picks = statKeys.sort(() => systemRng() - 0.5).slice(0, 2);
+        picks.forEach(attr => {
+            player[attr] = Math.min(99, (player[attr] || 50) + amount);
+        });
+    }
 }

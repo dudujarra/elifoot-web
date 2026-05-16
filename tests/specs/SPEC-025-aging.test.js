@@ -1,13 +1,14 @@
 // SPEC-025: Advanced Player Aging harness
 import { describe, test, expect } from 'vitest';
-import { processPlayerDevelopment, ageSquad } from '../../src/engine/PlayerDevelopment.js';
+import { processPlayerDevelopment, ageSquad, ensureAttributes } from '../../src/engine/PlayerDevelopment.js';
+import { ATTRIBUTE_CATEGORIES } from '../../src/engine/PlayerAttributes.js';
 
 function makePlayer({ age = 22, personality = 'Profissional' } = {}) {
-    return {
+    const p = {
         id: 1, name: 'Test', age, personality,
-        attacking: 70, technical: 70, tactical: 70, defending: 70, creativity: 70,
         position: 'MEI', ovr: 70, retired: false,
     };
+    return ensureAttributes(p);
 }
 
 describe('SPEC-025: Advanced Player Aging', () => {
@@ -61,16 +62,17 @@ describe('SPEC-025: Advanced Player Aging', () => {
         expect(typeof p.retired).toBe('boolean');
     });
 
-    test('Caps maintained (attrs 20-99)', () => {
+    test('Caps maintained (attrs 1-20)', () => {
         const p = makePlayer({ age: 18 });
         for (let i = 0; i < 200; i++) {
             processPlayerDevelopment(p);
         }
-        // SCHEMA-UNIFIED: check root-level stats
-        const STAT_KEYS = ['attacking', 'technical', 'tactical', 'defending', 'creativity'];
-        for (const key of STAT_KEYS) {
-            expect(p[key]).toBeGreaterThanOrEqual(20);
-            expect(p[key]).toBeLessThanOrEqual(99);
+        // Check new fine-grained stats
+        for (const cat of Object.keys(ATTRIBUTE_CATEGORIES)) {
+            for (const attr of ATTRIBUTE_CATEGORIES[cat]) {
+                expect(p.attributes[cat][attr]).toBeGreaterThanOrEqual(1);
+                expect(p.attributes[cat][attr]).toBeLessThanOrEqual(20);
+            }
         }
     });
 
@@ -96,8 +98,9 @@ describe('SPEC-025: Advanced Player Aging', () => {
         const declines = changes.filter((c) => c.type === 'decline');
         if (declines.length > 0) {
             for (const d of declines) {
-                // creativity (mental) should NEVER decline — it can only grow
-                expect(['attacking', 'defending', 'technical', 'tactical']).toContain(d.attr);
+                // mental stats should NEVER decline — it can only grow
+                const isMental = ATTRIBUTE_CATEGORIES.mental.includes(d.attr);
+                expect(isMental).toBe(false);
             }
         }
     });

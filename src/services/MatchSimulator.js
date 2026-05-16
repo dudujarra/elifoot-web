@@ -34,8 +34,13 @@ import { emitGameEvent, GameEvents } from '../audio/EventBus.js';
 import { getMatchBonusBuff, settleMatchBonus } from '../engine/MatchBonusSystem.js';
 import { getHomeAdvantageFromTickets } from '../engine/TicketPricingSystem.js';
 import { processMatchCards } from '../engine/DisciplineSystem.js';
+import { spatialEngine } from '../engine/SpatialEngine.js';
+import { DeepTacticalEngine } from '../engine/tactical/DeepTacticalEngine.js';
 
 export class MatchSimulator {
+    constructor() {
+        this._tacticalEngine = new DeepTacticalEngine();
+    }
     /**
      * Simula partida completa.
      *
@@ -51,6 +56,8 @@ export class MatchSimulator {
 
         const homeSectors = engine.getTeamSectors(homeId);
         const awaySectors = engine.getTeamSectors(awayId);
+
+        this._tacticalEngine.initializeMatch(homeTeam, awayTeam);
 
         // Tactic setup — SPEC-131: NPCs usam tática dinâmica (não mais hardcoded 'normal')
         const homeTactic = homeId === engine.manager.teamId
@@ -79,9 +86,13 @@ export class MatchSimulator {
         awaySectors.attack = Math.floor(awaySectors.attack * oppTactic.ataModifier * awayTTAta);
         awaySectors.defense = Math.floor(awaySectors.defense * oppTactic.defModifier * awayTTDef);
 
-        // Tactic counter modifier
-        const homeCounterMod = TACTIC_COUNTERS[homeTactic]?.[awayTactic] || 1.0;
-        const awayCounterMod = TACTIC_COUNTERS[awayTactic]?.[homeTactic] || 1.0;
+        // Tactic counter modifier — amplified by Sinistro v2 tacticCounterAmplifier
+        const tacticAmp = getDifficulty().modifiers.tacticCounterAmplifier || 1.0;
+        const rawHomeCounter = TACTIC_COUNTERS[homeTactic]?.[awayTactic] || 1.0;
+        const rawAwayCounter = TACTIC_COUNTERS[awayTactic]?.[homeTactic] || 1.0;
+        // Amplify deviation from 1.0: e.g. 0.7 at amp 1.8 → 1.0 + (0.7-1.0)*1.8 = 0.46
+        const homeCounterMod = 1.0 + (rawHomeCounter - 1.0) * tacticAmp;
+        const awayCounterMod = 1.0 + (rawAwayCounter - 1.0) * tacticAmp;
 
         // Match condition
         const cond = engine.matchCondition || { ataModifier: 1, defModifier: 1, energyModifier: 1 };
@@ -292,16 +303,30 @@ export class MatchSimulator {
         const homeRockwallMod = getDefenseSectorBonus(homeTeam.squad);
         const awayRockwallMod = getDefenseSectorBonus(awayTeam.squad);
 
+        // ==========================================
+        // DEEP TACTICAL: SPATIAL ENGINE MODIFIERS
+        // ==========================================
+        const spatialData = spatialEngine.calculateSpatialMatchModifiers(homeTactic, homeTeam.squad, awayTactic, awayTeam.squad);
+        if (isManagerMatch && spatialData.logs.length > 0) {
+            spatialData.logs.forEach(logText => {
+                rawEvents.push({ minute: 0, type: 'tactical_analysis', text: `🧠 Análise Espacial: ${logText}` });
+            });
+        }
+
         // Base λ (home xG) and μ (away xG)
         // rockwall reduz xG do adversário (defende melhor)
-        let lambda = BASE_XG_HOME * homeAttackStr * (awayDefenseStr * awayRockwallMod) * homeMoralFactor * homeCounterMod * homeClimateMod;
-        let mu = BASE_XG_AWAY * awayAttackStr * (homeDefenseStr * homeRockwallMod) * awayMoralFactor * awayCounterMod * awayClimateMod;
+        let lambda = BASE_XG_HOME * homeAttackStr * (awayDefenseStr * awayRockwallMod) * homeMoralFactor * homeCounterMod * homeClimateMod * spatialData.homeXgMod;
+        let mu = BASE_XG_AWAY * awayAttackStr * (homeDefenseStr * homeRockwallMod) * awayMoralFactor * awayCounterMod * awayClimateMod * spatialData.awayXgMod;
 
         // Tactical Formation Rock-Paper-Scissors (§2.14)
         const homeFormation = homeTeam?.formation || '4-3-3';
         const awayFormation = awayTeam?.formation || '4-3-3';
-        const homeFormationMod = FORMATION_COUNTERS[homeFormation]?.[awayFormation] || 1.0;
-        const awayFormationMod = FORMATION_COUNTERS[awayFormation]?.[homeFormation] || 1.0;
+        const formAmp = getDifficulty().modifiers.formationCounterAmplifier || 1.0;
+        const rawHomeFormMod = FORMATION_COUNTERS[homeFormation]?.[awayFormation] || 1.0;
+        const rawAwayFormMod = FORMATION_COUNTERS[awayFormation]?.[homeFormation] || 1.0;
+        // Amplify deviation from 1.0 (same logic as tactic counter)
+        const homeFormationMod = 1.0 + (rawHomeFormMod - 1.0) * formAmp;
+        const awayFormationMod = 1.0 + (rawAwayFormMod - 1.0) * formAmp;
 
         lambda *= homeFormationMod;
         mu *= awayFormationMod;
@@ -344,8 +369,25 @@ export class MatchSimulator {
                 try { emitGameEvent(GameEvents.MATCH_STARTED, { homeTeam: homeTeam.name, awayTeam: awayTeam.name }); } catch { /* event emit - non-critical */ }
             }
 
-            const isHomeChance = systemRng() < homeChancePerMin;
-            const isAwayChance = !isHomeChance && systemRng() < awayChancePerMin;
+            // DEEP TACTICAL ENGINE: Phase 4 Integration
+            let isHomeChance = false;
+            let isAwayChance = false;
+            let tacticalBaseXG = 0.3; // Default 30% conversion baseline
+
+            const tacticalEvent = this._tacticalEngine.tickMinute(homeTeam.squad, awayTeam.squad);
+            if (tacticalEvent && tacticalEvent.type === 'shot') {
+                if (tacticalEvent.team === 'home') {
+                    isHomeChance = true;
+                    tacticalBaseXG = tacticalEvent.xG;
+                } else {
+                    isAwayChance = true;
+                    tacticalBaseXG = tacticalEvent.xG;
+                }
+            } else {
+                // Fallback Poisson (scaled down) to guarantee matches don't end 0-0 if tactical engine stalls
+                isHomeChance = systemRng() < (homeChancePerMin * 0.4);
+                isAwayChance = !isHomeChance && systemRng() < (awayChancePerMin * 0.4);
+            }
 
             // Filler narration every ~12 min
             if (minute % 12 === 0 && !isHomeChance && !isAwayChance) {
@@ -380,19 +422,36 @@ export class MatchSimulator {
                     ? (isHomeAttacking ? homeScorerPoolSetPiece : awayScorerPoolSetPiece)
                     : attackers;
                 const scorer = pickRandom(scorerPool);
+                const gkPool = (defTeam.squad || []).filter(p => p.isTitular && p.position === 'GOL' && !p.injury);
+                const keeper = pickRandom(gkPool);
+
                 const formMod = scorer ? getFormModifier(scorer.form?.trend) : 1.0;
                 const traitMod = scorer ? getTraitMatchModifier(scorer, minute, isManagerHome ? homeTactic : awayTactic, false) : 1.0;
                 // SPEC-144: poacher (+25% conv) + set_piece_target (+20% se minuto de bola parada)
                 const poacherMod = getGoalConversionBonus(scorer);
                 const setPieceMod = (isSetPieceMinute && scorer) ? getSetPieceBonus(scorer) : 1.0;
 
+                const isDerby = engine.matchCondition && engine.matchCondition.id === 'derby';
+                const scorerTransientFatigue = spatialEngine.getTransientFatigueModifier(scorer, minute);
+                const scorerCognitiveMod = spatialEngine.getCognitiveModifier(scorer, minute, isDerby);
+                
+                const keeperTransientFatigue = spatialEngine.getTransientFatigueModifier(keeper, minute);
+                const keeperCognitiveMod = spatialEngine.getCognitiveModifier(keeper, minute, isDerby);
+
                 // Adjust shotPower threshold so average conversion = CONVERSION_RATE
                 // §2: PRD pity bonus — +10% per consecutive miss (caps at +50%)
                 const pityBonus = isHomeAttacking
                     ? Math.min(0.5, homeMissStreak * 0.10)
                     : Math.min(0.5, awayMissStreak * 0.10);
-                const shotPower = atkSectors.attack * cond.ataModifier * systemRng() * formMod * traitMod * poacherMod * setPieceMod * (1 + pityBonus);
-                const saveChance = defSectors.goalkeeper * systemRng() * 0.8; 
+                
+                const finalScorerMod = formMod * traitMod * poacherMod * setPieceMod * scorerTransientFatigue * scorerCognitiveMod;
+                
+                // DEEP TACTICAL ENGINE: Blend spatial xG with traditional sector math
+                const tacticalMod = (tacticalBaseXG / 0.3); // Ratio of actual xG vs 30% base
+                const shotPower = atkSectors.attack * cond.ataModifier * systemRng() * finalScorerMod * (1 + pityBonus) * tacticalMod;
+                
+                const finalKeeperMod = keeperTransientFatigue * keeperCognitiveMod;
+                const saveChance = defSectors.goalkeeper * systemRng() * 0.8 * finalKeeperMod; 
 
                 const scorerName = scorer ? scorer.name : attTeam.name;
                 const isGoal = shotPower > saveChance;

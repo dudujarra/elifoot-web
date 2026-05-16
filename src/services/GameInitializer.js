@@ -163,6 +163,7 @@ export class GameInitializer {
         const diff = getDifficulty();
         engine.board = new BoardSystem(team.division, team.balance, {
             fireCooldown: diff.modifiers.boardFireCooldown || 0,
+            currentWeek: engine.currentWeek || 0
         });
         engine.legacy = new ManagerLegacy(name);
         engine.currentSponsor = evaluateSponsor(team.division, 10);
@@ -309,12 +310,13 @@ export class GameInitializer {
             id: 'pro_player',
             name: name,
             position: playerPosition,
+            attributes: JSON.parse(JSON.stringify(engine.proPlayer.attributes)),
+            ovr: engine.proPlayer.ovr,
             attacking: engine.proPlayer.attacking,
             technical: engine.proPlayer.technical,
             tactical: engine.proPlayer.tactical,
             defending: engine.proPlayer.defending,
             creativity: engine.proPlayer.creativity,
-            ovr: 50,
             age: 17,
             energy: 100,
             moral: 80,

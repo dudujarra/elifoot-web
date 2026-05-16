@@ -4,6 +4,7 @@
  */
 
 import { Data } from './data';
+import { ATTRIBUTE_CATEGORIES, calculateOvrFromAttributes } from './PlayerAttributes.js';
 
 import { rng as systemRng } from './rng.js';
 
@@ -45,12 +46,20 @@ export function generateYouthIntake(academyLevel = 1, clubReputation = 50) {
         player.contract = { weeksLeft: 76, salary: 2000 }; // 2 temporadas
         player.value = 500000 + Math.floor(systemRng() * 2000000);
 
-        // Ajustar atributos para jovem (mais baixos)
-        ['attacking', 'technical', 'tactical', 'defending', 'creativity'].forEach(attr => {
-            if (player[attr] !== undefined) {
-                player[attr] = Math.max(20, player[attr] - 10 + Math.floor(systemRng() * 5));
-            }
-        });
+        // Ajustar atributos para jovem (reduzir tudo levemente para refletir falta de base profissional)
+        if (player.attributes) {
+            Object.keys(ATTRIBUTE_CATEGORIES).forEach(cat => {
+                ATTRIBUTE_CATEGORIES[cat].forEach(attr => {
+                    if (player.attributes[cat][attr]) {
+                        player.attributes[cat][attr] = Math.max(1, player.attributes[cat][attr] - Math.floor(systemRng() * 2));
+                    }
+                });
+            });
+            const macroPos = ['GOL', 'DEF', 'MEI', 'ATA'].includes(player.position) ? player.position : 'MEI';
+            player.ovr = calculateOvrFromAttributes(player.attributes, macroPos);
+            // Ensure potential is still valid after ovr recalculation
+            player.potential = Math.max(player.potential, player.ovr + Math.floor(systemRng() * 15));
+        }
 
         youngsters.push(player);
     }
@@ -117,35 +126,30 @@ export function processLoans(loans, team) {
             const growthChance = isYoung ? 0.7 : 0.3;
 
             if (systemRng() < growthChance) {
-                // Sucesso: atributos melhoram +1 a +3
-                const boost = 1 + Math.floor(systemRng() * 3);
-                ['attacking', 'technical', 'tactical', 'defending', 'creativity'].forEach(attr => {
-                    if (player[attr] !== undefined) {
-                        player[attr] = Math.min(99, player[attr] + Math.floor(systemRng() * (boost + 1)));
-                    }
-                });
-                // BUG-FIX: recalculate OVR from attributes (position-weighted) instead of naive += boost
+                // Sucesso: atributos melhoram levemente
                 const oldOvr = player.ovr;
-                const a = player;
-                switch (player.position) {
-                    case "GOL": player.ovr = Math.floor((a.defending * 0.4) + (a.tactical * 0.3) + (a.technical * 0.3)); break;
-                    case "DEF": player.ovr = Math.floor((a.defending * 0.6) + (a.tactical * 0.25) + (a.technical * 0.15)); break;
-                    case "MEI": player.ovr = Math.floor((a.creativity * 0.5) + (a.tactical * 0.2) + (a.attacking * 0.15) + (a.defending * 0.15)); break;
-                    case "ATA": player.ovr = Math.floor((a.attacking * 0.5) + (a.technical * 0.25) + (a.creativity * 0.25)); break;
-                    default: player.ovr = Math.floor((a.attacking + a.defending + a.creativity + a.technical + a.tactical) / 5);
+                if (player.attributes) {
+                    Object.keys(ATTRIBUTE_CATEGORIES).forEach(cat => {
+                        ATTRIBUTE_CATEGORIES[cat].forEach(attr => {
+                            if (systemRng() < 0.3) { // 30% chance of a stat going up
+                                player.attributes[cat][attr] = Math.min(20, player.attributes[cat][attr] + 1);
+                            }
+                        });
+                    });
+                    const macroPos = ['GOL', 'DEF', 'MEI', 'ATA'].includes(player.position) ? player.position : 'MEI';
+                    player.ovr = calculateOvrFromAttributes(player.attributes, macroPos);
                 }
+
                 const actualBoost = player.ovr - oldOvr;
                 player.loanResult = `✅ ${player.name} voltou de ${loan.destination} melhorado (+${Math.max(0, actualBoost)} OVR)!`;
             } else {
                 // Fracasso: atributos FIS -1, moral baixa
-                if (player.tactical) player.tactical = Math.max(20, player.tactical - 1);
-                const a = player;
-                switch (player.position) {
-                    case "GOL": player.ovr = Math.floor((a.defending * 0.4) + (a.tactical * 0.3) + (a.technical * 0.3)); break;
-                    case "DEF": player.ovr = Math.floor((a.defending * 0.6) + (a.tactical * 0.25) + (a.technical * 0.15)); break;
-                    case "MEI": player.ovr = Math.floor((a.creativity * 0.5) + (a.tactical * 0.2) + (a.attacking * 0.15) + (a.defending * 0.15)); break;
-                    case "ATA": player.ovr = Math.floor((a.attacking * 0.5) + (a.technical * 0.25) + (a.creativity * 0.25)); break;
-                    default: player.ovr = Math.floor((a.attacking + a.defending + a.creativity + a.technical + a.tactical) / 5);
+                if (player.attributes && player.attributes.physical.stamina) {
+                    player.attributes.physical.stamina = Math.max(1, player.attributes.physical.stamina - 1);
+                }
+                if (player.attributes) {
+                    const macroPos = ['GOL', 'DEF', 'MEI', 'ATA'].includes(player.position) ? player.position : 'MEI';
+                    player.ovr = calculateOvrFromAttributes(player.attributes, macroPos);
                 }
                 player.moral = Math.max(20, (player.moral || 50) - 10);
                 player.loanResult = `⚠️ ${player.name} voltou de ${loan.destination} sem evolução.`;

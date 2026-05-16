@@ -18,38 +18,29 @@ export class SectorService {
         if (!team) return { attack: 0, midfield: 0, defense: 0, goalkeeper: 0 };
         const titulares = team.squad.filter(p => p.isTitular);
 
-        const computeRating = (player) => {
-            if (player.attacking !== undefined && player.naturalPosition) {
-                // Pentagon-based: position-specific weights
-                const weights = { ATA: 0, TEC: 0, TAC: 0, DEF: 0, CRI: 0 };
-                if (player.position === 'ATA') { weights.ATA = 3; weights.TEC = 2; }
-                else if (player.position === 'MEI') { weights.TEC = 3; weights.CRI = 3; weights.TAC = 2; }
-                else if (player.position === 'DEF') { weights.DEF = 3; weights.TAC = 3; }
-                else if (player.position === 'GOL') { weights.TAC = 3; weights.DEF = 3; }
-                const total = weights.ATA + weights.TEC + weights.TAC + weights.DEF + weights.CRI;
-                if (total === 0) return 50;
-                return Math.floor((
-                    player.attacking * weights.ATA +
-                    player.technical * weights.TEC +
-                    player.tactical * weights.TAC +
-                    player.defending * weights.DEF +
-                    player.creativity * weights.CRI
-                ) / total);
+        const computeRating = (player, macroPos) => {
+            if (player.attributes) {
+                // Calculate effective rating for the sector based on key attributes
+                const a = player.attributes;
+                if (macroPos === 'ATA') {
+                    return Math.floor((a.technical.finishing * 0.4 + a.mental.offTheBall * 0.3 + a.physical.pace * 0.3) * 5);
+                } else if (macroPos === 'MEI') {
+                    return Math.floor((a.technical.passing * 0.4 + a.mental.vision * 0.3 + a.technical.technique * 0.3) * 5);
+                } else if (macroPos === 'DEF') {
+                    return Math.floor((a.technical.tackling * 0.4 + a.technical.marking * 0.3 + a.mental.positioning * 0.3) * 5);
+                } else if (macroPos === 'GOL') {
+                    return Math.floor((a.goalkeeping.handling * 0.4 + a.goalkeeping.reflexes * 0.3 + a.mental.positioning * 0.3) * 5);
+                }
             }
-            return null; // fallback signal
+            return player.ovr || 50; // fallback
         };
 
-        const avgPentagon = (arr) => {
+        const avgSector = (arr, macroPos) => {
             if (arr.length === 0) return null;
-            const ratings = arr.map(computeRating).filter(r => r !== null);
+            const ratings = arr.map(p => computeRating(p, macroPos)).filter(r => r !== null);
             if (ratings.length === 0) return null;
             return Math.floor(ratings.reduce((s, r) => s + r, 0) / ratings.length);
         };
-
-        // SCHEMA-UNIFIED: avg reads root-level stat keys
-        const avg = (arr, attr) => arr.length === 0 ? 0 : Math.floor(arr.reduce((s, p) => {
-            return s + (p[attr] || 50);
-        }, 0) / arr.length);
 
         // BUG-055 fix: when 0 titulares in position, fallback to ANY squad player
         const pickPosition = (pos) => {
@@ -64,17 +55,17 @@ export class SectorService {
         const golPlayers = pickPosition('GOL');
 
         // SPEC-125: baseline 45
-        const finalSector = (pentagon, fallback, baseline = 45) => {
-            if (pentagon != null && pentagon > 0) return pentagon;
+        const finalSector = (val, fallback, baseline = 45) => {
+            if (val != null && val > 0) return val;
             if (fallback != null && fallback > 0) return fallback;
             return baseline;
         };
 
         return {
-            attack:     finalSector(avgPentagon(ataPlayers), avg(ataPlayers, 'attacking')),
-            midfield:   finalSector(avgPentagon(meiPlayers), avg(meiPlayers, 'creativity')),
-            defense:    finalSector(avgPentagon(defPlayers), avg(defPlayers, 'defending')),
-            goalkeeper: finalSector(avgPentagon(golPlayers), avg(golPlayers, 'defending'))
+            attack:     finalSector(avgSector(ataPlayers, 'ATA'), null),
+            midfield:   finalSector(avgSector(meiPlayers, 'MEI'), null),
+            defense:    finalSector(avgSector(defPlayers, 'DEF'), null),
+            goalkeeper: finalSector(avgSector(golPlayers, 'GOL'), null)
         };
     }
 

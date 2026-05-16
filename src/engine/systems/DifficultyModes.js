@@ -55,20 +55,43 @@ export const DIFFICULTY_MODES = {
         id: 'sinistro',
         name: 'Sinistro',
         emoji: '💀',
-        description: 'Modo inferno. Receita mínima, board implacável, lesões constantes.',
+        description: 'Maestria tática obrigatória. Cada decisão conta — técnica vence.',
         modifiers: {
-            economyMult: 0.15,       // -85% receita (bilheteria, TV, prêmios, promoção)
-            transferCostMult: 3.0,   // +200% custo transferência
-            wageBudgetMult: 0.3,     // -70% wage cap
-            boardPatience: 0.2,      // 80% menos paciente
-            boardFireCooldown: 20,   // mínimo 20 semanas entre demissões
-            injuryRateMult: 3.0,     // 3× lesões
-            trainingXPMult: 0.25,    // -75% XP treino
-            scoutAccuracyBonus: -30, // -30% accuracy scout
-            matchStrengthPenalty: 0.42, // -58% força em partidas (compensa winStreak/DDA parciais)
-            maintenanceMult: 3.5,    // 3.5× custos de manutenção
-            winStreakMult: 0.3,      // win streak bonus existe mas a 30% do normal
-            ddaLossMult: 0.5         // DDA ajuda em loss streaks, mas pela metade
+            // === ECONOMIA: apertada mas não impossível ===
+            economyMult: 0.35,           // -65% receita (duro, mas investimento é viável)
+            transferCostMult: 2.0,       // +100% custo transferência (garimpo é essencial)
+            wageBudgetMult: 0.5,         // -50% wage cap (squad enxuto)
+            maintenanceMult: 2.5,        // 2.5× custos de manutenção
+
+            // === BOARD: exigente mas justo ===
+            boardPatience: 0.4,          // 60% menos paciente (resultados ou rua)
+            boardFireCooldown: 15,       // mínimo 15 semanas entre demissões
+
+            // === TÁTICA: o coração do Sinistro v2 ===
+            // Amplifica o impacto da matriz tática (counter system)
+            // Escolher tática errada custa MUITO mais, acertar premia MUITO mais
+            tacticCounterAmplifier: 1.8, // 1.0=normal, 1.8=quase dobra o efeito de counter
+            // NPCs jogam com IA tática superior (adaptam melhor)
+            npcTacticalIQ: 1.5,          // 1.0=normal, NPCs trocam tática 50% mais rápido
+            // Formação errada pesa mais
+            formationCounterAmplifier: 1.6,
+
+            // === PHYSICAL: fadiga e lesão realistas ===
+            injuryRateMult: 1.8,         // 80% mais lesões (não 3×, mas suficiente)
+            fatigueSensitivity: 1.5,     // energia cai 50% mais rápido
+            trainingXPMult: 0.5,         // -50% XP treino (desenvolvimento lento, não impossível)
+
+            // === SCOUTING: impreciso mas não cego ===
+            scoutAccuracyBonus: -20,     // -20% accuracy (garimpar exige olho clínico)
+
+            // === SEM matchStrengthPenalty ===
+            // Técnica vence: OVR do squad é respeitado integralmente.
+            // A dificuldade vem de decisões, não de debuff flat.
+            matchStrengthPenalty: 1.0,   // SEM penalty — squad quality matters
+
+            // === DDA/STREAK: moderado ===
+            winStreakMult: 0.5,          // 50% do win streak bonus
+            ddaLossMult: 0.6            // 60% da ajuda em loss streak
         }
     }
 };

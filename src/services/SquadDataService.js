@@ -6,7 +6,7 @@
  */
 
 import { mapSofaScorePosition, calculateRatingForPosition, getMacroPosition } from '../engine/Positions';
-
+import { generateDetailedAttributes, calculateOvrFromAttributes } from '../engine/PlayerAttributes.js';
 import { rng as systemRng } from '../engine/rng.js';
 
 const cache = new Map();
@@ -69,6 +69,17 @@ export function mapPlayer(raw) {
     const defending = pentagon.defending ?? 50;
     const creativity = pentagon.creativity ?? 50;
 
+    const positionMacro = getMacroPosition(naturalPos);
+    const pentagonBaseOvr = Math.round((attacking + technical + tactical + defending + creativity) / 5);
+    const age = raw.dateOfBirth ? computeAge(raw.dateOfBirth) : 25;
+    const isWonderkid = age <= 21 && pentagonBaseOvr >= 75;
+    
+    // Generate detailed 38-attributes
+    const detailedAttributes = generateDetailedAttributes(pentagonBaseOvr, positionMacro, age, isWonderkid);
+    
+    // Recalculate strict OVR from detailed attributes
+    const strictOvr = calculateOvrFromAttributes(detailedAttributes, positionMacro);
+
     return {
         // Identity
         id: raw.id,
@@ -79,7 +90,7 @@ export function mapPlayer(raw) {
         nationality: raw.country?.name || 'Brazil',
         nationalityCode: raw.country?.alpha2 || 'BR',
         dateOfBirth: raw.dateOfBirth,
-        age: raw.dateOfBirth ? computeAge(raw.dateOfBirth) : 25,
+        age: age,
 
         // Physical
         height: raw.height || 178,
@@ -91,7 +102,11 @@ export function mapPlayer(raw) {
         naturalPosition: naturalPos,
         secondaryPositions: (raw.positionsDetailed || []).slice(1).map(mapSofaScorePosition),
 
-        // Pentagon
+        // NEW 38-Attribute Tactical Engine Schema
+        attributes: detailedAttributes,
+        ovr: strictOvr,
+
+        // Pentagon (Fallback/UI compatibility)
         attacking,
         technical,
         tactical,
@@ -99,7 +114,7 @@ export function mapPlayer(raw) {
         creativity,
 
         // Legacy compat (macro)
-        position: getMacroPosition(naturalPos),
+        position: positionMacro,
 
         // Legacy attrs derived (engine.js compatibility)
         attrs: {

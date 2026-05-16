@@ -277,7 +277,7 @@ describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
         const tooSmall = divisionHistory.filter(d => d.squadSize < 16);
         console.log(`  Seasons with squad < 16: ${tooSmall.length}/${divisionHistory.length}`);
         // Allow some bad seasons but not more than 10%
-        expect(tooSmall.length).toBeLessThan(divisionHistory.length * 0.15);
+        expect(tooSmall.length).toBeLessThan(Math.max(3, divisionHistory.length * 0.1));
     });
 
     // === ML CONVERGENCE ===
@@ -310,8 +310,10 @@ describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
 
     it('12. Average tick < 200ms', () => {
         const avgTick = tickTimesMs.reduce((a, b) => a + b, 0) / tickTimesMs.length;
-        const maxTick = Math.max(...tickTimesMs);
-        const p99 = tickTimesMs.sort((a, b) => a - b)[Math.floor(tickTimesMs.length * 0.99)];
+        // NOTE: Math.max(...arr) causes stack overflow on 380K+ elements — use reduce
+        const maxTick = tickTimesMs.reduce((a, b) => a > b ? a : b, 0);
+        const sorted = [...tickTimesMs].sort((a, b) => a - b);
+        const p99 = sorted[Math.floor(sorted.length * 0.99)];
         console.log(`  Avg: ${avgTick.toFixed(2)}ms | P99: ${p99.toFixed(2)}ms | Max: ${maxTick.toFixed(2)}ms`);
         expect(avgTick).toBeLessThan(200);
     });
@@ -346,9 +348,9 @@ describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
             console.log(`  First: S${sh[0].season} Div${sh[0].division} Pos${sh[0].position}`);
             console.log(`  Last:  S${sh[sh.length - 1].season} Div${sh[sh.length - 1].division} Pos${sh[sh.length - 1].position}`);
         }
-        // AutoPlayLogger caps seasonHistory at 100 entries (ring buffer)
-        // So we verify: length === 100 (full buffer) AND last entry is from final seasons
-        expect(sh.length).toBe(100);
+        // AutoPlayLogger caps seasonHistory at 10 entries (ring buffer)
+        // So we verify: length === min(10, SEASONS)
+        expect(sh.length).toBe(Math.min(10, SEASONS));
         expect(sh[sh.length - 1].season).toBeGreaterThanOrEqual(SEASONS - 5);
     });
 
@@ -378,18 +380,22 @@ describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
         expect(promotions).toBeGreaterThanOrEqual(0);
     });
 
-    it('20. Difficulty modifiers were actually applied', () => {
-        // Verify sinistro modifiers — Round 3 (modo inferno real)
+    it('20. Difficulty modifiers were actually applied (Sinistro v2)', () => {
+        // Verify sinistro v2 modifiers — tactical depth, not flat debuffs
         const mods = DIFFICULTY_MODES.sinistro.modifiers;
-        expect(mods.economyMult).toBe(0.15);           // -85% all income
-        expect(mods.transferCostMult).toBe(3.0);        // +200% transfer cost
-        expect(mods.injuryRateMult).toBe(3.0);          // 3× injuries
-        expect(mods.boardPatience).toBe(0.2);            // 80% less patient
-        expect(mods.trainingXPMult).toBe(0.25);          // -75% training XP
-        expect(mods.matchStrengthPenalty).toBe(0.42);   // -58% team strength
-        expect(mods.maintenanceMult).toBe(3.5);         // 3.5× expenses
-        expect(mods.boardFireCooldown).toBe(20);
-        expect(mods.winStreakMult).toBe(0.3);            // 30% of normal win streak bonus
-        expect(mods.ddaLossMult).toBe(0.5);              // 50% of normal DDA loss help
+        expect(mods.economyMult).toBe(0.35);              // -65% income (tough but viable)
+        expect(mods.transferCostMult).toBe(2.0);           // +100% transfer cost
+        expect(mods.injuryRateMult).toBe(1.8);             // 80% more injuries
+        expect(mods.boardPatience).toBe(0.4);              // 60% less patient
+        expect(mods.trainingXPMult).toBe(0.5);             // -50% training XP
+        expect(mods.matchStrengthPenalty).toBe(1.0);       // NO flat penalty — technique wins
+        expect(mods.tacticCounterAmplifier).toBe(1.8);     // Tactic choices matter 80% more
+        expect(mods.formationCounterAmplifier).toBe(1.6);  // Formation choices matter 60% more
+        expect(mods.npcTacticalIQ).toBe(1.5);              // NPCs adapt 50% faster
+        expect(mods.fatigueSensitivity).toBe(1.5);         // Energy drains 50% faster
+        expect(mods.maintenanceMult).toBe(2.5);            // 2.5× expenses
+        expect(mods.boardFireCooldown).toBe(15);
+        expect(mods.winStreakMult).toBe(0.5);               // 50% of normal win streak bonus
+        expect(mods.ddaLossMult).toBe(0.6);                 // 60% of normal DDA loss help
     });
 });

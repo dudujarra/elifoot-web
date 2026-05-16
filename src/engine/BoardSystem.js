@@ -41,11 +41,12 @@ export class BoardSystem {
         this.fireProtection = 8; // semanas de graça no início
         this.lastFiredWeek = -999; // track último fire pra cooldown
         this.fireCooldown = options.fireCooldown || 0; // min weeks between fires
+        this.hiredWeek = options.currentWeek || 0;
     }
 
     // Atualiza confiança baseado nos resultados da semana
     updateConfidence(currentPosition, totalTeams, streak, avgMorale, balance, currentWeek) {
-        if (currentWeek < this.fireProtection) return; // período de graça
+        if (currentWeek - this.hiredWeek < this.fireProtection) return; // período de graça
 
         let delta = 0;
 

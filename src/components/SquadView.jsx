@@ -345,7 +345,7 @@ export function SquadView() {
                                                                     </div>
                                                                     <div style={{ background: 'var(--bg-panel)', padding: '12px 16px', borderLeft: '3px solid var(--info)' }}>
                                                                         <div className="ef-text-muted" style={{ fontSize: '0.7rem', marginBottom: '4px' }}>RATING (POS)</div>
-                                                                        <div className="ef-text-info" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{p.attacking ? calculateRatingForPosition(p, p.naturalPosition || 'MEC') : p.ovr}</div>
+                                                                        <div className="ef-text-info" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{(p.attributes || p.attacking) ? calculateRatingForPosition(p, p.naturalPosition || 'MEC') : p.ovr}</div>
                                                                     </div>
                                                                 </div>
                                                                 {p.personality && (

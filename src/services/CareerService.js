@@ -8,6 +8,8 @@
  */
 
 
+import { LIFESTYLE_CATALOG, TRAITS_CATALOG } from '../engine/PlayerCareer';
+import { calculateOvrFromAttributes } from '../engine/PlayerAttributes.js';
 import { rng as systemRng } from '../engine/rng.js';
 
 export class CareerService {
@@ -313,6 +315,43 @@ export class CareerService {
         proPlayer.defending  = proPlayer.skills.power;
         proPlayer.creativity = proPlayer.skills.vision;
         proPlayer.technical  = proPlayer.skills.technique;
+        
+        if (proPlayer.attributes) {
+            const scale = (val) => Math.max(1, Math.min(20, Math.round(val / 5)));
+            
+            proPlayer.attributes.physical.pace = scale(proPlayer.skills.pace);
+            proPlayer.attributes.physical.acceleration = scale(proPlayer.subAttrs?.acceleration || proPlayer.skills.pace);
+            proPlayer.attributes.physical.stamina = scale(proPlayer.subAttrs?.stamina || proPlayer.skills.power);
+            proPlayer.attributes.physical.strength = scale(proPlayer.subAttrs?.strength || proPlayer.skills.power);
+            
+            proPlayer.attributes.technical.technique = scale(proPlayer.skills.technique);
+            proPlayer.attributes.technical.dribbling = scale(proPlayer.subAttrs?.dribbling || proPlayer.skills.technique);
+            proPlayer.attributes.technical.passing = scale(proPlayer.subAttrs?.passing || proPlayer.skills.technique);
+            proPlayer.attributes.technical.shooting = scale(proPlayer.subAttrs?.shooting || proPlayer.skills.technique);
+            proPlayer.attributes.technical.firstTouch = scale(proPlayer.subAttrs?.firstTouch || proPlayer.skills.technique);
+            
+            proPlayer.attributes.mental.vision = scale(proPlayer.skills.vision);
+            proPlayer.attributes.mental.positioning = scale(proPlayer.subAttrs?.positioning || proPlayer.skills.vision);
+            proPlayer.attributes.mental.decisions = scale(proPlayer.subAttrs?.decisions || proPlayer.skills.vision);
+            proPlayer.attributes.mental.composure = scale(proPlayer.subAttrs?.composure || proPlayer.skills.vision);
+            proPlayer.attributes.mental.leadership = scale(proPlayer.subAttrs?.leadership || proPlayer.skills.vision);
+
+            proPlayer.ovr = calculateOvrFromAttributes(proPlayer.attributes, proPlayer.position);
+
+            const team = engine.getTeam(engine.manager.teamId);
+            if (team) {
+                const p = team.squad.find(x => x.id === 'pro_player');
+                if (p) {
+                    p.attributes = JSON.parse(JSON.stringify(proPlayer.attributes));
+                    p.ovr = proPlayer.ovr;
+                    p.attacking = proPlayer.attacking;
+                    p.technical = proPlayer.technical;
+                    p.tactical = proPlayer.tactical;
+                    p.defending = proPlayer.defending;
+                    p.creativity = proPlayer.creativity;
+                }
+            }
+        }
 
         // Reset weekly slots
         proPlayer.resetWeeklySlots();

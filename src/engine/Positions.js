@@ -278,31 +278,21 @@ export function calculatePositionFit(playerNaturalPos, requiredPos) {
     return 0.3;
 }
 
+import { calculateOvrFromAttributes } from './PlayerAttributes.js';
+
 /**
  * Calculate rating 0-100 for a player playing a specific position.
  */
 export function calculateRatingForPosition(player, positionCode) {
-    const weights = POSITION_ATTR_WEIGHTS[positionCode];
-    if (!weights || !player) return 0;
+    if (!player) return 0;
+    const posInfo = POSITIONS[positionCode];
+    if (!posInfo) return player.ovr || 50;
 
-    const atk = player.attacking ?? 50;
-    const tec = player.technical ?? 50;
-    const tac = player.tactical ?? 50;
-    const def = player.defending ?? 50;
-    const cri = player.creativity ?? 50;
-
-    const totalWeights = weights.ATA + weights.TEC + weights.TAC + weights.DEF + weights.CRI;
-    if (totalWeights === 0) return 50;
-
-    const weightedSum = (
-        atk * weights.ATA +
-        tec * weights.TEC +
-        tac * weights.TAC +
-        def * weights.DEF +
-        cri * weights.CRI
-    );
-
-    return Math.round(weightedSum / totalWeights);
+    if (player.attributes) {
+        return calculateOvrFromAttributes(player.attributes, posInfo.macro);
+    }
+    
+    return player.ovr || 50;
 }
 
 /**

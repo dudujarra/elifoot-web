@@ -172,7 +172,7 @@ describe('BUG-006: sellPlayer', () => {
 describe('Training feedback — applyTraining returns improvements', () => {
     it('deve retornar array improvements', () => {
         if (!team) return;
-        const result = applyTraining(team, 'fitness');
+        const result = applyTraining(team, 'TENSION');
         expect(result).toBeDefined();
         expect(result.success).toBe(true);
         expect(Array.isArray(result.improvements)).toBe(true);
@@ -180,7 +180,7 @@ describe('Training feedback — applyTraining returns improvements', () => {
 
     it('improvements devem conter name e changes', () => {
         if (!team) return;
-        const result = applyTraining(team, 'fitness');
+        const result = applyTraining(team, 'DURATION');
         if (result.improvements.length > 0) {
             const imp = result.improvements[0];
             expect(imp.name).toBeDefined();
@@ -195,9 +195,10 @@ describe('Training feedback — applyTraining returns improvements', () => {
         if (!team) return;
         // Force low attrs to guarantee improvement
         team.squad.forEach(p => {
-            p.attacking = 30;
+            if (!p.attributes) p.attributes = { physical: { acceleration: 1 }, technical: {}, tactical: {}, defending: {}, creativity: {} };
+            p.attributes.physical.acceleration = 1;
         });
-        const result = applyTraining(team, 'physical');
+        const result = applyTraining(team, 'SPEED');
         if (result.improvements.length > 0) {
             expect(result.msg).toContain('📈');
         }

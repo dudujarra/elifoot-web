@@ -17,6 +17,7 @@
 
 import { shouldTriggerPress, generateQuestion, applyPressEffect } from '../engine/PressConference';
 import { generateRenewalOffer, acceptRenewal } from '../engine/PlayerDevelopment';
+import { BoardSystem } from '../engine/BoardSystem';
 
 export class PressService {
     constructor() {
@@ -107,6 +108,12 @@ export class PressService {
         // Mudar manager para novo clube
         const oldTeamId = engine.manager.teamId;
         engine.manager.teamId = newTeam.id;
+
+        // Resetar board para o novo clube
+        engine.board = new BoardSystem(newTeam.division, newTeam.balance, {
+            currentWeek: engine.currentWeek || 0,
+            fireCooldown: engine.difficulty?.modifiers?.boardFireCooldown || 0
+        });
 
         // Boost de reputação
         if (proposal.reputationBoost) {

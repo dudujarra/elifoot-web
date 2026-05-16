@@ -105,6 +105,7 @@ export class SeasonProcessor {
                 const diff = getDifficulty();
                 engine.board = new BoardSystem(team.division, team.balance, {
                     fireCooldown: diff.modifiers.boardFireCooldown || 0,
+                    currentWeek: engine.currentWeek || 0
                 });
             }
         } catch { /* ignore */ }
@@ -181,6 +182,9 @@ export class SeasonProcessor {
                 });
                 if (!engine.seasonHistory) engine.seasonHistory = [];
                 engine.seasonHistory.push(story);
+                // Cap to prevent memory leak and context bloat
+                if (engine.seasonHistory.length > 10) engine.seasonHistory.shift();
+                
                 engine.weekEvents.push(`📖 ${story.headline}`);
             } catch { /* defensive */ }
         }
@@ -219,6 +223,8 @@ export class SeasonProcessor {
                 promoted: !!(repEvent === 'promotion'),
                 relegated: pos >= 19,
             });
+            // Cap careerHistory to 50 items
+            if (engine.manager.careerHistory.length > 50) engine.manager.careerHistory.shift();
         } catch { /* defensive */ }
     }
 
@@ -473,7 +479,9 @@ export class SeasonProcessor {
                     starPlayer,
                 },
             });
+            if (!engine.chronicles) engine.chronicles = [];
             engine.chronicles.push(chronicle);
+            if (engine.chronicles.length > 50) engine.chronicles.shift();
             engine.weekEvents.push(`📜 ${chronicle.chronicle}`);
             // SPEC-B3: trigger full-screen Chronicle modal next tick
             engine.pendingChronicleSeason = chronicle;
