@@ -1,3 +1,4 @@
+import { EngineLogger } from '../engine/EngineLogger.js';
 /**
  * AutoPlayService — Soak Test / Self-Play
  *
@@ -119,7 +120,7 @@ export class AutoPlayController {
                 if (result.total > 0) {
                     devLog('DAgger', `Warm-start: ${result.total} teacher lessons loaded`);
                 }
-            } catch { /* non-critical */ }
+            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'non-critical'); }
         }
 
         // Transfer tracking for ML reward feedback — initialized via _resetRuntimeTracking() above
@@ -210,7 +211,7 @@ export class AutoPlayController {
                         mode: challengeWin.id, emoji: challengeWin.emoji
                     });
                 }
-            } catch { /* challenge non-critical */ }
+            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'challenge non-critical'); }
 
             // §12.4 #6: Scarcity telemetry — log transfer window pressure
             try {
@@ -233,7 +234,7 @@ export class AutoPlayController {
                         }, 0);
                     }
                 }
-            } catch { /* scarcity non-critical */ }
+            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'scarcity non-critical'); }
 
             // §17: Track session metrics
             this._sessionMetrics.recordAction();
@@ -252,7 +253,7 @@ export class AutoPlayController {
                         }, 0);
                     }
                 }
-            } catch { /* press non-critical */ }
+            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'press non-critical'); }
 
             // §15.4: PWA notification trigger on milestones (non-blocking)
             try {
@@ -262,7 +263,7 @@ export class AutoPlayController {
                         window.__pwaService.notifySeasonEnd?.(this.engine.seasonNumber);
                     }
                 }
-            } catch { /* PWA non-critical */ }
+            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'PWA non-critical'); }
 
             // === HUMAN-PARITY INTERACTIONS (RFCT-018: delegated to AutoPlayPacing) ===
             AutoPlayPacing.runAll(this);
@@ -441,7 +442,7 @@ export class AutoPlayController {
         try {
             this.telemetry = new TelemetryAggregator();
             this.lastTelemetryReport = null;
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'ignore'); }
 
         // 6. Limpa saves de gameplay (mas NÃO o brain!)
         try {
@@ -451,7 +452,7 @@ export class AutoPlayController {
                 localStorage.removeItem('olefut_genetic_state');
                 // NÃO remove 'olefut_autoplay_brain' — esse é o ponto!
             }
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'ignore'); }
 
         brainSnapshot.savedAt = Date.now();
         return brainSnapshot;

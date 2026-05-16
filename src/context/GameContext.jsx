@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { Engine } from '../engine/engine';
+import { createEngine } from '../engine/engineFactory.js';
 import { Tournament } from '../engine/tournaments/Tournament';
 import { League } from '../engine/tournaments/League';
 import { KnockoutCup } from '../engine/tournaments/KnockoutCup';
@@ -219,7 +220,7 @@ function restoreEngine(engine, snapshot) {
 }
 
 export const GameProvider = ({ children }) => {
-    const engineRef = useRef(new Engine());
+    const engineRef = useRef(createEngine());
     const [, setTick] = useState(0);
     // SPEC-169 (Bloco 3.3): forceUpdate memoizado pra estabilidade
     // referencial — antes recriava-se a cada render do provider, forçando
@@ -308,7 +309,7 @@ export const GameProvider = ({ children }) => {
     const saveGame = useCallback(() => saveToStorage(engineRef.current, gameState), [gameState]);
     const resetGame = useCallback(() => {
         clearStorage();
-        engineRef.current = new Engine();
+        engineRef.current = createEngine();
         setGameState({ started: false, view: 'start', manager: '', teamId: null, mode: 'manager' });
     }, []);
 

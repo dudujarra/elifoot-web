@@ -3,29 +3,20 @@ import { compute as computeManagerIdentity } from './ManagerIdentitySystem.js';
 import { evaluateAhaMoments, markAhaSeen } from './AhaMomentsSystem.js';
 import { StaffManager } from './StadiumSystem.js';
 
-import { MatchSimulator } from '../services/MatchSimulator.js';
-import { LLMNarrativeService } from '../services/LLMNarrativeService.js';
-import { MythService } from '../services/MythService.js';
-import { RelationshipService } from '../services/RelationshipService.js';
-import { NarrativeService } from '../services/NarrativeService.js';
-import { CareerService } from '../services/CareerService.js';
-import { InheritanceService } from '../services/InheritanceService.js';
-import { WeekProcessor } from '../services/WeekProcessor.js';
-import { SeasonProcessor } from '../services/SeasonProcessor.js';
-import { NpcWeekProcessor } from '../services/NpcWeekProcessor.js';
-import { TransferService } from '../services/TransferService.js';
-import { ScoutingService } from '../services/ScoutingService.js';
-import { LoanService } from '../services/LoanService.js';
-import { FacilityService } from '../services/FacilityService.js';
-import { FormationService } from '../services/FormationService.js';
-import { PressService } from '../services/PressService.js';
-import { SectorService } from '../services/SectorService.js';
-import { GameInitializer } from '../services/GameInitializer.js';
+
 import { decrementSuspensions } from './DisciplineSystem.js';
 import { setMatchBonus, MATCH_BONUS_TIERS } from './MatchBonusSystem.js';
 import { setTicketPolicy, getActiveTicketPolicy, TICKET_POLICIES } from './TicketPricingSystem.js';
 import { startAuction, raiseBid, getActiveAuctions, requiresAuction } from './StarAuctionSystem.js';
 
+/**
+ * @typedef {import('./engine').EngineState} EngineState
+ */
+
+/**
+ * The core game engine containing the global state and logic.
+ * @implements {EngineState}
+ */
 export class Engine {
     constructor() {
         this.teams = [];
@@ -36,53 +27,7 @@ export class Engine {
         this.manager = { name: '', teamId: null, money: 0, salary: 5000, reputation: 10, tacticHistory: {}, careerHistory: [] };
         this.marketPlayers = [];
 
-        // RFCT-004: MatchSimulator extracted from playMatch (ver src/services/MatchSimulator.js)
-        this._matchSimulator = new MatchSimulator();
-        // SPEC-167: LLMNarrativeService — narrativa pós-jogo, conselho do auxiliar, reação da diretoria.
-        // Por padrão usa templates determinísticos (LLM opt-in via setMode('webllm')).
-        this.llmNarrative = new LLMNarrativeService();
-        // SPEC-167: última narrativa pós-jogo gerada (string ou null).
-        this.lastMatchNarrative = null;
-        // RFCT-005: WeekProcessor + SeasonProcessor extracted from advanceWeek/startNewSeason
-        this._weekProcessor = new WeekProcessor();
-        this._seasonProcessor = new SeasonProcessor();
-        // RFCT-019.1: NpcWeekProcessor — extracted NPC management + AI Director from advanceWeek
-        this._npcWeekProcessor = new NpcWeekProcessor();
-        // RFCT-019.2: TransferService — extracted market generation + transfer ops
-        this._transferService = new TransferService();
-        // RFCT-019.3: ScoutingService — extracted scouting + sign + scoutLeague
-        this._scoutingService = new ScoutingService();
-        // RFCT-019.4: LoanService — extracted loan financial + player loan
-        this._loanService = new LoanService();
-        // RFCT-019.5: FacilityService — extracted academy/stadium upgrades + staff
-        this._facilityService = new FacilityService();
-        // RFCT-019.6: FormationService — formation/tactic/training/teamtalk/sub + getMatchContext
-        this._formationService = new FormationService();
-        // RFCT-019.7: PressService — press conference + contract renewal + coach proposal response
-        this._pressService = new PressService();
-        // RFCT-019.9: SectorService — getTeamSectors + getPacingEvents
-        this._sectorService = new SectorService();
-        // RFCT-019.10: GameInitializer — initGame heavy logic extracted
-        this._gameInitializer = new GameInitializer();
-        // RFCT-007: MythService — Camada 5 (Mito) Hall de Lendas (stateless)
-        this._mythService = new MythService();
-        // RFCT-008/010: RelationshipService — Camada 3 (Relacional) (stateless)
-        this._relationshipService = new RelationshipService();
-        // RFCT-011/013: NarrativeService — Camadas 1, 2, 4 + integration 3, 5 (constructor injection)
-        this._narrativeService = new NarrativeService({
-            relationshipService: this._relationshipService,
-            mythService: this._mythService
-        });
-        // RFCT-014/016: CareerService — Player + Manager career + Transição (constructor injection)
-        this._careerService = new CareerService({
-            mythService: this._mythService,
-            relationshipService: this._relationshipService,
-            narrativeService: this._narrativeService
-        });
-        // AKITA-052 (v1.1.5): InheritanceService — traits herdáveis pra regens
-        this._inheritanceService = new InheritanceService({
-            mythService: this._mythService
-        });
+
 
         // Manager Mode state
         this.currentTactic = 'normal';

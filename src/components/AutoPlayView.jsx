@@ -319,7 +319,7 @@ export function AutoPlayView() {
 
     const handleResetAll = () => {
         if (!controllerRef.current) return;
-        if (!window.confirm('🚨 RESET TUDO: apaga TUDO (Q-table + stats + save jogo + LLM). Sem volta.')) return;
+        if (!window.confirm('[!] RESET TUDO: apaga TUDO (Q-table + stats + save jogo + LLM). Sem volta.')) return;
         try { controllerRef.current.pause(); } catch { /* ignore */ }
         try {
             if (typeof localStorage !== 'undefined') {
@@ -525,7 +525,7 @@ export function AutoPlayView() {
                             {llmStatus.loadProgress > 0 && llmStatus.loadProgress < 1 && (
                                 <span> ({(llmStatus.loadProgress * 100).toFixed(0)}%)</span>
                             )}
-                            {llmStatus.loadStatus === 'ready' && <span className="ef-ap__llm-ready"> ✓ LLM ativo</span>}
+                            {llmStatus.loadStatus === 'ready' && <span className="ef-ap__llm-ready"> [OK] LLM ativo</span>}
                             {llmStatus.loadStatus === 'error' && llmStatus.error && (
                                 <div className="ef-ap__llm-error-detail">{llmStatus.error}</div>
                             )}
@@ -741,7 +741,7 @@ export function AutoPlayView() {
                             return (
                                 <span>
                                     GDD Coverage: <strong style={{ color, fontSize: '0.85rem' }}>{active}/{total} ({pct}%)</strong>
-                                    {pct >= 100 && ' 🎉 FULL PARITY'}
+                                    {pct >= 100 && ' [*] FULL PARITY'}
                                     {pct >= 80 && pct < 100 && ' — rode mais seasons para cobertura total'}
                                 </span>
                             );

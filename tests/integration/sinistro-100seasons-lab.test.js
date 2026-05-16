@@ -29,6 +29,7 @@
 
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Engine } from '../../src/engine/engine.js';
+import { createEngine } from '../../src/engine/engineFactory.js';
 import { AutoPlayController } from '../../src/services/AutoPlayService.js';
 import { setDifficulty, DIFFICULTY_MODES } from '../../src/engine/systems/DifficultyModes.js';
 
@@ -83,7 +84,7 @@ describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
         expect(DIFFICULTY_MODES.sinistro).toBeDefined();
 
         // 2. Init engine
-        engine = new Engine();
+        engine = createEngine();
 
         // 3. Find Iguatu (worst team in game — Série D, R$1M budget, 3K stadium)
         //    Teams are assigned IDs sequentially: BRA.1(20), BRA.2(20), BRA.3(24), BRA.4(24), then SA/EU
@@ -103,7 +104,7 @@ describe('💀 Lab: Iguatu × Sinistro — 10000 Seasons Stress Test', () => {
         }
 
         // 4. Re-init with correct team
-        engine = new Engine();
+        engine = createEngine();
         engine.initGame('IguatuBot', teamId, 'manager', 'fallen');
 
         const team = engine.getTeam(teamId);

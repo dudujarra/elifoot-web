@@ -16,7 +16,7 @@
 //     intencionalmente separados.
 
 import { shouldTriggerPress, generateQuestion, applyPressEffect } from '../engine/PressConference';
-import { generateRenewalOffer, acceptRenewal } from '../engine/PlayerDevelopment';
+import { generateRenewalOffer, acceptRenewal } from '../engine/systems/ContractNegotiationSystem.js';
 import { BoardSystem } from '../engine/BoardSystem';
 
 export class PressService {

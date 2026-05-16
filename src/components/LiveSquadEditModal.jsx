@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { TACTICS } from '../engine/ManagerSystems';
-import { getFormEmoji } from '../engine/PlayerDevelopment';
+import { getFormEmoji } from '../engine/systems/FormSystem.js';
 import { Help } from './Help';
 import { EfTooltip, EfModal, EfButton } from './ui';
 import {
@@ -44,7 +44,7 @@ function PlayerCard({ player, onClick, actionLabel, actionVariant = 'primary', s
                 </span>
                 <div className="ef-livesq__player-meta">
                     <span className="ef-livesq__player-name">
-                        {player.name} {player._isCaptain ? '©️' : ''} {formEmoji}
+                        {player.name} {player._isCaptain ? '[C]' : ''} {formEmoji}
                     </span>
                     <div className="ef-livesq__player-stats-row">
                         <span className="ef-livesq__stat">

@@ -1,3 +1,4 @@
+import { EngineLogger } from '../engine/EngineLogger.js';
 /**
  * AutoPlayPersistence — State Management
  *
@@ -33,13 +34,13 @@ export class AutoPlayPersistence {
             }
             // Don't restore startTime/running — fresh session is paused initially
             statsObj.startTime = null;
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlayPersistence.js', 'ignore'); }
     }
 
     static saveStats(statsObj) {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(statsObj));
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlayPersistence.js', 'ignore'); }
     }
 
     static resetStatsOnly() {

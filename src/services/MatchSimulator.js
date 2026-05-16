@@ -17,24 +17,22 @@
  * - engine.teamTalkModifiers (reset)
  */
 
-import { FORMATION_COUNTERS, getFormModifier } from '../engine/PlayerDevelopment';
+import { FORMATION_COUNTERS } from '../engine/tactical/TacticCounters.js';
+import { getFormModifier } from '../engine/systems/FormSystem.js';
 import { MatchNarrator } from './MatchNarrator.js';
 import { getDifficulty } from '../engine/systems/DifficultyModes.js';
 import { getAtmosphere } from '../engine/BrazilianAtmosphere.js';
 import { getClubVoice } from '../engine/ClubVoiceSystem.js';
-import { getTraitMatchModifier, hasTrait, initCareerStats, recordMatchStats, getGoalConversionBonus, getDefenseSectorBonus, getSetPieceBonus, getPenaltySaveBonus, getPenaltyConversionBonus } from '../engine/PlayerTraits';
-import { recordNpcResult } from '../engine/NpcTacticAdvisor';
-import { npcFeedMatchResult } from './learning/NpcManagerAI.js';
+import { getTraitMatchModifier, getGoalConversionBonus, getDefenseSectorBonus, getSetPieceBonus, getPenaltySaveBonus, getPenaltyConversionBonus } from '../engine/PlayerTraits';
 
 import { rng as systemRng } from '../engine/rng.js';
 import { emitGameEvent, GameEvents } from '../audio/EventBus.js';
-import { settleMatchBonus } from '../engine/MatchBonusSystem.js';
 import { processMatchCards } from '../engine/DisciplineSystem.js';
 import { spatialEngine } from '../engine/SpatialEngine.js';
 import { DeepTacticalEngine } from '../engine/tactical/DeepTacticalEngine.js';
 import { MatchEffectsPipeline } from '../engine/systems/MatchEffectsPipeline.js';
-import { shouldTriggerMidMatch, getMidMatchCardDerbyAware, getReactiveCard } from '../engine/MidMatchManagerDeck.js';
-import { MATCH_BASE_DRAIN_MIN, MATCH_BASE_DRAIN_RANGE, WORKHORSE_ENERGY_SAVE, LEADER_WIN_MORAL_BOOST } from '../engine/constants.js';
+import { shouldTriggerMidMatch, getMidMatchCardDerbyAware } from '../engine/MidMatchManagerDeck.js';
+import { resolveMOTM, applyEnergyDrain, recordCareerStats, applyLeaderBoost, settleBicho, feedNpcResults, emitMatchEnd } from './MatchPostMatch.js';
 export class MatchSimulator {
     constructor() {
         this._tacticalEngine = new DeepTacticalEngine();
@@ -531,91 +529,24 @@ export class MatchSimulator {
 
         // MOTM — Man of the Match (only at end of full match)
         if (!skipPostMatch) {
-        const homeTitulares = (homeTeam.squad || []).filter(p => p.isTitular);
-        const awayTitulares = (awayTeam.squad || []).filter(p => p.isTitular);
-        let bestPerf = -1, motm = null;
-        [...homeTitulares, ...awayTitulares].forEach(p => {
-            const perf = (performanceMap[p.id] || 0);
-            if (perf > bestPerf) { bestPerf = perf; motm = p; }
-        });
-        if (motm && bestPerf > 0) {
-            events.motm = { name: motm.name, team: homeTeam.squad?.includes(motm) ? homeTeam.name : awayTeam.name, score: bestPerf };
-            if (isManagerMatch) rawEvents.push({ minute: 90, type: 'motm', name: motm.name });
-        }
+        events.motm = resolveMOTM(homeTeam, awayTeam, performanceMap, isManagerMatch, rawEvents);
 
         // Match stats
         events.stats = { homeShots, awayShots, homeSaves, awaySaves };
 
         } // end if (!skipPostMatch) — MOTM block
 
-        // Energy drain (trait: workhorse saves 30%) — only at end of full match
+        // Energy drain + career + discipline + leader + bicho (only at end of full match)
         if (!skipPostMatch) {
-        const baseDrain = Math.floor(MATCH_BASE_DRAIN_MIN + systemRng() * MATCH_BASE_DRAIN_RANGE) * (cond.energyModifier || 1);
-        const energyDrain = Math.floor(baseDrain * weatherDrainMod);
-        [...(homeTeam.squad || []), ...(awayTeam.squad || [])].filter(p => p.isTitular).forEach(p => {
-            const saveMod = hasTrait(p, 'workhorse') ? WORKHORSE_ENERGY_SAVE : 1.0;
-            p.energy = Math.max(0, p.energy - Math.floor(energyDrain * saveMod));
-        });
+        applyEnergyDrain(homeTeam, awayTeam, cond, weatherDrainMod);
+        recordCareerStats(engine, events);
 
-        // Record career stats for manager's team
-        // BUG-082: also record for bench players if they somehow scored (_matchGoals > 0)
-        const managerTeam = engine.getTeam(engine.manager.teamId);
-        if (managerTeam) {
-            managerTeam.squad.forEach(p => {
-                if (!p.isTitular && !(p._matchGoals > 0)) return;
-                initCareerStats(p);
-                const goals = p._matchGoals || 0;
-                const assists = 0; // tracked via scorers
-                const cards = events.cards?.filter(c => c.player === p.name).length || 0;
-                const isMotm = events.motm?.name === p.name;
-                recordMatchStats(p, goals, assists, cards, isMotm);
-                delete p._matchGoals;
-            });
-            // Record assists from scorers
-            (events.scorers || []).forEach(s => {
-                if (s.assist) {
-                    const assistP = managerTeam.squad.find(p => p.name === s.assist);
-                    if (assistP) {
-                        initCareerStats(assistP);
-                        assistP.career.totalAssists++;
-                        assistP.career.seasonAssists++;
-                    }
-                }
-            });
-        }
-        
         // Elifoot Classic Feature: Discipline System (Suspensions for red/yellow cards)
         processMatchCards(events.cards, homeTeam);
         processMatchCards(events.cards, awayTeam);
 
-        // Leader trait: +LEADER_WIN_MORAL_BOOST moral on win
-        if (homeGoals !== awayGoals) {
-            const isWin = (homeId === engine.manager.teamId && homeGoals > awayGoals) || (awayId === engine.manager.teamId && awayGoals > homeGoals);
-            if (isWin && managerTeam) {
-                const leaders = managerTeam.squad.filter(p => hasTrait(p, 'leader'));
-                if (leaders.length > 0) {
-                    // BUG-FIX: Apply moral boost ONCE regardless of leader count (was N× before)
-                    managerTeam.squad.forEach(p => { p.moral = Math.min(100, (p.moral || 50) + LEADER_WIN_MORAL_BOOST); });
-                    if (isManagerMatch) rawEvents.push({ minute: 90, type: 'leader', name: leaders[0].name });
-                }
-            }
-        }
-
-        // ==========================================
-        // ELIFOOT CLASSIC: BICHO settlement pós-match
-        // ==========================================
-        if (isManagerMatch && engine.pendingMatchBonus) {
-            const managerIsHome = homeId === engine.manager.teamId;
-            const didWin = managerIsHome
-                ? homeGoals > awayGoals
-                : awayGoals > homeGoals;
-            const bonusResult = settleMatchBonus(engine, didWin);
-            if (bonusResult) {
-                if (isManagerMatch) rawEvents.push({ minute: 90, type: 'bicho', ...bonusResult });
-                engine.weekEvents = engine.weekEvents || [];
-                engine.weekEvents.push(bonusResult.msg);
-            }
-        }
+        applyLeaderBoost(engine, homeId, awayId, homeGoals, awayGoals, isManagerMatch, rawEvents);
+        settleBicho(engine, homeId, homeGoals, awayGoals, isManagerMatch, rawEvents);
         } // end if (!skipPostMatch) — energy, career, discipline, leader, bicho
 
         if (isManagerMatch) {
@@ -633,33 +564,11 @@ export class MatchSimulator {
             // Reset team talk modifiers after match
             engine.teamTalkModifiers = { ata: 1.0, def: 1.0 };
 
-            // SPEC-131: registra resultado nos estados NPC para próximo pivot
-            const homeResult = homeGoals > awayGoals ? 'W' : homeGoals < awayGoals ? 'L' : 'D';
-            const awayResult = awayGoals > homeGoals ? 'W' : awayGoals < homeGoals ? 'L' : 'D';
-            if (homeTeam && homeId !== engine.manager.teamId && homeTeam.npcTacticState) {
-                homeTeam.npcTacticState = recordNpcResult(homeTeam.npcTacticState, homeResult);
-                // MARL Fase 6: feed emotional engine with match result
-                try { npcFeedMatchResult(homeTeam, homeResult, engine); } catch { /* defensive */ }
-            }
-            if (awayTeam && awayId !== engine.manager.teamId && awayTeam.npcTacticState) {
-                awayTeam.npcTacticState = recordNpcResult(awayTeam.npcTacticState, awayResult);
-                // MARL Fase 6: feed emotional engine with match result
-                try { npcFeedMatchResult(awayTeam, awayResult, engine); } catch { /* defensive */ }
-            }
-            // Track last opponent for tactic advisor context
-            if (!engine._lastNpcOpponent) engine._lastNpcOpponent = {};
-            if (homeId !== engine.manager.teamId) engine._lastNpcOpponent[homeId] = awayId;
-            if (awayId !== engine.manager.teamId) engine._lastNpcOpponent[awayId] = homeId;
+            // SPEC-131: NPC tactic state + MARL emotional engine
+            feedNpcResults(engine, homeTeam, awayTeam, homeId, awayId, homeGoals, awayGoals);
 
             // §9: Emit match end for procedural audio
-            try {
-                const managerResult = isManagerHome
-                    ? (homeGoals > awayGoals ? 'victory' : homeGoals < awayGoals ? 'defeat' : 'draw')
-                    : isManagerAway
-                        ? (awayGoals > homeGoals ? 'victory' : awayGoals < homeGoals ? 'defeat' : 'draw')
-                        : 'neutral';
-                emitGameEvent(GameEvents.MATCH_ENDED, { result: managerResult, homeGoals, awayGoals });
-            } catch { /* event emit - non-critical */ }
+            emitMatchEnd(isManagerHome, isManagerAway, homeGoals, awayGoals);
         } // end if (!skipPostMatch)
 
         return { homeGoals, awayGoals, events, stats: { homeShots, awayShots, homeSaves, awaySaves } };

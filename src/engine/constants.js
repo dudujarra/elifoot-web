@@ -132,3 +132,9 @@ export const LEADER_WIN_MORAL_BOOST = 2;
 
 export const SAVE_KEY = 'olefut_save_v1';
 export const SAVE_VERSION = 11;
+
+
+// --- Extracted Magic Numbers ---
+export const MARKET_BASE_FEE = 15000;
+export const ACADEMY_UPGRADE_COST = 500000;
+export const STADIUM_UPGRADE_COST = 1000000;

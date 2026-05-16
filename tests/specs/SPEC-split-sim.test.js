@@ -1,12 +1,13 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Engine } from '../../src/engine/engine.js';
+import { createEngine } from '../../src/engine/engineFactory.js';
 
 describe('Split Simulation Flow', () => {
     let engine;
     let teamId;
 
     beforeEach(() => {
-        engine = new Engine();
+        engine = createEngine();
         // Pick first team as manager's team
         const teams = Object.keys(engine.teams);
         teamId = teams[0];

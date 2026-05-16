@@ -404,7 +404,7 @@ export function MarketView() {
                                                             </span>
                                                             <span className="ef-auction__bid-value">
                                                                 R$ {(b.bid / 1_000_000).toFixed(1)}M
-                                                                {isHighest && ' ✓'}
+                                                                {isHighest && ' [TOP]'}
                                                             </span>
                                                         </div>
                                                     );
@@ -435,8 +435,8 @@ export function MarketView() {
                                                 }
                                                 {' · '}
                                                 {isWinning
-                                                    ? '✅ Você está vencendo'
-                                                    : '⚠️ Há lances maiores'
+                                                    ? '[OK] Voce esta vencendo'
+                                                    : '[!] Ha lances maiores'
                                                 }
                                             </div>
                                         </div>

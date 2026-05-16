@@ -4,7 +4,7 @@ import { getModifiersForMatch as getWinStreakBonus } from '../WinStreakModifierS
 import { getMatchBonusBuff } from '../MatchBonusSystem.js';
 import { getHomeAdvantageFromTickets } from '../TicketPricingSystem.js';
 import { TACTICS } from '../ManagerSystems.js';
-import { TACTIC_COUNTERS } from '../PlayerDevelopment.js';
+import { TACTIC_COUNTERS } from '../tactical/TacticCounters.js';
 import { rng as systemRng } from '../rng.js';
 import {
     CLIMATE_AWAY_PENALTY, CLIMATE_HOME_BONUS, CLIMATE_ALTITUDE_PENALTY,

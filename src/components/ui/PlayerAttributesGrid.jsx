@@ -89,7 +89,7 @@ function CategoryBox({ title, attributes, data }) {
             minWidth: '140px', 
             background: 'var(--color-shadow-deep)', 
             padding: '8px', 
-            borderRadius: '4px',
+            borderRadius: 0,
             border: '1px solid var(--color-soft-border)'
         }}>
             <div style={{ 

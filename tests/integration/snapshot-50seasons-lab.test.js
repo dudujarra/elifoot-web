@@ -10,6 +10,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { Engine } from '../../src/engine/engine.js';
+import { createEngine } from '../../src/engine/engineFactory.js';
 import { AutoPlayController } from '../../src/services/AutoPlayService.js';
 import { setDifficulty } from '../../src/engine/systems/DifficultyModes.js';
 import { EngineLogger } from '../../src/engine/EngineLogger.js';
@@ -32,7 +33,7 @@ describe('🧪 Snapshot Pipeline: 50 Seasons (Sanity)', () => {
         setDifficulty('sinistro');
 
         // Init engine exatamente como o soak test faz
-        let engine = new Engine();
+        let engine = createEngine();
         engine.initGame('SnapshotBot', 1, 'manager', 'fallen');
 
         // Encontrar time Div 4 para snapshot
@@ -41,7 +42,7 @@ describe('🧪 Snapshot Pipeline: 50 Seasons (Sanity)', () => {
         const teamId = div4[0]?.id || 1;
 
         // Re-init com o time correto
-        engine = new Engine();
+        engine = createEngine();
         engine.initGame('SnapshotBot', teamId, 'manager', 'fallen');
 
         const bot = new AutoPlayController(engine);
