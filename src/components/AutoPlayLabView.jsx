@@ -1,6 +1,5 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable no-restricted-syntax -- progress bar width is dynamic */
 /**
-import '../styles/autoplay-lab-view.css';
  * AutoPlayLabView — F1 UI
  *
  * Single view: dropdown preset + config + RUN + results + export.
@@ -13,6 +12,7 @@ import { runBatch, seedRange, randomSeeds } from '../services/AutoPlayLab/BatchR
 import { PRESETS, PRESET_CATEGORIES } from '../services/AutoPlayLab/presets';
 import { toCSV, toJSON, downloadFile, timestampedFilename } from '../services/AutoPlayLab/Exporter';
 import { ArrowLeft, Play, Download, Flask } from '@phosphor-icons/react';
+import '../styles/autoplay-lab-view.css';
 
 export function AutoPlayLabView() {
     const { changeView, getDashboardView } = useGame();
@@ -95,11 +95,11 @@ export function AutoPlayLabView() {
                 <EfPanel padding="lg" className="ef-aplab__panel-gold-bottom">
                     <div className="ef-aplab__inline">
                         <Flask size={28} color="var(--color-gold-arcade)" weight="fill" />
-                        <div style={{ flex: 1 }}>
-                            <h2 style={{ margin: 0, fontSize: '1.4rem', color: 'var(--text-main)', fontFamily: 'var(--font-sans)' }}>
+                        <div className="ef-aplab__header-text">
+                            <h2 className="ef-aplab__title">
                                 AUTOPLAY LAB
                             </h2>
-                            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginTop: '4px' }}>
+                            <div className="ef-aplab__subtitle">
                                 Simula N saves headless. Valida engine, balance, IA, conteúdo.
                             </div>
                         </div>
@@ -113,19 +113,12 @@ export function AutoPlayLabView() {
                 <EfPanel padding="md" className="ef-aplab__panel-mb">
                     <div className="ef-aplab__grid-2">
                         <label className="ef-aplab__label-col">
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>PRESET</span>
+                            <span className="ef-aplab__field-label">PRESET</span>
                             <select
                                 value={presetId}
                                 onChange={e => setPresetId(e.target.value)}
                                 disabled={running}
-                                style={{
-                                    backgroundColor: 'var(--bg-panel)',
-                                    color: 'var(--text-main)',
-                                    border: '1px solid var(--color-soft-border)',
-                                    padding: '8px',
-                                    fontFamily: 'var(--font-mono)',
-                                    fontSize: '0.85rem',
-                                }}
+                                className="ef-aplab__input"
                             >
                                 {Object.entries(presetsByCategory).map(([cat, list]) => (
                                     <optgroup key={cat} label={PRESET_CATEGORIES[cat] || cat}>
@@ -136,14 +129,14 @@ export function AutoPlayLabView() {
                                 ))}
                             </select>
                             {preset && (
-                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', marginTop: '4px' }}>
+                                <div className="ef-aplab__field-desc">
                                     {preset.description}
                                 </div>
                             )}
                         </label>
 
                         <label className="ef-aplab__label-col">
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SAVES</span>
+                            <span className="ef-aplab__field-label">SAVES</span>
                             <input
                                 type="number"
                                 value={saves}
@@ -151,18 +144,12 @@ export function AutoPlayLabView() {
                                 disabled={running}
                                 min="1"
                                 max="1000"
-                                style={{
-                                    backgroundColor: 'var(--bg-panel)',
-                                    color: 'var(--text-main)',
-                                    border: '1px solid var(--color-soft-border)',
-                                    padding: '8px',
-                                    fontFamily: 'var(--font-mono)',
-                                }}
+                                className="ef-aplab__input"
                             />
                         </label>
 
                         <label className="ef-aplab__label-col">
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SEMANAS/SAVE</span>
+                            <span className="ef-aplab__field-label">SEMANAS/SAVE</span>
                             <input
                                 type="number"
                                 value={weeks}
@@ -170,35 +157,23 @@ export function AutoPlayLabView() {
                                 disabled={running}
                                 min="1"
                                 max="380"
-                                style={{
-                                    backgroundColor: 'var(--bg-panel)',
-                                    color: 'var(--text-main)',
-                                    border: '1px solid var(--color-soft-border)',
-                                    padding: '8px',
-                                    fontFamily: 'var(--font-mono)',
-                                }}
+                                className="ef-aplab__input"
                             />
                         </label>
 
                         <label className="ef-aplab__label-col">
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-sans)', fontWeight: 'bold' }}>SEED START</span>
+                            <span className="ef-aplab__field-label">SEED START</span>
                             <input
                                 type="number"
                                 value={seedStart}
                                 onChange={e => setSeedStart(parseInt(e.target.value) || 1000)}
                                 disabled={running}
-                                style={{
-                                    backgroundColor: 'var(--bg-panel)',
-                                    color: 'var(--text-main)',
-                                    border: '1px solid var(--color-soft-border)',
-                                    padding: '8px',
-                                    fontFamily: 'var(--font-mono)',
-                                }}
+                                className="ef-aplab__input"
                             />
                         </label>
                     </div>
 
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px', fontSize: '0.8rem', color: 'var(--text-main)', fontFamily: 'var(--font-sans)' }}>
+                    <label className="ef-aplab__label-checkbox">
                         <input
                             type="checkbox"
                             checked={useRandomSeeds}
@@ -213,20 +188,10 @@ export function AutoPlayLabView() {
                             <Play size={16} weight="fill" /> {running ? 'RODANDO...' : 'RODAR'}
                         </EfButton>
                         {running && (
-                            <div style={{ flex: 1, fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                            <div className="ef-aplab__progress-info">
                                 Progress: {Math.round(progress * 100)}% · ETA {eta}
-                                <div style={{
-                                    marginTop: '4px',
-                                    height: '6px',
-                                    backgroundColor: 'var(--color-soft-border)',
-                                    width: '100%',
-                                }}>
-                                    <div style={{
-                                        height: '6px',
-                                        width: `${progress * 100}%`,
-                                        backgroundColor: 'var(--color-gold-arcade)',
-                                        transition: 'width 0.2s',
-                                    }} />
+                                <div className="ef-aplab__progress-track">
+                                    <div className="ef-aplab__progress-fill" style={{ width: `${progress * 100}%` }} />
                                 </div>
                             </div>
                         )}
@@ -236,32 +201,22 @@ export function AutoPlayLabView() {
                 {/* RESULTS */}
                 {analysis && (
                     <EfPanel padding="md" className="ef-aplab__panel-mb">
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                            <div style={{ fontSize: '0.75rem', color: 'var(--color-gold-arcade)', fontFamily: 'var(--font-sans)', fontWeight: 'bold', letterSpacing: '0.1em' }}>
+                        <div className="ef-aplab__results-header">
+                            <div className="ef-aplab__results-label">
                                 RESULTADOS — {preset?.label?.toUpperCase()}
                             </div>
                         </div>
-                        <pre style={{
-                            backgroundColor: 'var(--color-bg-deep)',
-                            border: '1px solid var(--color-soft-border)',
-                            padding: '12px',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.78rem',
-                            color: 'var(--text-main)',
-                            overflow: 'auto',
-                            maxHeight: '500px',
-                            whiteSpace: 'pre-wrap',
-                        }}>
+                        <pre className="ef-aplab__results-pre">
                             {JSON.stringify(analysis, null, 2)}
                         </pre>
-                        <div style={{ marginTop: '12px', display: 'flex', gap: '10px' }}>
+                        <div className="ef-aplab__results-actions">
                             <EfButton variant="secondary" size="md" onClick={handleExportCSV}>
                                 <Download size={14} /> EXPORT CSV
                             </EfButton>
                             <EfButton variant="secondary" size="md" onClick={handleExportJSON}>
                                 <Download size={14} /> EXPORT JSON
                             </EfButton>
-                            <div style={{ flex: 1, textAlign: 'right', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', alignSelf: 'center' }}>
+                            <div className="ef-aplab__results-stats">
                                 {results?.length || 0} saves · {results?.filter(r => !r.crash).length || 0} OK · {results?.filter(r => r.crash).length || 0} crashes
                             </div>
                         </div>

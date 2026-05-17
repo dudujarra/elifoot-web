@@ -62,3 +62,106 @@
   align-items: center;
   gap: 16px;
 }
+
+/* ── Wave: inline-style extraction (AKITA-423) ───────── */
+.ef-aplab__header-text { flex: 1; }
+
+.ef-aplab__title {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+}
+
+.ef-aplab__subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-top: 4px;
+}
+
+.ef-aplab__field-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-weight: bold;
+}
+
+.ef-aplab__input {
+  background-color: var(--bg-panel);
+  color: var(--text-main);
+  border: 1px solid var(--color-soft-border);
+  padding: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.ef-aplab__field-desc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  margin-top: 4px;
+}
+
+.ef-aplab__progress-info {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.ef-aplab__progress-track {
+  margin-top: 4px;
+  height: 6px;
+  background-color: var(--color-soft-border);
+  width: 100%;
+}
+
+.ef-aplab__progress-fill {
+  height: 6px;
+  background-color: var(--color-gold-arcade);
+  transition: width 0.2s;
+}
+
+.ef-aplab__results-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ef-aplab__results-label {
+  font-size: 0.75rem;
+  color: var(--color-gold-arcade);
+  font-family: var(--font-sans);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.ef-aplab__results-pre {
+  background-color: var(--color-bg-deep);
+  border: 1px solid var(--color-soft-border);
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-main);
+  overflow: auto;
+  max-height: 500px;
+  white-space: pre-wrap;
+}
+
+.ef-aplab__results-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.ef-aplab__results-stats {
+  flex: 1;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  align-self: center;
+}
+
