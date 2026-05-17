@@ -15,7 +15,7 @@ import { join } from 'node:path';
 const DIST = join(process.cwd(), 'dist', 'assets');
 const INITIAL_LIMIT = 500_000;
 const SINGLE_CHUNK_LIMIT = 500_000;
-const TOTAL_LIMIT = 3_500_000; // bumped for Elifoot Classic modules (Bicho, Ticket, Auction, Discipline)
+const TOTAL_LIMIT = 3_600_000; // bumped for Glassmorphism + Elifoot Classic modules
 // Data-only chunks are excluded from per-chunk code size checks (they are JSON, not code)
 const DATA_CHUNKS = /^(player-data|realPlayers_)/;
 

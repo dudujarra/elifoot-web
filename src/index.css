@@ -434,7 +434,6 @@ h1, h2, h3, h4 {
   border: 1px solid var(--glass-border);
   background: rgba(10, 14, 23, 0.6); 
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   color: var(--text-main); 
   font-size: 1rem;
   font-family: 'Inter', system-ui, sans-serif; 

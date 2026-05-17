@@ -57,7 +57,8 @@ export function saveAllBrains(teams) {
 
     try {
         localStorage.setItem(STORAGE_KEY_PREFIX, JSON.stringify(brainData));
-    } catch (e) { EngineLogger.capture(e, 'BrainPersistence.restoreAll'); }
+    } catch (e) { 
+        EngineLogger.capture(e, 'BrainPersistence.restoreAll');
         // Storage full — aggressive prune
         try {
             const entries = Object.entries(brainData)

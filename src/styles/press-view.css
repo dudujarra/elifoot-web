@@ -19,8 +19,6 @@
 }
 
 .ef-press__root {
-  
-  -webkit-
   background-color: var(--color-bg, var(--ef-press-crt-black));
   min-height: 100dvh;
   padding: 24px;

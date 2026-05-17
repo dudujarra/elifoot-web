@@ -583,8 +583,6 @@ h1, h2, h3, h4 {
   min-height: 100dvh;
   padding: 16px;
   color: #E2E8F0;
-  
-  -webkit-
   position: relative;
   z-index: 1;
 }
@@ -1348,8 +1346,6 @@ h1, h2, h3, h4 {
   color: var(--text-main, #FDFBF7);
   font-family: 'Inter', system-ui, sans-serif;
   overflow-y: auto;
-  
-  -webkit-
 }
 .ef-scene-shell--centered {
   display: flex;
