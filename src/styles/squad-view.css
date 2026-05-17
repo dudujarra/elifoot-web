@@ -608,3 +608,147 @@
     padding-bottom: 0;
   }
 }
+
+/* ── Detail panel (expanded row) ───────────────────────── */
+.ef-squad__detail-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.ef-squad__detail-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.85rem;
+}
+
+.ef-squad__detail-stats-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 12px;
+}
+
+.ef-squad__detail-stat {
+  background: var(--bg-panel);
+  padding: 12px 16px;
+}
+
+.ef-squad__detail-stat--primary { border-left: 3px solid var(--primary); }
+.ef-squad__detail-stat--accent  { border-left: 3px solid var(--accent); }
+.ef-squad__detail-stat--info    { border-left: 3px solid var(--info); }
+
+.ef-squad__detail-stat-label {
+  font-size: 0.7rem;
+  margin-bottom: 4px;
+}
+
+.ef-squad__detail-stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.ef-squad__detail-stat-sep {
+  color: var(--border-panel);
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+/* SUSP badge in status cell */
+.ef-squad__status-susp {
+  color: var(--danger);
+  font-size: 9px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ── Stats tab cards ───────────────────────────────────── */
+.ef-squad__analysis-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--color-soft-border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ef-squad__analysis-name {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.ef-squad__analysis-pos {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  background: var(--bg-dark);
+  padding: 4px 12px;
+}
+
+/* ── Contract tab cells ────────────────────────────────── */
+.ef-squad__contract-th {
+  text-align: left;
+  padding: 16px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.ef-squad__contract-th--center {
+  text-align: center;
+}
+
+.ef-squad__contract-row {
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--bg-panel);
+}
+
+.ef-squad__contract-td {
+  padding: 16px;
+}
+
+.ef-squad__contract-td--name { font-weight: bold; }
+.ef-squad__contract-td--center { text-align: center; }
+.ef-squad__contract-td--right { text-align: right; }
+.ef-squad__contract-td--pos {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* ── Contract section header ───────────────────────────── */
+.ef-squad__contract-header {
+  padding: 24px;
+  margin-bottom: 0;
+  border-bottom: 2px solid var(--color-soft-border);
+}
+
+/* ── Loan cards ────────────────────────────────────────── */
+.ef-squad__loan-card {
+  background: var(--bg-panel);
+  padding: 16px;
+  border: 1px solid var(--border-panel);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ef-squad__loan-name {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.ef-squad__loan-dest {
+  font-weight: normal;
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+}
+
+.ef-squad__loan-timer {
+  font-size: 0.85rem;
+  background: var(--bg-dark);
+  padding: 6px 12px;
+}

@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable no-restricted-syntax -- remaining dynamic runtime styles (widths, conditional colors) */
 import React, { useState } from 'react';
 import '../styles/squad-view.css';
 import { useGame } from '../context/GameContext';
@@ -233,7 +233,7 @@ export function SquadView() {
                                                     {p.injury ? (
                                                         <FirstAid weight="fill" size={16} className="ef-squad__status-medical" />
                                                     ) : p.suspension ? (
-                                                        <div className="ef-squad__status-medical" style={{color: 'var(--danger)', fontSize: '9px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%'}}>SUSP</div>
+                                                        <div className="ef-squad__status-susp">SUSP</div>
                                                     ) : (
                                                         <div
                                                             onClick={(e) => { e.stopPropagation(); toggleTitular(p.id); }}
@@ -325,32 +325,32 @@ export function SquadView() {
                                                                 <HexagonChart player={p} size={180} />
                                                             </div>
                                                             <div className="ef-squad__details-col">
-                                                                <div className="ef-sans ef-text-main" style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
+                                                                <div className="ef-sans ef-text-main ef-squad__detail-name">
                                                                     {p.name}
                                                                 </div>
-                                                                <div className="ef-mono ef-text-muted" style={{ display: 'flex', gap: '16px', fontSize: '0.85rem' }}>
+                                                                <div className="ef-mono ef-text-muted ef-squad__detail-meta">
                                                                     {p.personality && (
                                                                         <div>
                                                                             <Heartbeat weight="fill" /> {p.personality} • {p.playstyle || 'Caneleiro'}
                                                                         </div>
                                                                     )}
                                                                 </div>
-                                                                <div className="ef-mono" style={{ display: 'flex', gap: '24px', marginTop: '12px' }}>
-                                                                    <div style={{ background: 'var(--bg-panel)', padding: '12px 16px', borderLeft: '3px solid var(--primary)' }}>
-                                                                        <div className="ef-text-muted" style={{ fontSize: '0.7rem', marginBottom: '4px' }}>OVR / POT</div>
-                                                                        <div className="ef-text-main" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{p.ovr} <span style={{ color: 'var(--border-panel)', fontSize: '1rem', fontWeight: 'normal' }}>/</span> <span className={p.potential > p.ovr + 5 ? 'ef-text-primary' : 'ef-text-muted'}>{p.potential || p.ovr}</span></div>
+                                                                <div className="ef-mono ef-squad__detail-stats-row">
+                                                                    <div className="ef-squad__detail-stat ef-squad__detail-stat--primary">
+                                                                        <div className="ef-text-muted ef-squad__detail-stat-label">OVR / POT</div>
+                                                                        <div className="ef-text-main ef-squad__detail-stat-value">{p.ovr} <span className="ef-squad__detail-stat-sep">/</span> <span className={p.potential > p.ovr + 5 ? 'ef-text-primary' : 'ef-text-muted'}>{p.potential || p.ovr}</span></div>
                                                                     </div>
-                                                                    <div style={{ background: 'var(--bg-panel)', padding: '12px 16px', borderLeft: '3px solid var(--accent)' }}>
-                                                                        <div className="ef-text-muted" style={{ fontSize: '0.7rem', marginBottom: '4px' }}>VALOR DE MERCADO</div>
-                                                                        <div className="ef-text-accent" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>R$ {((p.marketValue || p.value) / 1e6).toFixed(1)}M</div>
+                                                                    <div className="ef-squad__detail-stat ef-squad__detail-stat--accent">
+                                                                        <div className="ef-text-muted ef-squad__detail-stat-label">VALOR DE MERCADO</div>
+                                                                        <div className="ef-text-accent ef-squad__detail-stat-value">R$ {((p.marketValue || p.value) / 1e6).toFixed(1)}M</div>
                                                                     </div>
-                                                                    <div style={{ background: 'var(--bg-panel)', padding: '12px 16px', borderLeft: '3px solid var(--info)' }}>
-                                                                        <div className="ef-text-muted" style={{ fontSize: '0.7rem', marginBottom: '4px' }}>RATING (POS)</div>
-                                                                        <div className="ef-text-info" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{(p.attributes || p.attacking) ? calculateRatingForPosition(p, p.naturalPosition || 'MEC') : p.ovr}</div>
+                                                                    <div className="ef-squad__detail-stat ef-squad__detail-stat--info">
+                                                                        <div className="ef-text-muted ef-squad__detail-stat-label">RATING (POS)</div>
+                                                                        <div className="ef-text-info ef-squad__detail-stat-value">{(p.attributes || p.attacking) ? calculateRatingForPosition(p, p.naturalPosition || 'MEC') : p.ovr}</div>
                                                                     </div>
                                                                 </div>
                                                                 {p.personality && (
-                                                                    <div className="ef-sans" style={{ marginTop: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--color-purple-dark)', padding: '6px 12px', border: '1px solid var(--color-purple-wonder)', color: 'var(--color-purple-wonder)', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                                                                    <div className="ef-sans ef-squad__badge-wrap">
                                                                         <Heartbeat weight="fill" /> PERFIL: {p.personality}
                                                                     </div>
                                                                 )}
@@ -415,9 +415,9 @@ export function SquadView() {
                         </div>
                         <div className="ef-squad__grid-md">
                             {sorted.filter(p => p.isTitular).slice(0, 11).map(p => (
-                                <div key={p.id} style={{ background: 'var(--bg-panel)', border: '1px solid var(--color-soft-border)', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <div className="ef-sans ef-text-main" style={{ fontWeight: 'bold', fontSize: '1rem', marginBottom: '8px', textAlign: 'center' }}>{p.name}</div>
-                                    <div className="ef-mono" style={{ fontSize: '0.8rem', color: getPosColor(p.position), fontWeight: 'bold', marginBottom: '16px', background: 'var(--bg-dark)', padding: '4px 12px' }}>{p.naturalPosition || p.position}</div>
+                                <div key={p.id} className="ef-squad__analysis-card">
+                                    <div className="ef-sans ef-text-main ef-squad__analysis-name">{p.name}</div>
+                                    <div className="ef-mono ef-squad__analysis-pos" style={{ color: getPosColor(p.position) }}>{p.naturalPosition || p.position}</div>
                                     <HexagonChart player={p} size={160} />
                                 </div>
                             ))}
@@ -427,16 +427,16 @@ export function SquadView() {
 
                 {tab === 'contratos' && (
                     <EfPanel padding="none" className="ef-squad__panel-table">
-                        <div className="ef-section-header" style={{ padding: '24px', marginBottom: 0, borderBottom: '2px solid var(--color-soft-border)' }}>
+                        <div className="ef-section-header ef-squad__contract-header">
                             <IdentificationCard size={24} color="var(--accent)" weight="fill" />
                             <h3>GESTÃO DE CONTRATOS</h3>
                         </div>
                         <table className="ef-squad__table">
                             <thead className="ef-squad__thead">
                                 <tr>
-                                    <th className="ef-text-muted" style={{ textAlign:'left', padding: '16px', fontSize: '0.75rem', fontWeight: 'bold' }}>JOGADOR</th>
-                                    <th className="ef-text-muted" style={{ textAlign:'center', padding: '16px', fontSize: '0.75rem', fontWeight: 'bold' }}>POS</th>
-                                    <th className="ef-text-muted" style={{ textAlign:'center', padding: '16px', fontSize: '0.75rem', fontWeight: 'bold' }}>IDADE</th>
+                                    <th className="ef-text-muted ef-squad__contract-th">JOGADOR</th>
+                                    <th className="ef-text-muted ef-squad__contract-th ef-squad__contract-th--center">POS</th>
+                                    <th className="ef-text-muted ef-squad__contract-th ef-squad__contract-th--center">IDADE</th>
                                     <th className="ef-squad__th ef-squad__th--wage-right">WAGE/SEM</th>
                                     <th className="ef-squad__th ef-squad__th--wage-right">RESTANTE</th>
                                     <th className="ef-squad__th ef-squad__th--wage-right">CLÁUSULA</th>
@@ -445,14 +445,14 @@ export function SquadView() {
                             </thead>
                             <tbody>
                                 {sorted.map((p, i) => (
-                                    <tr key={p.id} style={{ background: i % 2 === 0 ? 'var(--bg-panel)' : 'var(--bg-panel)', borderBottom: '1px solid var(--bg-panel)' }}>
-                                        <td className="ef-text-main" style={{ fontWeight: 'bold', padding: '16px' }}>{p.name}</td>
-                                        <td className="ef-mono" style={{ textAlign:'center', color: getPosColor(p.position), fontSize: '0.8rem', fontWeight: 'bold', padding: '16px' }}>{p.naturalPosition || p.position}</td>
-                                        <td className="ef-mono ef-text-muted" style={{ textAlign:'center', padding: '16px' }}>{p.age}</td>
-                                        <td className="ef-mono ef-text-danger" style={{ textAlign:'right', padding: '16px' }}>R$ {(p.contract?.weeklyWage || 0).toLocaleString('pt-BR')}</td>
-                                        <td className="ef-mono ef-text-muted" style={{ textAlign:'right', padding: '16px' }}>{p.contract?.weeksRemaining || p.contract?.weeksLeft || '-'} sem</td>
-                                        <td className="ef-mono ef-text-info" style={{ textAlign:'right', padding: '16px' }}>{p.contract?.releaseClause ? `R$ ${(p.contract.releaseClause / 1e6).toFixed(1)}M` : '-'}</td>
-                                        <td className="ef-mono ef-text-accent" style={{ textAlign:'right', padding: '16px' }}>{p.marketValue ? `R$ ${(p.marketValue / 1e6).toFixed(1)}M` : '-'}</td>
+                                    <tr key={p.id} className="ef-squad__contract-row">
+                                        <td className="ef-text-main ef-squad__contract-td ef-squad__contract-td--name">{p.name}</td>
+                                        <td className="ef-mono ef-squad__contract-td ef-squad__contract-td--pos" style={{ color: getPosColor(p.position) }}>{p.naturalPosition || p.position}</td>
+                                        <td className="ef-mono ef-text-muted ef-squad__contract-td ef-squad__contract-td--center">{p.age}</td>
+                                        <td className="ef-mono ef-text-danger ef-squad__contract-td ef-squad__contract-td--right">R$ {(p.contract?.weeklyWage || 0).toLocaleString('pt-BR')}</td>
+                                        <td className="ef-mono ef-text-muted ef-squad__contract-td ef-squad__contract-td--right">{p.contract?.weeksRemaining || p.contract?.weeksLeft || '-'} sem</td>
+                                        <td className="ef-mono ef-text-info ef-squad__contract-td ef-squad__contract-td--right">{p.contract?.releaseClause ? `R$ ${(p.contract.releaseClause / 1e6).toFixed(1)}M` : '-'}</td>
+                                        <td className="ef-mono ef-text-accent ef-squad__contract-td ef-squad__contract-td--right">{p.marketValue ? `R$ ${(p.marketValue / 1e6).toFixed(1)}M` : '-'}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -468,11 +468,11 @@ export function SquadView() {
                         </div>
                         <div className="ef-squad__grid-lg">
                             {loanedOut.map((l, i) => (
-                                <div key={i} style={{ background: 'var(--bg-panel)', padding: '16px', border: '1px solid var(--border-panel)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div className="ef-sans ef-text-main" style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>
-                                        {l.playerName} <span className="ef-text-muted" style={{ fontWeight: 'normal', display: 'block', marginTop: '4px', fontSize: '0.8rem' }}>→ {l.destination}</span>
+                                <div key={i} className="ef-squad__loan-card">
+                                    <div className="ef-sans ef-text-main ef-squad__loan-name">
+                                        {l.playerName} <span className="ef-text-muted ef-squad__loan-dest">→ {l.destination}</span>
                                     </div>
-                                    <div className="ef-mono ef-text-accent" style={{ fontSize: '0.85rem', background: 'var(--bg-dark)', padding: '6px 12px' }}>
+                                    <div className="ef-mono ef-text-accent ef-squad__loan-timer">
                                         {l.weeksLeft}/{l.totalWeeks} sem
                                     </div>
                                 </div>
