@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable no-restricted-syntax -- --chronicle-color CSS var set dynamically */
 /* eslint-disable react-refresh/only-export-components */
 /**
  * ChronicleSeasonEndModal — SPEC-B3
@@ -10,6 +10,7 @@
 import { useEffect, useCallback } from 'react';
 import { useGame } from '../context/GameContext';
 import { Scroll, Download, Image as ImageIcon, X, Trophy, CloudRain } from '@phosphor-icons/react';
+import '../styles/chronicle-modal.css';
 
 // ─── pure helpers exportados pra teste ───
 
@@ -211,136 +212,59 @@ export function ChronicleSeasonEndModal() {
 
     return (
         <div
-            className="ef-chronicle-season-modal"
+            className="ef-chronicle-overlay"
             role="dialog"
             aria-labelledby="ef-chronicle-title"
             aria-modal="true"
-            style={{
-                position: 'fixed',
-                inset: 0,
-                backgroundColor: 'rgba(5, 10, 15, 0.95)',
-                zIndex: 1000,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '24px',
-                overflowY: 'auto',
-            }}
         >
-            <div style={{
-                maxWidth: '720px',
-                width: '100%',
-                backgroundColor: 'var(--color-bg-deep)',
-                border: `2px solid ${meta.color}`,
-                padding: '32px',
-                position: 'relative',
-            }}>
+            <div className="ef-chronicle-card" style={{ '--chronicle-color': meta.color }}>
                 <button
                     type="button"
                     onClick={close}
                     aria-label="Fechar crônica"
-                    style={{
-                        position: 'absolute',
-                        top: '12px',
-                        right: '12px',
-                        background: 'transparent',
-                        border: '1px solid var(--color-soft-border)',
-                        color: 'var(--text-main)',
-                        padding: '6px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                    }}
+                    className="ef-chronicle-close"
                 >
                     <X size={16} weight="bold" />
                 </button>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+                <div className="ef-chronicle-header">
                     <Icon size={32} color={meta.color} weight="fill" />
                     <div>
-                        <div style={{ fontSize: '0.75rem', color: meta.color, fontFamily: 'var(--font-sans)', fontWeight: 'bold', letterSpacing: '0.1em' }}>
+                        <div className="ef-chronicle-mood-label">
                             {meta.label}
                         </div>
-                        <h2 id="ef-chronicle-title" style={{ margin: 0, fontSize: '1.4rem', color: 'var(--text-main)', fontFamily: 'var(--font-sans)' }}>
+                        <h2 id="ef-chronicle-title" className="ef-chronicle-title">
                             Temporada {chronicle.season} — {chronicle.clubName}
                         </h2>
-                        <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+                        <div className="ef-chronicle-manager">
                             Técnico: {chronicle.managerName}
                         </div>
                     </div>
                 </div>
 
-                <div style={{
-                    backgroundColor: 'var(--bg-panel)',
-                    border: '1px solid var(--color-soft-border)',
-                    padding: '20px',
-                    marginBottom: '20px',
-                    fontFamily: 'var(--font-sans)',
-                    color: 'var(--text-main)',
-                    fontSize: '0.95rem',
-                    lineHeight: 1.6,
-                    whiteSpace: 'pre-wrap',
-                }}>
+                <div className="ef-chronicle-body">
                     {chronicle.chronicle}
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                <div className="ef-chronicle-actions">
                     <button
                         type="button"
                         onClick={handleExport}
-                        style={{
-                            backgroundColor: 'transparent',
-                            color: meta.color,
-                            border: `1px solid ${meta.color}`,
-                            padding: '10px 18px',
-                            fontFamily: 'var(--font-sans)',
-                            fontSize: '0.85rem',
-                            fontWeight: 'bold',
-                            letterSpacing: '0.05em',
-                            textTransform: 'uppercase',
-                            cursor: 'pointer',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                        }}
+                        className="ef-chronicle-btn ef-chronicle-btn--outline"
                     >
                         <Download size={16} weight="bold" /> MD
                     </button>
                     <button
                         type="button"
                         onClick={handleExportPng}
-                        style={{
-                            backgroundColor: 'transparent',
-                            color: meta.color,
-                            border: `1px solid ${meta.color}`,
-                            padding: '10px 18px',
-                            fontFamily: 'var(--font-sans)',
-                            fontSize: '0.85rem',
-                            fontWeight: 'bold',
-                            letterSpacing: '0.05em',
-                            textTransform: 'uppercase',
-                            cursor: 'pointer',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                        }}
+                        className="ef-chronicle-btn ef-chronicle-btn--outline"
                     >
                         <ImageIcon size={16} weight="bold" /> PNG
                     </button>
                     <button
                         type="button"
                         onClick={close}
-                        style={{
-                            backgroundColor: meta.color,
-                            color: 'var(--color-bg-deep)',
-                            border: 'none',
-                            padding: '10px 18px',
-                            fontFamily: 'var(--font-sans)',
-                            fontSize: '0.85rem',
-                            fontWeight: 'bold',
-                            letterSpacing: '0.05em',
-                            textTransform: 'uppercase',
-                            cursor: 'pointer',
-                        }}
+                        className="ef-chronicle-btn ef-chronicle-btn--solid"
                     >
                         CONTINUAR
                     </button>

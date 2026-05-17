@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable no-restricted-syntax -- dynamic border/bg colors from props require CSS vars */
 /**
  * MatchScoreboard — extracted from MatchView (AKITA-319 F1.4 partial split)
  *
@@ -8,6 +8,7 @@
  */
 
 import { EfPanel, EfClubBadge } from './ui';
+import '../styles/match-scoreboard.css';
 
 export function MatchScoreboard({
     half,
@@ -20,26 +21,26 @@ export function MatchScoreboard({
 }) {
     if (!result) return null;
     return (
-        <EfPanel padding="md" style={{ position: 'relative', marginBottom: '24px', overflow: 'hidden', border: `2px solid ${colors.border}` }}>
+        <EfPanel padding="md" className="ef-scoreboard" style={{ '--scoreboard-border': colors.border, '--scoreboard-bg': colors.bg }}>
             {goalBurstActive && (
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'var(--color-forest-pulse)', animation: 'pulse 1s infinite', pointerEvents: 'none', zIndex: 1 }} />
+                <div className="ef-scoreboard__burst" />
             )}
 
-            <div className="ef-sans ef-text-accent" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '24px', marginBottom: '16px', fontSize: '0.85rem', fontWeight: 'bold', position: 'relative', zIndex: 2 }}>
-                <div style={{ flex: 1, textAlign: 'right', letterSpacing: '0.1em' }}>MANDANTE</div>
-                <div className="ef-mono ef-text-primary" style={{ backgroundColor: colors.bg, padding: '6px 12px', border: `1px solid ${colors.border}` }}>
+            <div className="ef-sans ef-text-accent ef-scoreboard__header">
+                <div className="ef-scoreboard__label ef-scoreboard__label--home">MANDANTE</div>
+                <div className="ef-mono ef-text-primary ef-scoreboard__half-badge">
                     {half}
                 </div>
-                <div style={{ flex: 1, textAlign: 'left', letterSpacing: '0.1em' }}>VISITANTE</div>
+                <div className="ef-scoreboard__label ef-scoreboard__label--away">VISITANTE</div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: '16px', position: 'relative', zIndex: 2 }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', flex: 1 }}>
+            <div className="ef-scoreboard__body">
+                <div className="ef-scoreboard__team">
                     <EfClubBadge name={result.home} size="xl" />
-                    <span className="ef-sans ef-text-main" style={{ fontSize: '1rem', fontWeight: 'bold', textAlign: 'center' }}>{result.home}</span>
+                    <span className="ef-sans ef-text-main ef-scoreboard__team-name">{result.home}</span>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+                <div className="ef-scoreboard__center">
                     <div className="ef-score-box">
                         <div className="ef-score-box__num">{runningScore.home}</div>
                         <div className="ef-score-box__sep">-</div>
@@ -54,9 +55,9 @@ export function MatchScoreboard({
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', flex: 1 }}>
+                <div className="ef-scoreboard__team">
                     <EfClubBadge name={result.away} size="xl" />
-                    <span className="ef-sans ef-text-main" style={{ fontSize: '1rem', fontWeight: 'bold', textAlign: 'center' }}>{result.away}</span>
+                    <span className="ef-sans ef-text-main ef-scoreboard__team-name">{result.away}</span>
                 </div>
             </div>
         </EfPanel>
