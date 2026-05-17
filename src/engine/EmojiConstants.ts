@@ -1,0 +1,392 @@
+/**
+ * EmojiConstants.js — Centralized semantic emoji/icon constants
+ *
+ * Mandamento Brutal #3: Zero emoji em código novo.
+ * All UI-facing emojis MUST come from this module.
+ * 
+ * Usage:
+ *   import { ICONS } from '../engine/EmojiConstants.js';
+ *   const msg = `${ICONS.GOAL} Gol de ${scorer}!`;
+ *
+ * Categories follow engine domain model:
+ * - MATCH: in-game match events
+ * - FINANCE: money, transfers, contracts
+ * - STAFF: staff roles and medical
+ * - TACTICS: formations, training, tactics
+ * - CARDS: discipline (yellow/red)
+ * - MOOD: morale, emotions, board
+ * - CAREER: career milestones, achievements
+ * - NARRATIVE: story events, press, atmosphere
+ * - SCOUT: scouting regions and discovery
+ * - UI: general UI indicators
+ */
+
+// ============================================================
+// MATCH EVENTS
+// ============================================================
+export const MATCH = {
+  GOAL:        '\u26BD',  // ⚽
+  OWN_GOAL:    '\u26BD',  // ⚽ (contextualized by text)
+  PENALTY:     '\u26BD',  // ⚽
+  SAVE:        '\u{1F9E4}', // 🧤
+  INJURY:      '\u{1F915}', // 🤕
+  SUBSTITUTION:'\u{1F504}', // 🔄
+  WHISTLE:     '\u{1F4E2}', // 📢
+  VAR:         '\u{1F4FA}', // 📺
+  DERBY:       '\u26A1',  // ⚡
+  CONDITION_RAIN: '\u{1F327}\uFE0F', // 🌧️
+  CONDITION_HEAT: '\u{1F525}', // 🔥
+  CONDITION_PACKED: '\u{1F3DF}\uFE0F', // 🏟️
+  CONDITION_NIGHT: '\u{1F319}', // 🌙
+  CONDITION_TV: '\u{1F4FA}', // 📺
+  CONDITION_NORMAL: '\u2600\uFE0F', // ☀️
+} as const;
+
+// ============================================================
+// DISCIPLINE
+// ============================================================
+export const CARDS = {
+  YELLOW:     '\u{1F7E8}', // 🟨
+  RED:        '\u{1F7E5}', // 🟥
+  SUSPENSION: '\u{1F6AB}', // 🚫
+} as const;
+
+// ============================================================
+// FINANCE & TRANSFERS
+// ============================================================
+export const FINANCE = {
+  MONEY:       '\u{1F4B0}', // 💰
+  CHART_UP:    '\u{1F4C8}', // 📈
+  CHART_DOWN:  '\u{1F4C9}', // 📉
+  CONTRACT:    '\u{1F4DD}', // 📝
+  SALARY:      '\u{1F4B8}', // 💸
+  TROPHY:      '\u{1F3C6}', // 🏆
+  PRIZE:       '\u{1F3C6}', // 🏆
+  TAX:         '\u{1F3DB}\uFE0F', // 🏛️
+  WARNING:     '\u26A0\uFE0F', // ⚠️
+  DISASTER:    '\u26A0\uFE0F', // ⚠️
+} as const;
+
+// ============================================================
+// STAFF & MEDICAL
+// ============================================================
+export const STAFF = {
+  PHYSIO:      '\u{1F3E5}', // 🏥
+  SCOUT:       '\u{1F50D}', // 🔍
+  FITNESS:     '\u{1F4AA}', // 💪
+  FINANCE_DIR: '\u{1F4B0}', // 💰
+  YOUTH_COACH: '\u{1F393}', // 🎓
+} as const;
+
+// ============================================================
+// TRAINING & TACTICS
+// ============================================================
+export const TRAINING = {
+  RECOVERY:    '\u{1F3C3}', // 🏃
+  TENSION:     '\u{1F4AA}', // 💪
+  DURATION:    '\u{1FAC1}', // 🫁
+  SPEED:       '\u26A1',   // ⚡
+  ACTIVATION:  '\u{1F9E0}', // 🧠
+  REST:        '\u{1F634}', // 😴
+  BOOST:       '\u{1F4C8}', // 📈
+} as const;
+
+// ============================================================
+// MORALE & EMOTIONS
+// ============================================================
+export const MOOD = {
+  HAPPY:       '\u{1F60A}', // 😊
+  ANGRY:       '\u{1F624}', // 😤
+  HEARTBREAK:  '\u{1F494}', // 💔
+  CELEBRATE:   '\u{1F389}', // 🎉
+  CROWN:       '\u{1F451}', // 👑
+  FIRE:        '\u{1F525}', // 🔥
+  STAR:        '\u2B50',    // ⭐
+  ROCKET:      '\u{1F680}', // 🚀
+  TARGET:      '\u{1F3AF}', // 🎯
+  HANDSHAKE:   '\u{1F91D}', // 🤝
+} as const;
+
+// ============================================================
+// CAREER & ACHIEVEMENTS
+// ============================================================
+export const CAREER = {
+  GOLD:        '\u{1F947}', // 🥇
+  SILVER:      '\u{1F948}', // 🥈
+  BRONZE:      '\u{1F949}', // 🥉
+  TROPHY:      '\u{1F3C6}', // 🏆
+  MEDAL:       '\u{1F3C5}', // 🏅
+  MILESTONE:   '\u{1F3AF}', // 🎯
+  LEGEND:      '\u{1F451}', // 👑
+  RETIREMENT:  '\u{1F44B}', // 👋
+} as const;
+
+// ============================================================
+// NARRATIVE & PRESS
+// ============================================================
+export const NARRATIVE = {
+  NEWS:        '\u{1F4F0}', // 📰
+  CLIPBOARD:   '\u{1F4CB}', // 📋
+  MEGAPHONE:   '\u{1F4E2}', // 📢
+  SHIELD:      '\u{1F6E1}\uFE0F', // 🛡️
+  CROSSED_SWORDS: '\u2694\uFE0F', // ⚔️
+  PEOPLE:      '\u{1F465}', // 👥
+  STATS:       '\u{1F4CA}', // 📊
+  BRAIN:       '\u{1F9E0}', // 🧠
+} as const;
+
+// ============================================================
+// TEAM TALKS
+// ============================================================
+export const TALKS = {
+  MOTIVATIONAL: '\u{1F4AA}', // 💪
+  CALM:        '\u{1F9D8}', // 🧘
+  AGGRESSIVE:  '\u{1F525}', // 🔥
+  THREATENING: '\u26A0\uFE0F', // ⚠️
+  TACTICAL:    '\u{1F4CB}', // 📋
+  RELAXED:     '\u{1F60E}', // 😎
+} as const;
+
+// ============================================================
+// SCOUTING REGIONS
+// ============================================================
+export const SCOUT_REGIONS = {
+  BRAZIL:     '\u{1F1E7}\u{1F1F7}', // 🇧🇷
+  ARGENTINA:  '\u{1F1E6}\u{1F1F7}', // 🇦🇷
+  EUROPE:     '\u{1F1EA}\u{1F1FA}', // 🇪🇺
+  AFRICA:     '\u{1F30D}', // 🌍
+  ASIA:       '\u{1F30F}', // 🌏
+} as const;
+
+// ============================================================
+// UI INDICATORS
+// ============================================================
+export const UI = {
+  CHECK:       '\u2705',    // ✅
+  CROSS:       '\u274C',    // ❌
+  ARROW_UP:    '\u2B06\uFE0F', // ⬆️
+  ARROW_DOWN:  '\u2B07\uFE0F', // ⬇️
+  INFO:        '\u2139\uFE0F', // ℹ️
+  CLOCK:       '\u{1F552}', // 🕒
+  LOCK:        '\u{1F512}', // 🔒
+  REFRESH:     '\u{1F504}', // 🔄
+} as const;
+
+// ============================================================
+// COSMETIC SHOP
+// ============================================================
+export const COSMETIC = {
+  SHIRT:       '\u{1F455}', // 👕
+  RAINBOW:     '\u{1F308}', // 🌈
+  FLEUR:       '\u269C\uFE0F', // ⚜️
+  SKULL:       '\u{1F480}', // 💀
+  CROWN:       '\u{1F451}', // 👑
+  SUIT:        '\u{1F935}', // 🤵
+  ZEN:         '\u{1F9D8}', // 🧘
+  ROCK:        '\u{1F918}', // 🤘
+  GRASS:       '\u{1F7E2}', // 🟢
+  SPIRAL:      '\u{1F300}', // 🌀
+  FLAG:        '\u{1F6A9}', // 🚩
+  FIREWORKS:   '\u{1F386}', // 🎆
+} as const;
+
+// ============================================================
+// INJURY TYPES
+// ============================================================
+export const INJURY_TYPE = {
+  MUSCLE:      '\u{1F9B5}', // 🦵
+  ANKLE:       '\u{1F9B6}', // 🦶
+  KNEE:        '\u{1F9BF}', // 🦿
+  HAMSTRING:   '\u{1FA79}', // 🩹
+  FRACTURE:    '\u{1F3E5}', // 🏥
+  CONCUSSION:  '\u{1F915}', // 🤕
+} as const;
+
+// ============================================================
+// ACHIEVEMENTS (MetaProgression)
+// ============================================================
+export const ACHIEVEMENT = {
+  FIRST_TITLE:   '\u{1F3C6}', // 🏆
+  FIVE_TITLES:   '\u2B50',    // ⭐
+  CUP:           '\u{1F947}', // 🥇
+  YOUTH:         '\u{1F331}', // 🌱
+  GIANT_KILLER:  '\u2694\uFE0F', // ⚔️
+  CRISIS_SAVIOR: '\u{1F691}', // 🚑
+  IRON_MANAGER:  '\u{1F529}', // 🔩
+  MARKET_WIZARD: '\u{1F4B0}', // 💰
+  UNBEATEN:      '\u{1F6E1}\uFE0F', // 🛡️
+  DYNASTY:       '\u{1F451}', // 👑
+} as const;
+
+// ============================================================
+// DIFFICULTY MODES
+// ============================================================
+export const DIFFICULTY = {
+  EASY:      '\u{1F7E2}', // 🟢
+  NORMAL:    '\u{1F7E1}', // 🟡
+  HARD:      '\u{1F534}', // 🔴
+  SINISTRO:  '\u{1F480}', // 💀
+} as const;
+
+// ============================================================
+// PLAYER LIFESTYLE (PlayerCareer)
+// ============================================================
+export const LIFESTYLE = {
+  APARTMENT:     '\u{1F3E2}', // 🏢
+  HOUSE:         '\u{1F3E0}', // 🏠
+  MANSION:       '\u{1F3F0}', // 🏰
+  CAR_POPULAR:   '\u{1F697}', // 🚗
+  CAR_LUXURY:    '\u{1F699}', // 🚙
+  CAR_SUPER:     '\u{1F3CE}\uFE0F', // 🏎️
+  PARTY:         '\u{1F389}', // 🎉
+  CHARITY:       '\u2764\uFE0F', // ❤️
+  INVESTMENT:    '\u{1F4C8}', // 📈
+  WEDDING:       '\u{1F48D}', // 💍
+  BRIEFCASE:     '\u{1F4BC}', // 💼
+} as const;
+
+// ============================================================
+// PERSONALITY ARCHETYPES (PlayerCareer)
+// ============================================================
+export const PERSONALITY = {
+  MAVERICK:   '\u{1F3AD}', // 🎭
+  VIRTUOSO:   '\u{1F3AF}', // 🎯
+  HEARTBEAT:  '\u{1FAC0}', // 🫀
+} as const;
+
+// ============================================================
+// PRESS & NPC CHARACTERS
+// ============================================================
+export const PRESS = {
+  MICROPHONE:  '\u{1F399}\uFE0F', // 🎙️
+  TV:          '\u{1F4FA}', // 📺
+  NEWSPAPER:   '\u{1F4F0}', // 📰
+  MIC:         '\u{1F3A4}', // 🎤
+  MEGAPHONE_NPC: '\u{1F4E3}', // 📣
+  TIE:         '\u{1F454}', // 👔
+} as const;
+
+// ============================================================
+// BOARD STATUS
+// ============================================================
+export const BOARD = {
+  BUILDING:    '\u{1F3DB}\uFE0F', // 🏛️
+  THINKING:    '\u{1F914}', // 🤔
+  UNKNOWN:     '\u2753',    // ❓
+} as const;
+
+// ============================================================
+// TICKETS & STADIUM
+// ============================================================
+export const TICKET = {
+  STANDARD:    '\u{1F3AB}\uFE0F', // 🎟️
+  STADIUM:     '\u{1F3DF}\uFE0F', // 🏟️
+  DIAMOND:     '\u{1F48E}', // 💎
+} as const;
+
+// ============================================================
+// CHALLENGE MODES
+// ============================================================
+export const CHALLENGE = {
+  ANT:         '\u{1F41C}', // 🐜
+  SEEDLING:    '\u{1F331}', // 🌱
+  EXTINGUISHER:'\u{1F9EF}', // 🧯
+  SHIELD:      '\u{1F6E1}\uFE0F', // 🛡️
+  MONEY:       '\u{1F4B0}', // 💰
+  HEART:       '\u2764\uFE0F', // ❤️
+} as const;
+
+// ============================================================
+// PLAYER TRAITS
+// ============================================================
+export const TRAIT = {
+  BOOT:        '\u{1F45F}', // 👟
+  PRECISION:   '\u{1F3AF}', // 🎯
+  STAR:        '\u2B50',    // ⭐
+  GLOWING:     '\u{1F31F}', // 🌟
+  MECHANICAL:  '\u{1F9BE}', // 🦾
+} as const;
+
+// ============================================================
+// REPUTATION LEVELS (SeasonSystem)
+// ============================================================
+export const REPUTATION = {
+  LEGENDARY:   '\u{1F451}', // 👑
+  RENOWNED:    '\u2B50',    // ⭐
+  RECOGNIZED:  '\u{1F4C8}', // 📈
+  BEGINNER:    '\u{1F331}', // 🌱
+  UNKNOWN:     '\u2753',    // ❓
+} as const;
+
+// ============================================================
+// MATCH BONUS (MatchBonusSystem)
+// ============================================================
+export const BONUS = {
+  NONE:        '\u2014',    // —
+  LOW:         '\u{1F4B5}', // 💵
+  MEDIUM:      '\u{1F4B0}', // 💰
+  HIGH:        '\u{1F911}', // 🤑
+} as const;
+
+// ============================================================
+// ACHIEVEMENT BADGES (AchievementsSystem)
+// ============================================================
+export const BADGE = {
+  TROPHY:          '\u{1F3C6}', // 🏆
+  MEDAL:           '\u{1F3C5}', // 🏅
+  STAR:            '\u2B50',    // ⭐
+  FIRST_PLACE:     '\u{1F947}', // 🥇
+  SHIELD:          '\u{1F6E1}\uFE0F', // 🛡️
+  SOCCER_BALL:     '\u26BD',    // ⚽
+  BULLSEYE:        '\u{1F3AF}', // 🎯
+  MUSCLE:          '\u{1F4AA}', // 💪
+  FIRE:            '\u{1F525}', // 🔥
+  SHOOTING_STAR:   '\u{1F320}', // 🌠
+  GLOWING_STAR:    '\u{1F31F}', // 🌟
+  CROWN:           '\u{1F451}', // 👑
+  NEW:             '\u{1F195}', // 🆕
+  MILITARY_MEDAL:  '\u{1F396}\uFE0F', // 🎖️
+  LIGHTNING:       '\u26A1',    // ⚡
+  THEATER:         '\u{1F3AD}', // 🎭
+  REFRESH:         '\u{1F504}', // 🔄
+  BRICKS:          '\u{1F9F1}', // 🧱
+  SPARKLES:        '\u2728',    // ✨
+  ROCKET:          '\u{1F680}', // 🚀
+  SNOWFLAKE:       '\u2744\uFE0F', // ❄️
+  SEEDLING:        '\u{1F331}', // 🌱
+  LIFE_PRESERVER:  '\u{1F6DF}', // 🛟
+  CROSSED_SWORDS:  '\u2694\uFE0F', // ⚔️
+  DICE:            '\u{1F3B2}', // 🎲
+  BOXING_GLOVE:    '\u{1F94A}', // 🥊
+} as const;
+
+/**
+ * Flat convenience alias — import { ICONS } from './EmojiConstants.js'
+ * Merges all categories into a single namespace.
+ */
+export const ICONS = {
+  ...MATCH,
+  ...CARDS,
+  ...FINANCE,
+  ...STAFF,
+  ...TRAINING,
+  ...MOOD,
+  ...CAREER,
+  ...NARRATIVE,
+  ...TALKS,
+  ...UI,
+  ...COSMETIC,
+  ...INJURY_TYPE,
+  ...ACHIEVEMENT,
+  ...DIFFICULTY,
+  ...LIFESTYLE,
+  ...PERSONALITY,
+  ...PRESS,
+  ...BOARD,
+  ...TICKET,
+  ...CHALLENGE,
+  ...TRAIT,
+  ...REPUTATION,
+  ...BONUS,
+  ...BADGE,
+} as const;
