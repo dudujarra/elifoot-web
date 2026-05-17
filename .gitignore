@@ -55,3 +55,9 @@ elifoot_25_extracted/
 *.assets
 *.dll
 *.exe
+
+# AKITA-427: Large binary assets — never track in git
+*.wav
+*.WAV
+tests/e2e/results/
+public/audio/fase1/**/*.wav
