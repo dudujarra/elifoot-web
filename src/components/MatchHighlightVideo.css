@@ -20,7 +20,7 @@
     height: 100%;
     object-fit: cover;
     z-index: 1;
-    image-rendering: pixelated; /* SNES aesthetic */
+     /* SNES aesthetic */
 }
 
 .ef-match-highlight-video__overlay {

@@ -1,6 +1,6 @@
 /* StartView — Premium SNES 32-bit (Stitch v1.1 port)
  * Match: docs/stitch-designs/v1.1-all/31-ol-fut-start-screen-snes-style.html
- * AKITA-397 — brand-locked, tokens-only (zero raw hex), Press Start 2P + Pixelify Sans + IBM Plex Mono.
+ * AKITA-397 — brand-locked, tokens-only (zero raw hex), Outfit + Inter + JetBrains Mono.
  *
  * Layout: full-screen "boot canvas" com center-circle field background,
  * corner brackets, side data strips, hero stars + logo + FOOTBALL MANAGER banner,
@@ -202,7 +202,7 @@
 .ef-start-logo {
   width: 96px;
   height: 96px;
-  image-rendering: pixelated;
+  
   margin-bottom: -16px;
   filter:
     drop-shadow(0 0 12px color-mix(in srgb, var(--primary) 60%, transparent))
@@ -212,7 +212,7 @@
 .ef-start-title {
   margin: 0;
   padding: 0;
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: clamp(2.5rem, 9vw, 5.5rem);
   color: var(--primary);
   text-shadow:
@@ -234,7 +234,7 @@
 
 .ef-start-subtitle {
   margin: 0;
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.25em;
   color: var(--accent);
@@ -269,7 +269,7 @@
   background: var(--bg-panel-sunk, var(--bg-dark));
   border: 4px solid var(--primitive-color-green-pitch, #8af0c0);
   color: var(--text-main);
-  font-family: var(--font-sans, 'Pixelify Sans'), system-ui, sans-serif;
+  font-family: var(--font-sans, 'Inter'), system-ui, sans-serif;
   font-weight: 700;
   font-size: 1rem;
   outline: none;
@@ -295,7 +295,7 @@
 }
 
 .ef-start-field-label {
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -319,7 +319,7 @@
   border: none;
   color: var(--text-main);
   outline: none;
-  font-family: var(--font-sans, 'Pixelify Sans'), system-ui, sans-serif;
+  font-family: var(--font-sans, 'Inter'), system-ui, sans-serif;
   font-weight: 700;
   font-size: 1rem;
   appearance: none;
@@ -410,7 +410,7 @@
 
 .ef-start-press {
   margin: 0;
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.25em;
   color: var(--primary);
@@ -428,7 +428,7 @@
 
 .ef-start-credits {
   margin: 0;
-  font-family: var(--font-mono, 'IBM Plex Mono'), monospace;
+  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
   font-size: 0.6rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -445,7 +445,7 @@
   width: 22px;
   height: 22px;
   border: 2px solid var(--bg-dark);
-  image-rendering: pixelated;
+  
 }
 
 .ef-start-swatch--primary { background: var(--primary); }

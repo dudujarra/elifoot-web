@@ -1,7 +1,7 @@
 /**
  * ChronicleView — SPEC-082: Crônica do Save
  * Stitch v1.1 port (AKITA-391): match docs/stitch-designs/v1.1-all/21-ol-fut-chronicle-cr-nica-do-save.html
- * Tokens-only — zero raw hex, brand fonts (Press Start 2P / Pixelify Sans / IBM Plex Mono).
+ * Tokens-only — zero raw hex, brand fonts (Outfit / Inter / JetBrains Mono).
  *
  * Faithful to Stitch layout: hero banner (LIVE FEED) + 4/8 grid
  * (left aside: narrative-view toggle + manager bio · right: terminal panel with chapters + export actions).

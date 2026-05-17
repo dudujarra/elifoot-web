@@ -5,7 +5,7 @@
  * Sizes: sm | md | lg
  *
  * Heavy 4px bevel borders, pixel-perfect press feedback,
- * Press Start 2P for labels, zero border-radius.
+ * Outfit for labels, zero border-radius.
  *
  * SPEC-169 (Bloco 3.3): wrapped em React.memo. EfButton aparece em listas
  * grandes (mercado, elenco, standings) — sem memo, todo render do parent

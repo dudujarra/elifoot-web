@@ -1,7 +1,7 @@
 /**
  * LineageView — SPEC-166: Painel Linhagem & Legado
  * Stitch v1.1 port (AKITA-390): match docs/stitch-designs/v1.1-all/82-lineageview-hall-de-lendas.html
- * Tokens-only — zero raw hex, brand fonts (Press Start 2P / Pixelify Sans / IBM Plex Mono).
+ * Tokens-only — zero raw hex, brand fonts (Outfit / Inter / JetBrains Mono).
  */
 
 import { useState } from 'react';

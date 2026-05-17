@@ -1,7 +1,7 @@
 /* PressView — Stitch v1.1 port
  * Match: docs/stitch-designs/v1.1-all/81-coletiva-de-imprensa-ol-fut-pressview.html
  * AKITA-387 — brand-locked, tokens-only (zero raw hex).
- * Press Start 2P + Pixelify Sans + IBM Plex Mono.
+ * Outfit + Inter + JetBrains Mono.
  */
 
 /* === ROOT === */
@@ -19,8 +19,8 @@
 }
 
 .ef-press__root {
-  image-rendering: pixelated;
-  -webkit-image-rendering: pixelated;
+  
+  -webkit-
   background-color: var(--color-bg, var(--ef-press-crt-black));
   min-height: 100dvh;
   padding: 24px;
@@ -69,14 +69,14 @@
 
 .ef-press__header-title {
   margin: 0 0 4px 0;
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
 .ef-press__header-subtitle {
-  font-family: var(--font-mono, 'IBM Plex Mono'), monospace;
+  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -115,7 +115,7 @@
 }
 
 .ef-press__live-label {
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.1em;
   color: var(--ef-press-danger);
@@ -132,7 +132,7 @@
   background-color: var(--primitive-color-neutral-abyss);
   background-size: cover;
   background-position: center;
-  image-rendering: pixelated;
+  
 }
 
 .ef-press__hero-overlay {
@@ -156,7 +156,7 @@
 }
 
 .ef-press__hero-tag {
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.5rem;
   letter-spacing: 0.05em;
   padding: 4px 8px;
@@ -182,7 +182,7 @@
   padding: 2px 12px;
   background: var(--ef-press-neon);
   color: var(--ef-press-crt-black);
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -195,7 +195,7 @@
   background-color: var(--ef-press-forest-dark);
   border: var(--primitive-border-hairline) solid var(--ef-press-trophy);
   padding: 6px 12px;
-  font-family: var(--font-mono, 'IBM Plex Mono'), monospace;
+  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.05em;
   margin-bottom: 18px;
@@ -221,7 +221,7 @@
 }
 
 .ef-press__question-text {
-  font-family: var(--font-body, 'Pixelify Sans'), system-ui, sans-serif;
+  font-family: var(--font-body, 'Inter'), system-ui, sans-serif;
   font-size: 1.05rem;
   line-height: 1.55;
   margin: 0;
@@ -237,7 +237,7 @@
 }
 
 .ef-press__answer-label {
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   margin-bottom: 16px;
@@ -293,7 +293,7 @@
   align-items: center;
   justify-content: center;
   border: var(--primitive-border-thin) solid var(--ef-press-pitch);
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.7rem;
   color: var(--ef-press-neon);
   background: transparent;
@@ -307,7 +307,7 @@
 }
 
 .ef-press .ef-press__option-text {
-  font-family: var(--font-body, 'Pixelify Sans'), system-ui, sans-serif;
+  font-family: var(--font-body, 'Inter'), system-ui, sans-serif;
   font-size: 0.95rem;
   line-height: 1.45;
   color: var(--ef-press-parchment);
@@ -324,7 +324,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-display, 'Press Start 2P'), monospace;
+  font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   margin-bottom: 18px;
@@ -340,7 +340,7 @@
 }
 
 .ef-press__answered-quote-text {
-  font-family: var(--font-body, 'Pixelify Sans'), system-ui, sans-serif;
+  font-family: var(--font-body, 'Inter'), system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.55;
   margin: 0;
@@ -363,7 +363,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono, 'IBM Plex Mono'), monospace;
+  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   font-weight: 700;
@@ -384,7 +384,7 @@
   align-items: center;
   gap: 8px;
   border: var(--primitive-border-hairline) solid var(--ef-press-pitch);
-  font-family: var(--font-mono, 'IBM Plex Mono'), monospace;
+  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
 }
 
 .ef-press__effect-key {

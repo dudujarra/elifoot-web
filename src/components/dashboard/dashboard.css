@@ -3,7 +3,7 @@
  *
  * 16-BIT BRUTALIST ARCADE AESTHETIC (SPEC-176 ISSSD-Premium 32-bit).
  * Uses tokens from src/styles/isssd-premium.css — zero raw hex per SPEC-183.
- * Press Start 2P for headers; --bezel-accent-light/--bezel-primary-light/--bezel-danger-light palette.
+ * Outfit for headers; --bezel-accent-light/--bezel-primary-light/--bezel-danger-light palette.
  */
 
 /* ========== HEADER ========== */
@@ -31,7 +31,7 @@
 }
 
 .ef-dash-header-title {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     font-size: 0.9rem;
     margin: 0;
     color: var(--bezel-accent-light);
@@ -42,7 +42,7 @@
     display: block;
     font-size: 0.5rem;
     color: var(--color-text-faint);
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
@@ -51,7 +51,7 @@
     display: block;
     font-size: 0.5rem;
     color: var(--color-text-faint);
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     margin-top: 4px;
 }
 
@@ -62,13 +62,13 @@
 .ef-dash-balance {
     font-size: 0.8rem;
     font-weight: 700;
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     text-shadow: 2px 2px 0 var(--color-pure-black);
 }
 
 .ef-dash-board-status {
     font-size: 0.45rem;
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     cursor: help;
     display: inline-block;
     margin-top: 4px;
@@ -97,7 +97,7 @@
     justify-content: space-between;
     font-size: 0.45rem;
     color: var(--color-text-faint);
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     margin-top: 6px;
 }
 
@@ -115,7 +115,7 @@
     gap: 4px;
     padding: 6px 12px;
     font-size: 0.5rem;
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     font-weight: 600;
     border: 4px solid;
     text-transform: uppercase;
@@ -154,7 +154,7 @@
     background: var(--bg-dark);
     border: 4px solid;
     border-color: var(--bezel-light) var(--bg-dark) var(--bg-dark) var(--bezel-light);
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Outfit', system-ui, sans-serif;
     font-size: 0.45rem;
     margin-top: 8px;
 }

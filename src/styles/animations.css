@@ -5,7 +5,7 @@
  * Easing curves smooth quebram aesthetic SNES — usar steps() ou linear sempre.
  *
  * Direção arte:
- * - image-rendering: pixelated (nearest-neighbor)
+ * -  (nearest-neighbor)
  * - steps() animation timing (não cubic-bezier)
  * - duration ms múltiplos de 100ms (12 FPS feel)
  */
@@ -119,7 +119,7 @@
     height: 64px;
     background-image: url('/olefut/sprites/animations/ball-roll-8frames.png');
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-ball-roll 800ms steps(8) infinite;
 }
 
@@ -128,7 +128,7 @@
     height: 96px;
     background-image: url('/olefut/sprites/animations/goal-burst-6frames.png');
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-goal-burst 1200ms steps(6) forwards;
 }
 
@@ -137,7 +137,7 @@
     height: 48px;
     background-image: url('/olefut/sprites/animations/spinner-8frames.png');
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-spinner 800ms steps(8) infinite;
 }
 
@@ -149,7 +149,7 @@
     background-image: url('/olefut/sprites/animations/spinner-8frames.png');
     background-repeat: no-repeat;
     background-size: 128px 16px; /* 8 frames × 16px scaled */
-    image-rendering: pixelated;
+    
     animation: ef-spinner-sm 800ms steps(8) infinite;
 }
 
@@ -166,7 +166,7 @@
     background-image: url('/olefut/sprites/cards/match-events.png');
     background-size: 384px 288px; /* 4×96 × 3×96 */
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 .ef-event-goal       { background-position: 0 0; }
 .ef-event-foul       { background-position: -96px 0; }
@@ -245,7 +245,7 @@ button:not(.no-anim):not([disabled]):active {
     background-image: url('/olefut/sprites/positions/position-icons.png');
     background-size: 96px 48px; /* 4×24 × 2×24 scaled */
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     vertical-align: middle;
 }
 .ef-pos-icon.GOL { background-position: 0 0; }
@@ -265,7 +265,7 @@ button:not(.no-anim):not([disabled]):active {
     background-image: url('/olefut/sprites/trophies/trophy-set.png');
     background-size: 192px 128px; /* 4×48 × 2×64 scaled */
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 .ef-trophy-tier-1 { background-position: 0 0; }       /* Gold cup tier 1 */
 .ef-trophy-tier-2 { background-position: -48px 0; }   /* Silver cup tier 2 */
@@ -284,7 +284,7 @@ button:not(.no-anim):not([disabled]):active {
     background-image: url('/olefut/sprites/effects/score-digits.png');
     background-size: 160px 96px; /* 5×32 × 2×48 scaled */
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 .ef-led-digit-0 { background-position: 0 0; }
 .ef-led-digit-1 { background-position: -32px 0; }
@@ -302,7 +302,7 @@ button:not(.no-anim):not([disabled]):active {
     height: 128px;
     background-image: url('/olefut/sprites/animations/trophy-unlock-6frames.png');
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-trophy-unlock 1500ms steps(6) forwards;
 }
 
@@ -311,7 +311,7 @@ button:not(.no-anim):not([disabled]):active {
     height: 80px;
     background-image: url('/olefut/sprites/animations/crowd-wave-4frames.png');
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-crowd-wave 1000ms steps(4) infinite;
 }
 
@@ -321,7 +321,7 @@ button:not(.no-anim):not([disabled]):active {
     background-image: url('/olefut/sprites/animations/ball-kick-6frames.png');
     background-size: 384px 64px;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-ball-kick 600ms steps(6) 1;
 }
 
@@ -331,7 +331,7 @@ button:not(.no-anim):not([disabled]):active {
     background-image: url('/olefut/sprites/animations/gk-save-5frames.png');
     background-size: 320px 64px;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-gk-save 700ms steps(5) 1;
 }
 
@@ -341,7 +341,7 @@ button:not(.no-anim):not([disabled]):active {
     background-image: url('/olefut/sprites/animations/crowd-flag-wave-4frames.png');
     background-size: 512px 96px;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     animation: ef-crowd-flag-wave 1200ms steps(4) infinite;
 }
 
@@ -373,7 +373,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-boardroom {
@@ -381,7 +381,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-champion-celebration {
@@ -389,7 +389,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-pitch-topdown {
@@ -397,7 +397,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-state-arrows {
@@ -405,7 +405,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-sponsors {
@@ -413,7 +413,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-finance-icons {
@@ -421,7 +421,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-celebration {
@@ -429,7 +429,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-weather-overlay {
@@ -437,7 +437,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
     pointer-events: none;
     opacity: 0.25;
     mix-blend-mode: overlay;
@@ -448,7 +448,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-players {
@@ -456,7 +456,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-achievements {
@@ -464,7 +464,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-crowd-strip {
@@ -472,7 +472,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center bottom;
     background-repeat: repeat-x;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-locker-room {
@@ -480,7 +480,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-tunnel-walkout {
@@ -488,7 +488,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-press-box {
@@ -496,7 +496,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-trophy-room {
@@ -504,7 +504,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-pitch-tactical {
@@ -512,7 +512,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-pitch-patterns {
@@ -520,7 +520,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 .ef-art-stadium-night {
@@ -528,7 +528,7 @@ button:not(.no-anim):not([disabled]):active {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    image-rendering: pixelated;
+    
 }
 
 /* Atmospheric art overlay helper — dimmed background panel */

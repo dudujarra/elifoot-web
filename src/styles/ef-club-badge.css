@@ -12,8 +12,8 @@
 }
 
 .ef-club-badge__img {
-    image-rendering: pixelated;
-    -webkit-image-rendering: pixelated;
+    
+    -webkit-
     object-fit: contain;
 }
 

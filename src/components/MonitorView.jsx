@@ -2,7 +2,7 @@
  * MonitorView — Telemetria e Diagnóstico OléFUT
  * Stitch v1.1 port (AKITA-393): match docs/stitch-designs/v1.1-all/65-monitor-telemetria-ol-fut.html
  * Tokens-only — zero raw hex (token vars + isolated --ef-mon-* fallbacks).
- * Brand fonts: Press Start 2P / Pixelify Sans / IBM Plex Mono via tokens.
+ * Brand fonts: Outfit / Inter / JetBrains Mono via tokens.
  */
 
 import { useState, useEffect, useMemo } from 'react';

@@ -1,7 +1,7 @@
 /**
  * SaveSlotsView — Memory Card Save Manager
  * Stitch v1.1 port (AKITA-396): match docs/stitch-designs/v1.1-all/24-memory-card-ol-fut-save-manager.html
- * Tokens-only — zero raw hex. Press Start 2P + Pixelify Sans + IBM Plex Mono via tokens.
+ * Tokens-only — zero raw hex. Outfit + Inter + JetBrains Mono via tokens.
  * Preserves all SaveSlotsService logic (save/load/delete/export/import + slot metadata).
  */
 

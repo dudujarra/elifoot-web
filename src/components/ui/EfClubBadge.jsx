@@ -9,7 +9,7 @@
  * 100% pixel-art SNES direção arte:
  * - PNG nativo Stitch chunky pixels visible
  * - background-position crop per club
- * - image-rendering: pixelated (nearest-neighbor scale)
+ * -  (nearest-neighbor scale)
  * - Fallback SVG abstract para clubes não mapeados
  *
  * Sizes: sm 24, md 48, lg 96, xl 128 (8px grid)

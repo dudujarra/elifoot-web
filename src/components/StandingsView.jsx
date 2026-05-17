@@ -2,7 +2,7 @@
  * StandingsView — Premium 32-bit table (Stitch v1.1)
  *
  * Match reference: docs/stitch-designs/v1.1-all/55-classifica-o-20-clubes-premium-32-bit.html
- * Brand-locked: Press Start 2P (display) + Pixelify Sans (sans) + IBM Plex Mono (mono).
+ * Brand-locked: Outfit (display) + Inter (sans) + JetBrains Mono (mono).
  *
  * AKITA-384 (port-only): zero changes to engine, hooks, business logic.
  * Preserves: getStandings(zone, division), state-championship branch,

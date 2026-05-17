@@ -2,7 +2,7 @@
  * PressView — Coletiva de Imprensa (Stitch v1.1 port)
  *
  * Match reference: docs/stitch-designs/v1.1-all/81-coletiva-de-imprensa-ol-fut-pressview.html
- * Brand-locked: Press Start 2P (display) + Pixelify Sans (sans) + IBM Plex Mono (mono).
+ * Brand-locked: Outfit (display) + Inter (sans) + JetBrains Mono (mono).
  *
  * AKITA-387 (port-only): zero changes to engine, hooks, business logic.
  * Preserves:

@@ -2,7 +2,7 @@
  * CosmeticShopView — SPEC-101: Loja de Cosméticos
  * Stitch v1.1 port (AKITA-395): match docs/stitch-designs/v1.1-all/07-ol-fut-cosmeticshop.html
  *                              + docs/stitch-designs/v1.1-all/68-ol-fut-loja-cosm-tica.html
- * Tokens-only — zero raw hex, brand fonts (Press Start 2P / Pixelify Sans / IBM Plex Mono).
+ * Tokens-only — zero raw hex, brand fonts (Outfit / Inter / JetBrains Mono).
  * Engine/services untouched — pure visual refresh.
  */
 
