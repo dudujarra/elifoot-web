@@ -44,6 +44,11 @@ function App() {
 
     return (
         <div className="app-shell">
+            {/* A11y: Skip to main content link — visible on Tab */}
+            <a href="#main-content" className="ef-skip-link">
+                Pular para o conteúdo principal
+            </a>
+
             <ChronicleSeasonEndModal />
             <SeasonalEventModal />
 
@@ -52,7 +57,7 @@ function App() {
             <div className="app-main-area">
                 {gameState.started && <AppHeader />}
 
-                <main className="app-content">
+                <main id="main-content" className="app-content">
                     <Suspense fallback={<Fallback />}>
                         <Routes>
                             <Route path="/" element={<StartView />} />

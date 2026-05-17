@@ -80,7 +80,7 @@ export function Sidebar() {
     const modeLabel = gameState.mode === 'player' ? 'MODO JOGADOR' : 'MODO TÉCNICO';
 
     return (
-        <aside className="olefut-sidebar ef-sidebar">
+        <aside className="olefut-sidebar ef-sidebar" role="navigation" aria-label="Menu principal">
             <div className="ef-sidebar__inner">
                 {/* Mode label */}
                 <div className="ef-sidebar__mode">
@@ -99,8 +99,12 @@ export function Sidebar() {
                             key={item.view}
                             className={itemClass}
                             onClick={() => changeView(item.view)}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); changeView(item.view); } }}
+                            role="button"
+                            tabIndex={0}
+                            aria-current={isActive ? 'page' : undefined}
                         >
-                            <span className="ef-sidebar__icon">
+                            <span className="ef-sidebar__icon" aria-hidden="true">
                                 <IconComponent size={20} weight={isActive ? "fill" : "regular"} />
                             </span>
                             <span className="ef-sidebar__label">

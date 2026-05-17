@@ -1,12 +1,15 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
+/* eslint-disable no-restricted-syntax -- maxWidth requires dynamic runtime style */
 /**
- * EfModal — Stitch component
+ * EfModal — Stitch component (AKITA-428: A11y upgrade)
  *
  * Centro tela, painel beveled, fundo escuro fade. Esc fecha.
  * Sizes: sm | md | lg | fullscreen
+ *
+ * A11y: focus trap, aria-modal, aria-labelledby, body scroll lock.
  */
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 const SIZE_MAP = {
     sm: '320px',
@@ -25,12 +28,26 @@ export function EfModal({
     children,
     footer
 }) {
+    const modalRef = useRef(null);
+
+    // Focus trap: Tab/Shift+Tab cycling inside modal
+    useFocusTrap(modalRef, !!open);
+
+    // Esc to close
     useEffect(() => {
         if (!open || !closeOnEsc) return;
         const handler = (e) => { if (e.key === 'Escape') onClose?.(); };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
     }, [open, closeOnEsc, onClose]);
+
+    // Lock body scroll when modal is open
+    useEffect(() => {
+        if (!open) return;
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => { document.body.style.overflow = prev; };
+    }, [open]);
 
     if (!open) return null;
 
@@ -41,6 +58,7 @@ export function EfModal({
             aria-labelledby={title ? 'ef-modal-title' : undefined}
             onClick={closeOnBackdrop ? onClose : undefined}
             className="ef-modal-backdrop"
+            ref={modalRef}
         >
             <div
                 onClick={(e) => e.stopPropagation()}
@@ -57,6 +75,7 @@ export function EfModal({
                             onClick={onClose}
                             aria-label="Fechar"
                             className="ef-modal-close"
+                            type="button"
                         >
                             X
                         </button>
