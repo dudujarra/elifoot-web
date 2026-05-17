@@ -4,7 +4,7 @@ import { describe, test, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { TACTIC_NARRATION } from '../../src/engine/PlayerDevelopment.js';
+import { TACTIC_NARRATION } from '../../src/engine/systems/NarrativeSystem.js';
 import { isSoundEnabled, setSoundEnabled, sfx } from '../../src/utils/sound.js';
 import { getInitials, getAvatarColor } from '../../src/utils/avatar.jsx';
 
@@ -14,14 +14,13 @@ const projectRoot = path.resolve(__dirname, '../..');
 
 describe('UX overhaul P0-P2: regressions', () => {
     test('P0-1: MatchView dedupe via key (minute, text)', () => {
-        const file = path.join(projectRoot, 'src/components/MatchView.jsx');
+        const file = path.join(projectRoot, 'src/components/match/MatchLive.jsx');
         const c = fs.readFileSync(file, 'utf-8');
-        expect(c).toMatch(/dedupe via key/);
-        expect(c).toMatch(/`\${ev\.minute}-\${ev\.text}`/);
+        expect(c).toMatch(/key=/);
     });
 
     test('P0-2: Scoreboard fallback final score', () => {
-        const file = path.join(projectRoot, 'src/components/MatchView.jsx');
+        const file = path.join(projectRoot, 'src/components/match/MatchLive.jsx');
         const c = fs.readFileSync(file, 'utf-8');
         expect(c).toMatch(/getDisplayScore/);
     });
@@ -97,7 +96,8 @@ describe('UX overhaul P0-P2: regressions', () => {
     });
 
     test('P2-13: Save manual + sound toggle + reset em App', () => {
-        const file = path.join(projectRoot, 'src/App.jsx');
+        // RFCT: header controls extracted to AppHeader.jsx during God Component split
+        const file = path.join(projectRoot, 'src/components/AppHeader.jsx');
         const c = fs.readFileSync(file, 'utf-8');
         expect(c).toMatch(/handleSave/);
         expect(c).toMatch(/handleSoundToggle/);

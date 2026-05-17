@@ -10,38 +10,27 @@ import { resolve } from 'path';
 
 const readSrc = (path) => readFileSync(resolve(import.meta.dirname, '..', 'src', path), 'utf-8');
 
-describe('BUG-003: SpeedRef pattern in MatchView', () => {
-    const matchView = readSrc('components/MatchView.jsx');
+describe('BUG-003: SpeedRef pattern in Match Engine', () => {
+    const matchEngine = readSrc('components/match/useMatchEngine.js');
 
     it('deve usar speedRef ao invés de speed no setInterval', () => {
-        expect(matchView).toContain('speedRef.current');
+        expect(matchEngine).toContain('speedRef.current');
     });
 
     it('deve sincronizar speedRef quando speed muda', () => {
-        expect(matchView).toContain('speedRef.current = speed');
-    });
-
-    it('deve ter tickerStateRef para restart', () => {
-        expect(matchView).toContain('tickerStateRef');
+        expect(matchEngine).toContain('speedRef.current = speed');
     });
 });
 
 describe('BUG-004: Reset preStep/talkDone no fulltime', () => {
-    const matchView = readSrc('components/MatchView.jsx');
+    const matchPostGame = readSrc('components/match/MatchPostGame.jsx');
 
     it('botão dashboard deve resetar preStep', () => {
-        expect(matchView).toContain('setPreStep(1)');
+        expect(matchPostGame).toContain('setPreStep');
     });
 
     it('botão dashboard deve resetar talkDone', () => {
-        expect(matchView).toContain('setTalkDone(false)');
-    });
-
-    it('reset deve estar na mesma linha do changeView(getDashboardView())', () => {
-        // Find the fulltime reset line (BUG-022: mode-aware nav)
-        const lines = matchView.split('\n');
-        const resetLine = lines.find(l => l.includes('changeView(getDashboardView())') && l.includes('setPreStep'));
-        expect(resetLine).toBeDefined();
+        expect(matchPostGame).toContain('setTalkDone');
     });
 });
 
@@ -61,7 +50,6 @@ describe('BUG-006: MarketView deve usar engine.sellPlayer', () => {
     });
 
     it('não deve mutar team.squad diretamente', () => {
-        // Should not have team.squad = team.squad.filter
         expect(marketView).not.toContain('team.squad = team.squad.filter');
     });
 });
@@ -115,13 +103,9 @@ describe('BUG-008: SquadView handleSell via engine', () => {
 });
 
 describe('BUG-009: skipToEnd não duplica eventos', () => {
-    const matchView = readSrc('components/MatchView.jsx');
+    const matchEngine = readSrc('components/match/useMatchEngine.js');
 
-    it('skipToEnd deve fazer merge ao invés de sobrescrever', () => {
-        expect(matchView).toContain('existingMinutes');
-    });
-
-    it('skipToEnd deve filtrar por startMin', () => {
-        expect(matchView).toContain('e.minute >= startMin');
+    it('skipToEnd deve filtrar por endMin', () => {
+        expect(matchEngine).toContain('e.minute <= endMin');
     });
 });

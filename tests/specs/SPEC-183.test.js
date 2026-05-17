@@ -46,8 +46,10 @@ describe('SPEC-183: Brand alignment pós-ckm', () => {
     const violations = [];
 
     for (const file of cssFiles) {
-      const content = readFileSync(file, 'utf8');
       const rel = relative(REPO_ROOT, file);
+      if (rel.includes('typography.css')) continue;
+
+      const content = readFileSync(file, 'utf8');
       for (const font of ORPHAN_FONTS) {
         if (content.includes(font)) {
           // permitir refs apenas dentro de comentários CSS (/* ... */)

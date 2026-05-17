@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { initForm, updateForm, getFormModifier } from '../../src/engine/PlayerDevelopment.js';
+import { initForm, updateForm, getFormModifier } from '../../src/engine/systems/FormSystem.js';
 
 describe('BUG-F2-01: updateForm division-by-zero guard', () => {
     it('initForm creates empty form with normal trend', () => {

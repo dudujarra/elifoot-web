@@ -1,6 +1,8 @@
 // SPEC-003: Player Development harness
 import { describe, test, expect } from 'vitest';
-import { processPlayerDevelopment, ageSquad, updateForm, getFormModifier, TACTIC_COUNTERS, ensureAttributes } from '../../src/engine/PlayerDevelopment.js';
+import { processPlayerDevelopment, ageSquad, ensureAttributes } from '../../src/engine/PlayerDevelopment.js';
+import { updateForm, getFormModifier } from '../../src/engine/systems/FormSystem.js';
+import { TACTIC_COUNTERS } from '../../src/engine/tactical/TacticCounters.js';
 import { ATTRIBUTE_CATEGORIES } from '../../src/engine/PlayerAttributes.js';
 
 function makePlayer({ age = 22, personality = 'Profissional' } = {}) {
