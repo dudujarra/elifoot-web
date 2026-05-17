@@ -6,7 +6,8 @@
  * (gol, vermelho) durante partida live. Pausa ticker via prop.
  */
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { CheckCircle, Warning, SoccerBall } from '@phosphor-icons/react';
 import '../styles/match-highlight-modal.css';
 
@@ -39,6 +40,8 @@ export function extractHighlightContext(narrationEntry) {
 }
 
 export function MatchHighlightModal({ context, onDismiss, autoDismissMs = 3000 }) {
+    const trapRef = useFocusTrap(!!context);
+
     const handleDismiss = useCallback(() => {
         if (typeof onDismiss === 'function') onDismiss();
     }, [onDismiss]);
@@ -61,6 +64,7 @@ export function MatchHighlightModal({ context, onDismiss, autoDismissMs = 3000 }
 
     return (
         <div
+            ref={trapRef}
             className="ef-highlight-overlay"
             role="alert"
             aria-live="assertive"

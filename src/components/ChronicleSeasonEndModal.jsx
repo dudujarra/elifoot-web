@@ -7,7 +7,8 @@
  * Render quando engine.pendingChronicleSeason e truthy.
  */
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useGame } from '../context/GameContext';
 import { Scroll, Download, Image as ImageIcon, X, Trophy, CloudRain } from '@phosphor-icons/react';
 import '../styles/chronicle-modal.css';
@@ -164,6 +165,7 @@ export function ChronicleSeasonEndModal() {
     const { getEngine, forceUpdate } = useGame();
     const engine = getEngine?.();
     const chronicle = engine?.pendingChronicleSeason || null;
+    const trapRef = useFocusTrap(!!chronicle);
 
     const close = useCallback(() => {
         if (!engine) return;
@@ -212,6 +214,7 @@ export function ChronicleSeasonEndModal() {
 
     return (
         <div
+            ref={trapRef}
             className="ef-chronicle-overlay"
             role="dialog"
             aria-labelledby="ef-chronicle-title"

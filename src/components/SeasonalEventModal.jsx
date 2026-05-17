@@ -7,7 +7,8 @@
  * effect aplicado em team, flag limpa.
  */
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useGame } from '../context/GameContext';
 import { CalendarBlank, X } from '@phosphor-icons/react';
 import '../styles/decision-modal.css';
@@ -50,6 +51,7 @@ export function SeasonalEventModal() {
     const { getEngine, forceUpdate } = useGame();
     const engine = getEngine?.();
     const event = engine?.pendingSeasonalEvent || null;
+    const trapRef = useFocusTrap(!!event);
 
     /* eslint-disable react-hooks/preserve-manual-memoization, react-hooks/immutability */
     // BUG-081 pattern: engine é external store — mutações intencionais via forceUpdate.
@@ -86,6 +88,7 @@ export function SeasonalEventModal() {
 
     return (
         <div
+            ref={trapRef}
             className="ef-decision-overlay"
             role="dialog"
             aria-modal="true"
