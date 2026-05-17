@@ -88,7 +88,7 @@
   color: var(--color-text-primary);
   margin-bottom: 24px;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  
   word-break: break-word;
 }
 
@@ -126,7 +126,7 @@
   font-size: var(--primitive-font-size-badge-desktop);
   letter-spacing: 0.08em;
   color: var(--color-text-secondary);
-  text-transform: uppercase;
+  
 }
 
 .ef-hall-slot__stat-value {
@@ -160,7 +160,7 @@
   font-size: var(--primitive-font-size-h3-desktop);
   color: var(--color-primary);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  
   margin: 0 0 12px 0;
 }
 
@@ -242,7 +242,7 @@
   font-size: var(--primitive-font-size-h3-mobile);
   color: var(--color-text-primary);
   letter-spacing: 0.05em;
-  text-transform: uppercase;
+  
 }
 
 .ef-heritage-card__meta {
@@ -252,7 +252,7 @@
   font-family: var(--font-mono);
   font-size: var(--primitive-font-size-caption-desktop);
   color: var(--color-text-secondary);
-  text-transform: uppercase;
+  
   letter-spacing: 0.04em;
 }
 
@@ -315,7 +315,7 @@
   letter-spacing: 0.08em;
   color: var(--color-text-primary);
   margin: 0 0 12px 0;
-  text-transform: uppercase;
+  
 }
 
 .ef-empty-state__p {

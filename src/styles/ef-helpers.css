@@ -89,7 +89,8 @@
 }
 
 .ef-h-bg-panel {
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
 }
 
 .ef-h-border-soft {

@@ -42,7 +42,7 @@
   font-size: var(--primitive-font-size-h1-desktop);
   color: var(--color-primary);
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  
   margin: 0;
 }
 
@@ -51,7 +51,7 @@
   font-size: var(--primitive-font-size-caption-desktop);
   color: var(--color-text-primary);
   letter-spacing: 0.16em;
-  text-transform: uppercase;
+  
 }
 
 .ef-cosmetic-shop__banner-pill {
@@ -64,7 +64,7 @@
   font-family: var(--font-display);
   font-size: var(--primitive-font-size-badge-desktop);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 /* === POINTS DISPLAY SECTION === */
@@ -109,7 +109,7 @@
   font-family: var(--font-mono);
   color: var(--color-secondary);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 .ef-cosmetic-shop__points-value {
@@ -131,7 +131,7 @@
   font-size: var(--primitive-font-size-caption-desktop);
   color: var(--color-text-secondary);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 .ef-cosmetic-shop__progress-value {
@@ -157,7 +157,7 @@
   font-size: var(--primitive-font-size-h3-desktop);
   color: var(--color-primary);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  
 }
 
 .ef-cosmetic-shop__category-icon {
@@ -208,7 +208,7 @@
   font-family: var(--font-display);
   font-size: var(--primitive-font-size-badge-desktop);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
   z-index: 2;
 }
 
@@ -228,7 +228,7 @@
   font-size: var(--primitive-font-size-h3-mobile);
   color: var(--color-text-primary);
   letter-spacing: 0.06em;
-  text-transform: uppercase;
+  
   text-align: center;
 }
 
@@ -287,7 +287,7 @@
   font-size: var(--primitive-font-size-caption-desktop);
   color: var(--color-text-secondary);
   letter-spacing: 0.06em;
-  text-transform: uppercase;
+  
 }
 
 .ef-cosmetic-shop__footer-dot {

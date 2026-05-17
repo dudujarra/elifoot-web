@@ -128,7 +128,7 @@
   letter-spacing: 0.12em;
   color: var(--color-primary);
   margin: 0 0 16px 0;
-  text-transform: uppercase;
+  
 }
 
 .ef-chron__toggle-stack {
@@ -232,7 +232,7 @@
 
 .ef-chron__bio-label {
   color: var(--color-text-secondary);
-  text-transform: uppercase;
+  
   display: inline-flex;
   align-items: center;
   gap: 4px;

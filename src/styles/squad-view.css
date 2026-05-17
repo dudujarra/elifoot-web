@@ -44,7 +44,8 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
 }
 
 .ef-squad__tabs {
@@ -64,7 +65,8 @@
 
 .ef-squad__panel-table {
   overflow-x: auto;
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--bg-panel);
 }
 
@@ -74,7 +76,8 @@
 }
 
 .ef-squad__thead {
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   border-bottom: 2px solid var(--color-soft-border);
 }
 
@@ -118,7 +121,8 @@
 }
 
 .ef-squad__row-zebra {
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--bg-panel);
 }
 
@@ -183,7 +187,8 @@
 }
 
 .ef-squad__stat-card {
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--color-soft-border);
   padding: 16px;
   display: flex;
@@ -192,7 +197,8 @@
 }
 
 .ef-squad__loan-row {
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   padding: 16px;
   border: 1px solid var(--border-panel);
   display: flex;
@@ -226,7 +232,8 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
 }
 
 .ef-squad__name-cell {
@@ -254,7 +261,7 @@
 
 .ef-squad__pos-mono {
   font-size: 0.7rem;
-  text-transform: uppercase;
+  
 }
 
 .ef-squad__ovr-cell {
@@ -291,7 +298,8 @@
 }
 
 .ef-squad__details-box {
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   padding: 16px;
   border: 1px solid var(--color-soft-border);
 }
@@ -355,12 +363,13 @@
   font-size: 0.7rem;
   letter-spacing: 0.05em;
   color: var(--color-text-primary);
-  text-transform: uppercase;
+  
 }
 
 /* TABLE ROW — Stitch borderless zebra */
 .ef-squad__row {
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   cursor: pointer;
   border-left: var(--primitive-border-thick) solid transparent;
   border-bottom: var(--primitive-border-hairline) solid var(--bg-panel);
@@ -431,7 +440,7 @@
   font-size: 0.62rem;
   letter-spacing: 0.05em;
   color: var(--color-text-secondary);
-  text-transform: uppercase;
+  
 }
 
 .ef-squad__sub-label--danger {
@@ -501,7 +510,7 @@
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
-  text-transform: uppercase;
+  
 }
 
 .ef-squad__action-pill:hover:not(:disabled) {

@@ -70,14 +70,14 @@
   font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
+  
 }
 
 .ef-press__header-subtitle {
   font-family: var(--font-mono, 'JetBrains Mono'), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  
 }
 
 .ef-press__live-row {
@@ -159,7 +159,7 @@
   letter-spacing: 0.05em;
   padding: 4px 8px;
   color: var(--ef-press-crt-black);
-  text-transform: uppercase;
+  
   text-shadow: none;
 }
 
@@ -183,7 +183,7 @@
   font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 .ef-press__context-tag {
@@ -198,7 +198,7 @@
   letter-spacing: 0.05em;
   margin-bottom: 18px;
   font-weight: 700;
-  text-transform: uppercase;
+  
 }
 
 .ef-press__question-row {
@@ -242,7 +242,7 @@
   font-weight: 700;
   border-bottom: var(--primitive-border-hairline) solid var(--ef-press-pitch);
   padding-bottom: 8px;
-  text-transform: uppercase;
+  
 }
 
 .ef-press__answer-grid {
@@ -327,7 +327,7 @@
   letter-spacing: 0.08em;
   margin-bottom: 18px;
   font-weight: 700;
-  text-transform: uppercase;
+  
 }
 
 .ef-press__answered-quote {
@@ -365,7 +365,7 @@
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   font-weight: 700;
-  text-transform: uppercase;
+  
 }
 
 .ef-press__effects-list {
@@ -386,7 +386,7 @@
 }
 
 .ef-press__effect-key {
-  text-transform: uppercase;
+  
   font-size: 0.7rem;
   letter-spacing: 0.05em;
 }

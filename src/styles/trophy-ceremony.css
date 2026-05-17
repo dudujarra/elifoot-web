@@ -75,7 +75,7 @@
   justify-content: space-between;
   padding: 16px 32px;
   background-color: var(--primitive-color-green-forest-dark, #0E1F14);
-  border-bottom: 4px solid var(--primitive-color-green-pitch, #52B788);
+  border-bottom: 1px solid var(--primitive-color-green-pitch, #52B788);
 }
 
 .ef-trophy-ceremony__appbar-title {
@@ -83,7 +83,7 @@
   font-size: 20px;
   line-height: 1.4;
   letter-spacing: -0.02em;
-  text-transform: uppercase;
+  
   color: var(--primitive-color-gold-trophy, #FFD700);
   margin: 0;
 }
@@ -121,7 +121,7 @@
   font-size: 24px;
   line-height: 32px;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
   color: var(--primitive-color-green-neon, #39FF14);
   text-shadow: 4px 4px 0 var(--primitive-color-neutral-crt-black, #111417);
 }
@@ -138,7 +138,7 @@
   font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
   font-size: 12px;
   line-height: 16px;
-  text-transform: uppercase;
+  
   color: var(--primitive-color-gold-trophy, #FFD700);
 }
 
@@ -159,12 +159,12 @@
   gap: 8px;
   padding: 4px 16px;
   background-color: var(--primitive-color-gold-amber, #FBBF24);
-  border: 4px solid var(--primitive-color-green-pitch, #52B788);
+  border: 1px solid var(--primitive-color-green-pitch, #52B788);
   color: var(--primitive-color-neutral-crt-black, #111417);
   font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
   font-size: 12px;
   line-height: 16px;
-  text-transform: uppercase;
+  
   white-space: nowrap;
 }
 
@@ -176,7 +176,7 @@
   max-width: 640px;
   padding: 24px;
   background-color: rgba(17, 20, 23, 0.9);
-  border: 4px solid var(--primitive-color-green-pitch, #52B788);
+  border: 1px solid var(--primitive-color-green-pitch, #52B788);
 }
 
 .ef-trophy-ceremony__stats-tag {
@@ -185,12 +185,12 @@
   left: 24px;
   padding: 4px 12px;
   background-color: var(--primitive-color-green-forest, #1B4332);
-  border: 2px solid var(--primitive-color-green-neon, #39FF14);
+  border: 1px solid var(--primitive-color-green-neon, #39FF14);
   color: var(--primitive-color-green-neon, #39FF14);
   font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
   font-size: 12px;
   line-height: 16px;
-  text-transform: uppercase;
+  
 }
 
 /* === Dominance meter ================================================= */
@@ -211,7 +211,7 @@
   line-height: 16px;
   letter-spacing: 0.05em;
   color: var(--primitive-color-neutral-smoke, #a0baae);
-  text-transform: uppercase;
+  
 }
 
 .ef-trophy-ceremony__meter-track {
@@ -273,7 +273,7 @@
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
+  
   color: var(--primitive-color-green-pitch, #52B788);
   opacity: 0.5;
 }

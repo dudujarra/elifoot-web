@@ -32,7 +32,7 @@
   font-family: var(--font-mono);
   font-size: var(--primitive-font-size-caption-desktop);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
   color: var(--color-primary);
   background: var(--color-bg-secondary);
   border: var(--primitive-border-thin) solid var(--color-primary);
@@ -113,7 +113,7 @@
   font-size: var(--primitive-font-size-caption-desktop);
   letter-spacing: 0.08em;
   color: var(--color-primary);
-  text-transform: uppercase;
+  
 }
 
 .ef-riv__derby-meta-row--accent {
@@ -237,7 +237,7 @@
   padding: 4px 8px;
   background: var(--color-bg-tertiary);
   border: var(--primitive-border-hairline) solid;
-  text-transform: uppercase;
+  
   width: max-content;
 }
 
@@ -287,7 +287,7 @@
   font-size: var(--primitive-font-size-badge-desktop);
   letter-spacing: 0.08em;
   color: var(--color-text-secondary);
-  text-transform: uppercase;
+  
 }
 
 .ef-riv-card__stat-value {
@@ -312,7 +312,7 @@
   font-size: var(--primitive-font-size-caption-desktop);
   letter-spacing: 0.08em;
   color: var(--color-primary);
-  text-transform: uppercase;
+  
   padding-top: 8px;
   border-top: var(--primitive-border-hairline) solid var(--color-border);
 }
@@ -388,7 +388,7 @@
   font-size: var(--primitive-font-size-badge-desktop);
   color: var(--color-text-secondary);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  
 }
 
 .ef-riv__companion-meta {
@@ -406,7 +406,7 @@
   font-family: var(--font-mono);
   font-size: var(--primitive-font-size-badge-desktop);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  
 }
 
 .ef-riv__companion-key {

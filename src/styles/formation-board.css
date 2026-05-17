@@ -27,7 +27,8 @@
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
-  background-color: var(--bg-panel);
+  background-color: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
   padding: 12px;
   border: 1px solid var(--ef-form-soft-border);
 }
@@ -55,7 +56,7 @@
   aspect-ratio: 600 / 400;
   position: relative;
   background: var(--ef-form-field);
-  border: 4px solid var(--bg-panel);
+  border: 1px solid var(--bg-panel);
   overflow: hidden;
   touch-action: none;
   margin: 0 auto;

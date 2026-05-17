@@ -32,7 +32,7 @@
 /* === HERO PANEL === */
 .ef-standings__hero-panel {
   justify-content: space-between;
-  border-bottom: 4px solid var(--ef-pixel-bevel);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .ef-standings__hero-title {
@@ -41,7 +41,7 @@
   font-size: 1.1rem;
   letter-spacing: 0.02em;
   color: var(--primary);
-  text-transform: uppercase;
+  
 }
 
 .ef-standings__hero-meta {
@@ -51,7 +51,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0;
-  text-transform: uppercase;
+  
 }
 
 .ef-standings__hero-week {
@@ -93,7 +93,7 @@
 /* === TABLE FRAME — Stitch "pixel-border" + forest-dark bg === */
 .ef-standings__table-frame {
   background: var(--bg-panel-sunk, var(--bg-dark));
-  border: 4px solid var(--ef-pixel-bevel);
+  border: 1px solid var(--ef-pixel-bevel);
   overflow-x: auto;
   /* Stitch CRT pixel-bevel — outer ring via box-shadow */
   box-shadow:
@@ -122,9 +122,9 @@
   letter-spacing: 0.08em;
   padding: 12px 8px;
   color: var(--bg-dark);
-  border-bottom: 4px solid var(--ef-pixel-bevel);
+  border-bottom: 1px solid var(--glass-border);
   text-align: center;
-  text-transform: uppercase;
+  
 }
 
 .ef-standings__th--pos {
@@ -175,17 +175,17 @@
 }
 
 /* Zone-stripe accents (left border) */
-.ef-standings__row--zone-libertadores { border-left: 4px solid var(--ef-zone-libertadores); }
-.ef-standings__row--zone-suda         { border-left: 4px solid var(--ef-zone-suda); }
-.ef-standings__row--zone-promotion    { border-left: 4px solid var(--ef-zone-promotion); }
+.ef-standings__row--zone-libertadores { border-left: 2px solid var(--ef-zone-libertadores); }
+.ef-standings__row--zone-suda         { border-left: 2px solid var(--ef-zone-suda); }
+.ef-standings__row--zone-promotion    { border-left: 2px solid var(--ef-zone-promotion); }
 .ef-standings__row--zone-rebaixamento {
-  border-left: 4px solid var(--ef-zone-rebaixamento);
+  border-left: 2px solid var(--ef-zone-rebaixamento);
   background: var(--ef-danger-row-bg);
 }
 .ef-standings__row--zone-rebaixamento.ef-standings__row--odd {
   background: var(--ef-danger-row-bg);
 }
-.ef-standings__row--zone-default      { border-left: 4px solid var(--ef-zone-default); }
+.ef-standings__row--zone-default      { border-left: 2px solid var(--ef-zone-default); }
 
 /* === CELLS === */
 .ef-standings__cell {
@@ -232,7 +232,7 @@
 .ef-standings__team-name--user {
   color: var(--primary);
   font-weight: 700;
-  text-transform: uppercase;
+  
   letter-spacing: 0.02em;
 }
 
@@ -248,7 +248,7 @@
   font-size: 0.55rem;
   letter-spacing: 0.1em;
   color: var(--accent);
-  text-transform: uppercase;
+  
 }
 
 .ef-standings__cell--points {
@@ -272,7 +272,7 @@
   padding: 12px 4px;
   font-size: 0.65rem;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  
 }
 
 .ef-standings__legend-chip {

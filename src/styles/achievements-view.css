@@ -66,7 +66,7 @@
   font-size: 0.85rem;
   letter-spacing: 0.15em;
   color: var(--color-primary);
-  text-transform: uppercase;
+  
   text-shadow: 0 0 8px rgba(57, 255, 20, 0.45);
 }
 
@@ -89,7 +89,7 @@
 .ef-ach__dashboard-points-label {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
   padding-bottom: 4px;
 }
 
@@ -113,7 +113,7 @@
   font-size: 0.55rem;
   letter-spacing: 0.1em;
   color: var(--color-primary);
-  text-transform: uppercase;
+  
 }
 
 .ef-ach__dashboard-progress-footer {
@@ -121,7 +121,7 @@
   justify-content: flex-end;
   font-size: 0.65rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 /* === BLOCKY PROGRESS — Stitch inset bevel container === */
@@ -284,7 +284,7 @@
   font-family: var(--font-display);
   font-size: 0.85rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
   color: var(--color-text-primary);
   line-height: 1.4;
 }
@@ -330,7 +330,7 @@
   align-items: center;
   font-size: 0.75rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 .ef-ach__reward-label {
@@ -364,7 +364,7 @@
   font-family: var(--font-display);
   font-size: 0.55rem;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  
 }
 
 .ef-ach__status-banner--completed {
@@ -391,7 +391,7 @@
   justify-content: space-between;
   font-size: 0.6rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
   color: var(--color-text-secondary);
 }
 

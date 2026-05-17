@@ -10,7 +10,7 @@
     padding: 1rem 1.25rem;
     background: #0E1418;
     border: 1px solid #2D3748;
-    border-radius: 0;
+    border-radius: var(--radius-md);
     box-shadow:
       inset -1px -1px 0 var(--bezel-dark, #0C0F12),
       inset 1px 1px 0 var(--bezel-highlight),
@@ -75,7 +75,7 @@
 .aha-moment-card {
     background: #0E1418;
     border: 1px solid #2D3748;
-    border-radius: 0;
+    border-radius: var(--radius-md);
     padding: 0.8rem 1rem;
     margin-bottom: 0.5rem;
     cursor: pointer;
@@ -156,7 +156,7 @@
     padding: 2.5rem 3rem;
     background: #0E1418;
     border: 1px solid #2D3748;
-    border-radius: 0;
+    border-radius: var(--radius-md);
     box-shadow:
       inset -1px -1px 0 var(--bezel-dark, #0C0F12),
       inset 1px 1px 0 var(--bezel-highlight),
@@ -217,7 +217,7 @@
     padding: 0.3rem 1rem;
     background: #1A1808;
     border: 1px solid #fbbf24;
-    border-radius: 0;
+    border-radius: var(--radius-md);
     font-size: 0.78rem;
     color: #fbbf24;
     font-weight: 600;

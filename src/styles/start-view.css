@@ -64,7 +64,7 @@
   width: min(800px, 80vmin);
   height: min(800px, 80vmin);
   transform: translate(-50%, -50%);
-  border: 4px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
   border-radius: 50%;
   z-index: 1;
   pointer-events: none;
@@ -226,8 +226,8 @@
 
 .ef-start-subtitle-banner {
   background: var(--bg-dark);
-  border-top: 4px solid var(--accent);
-  border-bottom: 4px solid var(--accent);
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
   padding: 8px 24px;
   margin-top: 16px;
 }
@@ -241,7 +241,7 @@
   text-shadow:
     0 0 10px color-mix(in srgb, var(--accent) 60%, transparent),
     2px 2px 0 var(--primitive-color-neutral-abyss, #1a0f2e);
-  text-transform: uppercase;
+  
 }
 
 /* ============================================================
@@ -267,26 +267,27 @@
   width: 100%;
   padding: 14px 16px;
   background: var(--bg-panel-sunk, var(--bg-dark));
-  border: 4px solid var(--primitive-color-green-pitch, #8af0c0);
+  border: 1px solid var(--primitive-color-green-pitch, #8af0c0);
   color: var(--text-main);
   font-family: var(--font-sans, 'Inter'), system-ui, sans-serif;
   font-weight: 700;
   font-size: 1rem;
   outline: none;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  
   transition: border-color 80ms ease, background-color 80ms ease;
 }
 
 .ef-start-input::placeholder {
   color: var(--text-muted);
-  text-transform: uppercase;
+  
 }
 
 .ef-start-input:focus,
 .ef-start-select:focus {
   border-color: var(--primary);
-  background: var(--bg-panel);
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
 }
 
 .ef-start-select {
@@ -298,7 +299,7 @@
   font-family: var(--font-display, 'Outfit'), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
+  
   color: var(--text-muted);
   margin: 0 0 4px;
   text-align: left;
@@ -310,7 +311,7 @@
   gap: 12px;
   background: var(--bg-panel-sunk, var(--bg-dark));
   padding: 12px 16px;
-  border: 4px solid var(--primitive-color-green-pitch, #8af0c0);
+  border: 1px solid var(--primitive-color-green-pitch, #8af0c0);
 }
 
 .ef-start-team-row select {
@@ -324,7 +325,7 @@
   font-size: 1rem;
   appearance: none;
   cursor: pointer;
-  text-transform: uppercase;
+  
 }
 
 .ef-start-team-badge {
@@ -417,7 +418,7 @@
   text-shadow:
     0 0 10px color-mix(in srgb, var(--primary) 60%, transparent),
     2px 2px 0 var(--primitive-color-neutral-abyss, #1a0f2e);
-  text-transform: uppercase;
+  
   animation: ef-start-press-pulse 1.4s ease-in-out infinite;
 }
 
@@ -431,7 +432,7 @@
   font-family: var(--font-mono, 'JetBrains Mono'), monospace;
   font-size: 0.6rem;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
+  
   color: var(--text-muted);
 }
 
@@ -444,7 +445,7 @@
 .ef-start-swatch {
   width: 22px;
   height: 22px;
-  border: 2px solid var(--bg-dark);
+  border: 1px solid var(--bg-dark);
   
 }
 

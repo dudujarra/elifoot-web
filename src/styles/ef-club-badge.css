@@ -20,7 +20,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid var(--color-shadow-deep);
+    border: 1px solid var(--color-shadow-deep);
 }
 
 .ef-club-badge__fallback-text {
@@ -31,7 +31,7 @@
 .ef-club-badge__name {
     font-family: var(--font-display);
     color: var(--color-soft-text);
-    text-transform: uppercase;
+    
     letter-spacing: 0.04em;
     text-align: center;
     overflow: hidden;

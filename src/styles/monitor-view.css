@@ -197,7 +197,7 @@
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 .ef-mon__metric--ok .ef-mon__metric-status     { color: var(--color-primary); }
@@ -371,7 +371,7 @@
   color: var(--color-text-secondary);
   font-size: 0.7rem;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  
   border-right: 1px solid var(--color-tertiary);
 }
 
@@ -409,7 +409,7 @@
 
 .ef-mon__kernel-msg {
   color: var(--color-text-primary);
-  text-transform: uppercase;
+  
   letter-spacing: 0.04em;
 }
 
@@ -499,7 +499,7 @@
   color: var(--color-text-secondary);
   letter-spacing: 0.1em;
   margin: 0 0 16px 0;
-  text-transform: uppercase;
+  
 }
 
 .ef-mon__flux-head {
@@ -609,7 +609,7 @@
   color: var(--color-text-secondary);
   margin-top: 6px;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
 }
 
 .ef-mon__health-grid {
@@ -684,7 +684,7 @@
   font-size: 0.75rem;
   color: var(--color-text-secondary);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  
   margin-top: 4px;
 }
 
@@ -727,19 +727,19 @@
 
 .ef-mon__entry--critical,
 .ef-mon__entry--error {
-  border-left: 4px solid var(--color-danger);
+  border-left: 2px solid var(--color-danger);
 }
 
 .ef-mon__entry--warning {
-  border-left: 4px solid var(--color-warning);
+  border-left: 2px solid var(--color-warning);
 }
 
 .ef-mon__entry--info {
-  border-left: 4px solid var(--ef-mon-info);
+  border-left: 2px solid var(--ef-mon-info);
 }
 
 .ef-mon__entry--default {
-  border-left: 4px solid var(--ef-mon-muted-text);
+  border-left: 2px solid var(--ef-mon-muted-text);
 }
 
 .ef-mon__entry-header {
@@ -809,7 +809,7 @@
   font-size: 0.75rem;
   color: var(--color-text-secondary);
   letter-spacing: 0.12em;
-  text-transform: uppercase;
+  
   border-top: 1px solid var(--color-tertiary);
   margin-top: 16px;
 }

@@ -49,7 +49,7 @@
   font-weight: 700;
   color: var(--accent);
   margin-bottom: 6px;
-  text-transform: uppercase;
+  
   letter-spacing: 0.5px;
 }
 
@@ -250,7 +250,7 @@
 .ef-brain__mini-stat-label {
   font-size: 0.6rem;
   color: var(--text-muted);
-  text-transform: uppercase;
+  
 }
 
 .ef-brain__mini-stat-value {

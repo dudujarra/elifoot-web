@@ -20,7 +20,7 @@
     font-weight: 700;
     font-size: 0.85rem;
     letter-spacing: 0.08em;
-    text-transform: uppercase;
+    
     color: var(--ef-color-accent-gold);
 }
 
@@ -44,7 +44,7 @@
     gap: var(--ef-space-50);
     padding: var(--ef-space-200) var(--ef-space-100);
     background: var(--ef-color-neutral-bg-elev);
-    border: 2px solid var(--ef-color-border-subtle);
+    border: 1px solid var(--ef-color-border-subtle);
     border-radius: var(--ef-radius-md);
     cursor: pointer;
     transition: border-color 180ms ease, box-shadow 180ms ease, transform 100ms ease;
@@ -67,7 +67,7 @@
     font-weight: 700;
     font-size: 0.75rem;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
+    
     color: var(--ef-color-neutral-text-hi);
 }
 
@@ -104,7 +104,7 @@
 }
 
 .ef-bicho__summary--warn {
-    border-left: 3px solid var(--ef-color-func-warning);
+    border-left: 2px solid var(--ef-color-func-warning);
     color: var(--ef-color-func-warning);
 }
 
@@ -125,7 +125,7 @@
     font-weight: 700;
     font-size: 0.85rem;
     letter-spacing: 0.08em;
-    text-transform: uppercase;
+    
     color: var(--ef-color-func-info);
 }
 
@@ -148,7 +148,7 @@
     gap: var(--ef-space-50);
     padding: var(--ef-space-200);
     background: var(--ef-color-neutral-bg-elev);
-    border: 2px solid var(--ef-color-border-subtle);
+    border: 1px solid var(--ef-color-border-subtle);
     border-radius: var(--ef-radius-md);
     cursor: pointer;
     transition: border-color 180ms ease, box-shadow 180ms ease, transform 100ms ease;
@@ -176,7 +176,7 @@
     font-weight: 700;
     font-size: 0.8rem;
     letter-spacing: 0.04em;
-    text-transform: uppercase;
+    
     color: var(--ef-color-neutral-text-hi);
 }
 
@@ -202,7 +202,7 @@
 .ef-ticket__stat-label {
     font-family: var(--ef-font-mono);
     font-size: 0.55rem;
-    text-transform: uppercase;
+    
     letter-spacing: 0.08em;
     color: var(--ef-color-neutral-text-lo);
 }
@@ -268,7 +268,7 @@
     gap: var(--ef-space-200);
     padding: var(--ef-space-300);
     background: var(--ef-color-neutral-bg-card);
-    border: 2px solid var(--ef-color-accent-gold-dark);
+    border: 1px solid var(--ef-color-accent-gold-dark);
     border-radius: var(--ef-radius-md);
     overflow: hidden;
 }
@@ -306,7 +306,7 @@
     font-size: 0.95rem;
     letter-spacing: 0.04em;
     color: var(--ef-color-neutral-text-hi);
-    text-transform: uppercase;
+    
 }
 
 .ef-auction__player-meta {
@@ -335,7 +335,7 @@
     font-weight: 700;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
-    text-transform: uppercase;
+    
     color: var(--ef-color-neutral-text-lo);
 }
 
@@ -349,15 +349,15 @@
 }
 
 .ef-auction__bid-row--mine {
-    border-left: 3px solid var(--ef-color-func-info);
+    border-left: 2px solid var(--ef-color-func-info);
 }
 
 .ef-auction__bid-row--winning {
-    border-left: 3px solid var(--ef-color-func-success);
+    border-left: 2px solid var(--ef-color-func-success);
 }
 
 .ef-auction__bid-row--losing {
-    border-left: 3px solid var(--ef-color-func-danger);
+    border-left: 2px solid var(--ef-color-func-danger);
 }
 
 .ef-auction__bid-team {

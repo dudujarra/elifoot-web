@@ -27,13 +27,13 @@
 .ef-pmatch__event-panel--bench {
   max-width: 500px;
   width: 100%;
-  border: 2px solid var(--ef-pmatch-soft-border);
+  border: 1px solid var(--ef-pmatch-soft-border);
 }
 
 .ef-pmatch__event-panel--match {
   max-width: 500px;
   width: 100%;
-  border: 2px solid var(--accent);
+  border: 1px solid var(--accent);
 }
 
 .ef-pmatch__event-header--bench {
@@ -66,14 +66,14 @@
   max-width: 500px;
   width: 100%;
   text-align: center;
-  border: 2px solid var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .ef-pmatch__result-panel--fail {
   max-width: 500px;
   width: 100%;
   text-align: center;
-  border: 2px solid var(--danger);
+  border: 1px solid var(--danger);
 }
 
 .ef-pmatch__result-icon {
