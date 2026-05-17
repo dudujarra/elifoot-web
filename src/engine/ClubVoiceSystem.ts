@@ -10,7 +10,7 @@
  * Este módulo contém APENAS lógica de lookup.
  */
 
-import ClubVoices from './db/club-voices.json';
+import ClubVoices from './db/club-voices.json' with { type: 'json' };
 
 type ContextType = 'stadium_entry' | 'goal_home' | 'goal_away' | 'rival_match';
 
