@@ -39,7 +39,7 @@ const _streaks = new Map(); // teamId → lossStreak count
  * @param {number} [opts.week=1]
  * @returns {object} avaliação completa
  */
-export function evaluate({ teamId = 0, managerId = 0, streakLength = 0, currentTension = 50, squadMorale = 50, isPlayerManager = true, week = 1 } = {}) {
+export function evaluate({ teamId: _teamId = 0, managerId: _managerId = 0, streakLength = 0, currentTension: _currentTension = 50, squadMorale = 50, isPlayerManager = true, week: _week = 1 } = {}) {
     const severity = computeSeverity(streakLength);
     const forcedEvent = isPlayerManager && streakLength >= 8;
 

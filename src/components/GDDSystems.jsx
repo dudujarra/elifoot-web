@@ -1,6 +1,8 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
+/* eslint-disable react-refresh/only-export-components */
+import { useEffect, useState } from 'react';
 import { EfButton } from './ui/EfButton';
-import { Clock, Warning, CurrencyDollar, ClipboardText, WarningCircle, SmileySad, Flame, SoccerBall } from '@phosphor-icons/react';
+import { Clock, Warning, CurrencyDollar, ClipboardText, WarningCircle, SmileySad, Flame } from '@phosphor-icons/react';
 
 /**
  * §12.4 Octalysis #6: Scarcity Emphasis
@@ -40,7 +42,7 @@ export function ScarcityBanner({ engine }) {
                 const IconComp = item.Icon;
                 return (
                     <span key={i} className="scarcity-item" style={{ color: item.color }}>
-                        <IconComp size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />
+                        <IconComp size={12} weight="fill" className="ef-icon-inline" />
                         {item.text}
                     </span>
                 );
@@ -70,9 +72,9 @@ export function DreadIndicator({ engine }) {
 
     return (
         <div className={`dread-indicator ${isRelegation ? 'dread-critical' : 'dread-warning'}`}>
-            {isRelegation && <span className="dread-pulse"><WarningCircle size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />ZONA DE REBAIXAMENTO — {total - pos}º do fundo</span>}
-            {isClose && !isRelegation && <span><SmileySad size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />Perto da zona — {pos + 1}º lugar</span>}
-            {isFiring && <span className="dread-pulse"><Flame size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />DIRETORIA FURIOSA — Demissão iminente ({boardConf}%)</span>}
+            {isRelegation && <span className="dread-pulse"><WarningCircle size={12} weight="fill" className="ef-icon-inline" />ZONA DE REBAIXAMENTO — {total - pos}º do fundo</span>}
+            {isClose && !isRelegation && <span><SmileySad size={12} weight="fill" className="ef-icon-inline" />Perto da zona — {pos + 1}º lugar</span>}
+            {isFiring && <span className="dread-pulse"><Flame size={12} weight="fill" className="ef-icon-inline" />DIRETORIA FURIOSA — Demissão iminente ({boardConf}%)</span>}
         </div>
     );
 }

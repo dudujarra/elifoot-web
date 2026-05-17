@@ -14,6 +14,7 @@
  * 3. MatchSimulator lê getHomeAdvantageFromTickets(engine) para xG
  */
 
+import { TICKET } from './EmojiConstants.js';
 // ============================================================
 // POLÍTICAS DE INGRESSO
 // ============================================================
@@ -21,7 +22,7 @@ export const TICKET_POLICIES = [
     {
         id: 'cheap',
         name: 'Ingresso Popular',
-        emoji: '🎟️',
+        emoji: TICKET.STANDARD,
         priceMultiplier: 0.5,       // receita = 50% do normal
         attendanceMultiplier: 1.3,  // +30% público
         homeAdvantageBoost: 1.08,   // +8% vantagem em casa nos setores
@@ -31,7 +32,7 @@ export const TICKET_POLICIES = [
     {
         id: 'normal',
         name: 'Ingresso Normal',
-        emoji: '🏟️',
+        emoji: TICKET.STADIUM,
         priceMultiplier: 1.0,
         attendanceMultiplier: 1.0,
         homeAdvantageBoost: 1.0,
@@ -41,7 +42,7 @@ export const TICKET_POLICIES = [
     {
         id: 'expensive',
         name: 'Ingresso Premium',
-        emoji: '💎',
+        emoji: TICKET.DIAMOND,
         priceMultiplier: 1.8,       // receita = 180% do normal
         attendanceMultiplier: 0.6,  // -40% público
         homeAdvantageBoost: 0.95,   // -5% vantagem em casa

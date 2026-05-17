@@ -145,5 +145,5 @@ export function emitMatchEnd(isManagerHome, isManagerAway, homeGoals, awayGoals)
                 ? (awayGoals > homeGoals ? 'victory' : awayGoals < homeGoals ? 'defeat' : 'draw')
                 : 'neutral';
         emitGameEvent(GameEvents.MATCH_ENDED, { result: managerResult, homeGoals, awayGoals });
-    } catch { /* event emit - non-critical */ }
+    } catch (err) { EngineLogger.capture(err, 'MatchPostMatch.emitMatchEnd'); }
 }

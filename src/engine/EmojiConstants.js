@@ -190,6 +190,176 @@ export const COSMETIC = {
   FIREWORKS:   '\u{1F386}', // 🎆
 };
 
+// ============================================================
+// INJURY TYPES
+// ============================================================
+export const INJURY_TYPE = {
+  MUSCLE:      '\u{1F9B5}', // 🦵
+  ANKLE:       '\u{1F9B6}', // 🦶
+  KNEE:        '\u{1F9BF}', // 🦿
+  HAMSTRING:   '\u{1FA79}', // 🩹
+  FRACTURE:    '\u{1F3E5}', // 🏥
+  CONCUSSION:  '\u{1F915}', // 🤕
+};
+
+// ============================================================
+// ACHIEVEMENTS (MetaProgression)
+// ============================================================
+export const ACHIEVEMENT = {
+  FIRST_TITLE:   '\u{1F3C6}', // 🏆
+  FIVE_TITLES:   '\u2B50',    // ⭐
+  CUP:           '\u{1F947}', // 🥇
+  YOUTH:         '\u{1F331}', // 🌱
+  GIANT_KILLER:  '\u2694\uFE0F', // ⚔️
+  CRISIS_SAVIOR: '\u{1F691}', // 🚑
+  IRON_MANAGER:  '\u{1F529}', // 🔩
+  MARKET_WIZARD: '\u{1F4B0}', // 💰
+  UNBEATEN:      '\u{1F6E1}\uFE0F', // 🛡️
+  DYNASTY:       '\u{1F451}', // 👑
+};
+
+// ============================================================
+// DIFFICULTY MODES
+// ============================================================
+export const DIFFICULTY = {
+  EASY:      '\u{1F7E2}', // 🟢
+  NORMAL:    '\u{1F7E1}', // 🟡
+  HARD:      '\u{1F534}', // 🔴
+  SINISTRO:  '\u{1F480}', // 💀
+};
+
+// ============================================================
+// PLAYER LIFESTYLE (PlayerCareer)
+// ============================================================
+export const LIFESTYLE = {
+  APARTMENT:     '\u{1F3E2}', // 🏢
+  HOUSE:         '\u{1F3E0}', // 🏠
+  MANSION:       '\u{1F3F0}', // 🏰
+  CAR_POPULAR:   '\u{1F697}', // 🚗
+  CAR_LUXURY:    '\u{1F699}', // 🚙
+  CAR_SUPER:     '\u{1F3CE}\uFE0F', // 🏎️
+  PARTY:         '\u{1F389}', // 🎉
+  CHARITY:       '\u2764\uFE0F', // ❤️
+  INVESTMENT:    '\u{1F4C8}', // 📈
+  WEDDING:       '\u{1F48D}', // 💍
+  BRIEFCASE:     '\u{1F4BC}', // 💼
+};
+
+// ============================================================
+// PERSONALITY ARCHETYPES (PlayerCareer)
+// ============================================================
+export const PERSONALITY = {
+  MAVERICK:   '\u{1F3AD}', // 🎭
+  VIRTUOSO:   '\u{1F3AF}', // 🎯
+  HEARTBEAT:  '\u{1FAC0}', // 🫀
+};
+
+// ============================================================
+// PRESS & NPC CHARACTERS
+// ============================================================
+export const PRESS = {
+  MICROPHONE:  '\u{1F399}\uFE0F', // 🎙️
+  TV:          '\u{1F4FA}', // 📺
+  NEWSPAPER:   '\u{1F4F0}', // 📰
+  MIC:         '\u{1F3A4}', // 🎤
+  MEGAPHONE_NPC: '\u{1F4E3}', // 📣
+  TIE:         '\u{1F454}', // 👔
+};
+
+// ============================================================
+// BOARD STATUS
+// ============================================================
+export const BOARD = {
+  BUILDING:    '\u{1F3DB}\uFE0F', // 🏛️
+  THINKING:    '\u{1F914}', // 🤔
+  UNKNOWN:     '\u2753',    // ❓
+};
+
+// ============================================================
+// TICKETS & STADIUM
+// ============================================================
+export const TICKET = {
+  STANDARD:    '\u{1F3AB}\uFE0F', // 🎟️
+  STADIUM:     '\u{1F3DF}\uFE0F', // 🏟️
+  DIAMOND:     '\u{1F48E}', // 💎
+};
+
+// ============================================================
+// CHALLENGE MODES
+// ============================================================
+export const CHALLENGE = {
+  ANT:         '\u{1F41C}', // 🐜
+  SEEDLING:    '\u{1F331}', // 🌱
+  EXTINGUISHER:'\u{1F9EF}', // 🧯
+  SHIELD:      '\u{1F6E1}\uFE0F', // 🛡️
+  MONEY:       '\u{1F4B0}', // 💰
+  HEART:       '\u2764\uFE0F', // ❤️
+};
+
+// ============================================================
+// PLAYER TRAITS
+// ============================================================
+export const TRAIT = {
+  BOOT:        '\u{1F45F}', // 👟
+  PRECISION:   '\u{1F3AF}', // 🎯
+  STAR:        '\u2B50',    // ⭐
+  GLOWING:     '\u{1F31F}', // 🌟
+  MECHANICAL:  '\u{1F9BE}', // 🦾
+};
+
+// ============================================================
+// REPUTATION LEVELS (SeasonSystem)
+// ============================================================
+export const REPUTATION = {
+  LEGENDARY:   '\u{1F451}', // 👑
+  RENOWNED:    '\u2B50',    // ⭐
+  RECOGNIZED:  '\u{1F4C8}', // 📈
+  BEGINNER:    '\u{1F331}', // 🌱
+  UNKNOWN:     '\u2753',    // ❓
+};
+
+// ============================================================
+// MATCH BONUS (MatchBonusSystem)
+// ============================================================
+export const BONUS = {
+  NONE:        '\u2014',    // —
+  LOW:         '\u{1F4B5}', // 💵
+  MEDIUM:      '\u{1F4B0}', // 💰
+  HIGH:        '\u{1F911}', // 🤑
+};
+
+// ============================================================
+// ACHIEVEMENT BADGES (AchievementsSystem)
+// ============================================================
+export const BADGE = {
+  TROPHY:          '\u{1F3C6}', // 🏆
+  MEDAL:           '\u{1F3C5}', // 🏅
+  STAR:            '\u2B50',    // ⭐
+  FIRST_PLACE:     '\u{1F947}', // 🥇
+  SHIELD:          '\u{1F6E1}\uFE0F', // 🛡️
+  SOCCER_BALL:     '\u26BD',    // ⚽
+  BULLSEYE:        '\u{1F3AF}', // 🎯
+  MUSCLE:          '\u{1F4AA}', // 💪
+  FIRE:            '\u{1F525}', // 🔥
+  SHOOTING_STAR:   '\u{1F320}', // 🌠
+  GLOWING_STAR:    '\u{1F31F}', // 🌟
+  CROWN:           '\u{1F451}', // 👑
+  NEW:             '\u{1F195}', // 🆕
+  MILITARY_MEDAL:  '\u{1F396}\uFE0F', // 🎖️
+  LIGHTNING:       '\u26A1',    // ⚡
+  THEATER:         '\u{1F3AD}', // 🎭
+  REFRESH:         '\u{1F504}', // 🔄
+  BRICKS:          '\u{1F9F1}', // 🧱
+  SPARKLES:        '\u2728',    // ✨
+  ROCKET:          '\u{1F680}', // 🚀
+  SNOWFLAKE:       '\u2744\uFE0F', // ❄️
+  SEEDLING:        '\u{1F331}', // 🌱
+  LIFE_PRESERVER:  '\u{1F6DF}', // 🛟
+  CROSSED_SWORDS:  '\u2694\uFE0F', // ⚔️
+  DICE:            '\u{1F3B2}', // 🎲
+  BOXING_GLOVE:    '\u{1F94A}', // 🥊
+};
+
 /**
  * Flat convenience alias — import { ICONS } from './EmojiConstants.js'
  * Merges all categories into a single namespace.
@@ -206,4 +376,17 @@ export const ICONS = {
   ...TALKS,
   ...UI,
   ...COSMETIC,
+  ...INJURY_TYPE,
+  ...ACHIEVEMENT,
+  ...DIFFICULTY,
+  ...LIFESTYLE,
+  ...PERSONALITY,
+  ...PRESS,
+  ...BOARD,
+  ...TICKET,
+  ...CHALLENGE,
+  ...TRAIT,
+  ...REPUTATION,
+  ...BONUS,
+  ...BADGE,
 };

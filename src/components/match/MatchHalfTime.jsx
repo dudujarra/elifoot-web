@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { Pause, Strategy, ArrowsLeftRight, CheckCircle, Play } from '@phosphor-icons/react';
 import { EfClubBadge } from '../ui';
 import { getFormEmoji } from '../../engine/systems/FormSystem.js';

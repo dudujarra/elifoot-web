@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * AutoPlayView — Soak Test UI
  *
@@ -17,7 +18,7 @@ import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
 import { EfModal } from './ui/EfModal';
 import {
-    Robot, Target, Trophy, ArrowsClockwise, CurrencyDollar,
+    Robot, Target, ArrowsClockwise,
     ChartBar, TrendUp, TrendDown, Lightning, CheckCircle, XCircle,
     DownloadSimple, PersonSimpleWalk, PersonSimpleRun, Rocket, GitDiff,
     Play, Pause, Stop, Brain, WarningCircle, ClipboardText
@@ -131,7 +132,7 @@ export function AutoPlayView() {
                 <div className="ef-ap__container-sm">
                     <EfPanel variant="elev" padding="md" className="ef-ap__header-flex">
                         <h2 className="ef-arcade-h ef-arcade-h--xxl">
-                            <Robot size={22} weight="fill" style={{verticalAlign:'-3px',marginRight:'8px'}} />
+                            <Robot size={22} weight="fill" className="ef-icon-inline-lg" />
                             AUTOPLAY SETUP
                         </h2>
                         <EfButton variant="secondary" size="sm" onClick={() => changeView('start')}>← VOLTAR</EfButton>
@@ -190,7 +191,7 @@ export function AutoPlayView() {
                             variant={setupScenario === 'fallen' ? 'primary' : 'secondary'}
                             onClick={() => setSetupScenario('fallen')}
                             className="ef-ap__chip-input"
-                        ><TrendDown size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />Gigante Caído</EfButton>
+                        ><TrendDown size={14} weight="bold" className="ef-icon-inline" />Gigante Caído</EfButton>
                     </div>
 
                     <label className="ef-ap__field-label">DIFICULDADE</label>
@@ -212,7 +213,7 @@ export function AutoPlayView() {
                         disabled={!setupTeamId}
                         className="ef-ap__setup-submit"
                     >
-                        <Lightning size={16} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />
+                        <Lightning size={16} weight="fill" className="ef-icon-inline-md" />
                         INICIAR AUTOPLAY
                     </EfButton>
                     </EfPanel>
@@ -397,7 +398,7 @@ export function AutoPlayView() {
                 <EfPanel variant="elev" padding="md" className="ef-ap__hero-header">
                     <div className="ef-ap__hero-left">
                         <h2 className="ef-arcade-h ef-arcade-h--xl ef-ap__crt-glow">
-                            <Robot size={20} weight="fill" style={{verticalAlign:'-3px',marginRight:'8px'}} />
+                            <Robot size={20} weight="fill" className="ef-icon-inline-lg" />
                             SOAK TEST DASHBOARD
                         </h2>
                         <div className="ef-ap__sim-badge">
@@ -455,7 +456,7 @@ export function AutoPlayView() {
                                         title={p.label}
                                         aria-label={`Velocidade ${p.label}`}
                                     >
-                                        <IconComp size={14} weight={active ? 'fill' : 'bold'} style={{verticalAlign:'-2px',marginRight:'4px'}} />
+                                        <IconComp size={14} weight={active ? 'fill' : 'bold'} className="ef-icon-inline" />
                                         {p.label}
                                     </button>
                                 );
@@ -469,21 +470,21 @@ export function AutoPlayView() {
                 <div className="ef-ap__chip-wrap-mb">
                     {!stats?.running ? (
                         <EfButton variant="primary" onClick={handleStart}>
-                            <Play size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />Iniciar
+                            <Play size={14} weight="fill" className="ef-icon-inline" />Iniciar
                         </EfButton>
                     ) : (
                         <EfButton variant="secondary" onClick={handlePause}>
-                            <Pause size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />Pausar
+                            <Pause size={14} weight="fill" className="ef-icon-inline" />Pausar
                         </EfButton>
                     )}
                     <EfButton variant="secondary" onClick={handleStop}>
-                        <Stop size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />Parar
+                        <Stop size={14} weight="fill" className="ef-icon-inline" />Parar
                     </EfButton>
                     <EfButton variant="secondary" onClick={handleExport}>
-                        <DownloadSimple size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />Exportar Relatório JSON
+                        <DownloadSimple size={14} weight="bold" className="ef-icon-inline" />Exportar Relatório JSON
                     </EfButton>
                     <EfButton variant="secondary" onClick={handleExportTelemetry}>
-                        <ChartBar size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />Export Telemetry JSON
+                        <ChartBar size={14} weight="bold" className="ef-icon-inline" />Export Telemetry JSON
                     </EfButton>
                     <EfButton
                         variant="secondary"
@@ -491,7 +492,7 @@ export function AutoPlayView() {
                         title="Reset Q-table — bot esquece aprendizado, stats permanecem"
                         className="ef-ap__danger-btn"
                     >
-                        <Brain size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />Reset Brain
+                        <Brain size={14} weight="bold" className="ef-icon-inline" />Reset Brain
                     </EfButton>
                     <EfButton
                         variant="secondary"
@@ -499,7 +500,7 @@ export function AutoPlayView() {
                         title="NEW GAME+ — salva ML treinado, zera gameplay. Recomeça com o aprendizado intacto."
                         className="ef-ap__accent-btn-bold"
                     >
-                        <Brain size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />New Game+
+                        <Brain size={14} weight="fill" className="ef-icon-inline" />New Game+
                     </EfButton>
                     <EfButton
                         variant="secondary"
@@ -507,14 +508,14 @@ export function AutoPlayView() {
                         title="Reset TUDO — apaga brain + stats + telemetry. Sem volta."
                         className="ef-ap__danger-btn-bold"
                     >
-                        <XCircle size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />Reset Tudo
+                        <XCircle size={14} weight="fill" className="ef-icon-inline" />Reset Tudo
                     </EfButton>
                 </div>
 
                 {/* SPEC-119: LLM Bridge panel — buy/sell decision engine */}
                 <EfPanel variant="sunk" padding="md" className="ef-ap__llm-panel">
                     <div className="ef-ap__llm-header">
-                        <span><Brain size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />BUY/SELL ENGINE (SPEC-119)</span>
+                        <span><Brain size={14} weight="fill" className="ef-icon-inline-md" />BUY/SELL ENGINE (SPEC-119)</span>
                         <span className="ef-ap__llm-mode-tag">
                             mode: <strong>{llmStatus.mode}</strong>
                         </span>
@@ -540,7 +541,7 @@ export function AutoPlayView() {
                                 className="ef-ap__llm-load-btn"
                                 title="Load WebLLM Llama 3.2 1B (~700MB first time, cached after)"
                             >
-                                <Brain size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />Carregar WebLLM
+                                <Brain size={14} weight="fill" className="ef-icon-inline" />Carregar WebLLM
                             </EfButton>
                         ) : (
                             <EfButton
@@ -549,7 +550,7 @@ export function AutoPlayView() {
                                 onClick={handleResetLLM}
                                 className="ef-ap__llm-reset-btn"
                             >
-                                <ArrowsClockwise size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />Voltar Heurística
+                                <ArrowsClockwise size={14} weight="bold" className="ef-icon-inline" />Voltar Heurística
                             </EfButton>
                         )}
                     </div>
@@ -559,7 +560,7 @@ export function AutoPlayView() {
                 {stats?.brain && (
                     <EfPanel variant="sunk" padding="md" className="ef-ap__brain-panel">
                         <div className="ef-arcade-h ef-arcade-h--md ef-ap__brain-title">
-                            <Brain size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />BRAIN (SPEC-115/116/117)
+                            <Brain size={14} weight="fill" className="ef-icon-inline-md" />BRAIN (SPEC-115/116/117)
                         </div>
                         <div className="ef-ap__brain-stats-row">
                             <span>States: <strong>{stats.brain.states ?? 0}</strong></span>
@@ -598,7 +599,7 @@ export function AutoPlayView() {
             {stats && (
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
                     <h3 className="ef-arcade-h ef-arcade-h--lg ef-ap__h-mb-8">
-                        <ChartBar size={16} weight="bold" style={{verticalAlign:'-3px',marginRight:'6px'}} />
+                        <ChartBar size={16} weight="bold" className="ef-icon-inline-sm" />
                         ESTATÍSTICAS LIVE
                     </h3>
                     <div className="ef-ap__stats-grid">
@@ -622,7 +623,7 @@ export function AutoPlayView() {
             {stats?.insights && (
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
                     <h3 className="ef-arcade-h ef-arcade-h--lg ef-ap__h-mb-8">
-                        <TrendUp size={16} weight="bold" style={{verticalAlign:'-3px',marginRight:'6px'}} />
+                        <TrendUp size={16} weight="bold" className="ef-icon-inline-sm" />
                         INSIGHTS DA CARREIRA
                     </h3>
                     <div className="ef-ap__insights-grid">
@@ -646,7 +647,7 @@ export function AutoPlayView() {
             {stats && (
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
                     <h3 className="ef-arcade-h ef-arcade-h--md ef-ap__h-mb-8">
-                        <Target size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />
+                        <Target size={14} weight="fill" className="ef-icon-inline-md" />
                         GDD SYSTEMS STATUS — LIVE
                     </h3>
                     <div className="ef-ap__gdd-grid">
@@ -758,7 +759,7 @@ export function AutoPlayView() {
                         className="ef-ap__telemetry-header"
                     >
                         <h3 className="ef-arcade-h ef-arcade-h--md">
-                            <ChartBar size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'6px'}} />
+                            <ChartBar size={14} weight="bold" className="ef-icon-inline-md" />
                             Telemetria ({Object.keys(stats.telemetry.results).length} detectores)
                             <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: scoreColor(stats.telemetry.overallScore) }}>
                                 Score Geral: {stats.telemetry.overallScore}
@@ -786,7 +787,7 @@ export function AutoPlayView() {
                                     </div>
                                     {res.signals?.[0] && (
                                         <div className="ef-ap__telemetry-signal-top" style={{ color: scoreColor(100 - (res.signals[0].severity * 100)) }}>
-                                            <WarningCircle size={11} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />{res.signals[0].id}
+                                            <WarningCircle size={11} weight="bold" className="ef-icon-inline" />{res.signals[0].id}
                                         </div>
                                     )}
                                     {expandedSpec === spec && res.signals?.length > 0 && (
@@ -809,7 +810,7 @@ export function AutoPlayView() {
             {stats?.successes && stats.successes.length > 0 && (
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
                     <h3 className="ef-arcade-h ef-arcade-h--md ef-arcade-h--primary ef-ap__h-mb-8">
-                        <CheckCircle size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />
+                        <CheckCircle size={14} weight="fill" className="ef-icon-inline-md" />
                         SUCCESSES ({stats.successes.length})
                     </h3>
                     <div className="ef-ap__entry-types-line">
@@ -836,7 +837,7 @@ export function AutoPlayView() {
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
                     <div className="ef-ap__anomaly-bar">
                         <h3 className="ef-arcade-h ef-arcade-h--md ef-arcade-h--danger">
-                            <WarningCircle size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />
+                            <WarningCircle size={14} weight="fill" className="ef-icon-inline-md" />
                             ANOMALIES ({stats.anomalies.length})
                         </h3>
                         <select
@@ -875,7 +876,7 @@ export function AutoPlayView() {
             {stats?.decisions && stats.decisions.length > 0 && (
                 <EfPanel variant="elev" padding="md">
                     <h3 className="ef-arcade-h ef-arcade-h--md ef-ap__h-mb-8">
-                        <ClipboardText size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'6px'}} />
+                        <ClipboardText size={14} weight="bold" className="ef-icon-inline-md" />
                         ÚLTIMAS DECISÕES (20)
                     </h3>
                     <div className="ef-mono ef-ap__decisions-list">
@@ -904,7 +905,7 @@ export function AutoPlayView() {
                         </div>
                         <div className="ef-ap__pacing-actions">
                             <div className="ef-ap__pacing-resolving">
-                                <Robot size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />
+                                <Robot size={14} weight="fill" className="ef-icon-inline-md" />
                                 Auto-resolvendo (Soak Test)...
                             </div>
                         </div>

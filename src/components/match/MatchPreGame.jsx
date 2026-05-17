@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { UserList, Strategy, CheckCircle, ListNumbers, ArrowsLeftRight, Warning, SkipForward, ArrowLeft, Megaphone, Shield, SoccerBall } from '@phosphor-icons/react';
 import { getFormEmoji } from '../../engine/systems/FormSystem.js';
 import { TACTICS, FORMATIONS, TEAM_TALKS } from '../../engine/ManagerSystems';
@@ -6,7 +7,7 @@ import { PreMatchScreen } from '../PreMatchScreen';
 
 export function MatchPreGame({
     team, engine, sectors, preStep, setPreStep, benchPlayers, setBenchPlayers,
-    liveModalOpen, setLiveModalOpen, talkDone, setTalkDone, changeView, launchMatch,
+    _liveModalOpen, setLiveModalOpen, talkDone, setTalkDone, changeView, launchMatch,
     forceUpdate, getDashboardView, matchContext
 }) {
     const titulares = team.squad.filter(p => p.isTitular && !p.injury);

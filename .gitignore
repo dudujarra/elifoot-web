@@ -38,6 +38,17 @@ test_ui.cjs
 # Lab test results
 lab-results/
 
+# Development debris — one-off scripts & scratch files
+scratch*.js
+split-*.cjs
+split-*.js
+fix-*.cjs
+fix-*.mjs
+inline-*.mjs
+deep-tactical-engine-test.js
+test-chronicle.js
+process_sprites.py
+
 # Estudo / Extrações de Binários (Unity/Elifoot 25) - Não incluir no repo
 decompiled_elifoot25/
 elifoot_25_extracted/

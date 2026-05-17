@@ -67,14 +67,14 @@
 
 .ef-press__header-title {
   margin: 0 0 4px 0;
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
   
 }
 
 .ef-press__header-subtitle {
-  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   
@@ -113,7 +113,7 @@
 }
 
 .ef-press__live-label {
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.1em;
   color: var(--ef-press-danger);
@@ -154,7 +154,7 @@
 }
 
 .ef-press__hero-tag {
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.5rem;
   letter-spacing: 0.05em;
   padding: 4px 8px;
@@ -180,7 +180,7 @@
   padding: 2px 12px;
   background: var(--ef-press-neon);
   color: var(--ef-press-crt-black);
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.1em;
   
@@ -193,7 +193,7 @@
   background-color: var(--ef-press-forest-dark);
   border: var(--primitive-border-hairline) solid var(--ef-press-trophy);
   padding: 6px 12px;
-  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.05em;
   margin-bottom: 18px;
@@ -235,7 +235,7 @@
 }
 
 .ef-press__answer-label {
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   margin-bottom: 16px;
@@ -291,7 +291,7 @@
   align-items: center;
   justify-content: center;
   border: var(--primitive-border-thin) solid var(--ef-press-pitch);
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.7rem;
   color: var(--ef-press-neon);
   background: transparent;
@@ -322,7 +322,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   margin-bottom: 18px;
@@ -361,7 +361,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   font-weight: 700;
@@ -382,7 +382,7 @@
   align-items: center;
   gap: 8px;
   border: var(--primitive-border-hairline) solid var(--ef-press-pitch);
-  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
+  font-family: var(--font-mono), monospace;
 }
 
 .ef-press__effect-key {

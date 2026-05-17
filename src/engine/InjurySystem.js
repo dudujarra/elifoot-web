@@ -1,16 +1,18 @@
 import { rng as systemRng } from './rng.js';
+import { INJURY_TYPE } from './EmojiConstants.js';
+import { INJURY, ENERGY, AGE } from './GameConstants.js';
 /**
  * InjurySystem.js — Lesões e recuperação
  * Inspirado em FM (severity tiers) + OléFUT (simplicidade)
  */
 
 const INJURY_TYPES = [
-    { id: "muscle", name: "Lesão muscular", minWeeks: 1, maxWeeks: 3, emoji: "🦵" },
-    { id: "ankle", name: "Torção no tornozelo", minWeeks: 2, maxWeeks: 4, emoji: "🦶" },
-    { id: "knee", name: "Lesão no joelho", minWeeks: 3, maxWeeks: 8, emoji: "🦿" },
-    { id: "hamstring", name: "Estiramento na coxa", minWeeks: 1, maxWeeks: 3, emoji: "🩹" },
-    { id: "fracture", name: "Fratura", minWeeks: 6, maxWeeks: 15, emoji: "🏥" },
-    { id: "concussion", name: "Concussão", minWeeks: 1, maxWeeks: 2, emoji: "🤕" },
+    { id: "muscle", name: "Lesão muscular", minWeeks: 1, maxWeeks: 3, emoji: INJURY_TYPE.MUSCLE },
+    { id: "ankle", name: "Torção no tornozelo", minWeeks: 2, maxWeeks: 4, emoji: INJURY_TYPE.ANKLE },
+    { id: "knee", name: "Lesão no joelho", minWeeks: 3, maxWeeks: 8, emoji: INJURY_TYPE.KNEE },
+    { id: "hamstring", name: "Estiramento na coxa", minWeeks: 1, maxWeeks: 3, emoji: INJURY_TYPE.HAMSTRING },
+    { id: "fracture", name: "Fratura", minWeeks: 6, maxWeeks: 15, emoji: INJURY_TYPE.FRACTURE },
+    { id: "concussion", name: "Concussão", minWeeks: 1, maxWeeks: 2, emoji: INJURY_TYPE.CONCUSSION },
 ];
 
 /**
@@ -20,18 +22,17 @@ const INJURY_TYPES = [
  * @returns {object|null} injury object ou null
  */
 export function rollInjury(player, context = 'match') {
-    let chance = 0;
-
     // Base chance por contexto
-    if (context === 'match') chance = 0.04; // 4% por jogo
-    else if (context === 'training_double') chance = 0.06;
-    else chance = 0.02;
+    let chance;
+    if (context === 'match') chance = INJURY.BASE_MATCH_CHANCE;
+    else if (context === 'training_double') chance = INJURY.BASE_TRAINING_DOUBLE;
+    else chance = INJURY.BASE_TRAINING;
 
     // Modificadores
-    if (player.energy < 30) chance *= 2.0; // cansaço dobra risco
-    if (player.energy < 15) chance *= 3.0;
-    if (player.age > 32) chance *= 1.5; // veterano
-    if (player.age < 20) chance *= 0.7; // jovem
+    if (player.energy < ENERGY.EXHAUSTED) chance *= INJURY.EXHAUSTION_MULTIPLIER;
+    if (player.energy < ENERGY.CRITICAL) chance *= INJURY.CRITICAL_MULTIPLIER;
+    if (player.age > AGE.VETERAN_START) chance *= INJURY.VETERAN_MULTIPLIER;
+    if (player.age < 20) chance *= INJURY.YOUTH_MULTIPLIER;
 
     // injuryProneness: 5-15 scale. 10 = neutro, 15 = frágil (+50%), 5 = resistente (-30%)
     if (player.injuryProneness != null) {

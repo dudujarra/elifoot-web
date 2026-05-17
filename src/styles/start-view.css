@@ -212,7 +212,7 @@
 .ef-start-title {
   margin: 0;
   padding: 0;
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: clamp(2.5rem, 9vw, 5.5rem);
   color: var(--primary);
   text-shadow:
@@ -234,7 +234,7 @@
 
 .ef-start-subtitle {
   margin: 0;
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.25em;
   color: var(--accent);
@@ -296,7 +296,7 @@
 }
 
 .ef-start-field-label {
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.55rem;
   letter-spacing: 0.18em;
   
@@ -411,7 +411,7 @@
 
 .ef-start-press {
   margin: 0;
-  font-family: var(--font-display, 'Outfit'), monospace;
+  font-family: var(--font-display), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.25em;
   color: var(--primary);
@@ -429,7 +429,7 @@
 
 .ef-start-credits {
   margin: 0;
-  font-family: var(--font-mono, 'JetBrains Mono'), monospace;
+  font-family: var(--font-mono), monospace;
   font-size: 0.6rem;
   letter-spacing: 0.18em;
   

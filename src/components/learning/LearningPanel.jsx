@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * LearningPanel — SPEC-123
  *
@@ -16,7 +17,7 @@ import { TrendUp } from '@phosphor-icons/react';
 
 function Sparkline({ data, width = 200, height = 40, color = 'var(--color-success-mid)' }) {
     if (!Array.isArray(data) || data.length < 2) {
-        return <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>need ≥2 data points</div>;
+        return <div className="ef-text-sm-muted">need ≥2 data points</div>;
     }
     const max = Math.max(...data, 1);
     const min = Math.min(...data, 0);
@@ -148,7 +149,7 @@ export default function LearningPanel({ controllerRef }) {
                     alignItems: 'center'
                 }}
             >
-                <span><TrendUp size={14} weight="bold" style={{verticalAlign:'-2px',marginRight:'6px'}} />LEARNING REAL-TIME (SPEC-123) {open ? '▼' : '▶'}</span>
+                <span><TrendUp size={14} weight="bold" className="ef-icon-inline-md" />LEARNING REAL-TIME (SPEC-123) {open ? '▼' : '▶'}</span>
                 <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                     {brainSummary.states} states · {brainSummary.totalUpdates} upd · {memory.length} mem
                     {brainSummary.replayBuffer > 0 && ` · ${brainSummary.replayBuffer} replay`}
@@ -179,7 +180,7 @@ export default function LearningPanel({ controllerRef }) {
                     {/* Top Q-actions */}
                     {topActions.length > 0 && (
                         <div style={{ marginTop: '12px' }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                            <div className="ef-text-xs-muted">
                                 Top actions Q-values:
                             </div>
                             {topActions.slice(0, 5).map((a, i) => (
@@ -191,7 +192,7 @@ export default function LearningPanel({ controllerRef }) {
                     {/* Episodic memory */}
                     {memory.length > 0 && (
                         <div style={{ marginTop: '12px' }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                            <div className="ef-text-xs-muted">
                                 Recent memories (last {memory.length}):
                             </div>
                             <div style={{

@@ -21,14 +21,18 @@ if (typeof window !== 'undefined' && window.localStorage) {
             });
             localStorage.setItem('__olefut_migrated_v1', '1');
         }
-    } catch (_e) { /* localStorage indisponível, ignora */ }
+    } catch { /* localStorage indisponível, ignora */ }
 }
+
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GameProvider>
-      <App />
-    </GameProvider>
+    <BrowserRouter>
+      <GameProvider>
+        <App />
+      </GameProvider>
+    </BrowserRouter>
   </React.StrictMode>,
 )
 

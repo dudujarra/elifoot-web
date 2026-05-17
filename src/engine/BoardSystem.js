@@ -3,10 +3,12 @@
  * Inspirado em FM (board confidence) + Hattrick (patience)
  */
 
+import { BOARD as BOARD_EMOJI, NARRATIVE, MOOD } from './EmojiConstants.js';
+import { BOARD as BOARD_CONST, MORALE } from './GameConstants.js';
 // NPCs da diretoria
 export const BOARD_MEMBERS = {
-    president: { name: "Dr. Antônio Ferreira", role: "Presidente", emoji: "🏛️", patience: 6 },
-    director: { name: "Helena Vieira", role: "Diretora de Futebol", emoji: "📊", patience: 4 },
+    president: { name: "Dr. Antônio Ferreira", role: "Presidente", emoji: BOARD_EMOJI.BUILDING, patience: 6 },
+    director: { name: "Helena Vieira", role: "Diretora de Futebol", emoji: NARRATIVE.STATS, patience: 4 },
 };
 
 // Gerar objetivos baseados na divisão e orçamento
@@ -14,7 +16,7 @@ export function generateObjectives(division, balance) {
     const objectives = [];
 
     if (division === 1) {
-        if (balance > 200000000) {
+        if (balance > BOARD_CONST.BUDGET_HIGH) {
             objectives.push({ id: "title", text: "Ser campeão da liga", target: 1, metric: "position", weight: 40 });
             objectives.push({ id: "cup_semi", text: "Chegar na semifinal da Copa", target: "semi", metric: "cup", weight: 20 });
         } else {
@@ -28,17 +30,17 @@ export function generateObjectives(division, balance) {
         objectives.push({ id: "mid_table", text: "Não ser rebaixado", target: 16, metric: "position", weight: 50 });
     }
 
-    objectives.push({ id: "morale", text: "Manter moral do elenco acima de 40%", target: 40, metric: "morale", weight: 20 });
+    objectives.push({ id: "morale", text: "Manter moral do elenco acima de 40%", target: MORALE.FLOOR_MENTALIST, metric: "morale", weight: 20 });
     return objectives;
 }
 
 export class BoardSystem {
     constructor(division, balance, options = {}) {
-        this.confidence = 60; // 0-100
+        this.confidence = BOARD_CONST.INITIAL_CONFIDENCE; // 0-100
         this.objectives = generateObjectives(division, balance);
         this.isFired = false;
         this.warningGiven = false;
-        this.fireProtection = 8; // semanas de graça no início
+        this.fireProtection = BOARD_CONST.FIRE_PROTECTION_WEEKS; // semanas de graça no início
         this.lastFiredWeek = -999; // track último fire pra cooldown
         this.fireCooldown = options.fireCooldown || 0; // min weeks between fires
         this.hiredWeek = options.currentWeek || 0;
@@ -97,9 +99,9 @@ export class BoardSystem {
     }
 
     getStatus() {
-        if (this.confidence >= 70) return { label: "Satisfeita", color: "#39FF14", emoji: "😊" };
-        if (this.confidence >= 45) return { label: "Observando", color: "#FFD700", emoji: "🤔" };
-        if (this.confidence >= 25) return { label: "Insatisfeita", color: "#FF3333", emoji: "😤" };
-        return { label: "Furiosa", color: "#FF3333", emoji: "🔥" };
+        if (this.confidence >= 70) return { label: "Satisfeita", color: "#39FF14", emoji: MOOD.HAPPY };
+        if (this.confidence >= 45) return { label: "Observando", color: "#FFD700", emoji: BOARD_EMOJI.THINKING };
+        if (this.confidence >= 25) return { label: "Insatisfeita", color: "#FF3333", emoji: MOOD.ANGRY };
+        return { label: "Furiosa", color: "#FF3333", emoji: MOOD.FIRE };
     }
 }

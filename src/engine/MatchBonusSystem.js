@@ -14,6 +14,8 @@
  * 3. Pós-match, `settleMatchBonus(engine, didWin)` paga ou pune
  */
 
+import { BONUS, MOOD } from './EmojiConstants.js';
+
 // ============================================================
 // TIERS DE BICHO
 // ============================================================
@@ -21,7 +23,7 @@ export const MATCH_BONUS_TIERS = [
     {
         id: 'none',
         name: 'Sem Bicho',
-        emoji: '—',
+        emoji: BONUS.NONE,
         costPerPlayer: 0,
         moralBoostPre: 0,      // buff pré-jogo na moral
         ovrBuff: 0,            // buff temporário no xG (via moral factor)
@@ -31,7 +33,7 @@ export const MATCH_BONUS_TIERS = [
     {
         id: 'small',
         name: 'Bicho Leve',
-        emoji: '💵',
+        emoji: BONUS.LOW,
         costPerPlayer: 5_000,
         moralBoostPre: 3,
         ovrBuff: 0.02,         // +2% nos setores
@@ -41,7 +43,7 @@ export const MATCH_BONUS_TIERS = [
     {
         id: 'medium',
         name: 'Bicho Normal',
-        emoji: '💰',
+        emoji: BONUS.MEDIUM,
         costPerPlayer: 15_000,
         moralBoostPre: 6,
         ovrBuff: 0.05,         // +5% nos setores
@@ -51,7 +53,7 @@ export const MATCH_BONUS_TIERS = [
     {
         id: 'large',
         name: 'Bicho Pesado',
-        emoji: '🤑',
+        emoji: BONUS.HIGH,
         costPerPlayer: 40_000,
         moralBoostPre: 10,
         ovrBuff: 0.08,         // +8% nos setores
@@ -186,7 +188,7 @@ export function settleMatchBonus(engine, didWin) {
             paid: false,
             amount: 0,
             moralChange: bonus.frustrationPenalty,
-            msg: `😤 Bicho prometido mas sem vitória. Moral caiu ${bonus.frustrationPenalty}. Time frustrado.`,
+            msg: `${MOOD.ANGRY} Bicho prometido mas sem vitória. Moral caiu ${bonus.frustrationPenalty}. Time frustrado.`,
         };
     }
 }

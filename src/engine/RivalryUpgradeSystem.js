@@ -26,7 +26,7 @@ const NAMED_ARCS = [
  * @param {boolean} [opts.bothInTitleRace=false]
  * @returns {{ rivalryScore, criticalCount, activeArc, h2h, namedRivalry }}
  */
-export function evaluate({ clubAId, clubBId, history = [], bothInTitleRace = false } = {}) {
+export function evaluate({ clubAId: _clubAId, clubBId: _clubBId, history = [], bothInTitleRace = false } = {}) {
     const total = history.length;
     const aWins = history.filter(m => m.clubAScore > m.clubBScore).length;
     const bWins = history.filter(m => m.clubBScore > m.clubAScore).length;
@@ -58,7 +58,7 @@ export function markCritical(match) {
 
 // ─── helpers ────────────────────────────────────────────────
 
-function pickArc({ total, aWinRate, bWinRate, criticalCount, bothInTitleRace, history }) {
+function pickArc({ total, aWinRate, bWinRate, criticalCount: _criticalCount, bothInTitleRace, history }) {
     if (bothInTitleRace) return NAMED_ARCS.find(a => a.id === 'confronto_titulo');
     // Match-count arcs take priority (historia > equilíbrio momentâneo)
     if (total >= 20) return NAMED_ARCS.find(a => a.id === 'batalha_das_geracoes');

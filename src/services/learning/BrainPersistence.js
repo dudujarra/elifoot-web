@@ -67,7 +67,7 @@ export function saveAllBrains(teams) {
             const kept = Object.fromEntries(entries.slice(-20));
             localStorage.setItem(STORAGE_KEY_PREFIX, JSON.stringify(kept));
             pruned = entries.length - 20;
-        } catch { /* give up */ }
+        } catch (err2) { EngineLogger.capture(err2, 'BrainPersistence.saveAll.aggressivePrune'); }
     }
 
     return { saved, bytes: json.length, pruned };
@@ -87,13 +87,13 @@ export function restoreAllBrains(teams) {
     let raw;
     try {
         raw = localStorage.getItem(STORAGE_KEY_PREFIX);
-    } catch { return 0; }
+    } catch (err) { EngineLogger.capture(err, 'BrainPersistence.restoreAll.getItem'); return 0; }
     if (!raw) return 0;
 
     let brainData;
     try {
         brainData = JSON.parse(raw);
-    } catch { return 0; }
+    } catch (err) { EngineLogger.capture(err, 'BrainPersistence.restoreAll.parse'); return 0; }
 
     let restored = 0;
     for (const team of teams) {

@@ -1,4 +1,5 @@
 import { rng as systemRng } from '../../engine/rng.js';
+import { EngineLogger } from '../../engine/EngineLogger.js';
 import { generatePersonality, generateRandomPersonality, checkIsTilted } from './Archetypes.js';
 import { EmotionalEngine } from './EmotionalEngine.js';
 import { LearnedGoalRelevance } from './LearnedGoalRelevance.js';
@@ -363,7 +364,7 @@ export class AdaptiveBrain {
             if (Array.isArray(parsed.replayBuffer)) this.replayBuffer = parsed.replayBuffer;
             if (parsed.personality) this.personality = parsed.personality;
             if (parsed.emotions) this.emotions.restore(parsed.emotions);
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'AdaptiveBrain._restore'); }
     }
 
     save() {
@@ -381,7 +382,7 @@ export class AdaptiveBrain {
             };
             localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
             this.lastSavedAt = Date.now();
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'AdaptiveBrain.save'); }
     }
 
     reset() {
@@ -396,7 +397,7 @@ export class AdaptiveBrain {
         this.goalRelevance.reset();
         try {
             if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'AdaptiveBrain.reset'); }
     }
 
     // ─── Q-LEARNING CORE ─────────────────────────────────────

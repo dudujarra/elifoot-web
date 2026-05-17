@@ -26,6 +26,7 @@ import { getClubVoice } from '../engine/ClubVoiceSystem.js';
 import { getTraitMatchModifier, getGoalConversionBonus, getDefenseSectorBonus, getSetPieceBonus, getPenaltySaveBonus, getPenaltyConversionBonus } from '../engine/PlayerTraits';
 
 import { rng as systemRng } from '../engine/rng.js';
+import { EngineLogger } from '../engine/EngineLogger.js';
 import { emitGameEvent, GameEvents } from '../audio/EventBus.js';
 import { processMatchCards } from '../engine/DisciplineSystem.js';
 import { spatialEngine } from '../engine/SpatialEngine.js';
@@ -291,7 +292,7 @@ export class MatchSimulator {
 
             // §9: Emit match phase at key intervals for procedural audio
             if (minute === 1) {
-                try { emitGameEvent(GameEvents.MATCH_STARTED, { homeTeam: homeTeam.name, awayTeam: awayTeam.name }); } catch { /* event emit - non-critical */ }
+                try { emitGameEvent(GameEvents.MATCH_STARTED, { homeTeam: homeTeam.name, awayTeam: awayTeam.name }); } catch (err) { EngineLogger.capture(err, 'MatchSimulator.emitStart'); }
             }
 
             // DEEP TACTICAL ENGINE: Phase 4 Integration
@@ -457,7 +458,7 @@ export class MatchSimulator {
                             byPlayer: isManagerHome === isHomeAttacking,
                             moment: minute > 75 ? 'late' : minute < 15 ? 'early' : 'normal'
                         });
-                    } catch { /* event emit - non-critical */ }
+                    } catch (err) { EngineLogger.capture(err, 'MatchSimulator.emitGoal'); }
 
                     // Track performance
                     if (scorer) {

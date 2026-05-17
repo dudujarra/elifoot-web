@@ -5,7 +5,7 @@
  * Complementa FormationLayout.js (role macro), adiciona role18 per slot.
  */
 
-export const FORMATION_LAYOUTS_18 = {
+const FORMATION_LAYOUTS_18 = {
     '4-3-3': [
         'GOL',                          // 0 - Goleiro
         'LAE', 'ZAE', 'ZAD', 'LAD',     // 1-4 - Defesa
@@ -67,7 +67,7 @@ export const FORMATION_LAYOUTS_18 = {
 /**
  * Get 18-position code for a slot in a formation.
  */
-export function getSlot18Position(formationId, slotIdx) {
+function _getSlot18Position(formationId, slotIdx) {
     const layout = FORMATION_LAYOUTS_18[formationId] || FORMATION_LAYOUTS_18['4-3-3'];
     return layout[slotIdx] || 'MEC';
 }
@@ -75,9 +75,9 @@ export function getSlot18Position(formationId, slotIdx) {
 /**
  * Get all 18-pos slots for a formation as array of {slot, code}.
  */
-export function getFormationSlots18(formationId) {
+function _getFormationSlots18(formationId) {
     const layout = FORMATION_LAYOUTS_18[formationId] || FORMATION_LAYOUTS_18['4-3-3'];
     return layout.map((code, slot) => ({ slot, code }));
 }
 
-export const FORMATION_18_KEYS = Object.keys(FORMATION_LAYOUTS_18);
+const _FORMATION_18_KEYS = Object.keys(FORMATION_LAYOUTS_18);

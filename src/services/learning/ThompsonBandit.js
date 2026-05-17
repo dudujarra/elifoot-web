@@ -25,6 +25,7 @@
  */
 
 import { rng as systemRng } from '../../engine/rng.js';
+import { EngineLogger } from '../../engine/EngineLogger.js';
 
 const STORAGE_KEY_PREFIX = 'olefut_bandit_';
 const MAX_CONTEXTS = 100; // bound per-bandit context table
@@ -222,7 +223,7 @@ export class ThompsonBandit {
             if (parsed.arms) this.arms = parsed.arms;
             if (typeof parsed.totalPicks === 'number') this.totalPicks = parsed.totalPicks;
             if (typeof parsed.totalUpdates === 'number') this.totalUpdates = parsed.totalUpdates;
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'ThompsonBandit._restore'); }
     }
 
     save() {
@@ -235,7 +236,7 @@ export class ThompsonBandit {
                 savedAt: Date.now()
             };
             localStorage.setItem(STORAGE_KEY_PREFIX + this.name, JSON.stringify(payload));
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'ThompsonBandit.save'); }
     }
 
     reset() {
@@ -246,7 +247,7 @@ export class ThompsonBandit {
             if (typeof localStorage !== 'undefined') {
                 localStorage.removeItem(STORAGE_KEY_PREFIX + this.name);
             }
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'ThompsonBandit.reset'); }
     }
 
     /**

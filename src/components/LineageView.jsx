@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable react-refresh/only-export-components */
 /**
  * LineageView — SPEC-166: Painel Linhagem & Legado
  * Stitch v1.1 port (AKITA-390): match docs/stitch-designs/v1.1-all/82-lineageview-hall-de-lendas.html

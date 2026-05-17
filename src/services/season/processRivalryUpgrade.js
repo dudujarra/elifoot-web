@@ -30,8 +30,8 @@ export function processRivalryUpgrade(engine, team) {
       const history = engine.rivalryHistory[key];
       if (history.length < 3) continue;
       const [aIdStr, bIdStr] = key.split('_');
-      const aId = parseInt(aIdStr);
-      const bId = parseInt(bIdStr);
+      const aId = parseInt(aIdStr, 10);
+      const bId = parseInt(bIdStr, 10);
       if (aId !== team.id && bId !== team.id) continue;
       const rivalry = evaluateRivalry({
         clubAId: aId,

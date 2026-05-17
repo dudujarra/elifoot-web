@@ -6,7 +6,7 @@
  */
 
 import { EngineLogger } from '../../engine/EngineLogger.js';
-import { Engine } from '../../engine/engine.js';
+// import { Engine } from '../../engine/engine.js';
 import { createEngine } from '../../engine/engineFactory.js';
 import { setGlobalSeed } from '../../engine/rng.js';
 import { captureSnapshot, trackStreaks } from './SnapshotAPI.js';

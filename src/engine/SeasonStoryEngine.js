@@ -2,7 +2,7 @@
  * SPEC-150: Season Story Engine — gera resumo narrativo de cada temporada.
  * AUDIT-FIX #G: Adicionado sistema de arcos inter-temporada.
  */
-export function generateSeasonStory({ wins = 0, draws = 0, losses = 0, goalsFor = 0, goalsAgainst = 0,
+export function generateSeasonStory({ wins = 0, draws = 0, losses = 0, _goalsFor = 0, _goalsAgainst = 0,
     topScorer = null, longestWinStreak = 0, biggestWin = null, worstLoss = null,
     position = 10, promoted = false, relegated = false, division = 1, seasonNumber = 1,
     previousStories = [] } = {}) {

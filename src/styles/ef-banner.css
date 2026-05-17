@@ -31,7 +31,7 @@
   text-align: center;
   min-width: 320px;
   max-width: 600px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
 }
 
 .ef-banner__sprite {
@@ -48,7 +48,7 @@
   font-size: 32px;
   
   letter-spacing: 0.06em;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   text-shadow: 2px 2px 0 var(--color-shadow-deep);
 }
 
@@ -61,5 +61,5 @@
 .ef-banner__hint {
   margin-top: 20px;
   font-size: 10px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
 }

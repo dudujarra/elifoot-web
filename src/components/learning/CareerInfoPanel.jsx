@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * CareerInfoPanel — SPEC-124
  *
@@ -19,11 +20,11 @@ import {
 } from '@phosphor-icons/react';
 
 function RepIcon({ rep }) {
-    if (rep >= 80) return <Crown size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />;
-    if (rep >= 60) return <Star size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />;
-    if (rep >= 40) return <Sparkle size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />;
-    if (rep >= 20) return <ClipboardText size={12} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />;
-    return <Plant size={12} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />;
+    if (rep >= 80) return <Crown size={12} weight="fill" className="ef-icon-inline" />;
+    if (rep >= 60) return <Star size={12} weight="fill" className="ef-icon-inline" />;
+    if (rep >= 40) return <Sparkle size={12} weight="fill" className="ef-icon-inline" />;
+    if (rep >= 20) return <ClipboardText size={12} weight="bold" className="ef-icon-inline" />;
+    return <Plant size={12} weight="bold" className="ef-icon-inline" />;
 }
 
 const DIV_NAMES = { 1: 'Série A', 2: 'Série B', 3: 'Série C', 4: 'Série D' };
@@ -66,7 +67,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                 .slice(0, 5);
 
             // Build seasonHistory promotions/relegations
-            const transitions = [];
+            const _transitions = [];
             const seasonHistory = stats.seasonHistory || [];
             for (let i = 1; i < seasonHistory.length; i++) {
                 // Note: seasonHistory doesn't track division — derive from order
@@ -126,7 +127,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                     alignItems: 'center'
                 }}
             >
-                <span><SoccerBall size={14} weight="fill" style={{verticalAlign:'-2px',marginRight:'6px'}} />CARREIRA INFO {open ? '▼' : '▶'}</span>
+                <span><SoccerBall size={14} weight="fill" className="ef-icon-inline-md" />CARREIRA INFO {open ? '▼' : '▶'}</span>
                 <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                     Season {snapshot.seasonNumber} · Wk {snapshot.currentWeek}
                 </span>
@@ -144,32 +145,32 @@ export default function CareerInfoPanel({ controllerRef }) {
                         flexWrap: 'wrap'
                     }}>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>TIME</div>
+                            <div className="ef-text-sm-muted">TIME</div>
                             <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{snapshot.team.name}</div>
                             <div style={{ color: divColor, fontWeight: 700 }}>
                                 {divName} ({snapshot.zone})
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>POSIÇÃO</div>
+                            <div className="ef-text-sm-muted">POSIÇÃO</div>
                             <div style={{ fontWeight: 700, fontSize: '1.2rem', color: snapshot.position <= 4 ? 'var(--color-success-mid)' : snapshot.position >= 17 ? 'var(--danger)' : 'var(--accent)' }}>
                                 {snapshot.position}º
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>SQUAD</div>
+                            <div className="ef-text-sm-muted">SQUAD</div>
                             <div style={{ fontWeight: 700 }}>{snapshot.squadSize} jog · OVR {snapshot.avgOvr}</div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>BALANÇO</div>
+                            <div className="ef-text-sm-muted">BALANÇO</div>
                             <div style={{ fontWeight: 700, color: snapshot.balance < 0 ? 'var(--danger)' : 'var(--color-success-mid)' }}>
                                 R$ {(snapshot.balance / 1_000_000).toFixed(1)}M
                             </div>
                         </div>
                         <div>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>REPUTAÇÃO</div>
+                            <div className="ef-text-sm-muted">REPUTAÇÃO</div>
                             <div style={{ color: repBadge.color, fontWeight: 700 }}><RepIcon rep={snapshot.reputation} />{repBadge.label}</div>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{snapshot.reputation}/100</div>
+                            <div className="ef-text-sm-muted">{snapshot.reputation}/100</div>
                         </div>
                     </div>
 
@@ -181,18 +182,18 @@ export default function CareerInfoPanel({ controllerRef }) {
                             background: 'var(--color-shadow-deep)',
                             borderLeft: '3px solid var(--accent)',
                         }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                                <Crown size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />IDENTIDADE TÁTICA
+                            <div className="ef-text-xs-muted">
+                                <Crown size={12} weight="fill" className="ef-icon-inline" />IDENTIDADE TÁTICA
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.75rem' }}>
-                                <span style={{ color: 'var(--text-muted)' }}>Estilo:</span>
+                                <span className="ef-text-muted">Estilo:</span>
                                 <strong style={{ color: 'var(--accent)' }}>
                                     {snapshot.identity.dominantStyle}
                                     {snapshot.identity.styleConfidence > 0 && ` (${snapshot.identity.styleConfidence}%)`}
                                 </strong>
-                                <span style={{ color: 'var(--text-muted)' }}>Tier:</span>
+                                <span className="ef-text-muted">Tier:</span>
                                 <strong>{snapshot.identity.reputationTier}</strong>
-                                <span style={{ color: 'var(--text-muted)' }}>Destaque:</span>
+                                <span className="ef-text-muted">Destaque:</span>
                                 <span style={{ fontStyle: 'italic' }}>{snapshot.identity.careerHighlight}</span>
                             </div>
                         </div>
@@ -201,8 +202,8 @@ export default function CareerInfoPanel({ controllerRef }) {
                     {/* Titles + insights row */}
                     <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap' }}>
                         <div style={{ flex: 1, minWidth: '180px' }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                                <Trophy size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />TÍTULOS ({snapshot.titles.length})
+                            <div className="ef-text-xs-muted">
+                                <Trophy size={12} weight="fill" className="ef-icon-inline" />TÍTULOS ({snapshot.titles.length})
                             </div>
                             {snapshot.titles.length === 0 ? (
                                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
@@ -220,8 +221,8 @@ export default function CareerInfoPanel({ controllerRef }) {
                         </div>
 
                         <div style={{ flex: 1, minWidth: '180px' }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                                <ChartBar size={12} weight="bold" style={{verticalAlign:'-2px',marginRight:'4px'}} />INSIGHTS CARREIRA
+                            <div className="ef-text-xs-muted">
+                                <ChartBar size={12} weight="bold" className="ef-icon-inline" />INSIGHTS CARREIRA
                             </div>
                             <div style={{ fontSize: '0.7rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
                                 <span>Maior streak V:</span>
@@ -243,8 +244,8 @@ export default function CareerInfoPanel({ controllerRef }) {
                     {/* Top scorers */}
                     {snapshot.topScorers.length > 0 && (
                         <div style={{ marginTop: '8px' }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                                <SoccerBall size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />ARTILHEIROS (TEMPORADA ATUAL)
+                            <div className="ef-text-xs-muted">
+                                <SoccerBall size={12} weight="fill" className="ef-icon-inline" />ARTILHEIROS (TEMPORADA ATUAL)
                             </div>
                             <div style={{ background: 'var(--color-shadow-deep)', padding: '8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {/* Destaque o Top 1 com o Hexagon Chart */}
@@ -255,14 +256,14 @@ export default function CareerInfoPanel({ controllerRef }) {
                                             <HexagonChart player={snapshot.topScorers[0]} size={120} showLabels={true} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <div style={{ color: 'var(--accent)', fontSize: '0.7rem', fontWeight: 700, marginBottom: '4px' }}><Trophy size={11} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />DESTAQUE DA TEMPORADA</div>
+                                            <div style={{ color: 'var(--accent)', fontSize: '0.7rem', fontWeight: 700, marginBottom: '4px' }}><Trophy size={11} weight="fill" className="ef-icon-inline" />DESTAQUE DA TEMPORADA</div>
                                             <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)' }}>{snapshot.topScorers[0].name}</div>
                                             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
                                                 {snapshot.topScorers[0].position} · OVR {snapshot.topScorers[0].ovr}
                                             </div>
                                             <div style={{ fontSize: '0.8rem' }}>
                                                 <strong style={{ color: 'var(--color-success-mid)' }}>{snapshot.topScorers[0].goals}G</strong>{' '}
-                                                <span style={{ color: 'var(--text-muted)' }}>
+                                                <span className="ef-text-muted">
                                                     {snapshot.topScorers[0].assists}A · {snapshot.topScorers[0].apps}j
                                                 </span>
                                             </div>
@@ -285,12 +286,12 @@ export default function CareerInfoPanel({ controllerRef }) {
                                         borderBottom: i < snapshot.topScorers.length - 2 ? '1px solid var(--color-bg-deep)' : 'none'
                                     }}>
                                         <span>
-                                            <strong style={{ color: 'var(--text-muted)' }}>{i + 2}.</strong>{' '}
+                                            <strong className="ef-text-muted">{i + 2}.</strong>{' '}
                                             {p.name} ({p.position} · OVR {p.ovr})
                                         </span>
                                         <span>
                                             <strong style={{ color: 'var(--color-success-mid)' }}>{p.goals}G</strong>{' '}
-                                            <span style={{ color: 'var(--text-muted)' }}>
+                                            <span className="ef-text-muted">
                                                 {p.assists}A · {p.apps}j
                                             </span>
                                         </span>
@@ -303,8 +304,8 @@ export default function CareerInfoPanel({ controllerRef }) {
                     {/* Last seasons compact */}
                     {snapshot.seasons.length > 0 && (
                         <div style={{ marginTop: '8px' }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                                <Calendar size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />ÚLTIMAS {snapshot.seasons.length} TEMPORADAS
+                            <div className="ef-text-xs-muted">
+                                <Calendar size={12} weight="fill" className="ef-icon-inline" />ÚLTIMAS {snapshot.seasons.length} TEMPORADAS
                             </div>
                             <div style={{
                                 display: 'flex',

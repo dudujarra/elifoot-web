@@ -4,6 +4,7 @@
  * Converte results pra CSV/JSON downloadable.
  */
 
+import { EngineLogger } from '../../engine/EngineLogger.js';
 /**
  * CSV de batch results (1 linha por save).
  *
@@ -55,7 +56,8 @@ export function downloadFile(filename, content, mime = 'text/csv;charset=utf-8')
         a.click();
         URL.revokeObjectURL(url);
         return true;
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'Exporter.downloadFile');
         return false;
     }
 }

@@ -1,4 +1,5 @@
 import { rng as systemRng } from './rng.js';
+import { EngineLogger } from './EngineLogger.js';
 /**
  * InterruptEvents — SPEC-068
  *
@@ -140,7 +141,8 @@ export function pickInterruptEvent(engine, team) {
     const eligible = INTERRUPT_EVENTS.filter(ev => {
         try {
             return ev.trigger({ engine, team });
-        } catch {
+        } catch (err) {
+            EngineLogger.capture(err, 'InterruptEvents.trigger');
             return false;
         }
     });

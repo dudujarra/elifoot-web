@@ -1,4 +1,4 @@
-import { EngineLogger } from './EngineLogger.js';
+import { EngineLogger as _EngineLogger } from './EngineLogger.js';
 /**
  * ModLoader — SPEC-C4
  *

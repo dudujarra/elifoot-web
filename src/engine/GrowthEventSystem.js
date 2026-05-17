@@ -1,4 +1,5 @@
 import { rng as systemRng } from './rng.js';
+import { GROWTH, OVR, AGE } from './GameConstants.js';
 /**
  * GrowthEventSystem — SPEC-134: Progression Growth Events
  *
@@ -8,8 +9,8 @@ import { rng as systemRng } from './rng.js';
  * Stateless: recebe squad, retorna eventos + mutações a aplicar.
  */
 
-const OVR_FLOOR = 30;
-const OVR_CAP   = 99;
+const OVR_FLOOR = OVR.FLOOR;
+const OVR_CAP   = OVR.CAP;
 
 /**
  * Avalia squad e retorna growth events da semana.
@@ -22,12 +23,12 @@ const OVR_CAP   = 99;
  * @param {Array<string>} [opts.teamRecentResults=[]] — 'W'|'D'|'L' recentes
  * @returns {{ growthEvents: Array, newSquadOvrAvg: number }}
  */
-export function evaluateGrowth({ teamId, week, season, players, teamRecentResults = [] }) {
+export function evaluateGrowth({ teamId: _teamId, week: _week, season: _season, players, teamRecentResults = [] }) {
     const events = [];
     const seenPlayers = new Set();
 
-    const hotStreak = countTrailingWins(teamRecentResults) >= 5;
-    const primeGames = (p) => (p.gamesThisSeason || 0) >= 15;
+    const hotStreak = countTrailingWins(teamRecentResults) >= GROWTH.WINNING_STREAK_THRESHOLD;
+    const primeGames = (p) => (p.gamesThisSeason || 0) >= GROWTH.PRIME_GAMES_THRESHOLD;
 
     for (const player of players) {
         if (!player || player._retired || player.injury) continue;
@@ -37,7 +38,7 @@ export function evaluateGrowth({ teamId, week, season, players, teamRecentResult
         const pid = player.id;
 
         // Youth Breakthrough — sub-21, chance semanal
-        if (age < 21 && !seenPlayers.has(`${pid}-youth`) && systemRng() < 0.04) {
+        if (age < AGE.YOUTH_MAX && !seenPlayers.has(`${pid}-youth`) && systemRng() < GROWTH.YOUTH_BREAKTHROUGH_CHANCE) {
             const delta = 2 + Math.floor(systemRng() * 4); // +2 a +5
             const finalOvr = clamp(ovr + delta);
             events.push({
@@ -53,7 +54,7 @@ export function evaluateGrowth({ teamId, week, season, players, teamRecentResult
         }
 
         // Hot Streak — forma excelente temporal
-        if (hotStreak && !seenPlayers.has(`${pid}-hot`) && systemRng() < 0.06) {
+        if (hotStreak && !seenPlayers.has(`${pid}-hot`) && systemRng() < GROWTH.HOT_STREAK_CHANCE) {
             events.push({
                 type: 'hot_streak',
                 playerId: pid,
@@ -62,13 +63,13 @@ export function evaluateGrowth({ teamId, week, season, players, teamRecentResult
                 permanent: false,
                 duration: 4,
                 narrativeTag: 'FORM_HOT_STREAK',
-                apply: () => { player._hotStreakBonus = 3; player._hotStreakWeeks = 4; },
+                apply: () => { player._hotStreakBonus = 3; player._hotStreakWeeks = GROWTH.HOT_STREAK_DURATION; },
             });
             seenPlayers.add(`${pid}-hot`);
         }
 
         // Peak Season — prime years, bom volume de jogos
-        if (age >= 23 && age <= 27 && primeGames(player) && !seenPlayers.has(`${pid}-peak`) && systemRng() < 0.08) {
+        if (age >= AGE.PRIME_START && age <= AGE.PRIME_END && primeGames(player) && !seenPlayers.has(`${pid}-peak`) && systemRng() < GROWTH.PEAK_SEASON_CHANCE) {
             const finalOvr = clamp(ovr + 1);
             events.push({
                 type: 'peak_season',
@@ -83,7 +84,7 @@ export function evaluateGrowth({ teamId, week, season, players, teamRecentResult
         }
 
         // Decline — veteranos
-        if (age >= 32 && !seenPlayers.has(`${pid}-decline`) && systemRng() < (age - 30) * 0.03) {
+        if (age >= AGE.VETERAN_START && !seenPlayers.has(`${pid}-decline`) && systemRng() < (age - 30) * 0.03) {
             const finalOvr = Math.max(OVR_FLOOR, ovr - 1);
             events.push({
                 type: 'decline',
@@ -99,7 +100,7 @@ export function evaluateGrowth({ teamId, week, season, players, teamRecentResult
 
         // Training Breakthrough — jogadores com muitos treinos
         const trainCount = player._recentTrainCount || 0;
-        if (trainCount >= 4 && !seenPlayers.has(`${pid}-train`) && systemRng() < 0.12) {
+        if (trainCount >= 4 && !seenPlayers.has(`${pid}-train`) && systemRng() < GROWTH.TRAINING_BREAKTHROUGH_CHANCE) {
             const finalOvr = clamp(ovr + 2);
             events.push({
                 type: 'training_breakthrough',

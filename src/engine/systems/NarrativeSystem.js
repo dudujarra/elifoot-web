@@ -5,7 +5,7 @@ import { rng } from '../rng.js';
  * Cada contexto tem 25-30 templates. Sem repetição perceptível em soak tests longos.
  * Adiciona contexto 'derby_week' para semanas de clássico.
  */
-export const NARRATIVES_BY_CONTEXT = {
+const NARRATIVES_BY_CONTEXT = {
     moral_high: [
         '🎉 Clima excelente no vestiário! Elenco em alta.',
         '💪 Semana de treinos intensa. Time focado.',
@@ -167,7 +167,7 @@ export const NARRATIVES_BY_CONTEXT = {
  * @returns {string}
  */
 export function pickNarrative(ctx) {
-    const { position = 10, totalTeams = 20, moral = 50, streak = 0 } = ctx;
+    const { position = 10, totalTeams = 20, moral = 50, _streak = 0 } = ctx;
     let key;
     if (moral > 65 && position <= 3) {
         key = 'title_race';

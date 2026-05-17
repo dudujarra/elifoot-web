@@ -25,7 +25,7 @@ export function analyzeMatch({
     tacticUsed = 'Normal',
     formationUsed = '4-3-3',
     opponentStyle = 'Normal',
-    recentForm = [],
+    _recentForm = [],
     subsUsed = 0,
 } = {}) {
     const ourGoals = result.isHomeTeam ? (result.homeGoals || 0) : (result.awayGoals || 0);

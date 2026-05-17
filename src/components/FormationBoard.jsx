@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useState, useEffect, useRef } from 'react';
-import { FORMATION_PRESETS, getPreset, FORMATION_KEYS } from '../engine/FormationLayout';
+import { getPreset, FORMATION_KEYS } from '../engine/FormationLayout';
 import { EfTooltip, EfButton } from './ui';
 import { ArrowsClockwise, FloppyDisk } from '@phosphor-icons/react';
 import '../styles/formation-board.css';
@@ -151,7 +152,7 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                         const isDragging = draggedSlot === Number(slotIdx);
                         const isGk = pos.role === 'GOL';
                         const fillColor = isGk ? 'var(--ef-form-jersey-gold)' : 'var(--ef-form-jersey-blue)';
-                        const strokeColor = isGk ? 'var(--ef-form-jersey-stroke-gold)' : 'var(--ef-form-jersey-stroke-blue)';
+                        const _strokeColor = isGk ? 'var(--ef-form-jersey-stroke-gold)' : 'var(--ef-form-jersey-stroke-blue)';
 
                         return (
                             <g

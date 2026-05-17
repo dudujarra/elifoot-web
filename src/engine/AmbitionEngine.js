@@ -18,6 +18,7 @@
  */
 
 import { rng as systemRng } from './rng.js';
+import { SATISFACTION, MORALE, AGE, OVR, MARKET } from './GameConstants.js';
 
 // ============================================================
 // CLUB PRESTIGE
@@ -45,7 +46,7 @@ export function calcPrestige(team) {
     const avgOvr = team.squad && team.squad.length > 0
         ? team.squad.reduce((s, p) => s + (p.ovr || 50), 0) / team.squad.length
         : 50;
-    const squadBonus = avgOvr >= 80 ? 10 : avgOvr >= 70 ? 6 : avgOvr >= 60 ? 3 : 0;
+    const squadBonus = avgOvr >= OVR.ELITE ? 10 : avgOvr >= OVR.GOOD ? 6 : avgOvr >= OVR.DECENT ? 3 : 0;
 
     return Math.min(100, Math.max(0, Math.floor(base + budgetBonus + stadiumBonus + squadBonus)));
 }
@@ -95,16 +96,16 @@ export function calcSatisfaction(player, team) {
 
     // Modificadores contextuais
     if (player.isTitular) satisfaction += 8;
-    if ((player.moral || 50) > 75) satisfaction += 5;
-    if ((player.moral || 50) < 30) satisfaction -= 10;
+    if ((player.moral || MORALE.DEFAULT) > MORALE.HIGH) satisfaction += 5;
+    if ((player.moral || MORALE.DEFAULT) < MORALE.CRISIS) satisfaction -= 10;
     if (player.form?.trend === 'hot') satisfaction += 5;
     if (player.form?.trend === 'cold') satisfaction -= 3;
 
     // Jogadores jovens são mais pacientes (querem crescer)
-    if ((player.age || 25) < 22) satisfaction += 10;
+    if ((player.age || AGE.DEFAULT) < AGE.YOUTH_BONUS) satisfaction += 10;
 
     // Jogadores muito velhos são mais conformados
-    if ((player.age || 25) > 33) satisfaction += 8;
+    if ((player.age || AGE.DEFAULT) > AGE.VETERAN_BONUS) satisfaction += 8;
 
     // Lealdade por tempo: +2 por temporada no clube (max +10)
     const seasonsAtClub = player._seasonsAtClub || 0;
@@ -143,12 +144,12 @@ export function processAmbitionWeekly(team) {
         player._satisfaction = sat;
 
         // Insatisfeito: moral decai
-        if (sat < 30) {
-            const moralDrop = sat < 15 ? 5 : 3;
+        if (sat < SATISFACTION.CRISIS) {
+            const moralDrop = sat < SATISFACTION.REBELLION ? 5 : 3;
             player.moral = Math.max(5, (player.moral || 50) - moralDrop);
 
             // Transfer request trigger (probabilístico por semana)
-            if (!player._transferRequested && sat < 25) {
+            if (!player._transferRequested && sat < SATISFACTION.TRANSFER_REQ) {
                 // Chance cresce conforme satisfaction diminui: sat 0 = 25%, sat 25 = 0%
                 const requestChance = (25 - sat) * 0.01;
                 if (systemRng() < requestChance) {
@@ -170,7 +171,7 @@ export function processAmbitionWeekly(team) {
             }
 
             // Dressing room influence: jogador insatisfeito contamina colegas próximos
-            if (sat < 15 && player.ovr >= 75) {
+            if (sat < SATISFACTION.REBELLION && player.ovr >= OVR.STAR) {
                 events.push({
                     type: 'dressing_room_unrest',
                     playerId: player.id,
@@ -181,12 +182,12 @@ export function processAmbitionWeekly(team) {
         }
 
         // Satisfeito: moral recupera
-        if (sat > 70) {
+        if (sat > SATISFACTION.HAPPY) {
             player.moral = Math.min(100, (player.moral || 50) + 1);
         }
 
         // Se estava pedindo transferência mas agora está satisfeito, retira pedido
-        if (player._transferRequested && sat > 60) {
+        if (player._transferRequested && sat > SATISFACTION.WITHDRAW_REQ) {
             player._transferRequested = false;
             delete player._transferRequestReason;
             events.push({
@@ -236,7 +237,7 @@ export function onRelegation(team, fromDiv, toDiv) {
         if (ambition > team._prestige + 15) {
             player._transferRequested = true;
             player._relegationClause = true;
-            player._relegationClauseValue = Math.floor((player.value || player.marketValue || 1_000_000) * 0.40);
+            player._relegationClauseValue = Math.floor((player.value || player.marketValue || 1_000_000) * MARKET.RELEGATION_CLAUSE_RATE);
             player.moral = Math.max(10, (player.moral || 50) - 30);
             player._transferRequestReason = `Não aceito jogar na ${divName}.`;
 
@@ -262,7 +263,7 @@ export function onRelegation(team, fromDiv, toDiv) {
     }
 
     // Wage reduction automático (real football: 30-50% cut)
-    const wageReduction = 0.65; // reduz para 65% do salário
+    const wageReduction = MARKET.WAGE_REDUCTION_RELEGATION;
     for (const player of team.squad || []) {
         player.salary = Math.floor((player.salary || 5000) * wageReduction);
     }

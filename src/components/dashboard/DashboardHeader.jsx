@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * DashboardHeader — Stitch refactor (zero inline styles funcionais).
  *
@@ -30,9 +31,9 @@ export function DashboardHeader({ team, stats, boardStatus, board, balance, seas
                         <span className="ef-dash-header-meta">
                             {stats.position}º · Série {['A','B','C','D'][division - 1]} · {stats.wins}V {stats.draws}E {stats.losses}D
                             {stats.streak > 0 ? (
-                                <> <Flame size={12} weight="fill" style={{verticalAlign:'-2px'}} />{stats.streak}</>
+                                <> <Flame size={12} weight="fill" className="ef-icon-bare" />{stats.streak}</>
                             ) : stats.streak < 0 ? (
-                                <> <Snowflake size={12} weight="bold" style={{verticalAlign:'-2px'}} />{Math.abs(stats.streak)}</>
+                                <> <Snowflake size={12} weight="bold" className="ef-icon-bare" />{Math.abs(stats.streak)}</>
                             ) : null}
                         </span>
                     </div>

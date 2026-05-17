@@ -118,7 +118,7 @@ export function UnlockTooltip({ viewId, onDismiss }) {
             </div>
             <div className="unlock-tooltip__content">
                 <strong className="unlock-tooltip__title">
-                    <LockKey size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px'}} />
+                    <LockKey size={12} weight="fill" className="ef-icon-inline" />
                     {tip.title}
                 </strong>
                 <p className="unlock-tooltip__text">{tip.tip}</p>

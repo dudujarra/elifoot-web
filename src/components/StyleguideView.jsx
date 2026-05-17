@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { EfButton, EfCardPlayer, EfTooltip, EfModal, EfInput } from './ui';

@@ -226,7 +226,7 @@ export function ageSquad(squad) {
 
 
 
-function recalcOvr(player) {
+function _recalcOvr(player) {
     ensureAttributes(player); // SCHEMA-UNIFIED: guard root-level attrs
     // Weighted OVR por posição usando schema unificado 38 atributos
     const macroPos = ['GOL', 'DEF', 'MEI', 'ATA'].includes(player.position) ? player.position : 'MEI';

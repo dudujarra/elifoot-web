@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfBanner — full-screen narrative moment overlay.
  */

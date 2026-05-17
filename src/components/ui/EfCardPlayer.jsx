@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfCardPlayer — Stitch component
  *
@@ -47,7 +48,7 @@ export function EfCardPlayer({
     if (!player) return null;
 
     const isCol = layout === 'column';
-    const posColor = POSITION_COLOR[player.position] || 'var(--surface-border)';
+    const _posColor = POSITION_COLOR[player.position] || 'var(--surface-border)';
 
     return (
         <div

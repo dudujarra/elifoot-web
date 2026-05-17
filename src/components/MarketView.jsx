@@ -1,8 +1,8 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useState, useMemo, useCallback } from 'react';
 import { useGame } from '../context/GameContext';
 import { SCOUT_REGIONS } from '../engine/StadiumSystem';
 import { PlayerAvatar } from '../utils/avatar';
-import { Tooltip } from './Tooltip';
 import { EfClubBadge } from './ui/EfClubBadge';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';

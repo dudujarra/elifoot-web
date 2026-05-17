@@ -3,6 +3,7 @@
  * AKITA-011 + AKITA-012 consolidados
  */
 
+import { REPUTATION } from './EmojiConstants.js';
 // ============================================================
 // PATROCÍNIO
 // ============================================================
@@ -146,10 +147,10 @@ export class ManagerLegacy {
     }
 
     getLevel() {
-        if (this.reputation >= 80) return { label: "Lendário", emoji: "👑" };
-        if (this.reputation >= 60) return { label: "Renomado", emoji: "⭐" };
-        if (this.reputation >= 40) return { label: "Reconhecido", emoji: "📈" };
-        if (this.reputation >= 20) return { label: "Iniciante", emoji: "🌱" };
-        return { label: "Desconhecido", emoji: "❓" };
+        if (this.reputation >= 80) return { label: "Lendário", emoji: REPUTATION.LEGENDARY };
+        if (this.reputation >= 60) return { label: "Renomado", emoji: REPUTATION.RENOWNED };
+        if (this.reputation >= 40) return { label: "Reconhecido", emoji: REPUTATION.RECOGNIZED };
+        if (this.reputation >= 20) return { label: "Iniciante", emoji: REPUTATION.BEGINNER };
+        return { label: "Desconhecido", emoji: REPUTATION.UNKNOWN };
     }
 }

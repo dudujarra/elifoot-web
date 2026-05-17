@@ -30,7 +30,7 @@ const CHALLENGE_TYPES = {
  * @param {number} [opts.upcomingRivalWeek=-1] — week of next big rival match
  * @returns {{ challengeAvailable, challenge? }}
  */
-export function evaluate({ managerId = 0, currentClubId = 0, season = 1, week = 1, managerReputation = 10, managerAvailable = true, clubsInRelegationZone = [], historicClubsInLowerDivisions = [], upcomingRivalWeek = -1 } = {}) {
+export function evaluate({ _managerId = 0, currentClubId = 0, season = 1, week = 1, managerReputation = 10, _managerAvailable = true, clubsInRelegationZone = [], historicClubsInLowerDivisions = [], upcomingRivalWeek = -1 } = {}) {
     // Challenges only from season 2 onward (player needs to establish themselves)
     if (season < 2) return { challengeAvailable: false };
 
@@ -84,7 +84,7 @@ export function accept(challenge) {
  * @param {number} [opts.currentReputation=10]
  * @returns {{ reputationDelta, narrativeTitle, outcome }}
  */
-export function complete({ challengeType, success, currentReputation = 10 } = {}) {
+export function complete({ challengeType, success, _currentReputation = 10 } = {}) {
     const cfg = CHALLENGE_TYPES[challengeType] || CHALLENGE_TYPES.style_duel;
     if (success) {
         return {

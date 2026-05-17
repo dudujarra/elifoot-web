@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { CheckCircle, ChartBar, SoccerBall, Cardholder, FirstAid, MicrophoneStage, Shield } from '@phosphor-icons/react';
 import { EfClubBadge, EfBanner } from '../ui';
 import { TACTICS } from '../../engine/ManagerSystems';

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * Sidebar — SPEC-099 Persistent Nav
  *

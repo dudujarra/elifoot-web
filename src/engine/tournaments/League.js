@@ -29,7 +29,7 @@ export class League extends Tournament {
         for (let round = 0; round < rounds; round++) {
             const matches = [];
             const isSecondHalf = round >= (n - 1);
-            const r = round % (n - 1);
+            const _r = round % (n - 1);
             const current = [fixed, ...rotating];
 
             for (let i = 0; i < n / 2; i++) {

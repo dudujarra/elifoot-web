@@ -8,6 +8,7 @@
  */
 
 const STORAGE_PREFIX = 'olefut_onboarding_seen_';
+import { EngineLogger } from './EngineLogger.js';
 
 export const ONBOARDING_BY_VIEW = {
     market: {
@@ -87,7 +88,8 @@ export function hasOnboardingPending(viewId) {
     if (typeof localStorage === 'undefined') return false;
     try {
         return localStorage.getItem(STORAGE_PREFIX + viewId) !== 'true';
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'OnboardingTriggers.hasOnboardingPending');
         return false;
     }
 }
@@ -111,7 +113,7 @@ export function markOnboardingSeen(viewId) {
     if (typeof localStorage === 'undefined') return;
     try {
         localStorage.setItem(STORAGE_PREFIX + viewId, 'true');
-    } catch { /* noop */ }
+    } catch (err) { EngineLogger.capture(err, 'OnboardingTriggers.markOnboardingSeen'); }
 }
 
 /**
@@ -126,7 +128,7 @@ export function resetAllOnboarding() {
         // also reset main onboarding
         localStorage.removeItem('olefut_onboarding_done');
         localStorage.removeItem('olefut_onboarding_step');
-    } catch { /* noop */ }
+    } catch (err) { EngineLogger.capture(err, 'OnboardingTriggers.resetAllOnboarding'); }
 }
 
 /**
@@ -143,7 +145,7 @@ export function getSeenViews() {
                 seen.push(viewId);
             }
         });
-    } catch { /* noop */ }
+    } catch (err) { EngineLogger.capture(err, 'OnboardingTriggers.getSeenViews'); }
     return seen;
 }
 

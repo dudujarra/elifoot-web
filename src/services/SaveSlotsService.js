@@ -26,7 +26,8 @@ export function listSaveSlots() {
                 savedAt: m.savedAt || new Date().toISOString(),
                 size: raw.length
             };
-        } catch {
+        } catch (err) {
+            EngineLogger.capture(err, 'SaveSlotsService.listSaveSlots.parse');
             return { slot: i + 1, empty: true, corrupted: true };
         }
     });
@@ -56,7 +57,8 @@ export function saveToSlot(slotNum, gameState, engine) {
         };
         localStorage.setItem(META_KEY, JSON.stringify(meta));
         return true;
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'SaveSlotsService.saveToSlot');
         return false;
     }
 }
@@ -68,7 +70,8 @@ export function loadFromSlot(slotNum) {
     if (!raw) return null;
     try {
         return JSON.parse(raw);
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'SaveSlotsService.loadFromSlot');
         return null;
     }
 }
@@ -81,7 +84,8 @@ export function deleteSlot(slotNum) {
         delete meta[slotNum - 1];
         localStorage.setItem(META_KEY, JSON.stringify(meta));
         return true;
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'SaveSlotsService.deleteSlot');
         return false;
     }
 }
@@ -124,14 +128,15 @@ export function importJSONToSlot(slotNum, file) {
 
 function safeGet(key) {
     try { return localStorage.getItem(key); }
-    catch { return null; }
+    catch (err) { EngineLogger.capture(err, 'SaveSlotsService.safeGet'); return null; }
 }
 
 function readMeta() {
     try {
         const raw = localStorage.getItem(META_KEY);
         return raw ? JSON.parse(raw) : {};
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'SaveSlotsService.readMeta');
         return {};
     }
 }

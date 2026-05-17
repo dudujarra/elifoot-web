@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfButton — SNES 16-bit Brutalist Arcade
  *

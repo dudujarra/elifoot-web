@@ -41,7 +41,8 @@ function loadEntries() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         _entries = raw ? JSON.parse(raw) : [];
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'MonitorService.loadEntries');
         _entries = [];
     }
     return _entries;
@@ -142,7 +143,7 @@ export class MonitorService {
                             }
                         });
                     }
-                } catch { /* ignore */ }
+                } catch (err) { EngineLogger.capture(err, 'MonitorService.perfSnapshot'); }
             }, 60000);
         }
 
@@ -319,8 +320,8 @@ export class MonitorService {
         _entries = [];
         try {
             localStorage.removeItem(STORAGE_KEY);
-        } catch {
-            // ignore
+        } catch (err) {
+            EngineLogger.capture(err, 'MonitorService.clear');
         }
     }
 

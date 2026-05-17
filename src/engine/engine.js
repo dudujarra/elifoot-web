@@ -89,7 +89,7 @@ export class Engine {
     }
 
     getTeam(id) {
-        return this.teams.find(t => t.id === parseInt(id));
+        return this.teams.find(t => t.id === parseInt(id, 10));
     }
 
     getTournament(id) {
@@ -310,7 +310,7 @@ export class Engine {
     // PLAYER MODE — minimal inline (2 methods)
     // ================================================================
 
-    registerPlayerGoal(type) {
+    registerPlayerGoal(_type) {
         if (!this.proPlayer) return;
         this.proPlayer.seasonGoals++;
     }

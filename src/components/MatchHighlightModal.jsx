@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable react-refresh/only-export-components */
 /**
  * MatchHighlightModal — SPEC-F1.1
  *

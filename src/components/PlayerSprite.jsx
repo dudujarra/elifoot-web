@@ -1,4 +1,4 @@
-import React from 'react';
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import './PlayerSprite.css';
 
 /**

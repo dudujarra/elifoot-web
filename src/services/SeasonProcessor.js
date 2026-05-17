@@ -55,6 +55,9 @@ export class SeasonProcessor {
     const standings = engine.getStandings(team.zone, team.division);
     const pos = standings.findIndex(s => s.teamId === team.id) + 1 || standings.length;
 
+    // Defensive initialization to prevent undefined push error
+    engine.weekEvents = engine.weekEvents || [];
+
     // Legacy: titles + reputation
     processLegacy(engine, team, standings, pos);
 
@@ -81,7 +84,7 @@ export class SeasonProcessor {
     if (engine.marketPlayers && engine.marketPlayers.length > 0) {
       const marketAgeEvents = ageSquad(engine.marketPlayers);
       // Remove retired market players and replenish
-      const retiredIds = marketAgeEvents.filter(e => typeof e === 'string' && e.includes('aposentou')).length;
+      const _retiredIds = marketAgeEvents.filter(e => typeof e === 'string' && e.includes('aposentou')).length;
       engine.marketPlayers = engine.marketPlayers.filter(p => !p._retired);
       // Replenish pool to maintain 20 players
       if (typeof engine.generateMarket === 'function' && engine.marketPlayers.length < 15) {
@@ -349,7 +352,7 @@ export class SeasonProcessor {
           if (t.id && /_\d+$/.test(t.id)) {
             const lastUnder = t.id.lastIndexOf('_');
             const zone = t.id.substring(0, lastUnder);
-            const div = parseInt(t.id.substring(lastUnder + 1));
+            const div = parseInt(t.id.substring(lastUnder + 1), 10);
             if (zone && !isNaN(div) && div >= 1 && div <= 4) {
               teamIds = engine.teams.filter(tm => tm.zone === zone && tm.division === div).map(tm => tm.id);
             }

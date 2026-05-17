@@ -1,5 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { Engine } from '../engine/engine';
+import { useNavigate, useLocation } from 'react-router-dom';
+// import { Engine } from '../engine/engine';
 import { createEngine } from '../engine/engineFactory.js';
 import { Tournament } from '../engine/tournaments/Tournament';
 import { League } from '../engine/tournaments/League';
@@ -13,6 +15,31 @@ import { getUnifiedView } from '../engine/UnifiedModeBridge';
 const GameContext = createContext();
 
 export const useGame = () => useContext(GameContext);
+
+// View name → URL path mapping (bidirectional via PATH_TO_VIEW)
+const VIEW_TO_PATH = {
+    start: '/',
+    dashboard: '/dashboard',
+    player_dashboard: '/player-dashboard',
+    player_match: '/player-match',
+    match: '/match',
+    squad: '/squad',
+    market: '/market',
+    standings: '/standings',
+    monitor: '/monitor',
+    styleguide: '/styleguide',
+    achievements: '/achievements',
+    tutorial: '/tutorial',
+    press: '/press',
+    shop: '/shop',
+    autoplay: '/autoplay',
+    saves: '/saves',
+    rivalries: '/rivalries',
+    chronicle: '/chronicle',
+    lineage: '/lineage',
+    autoplaylab: '/autoplay-lab',
+};
+const PATH_TO_VIEW = Object.fromEntries(Object.entries(VIEW_TO_PATH).map(([k, v]) => [v, k]));
 
 // AKITA-RFCT-017: SAVE_VERSION bumped 1 → 3 (FIM v1.0.5 refactor).
 // AKITA-050 (v1.0.7): SAVE_VERSION 3 → 4 (Camada 2 events array foundation).
@@ -142,7 +169,7 @@ function serializeEngine(engine) {
     if (Array.isArray(safe.teams)) {
         safe.teams = safe.teams.map(t => {
             if (!t) return t;
-            const { brain, _lastTacticDecision, _aiDirectorState, ...clean } = t;
+            const { _brain, _lastTacticDecision, _aiDirectorState, ...clean } = t;
             return clean;
         });
     }
@@ -264,6 +291,17 @@ export const GameProvider = ({ children }) => {
         }
     }, [gameState]);
 
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Sync URL → gameState.view on popstate (browser back/forward)
+    useEffect(() => {
+        const viewFromUrl = PATH_TO_VIEW[location.pathname];
+        if (viewFromUrl && viewFromUrl !== gameState.view) {
+            setGameState(prev => ({ ...prev, view: viewFromUrl }));
+        }
+    }, [location.pathname]);
+
     // SPEC-169: handlers memoizados pra evitar invalidação do context value
     // a cada render. gameState.mode/view só são lidos onde mudam.
     const startGame = useCallback((name, teamId, scenario = 'livre', mode = 'manager', position = 'ATA', personality = 'maverick') => {
@@ -279,14 +317,16 @@ export const GameProvider = ({ children }) => {
             // Re-instrument após initGame (alguns métodos podem ter sido reset)
             MonitorService.getInstance().instrumentEngine(engineRef.current);
         } catch { /* ignore */ }
+        const initialView = mode === 'player' ? 'player_dashboard' : 'dashboard';
         setGameState({
             started: true,
-            view: mode === 'player' ? 'player_dashboard' : 'dashboard',
+            view: initialView,
             manager: name,
             teamId,
             mode
         });
-    }, []);
+        navigate(VIEW_TO_PATH[initialView] || '/dashboard');
+    }, [navigate]);
 
     const changeView = useCallback((view) => {
         setGameState(prev => {
@@ -298,7 +338,8 @@ export const GameProvider = ({ children }) => {
             } catch { /* ignore */ }
             return { ...prev, view };
         });
-    }, []);
+        navigate(VIEW_TO_PATH[view] || '/');
+    }, [navigate]);
 
     // BUG-022 fix: mode-aware dashboard route (avoid player→manager unintended switch)
     const getDashboardView = useCallback(
@@ -311,7 +352,8 @@ export const GameProvider = ({ children }) => {
         clearStorage();
         engineRef.current = createEngine();
         setGameState({ started: false, view: 'start', manager: '', teamId: null, mode: 'manager' });
-    }, []);
+        navigate('/');
+    }, [navigate]);
 
     const getEngine = useCallback(() => engineRef.current, []);
 

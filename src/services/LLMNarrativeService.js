@@ -26,7 +26,8 @@ function readPersistedToggle() {
     try {
         if (typeof localStorage === 'undefined') return false;
         return localStorage.getItem(LLM_TOGGLE_STORAGE_KEY) === '1';
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'LLMNarrativeService.readPersistedToggle');
         return false;
     }
 }
@@ -36,8 +37,8 @@ function writePersistedToggle(enabled) {
         if (typeof localStorage === 'undefined') return;
         if (enabled) localStorage.setItem(LLM_TOGGLE_STORAGE_KEY, '1');
         else localStorage.removeItem(LLM_TOGGLE_STORAGE_KEY);
-    } catch {
-        // Storage may be blocked (private mode, quota); ignore — runtime flag still works.
+    } catch (err) {
+        EngineLogger.capture(err, 'LLMNarrativeService.writePersistedToggle');
     }
 }
 
@@ -411,7 +412,7 @@ export class LLMNarrativeService {
     getLLMStatus() {
         let bridgeStatus = null;
         if (this._bridge && typeof this._bridge.status === 'function') {
-            try { bridgeStatus = this._bridge.status(); } catch { bridgeStatus = null; }
+            try { bridgeStatus = this._bridge.status(); } catch (err) { EngineLogger.capture(err, 'LLMNarrativeService.getLLMStatus'); bridgeStatus = null; }
         }
         return {
             enabled: !!this._enableLLM,
@@ -494,7 +495,8 @@ export class LLMNarrativeService {
         let fallbackText;
         try {
             fallbackText = buildFallback();
-        } catch {
+        } catch (err) {
+            EngineLogger.capture(err, 'LLMNarrativeService.buildFallback');
             fallbackText = 'A equipe segue trabalhando. Em breve mais novidades.';
         }
         if (!fallbackText || fallbackText.length < 20) {
@@ -515,8 +517,8 @@ export class LLMNarrativeService {
                     source = raceResult.value.source === 'webllm' ? 'webllm' : 'template';
                 }
                 // If timeout/error/short reply, stay with fallback
-            } catch {
-                // Swallow — fallback already set
+            } catch (err) {
+                EngineLogger.capture(err, 'LLMNarrativeService.bridgeDecide');
             }
         }
 
@@ -535,7 +537,8 @@ export class LLMNarrativeService {
         try {
             const s = this._bridge.status();
             return s && s.mode === 'webllm' && s.loadStatus === 'ready';
-        } catch {
+        } catch (err) {
+            EngineLogger.capture(err, 'LLMNarrativeService.isBridgeReady');
             return false;
         }
     }

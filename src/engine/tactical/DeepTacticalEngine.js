@@ -5,11 +5,11 @@
  */
 
 import { SpatialGrid } from './SpatialGrid.js';
-import { getEffectiveRoleQuality } from './RoleTaxonomy.js';
+import { getEffectiveRoleQuality as _getEffectiveRoleQuality } from './RoleTaxonomy.js';
 import { getFormationMultipliers, mapFormationToKey } from './FormationMatrix.js';
 import { resolveGenericDuel } from './DuelResolver.js';
-import { calculateShotxG, resolveShot } from './xGEngine.js';
-import { applyFatigue, calculateFitnessDecayPerMinute, applyTacticalFamiliarity, applyMoraleAndForm } from './FatigueFamiliarity.js';
+import { calculateShotxG, resolveShot as _resolveShot } from './xGEngine.js';
+import { applyFatigue as _applyFatigue, calculateFitnessDecayPerMinute as _calculateFitnessDecayPerMinute, applyTacticalFamiliarity as _applyTacticalFamiliarity, applyMoraleAndForm as _applyMoraleAndForm } from './FatigueFamiliarity.js';
 
 export class DeepTacticalEngine {
     constructor() {
@@ -91,7 +91,8 @@ export class DeepTacticalEngine {
         return event;
     }
 
-    attemptShot(team, squad) {
+    attemptShot(team, _squad) {
+        // eslint-disable-next-line no-useless-assignment -- xG is used on lines 99, 103, 112
         let xG = 0;
         // In a real scenario, we find the specific player in the zone. 
         // For now, we compute xG based on zone and return the chance to the simulator.

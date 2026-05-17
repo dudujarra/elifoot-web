@@ -4,6 +4,7 @@ import { MatchCardsDEF } from './decks/MatchCardsDEF';
 import { MatchCardsGOL } from './decks/MatchCardsGOL';
 
 import { rng as systemRng } from './rng.js';
+import { EngineLogger } from './EngineLogger.js';
 import { getAtmosphere } from './BrazilianAtmosphere.js';
 
 export const MatchEventsDeck = {
@@ -23,7 +24,7 @@ const TIER_WEIGHTS = { common: 60, uncommon: 25, rare: 12, legendary: 3 };
  * @param {string} personality - maverick|virtuoso|heartbeat (future filter)
  * @returns {object|null} A card object or null
  */
-export function drawCard(position, renown = 0, personality = null) {
+export function drawCard(position, renown = 0, _personality = null) {
     const deck = MatchEventsDeck[position];
     if (!deck || deck.length === 0) return null;
 
@@ -67,7 +68,8 @@ export function enrichCardWithAtmosphere(card, eventType, seed = 0) {
             text: `${atmo.flavorString} ${card.text || ''}`.trim(),
             _atmosphereApplied: eventType,
         };
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'MatchEventsDeck.enrichAtmosphere');
         return card;
     }
 }

@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
+/* eslint-disable react-refresh/only-export-components */
 /**
  * MatchBallSprite — SPEC-B1.3
  *

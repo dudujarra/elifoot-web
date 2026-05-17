@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable react-refresh/only-export-components */
 /**
  * MidMatchCardModal — SPEC-B2.2
  *

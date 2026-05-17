@@ -496,7 +496,7 @@
   padding: 4px 10px;
   background: var(--ef-ap-bg-deep);
   border: 1px solid var(--ef-ap-success-green);
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 0.5rem;
   color: var(--primary, #39FF14);
   
@@ -579,7 +579,7 @@
 }
 
 .ef-ap__bento-label {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 0.45rem;
   letter-spacing: 0.06em;
   color: var(--ef-ap-info-grey);
@@ -588,7 +588,7 @@
 }
 
 .ef-ap__bento-value {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   line-height: 1.2;
   color: var(--primary, #39FF14);
@@ -611,7 +611,7 @@
 }
 
 .ef-ap__bento-tag {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.55rem;
   padding: 2px 5px;
   font-weight: 700;
@@ -640,7 +640,7 @@
   background: rgba(27, 67, 50, 0.5);
   border: 1px solid var(--ef-ap-forest-success);
   color: var(--ef-ap-info-grey);
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 0.45rem;
   letter-spacing: 0.04em;
   cursor: pointer;

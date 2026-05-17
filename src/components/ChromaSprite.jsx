@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 
+import { useRef, useState, useEffect } from 'react';
 export default function ChromaSprite({ 
     src, 
     actionRow = 0, 

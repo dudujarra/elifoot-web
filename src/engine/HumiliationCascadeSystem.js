@@ -21,7 +21,7 @@
  * @param {boolean} [opts.isPlayerManager=true]
  * @returns {{ humiliationLevel, cascadeEvents, survivalNarrative }}
  */
-export function evaluate({ teamId = 0, managerId = 0, scoreDiff = 0, homeOrAway = 'home', week = 1, season = 1, managerTension = 50, isPlayerManager = true } = {}) {
+export function evaluate({ teamId: _teamId = 0, managerId: _managerId = 0, scoreDiff = 0, homeOrAway: _homeOrAway = 'home', week: _week = 1, season: _season = 1, managerTension: _managerTension = 50, isPlayerManager: _isPlayerManager = true } = {}) {
     const level = computeLevel(scoreDiff);
 
     if (level === 0) {

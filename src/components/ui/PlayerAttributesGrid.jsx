@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 import { ATTRIBUTE_CATEGORIES } from '../../engine/PlayerAttributes';
+import { useMemo } from 'react';
 
 const ATTRIBUTE_TRANSLATIONS = {
     // Technical

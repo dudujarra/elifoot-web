@@ -10,7 +10,7 @@
  * Este módulo contém APENAS lógica de lookup.
  */
 
-import ClubVoices from './db/club-voices.json';
+import ClubVoices from './db/club-voices.json' with { type: 'json' };
 
 /**
  * Retorna voz contextual de um clube. Fallback genérico se clube não mapeado.

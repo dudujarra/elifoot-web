@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-export function useMatchEngine(engine, changeView, getDashboardView, forceUpdateBase) {
+export function useMatchEngine(engine, changeView, getDashboardView, _forceUpdateBase) {
     const [phase, setPhase] = useState('prematch'); // prematch, firsthalf, halftime, secondhalf, fulltime
     const [preStep, setPreStep] = useState(1);
     const [benchPlayers, setBenchPlayers] = useState([]);
@@ -154,7 +154,7 @@ export function useMatchEngine(engine, changeView, getDashboardView, forceUpdate
         };
     };
 
-    const handleLiveIntervention = useCallback((isSub) => {
+    const handleLiveIntervention = useCallback((_isSub) => {
         if (matchIdsRef.current && result?._baseSimResult) {
             const { homeId, awayId, isCup } = matchIdsRef.current;
             const currentRes = truncateSimResult(result._baseSimResult, currentMinute);

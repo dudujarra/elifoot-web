@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 import { useState } from 'react';
 import { TACTICS } from '../engine/ManagerSystems';
 import { getFormEmoji } from '../engine/systems/FormSystem.js';

@@ -6,6 +6,7 @@
  */
 
 const STORAGE_KEY = 'olefut_challenges';
+import { EngineLogger } from '../engine/EngineLogger.js';
 
 export const WEEKLY_CHALLENGES = [
     {
@@ -60,13 +61,14 @@ function loadState() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         return raw ? JSON.parse(raw) : { activeWeek: 0, completed: {} };
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'ChallengesService.loadState');
         return { activeWeek: 0, completed: {} };
     }
 }
 
 function saveState(s) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch { /* ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (err) { EngineLogger.capture(err, 'ChallengesService.saveState'); }
 }
 
 export function getActiveChallenges(engine) {

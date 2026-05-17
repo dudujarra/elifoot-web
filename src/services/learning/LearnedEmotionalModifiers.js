@@ -28,6 +28,7 @@
  */
 
 import { rng as systemRng } from '../../engine/rng.js';
+import { EngineLogger } from '../../engine/EngineLogger.js';
 
 const STORAGE_KEY = 'olefut_emotion_sarsa';
 
@@ -47,7 +48,7 @@ const Q_VALUE_BOUND = 30; // hard cap on SARSA Q-values
 // we discretize into 3-5 presets per emotional response dimension.
 // SARSA picks the best preset combo for each (emotion, context).
 
-const RESPONSE_PRESETS = {
+const _RESPONSE_PRESETS = {
     // How much to explore (epsilonMod)
     EXPLORE_LOW:    { epsilonMod: 0.3 },   // stick with what works
     EXPLORE_NORMAL: { epsilonMod: 1.0 },   // baseline
@@ -289,7 +290,7 @@ export class LearnedEmotionalModifiers {
             if (parsed.qTable) this.qTable = parsed.qTable;
             if (parsed.visitCount) this.visitCount = parsed.visitCount;
             if (typeof parsed.totalUpdates === 'number') this.totalUpdates = parsed.totalUpdates;
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'LearnedEmotionalModifiers._restore'); }
     }
 
     save() {
@@ -301,7 +302,7 @@ export class LearnedEmotionalModifiers {
                 totalUpdates: this.totalUpdates,
                 savedAt: Date.now()
             }));
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'LearnedEmotionalModifiers.save'); }
     }
 
     reset() {
@@ -314,7 +315,7 @@ export class LearnedEmotionalModifiers {
         this._lastReward = 0;
         try {
             if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'LearnedEmotionalModifiers.reset'); }
     }
 
     // ─── ANALYTICS ──────────────────────────────────────────

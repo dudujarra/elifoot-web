@@ -4,6 +4,7 @@
  * Captura state coerente do engine como JSON portátil. Headless.
  */
 
+import { EngineLogger } from '../../engine/EngineLogger.js';
 export function captureSnapshot(engine) {
     if (!engine) return null;
     const stats = engine.managerStats || {};
@@ -15,7 +16,7 @@ export function captureSnapshot(engine) {
             const row = standings.findIndex(s => s.teamId === team.id);
             if (row >= 0) finalPosition = row + 1;
         }
-    } catch { /* defensive */ }
+    } catch (err) { EngineLogger.capture(err, 'SnapshotAPI.captureSnapshot'); }
 
     return {
         // Identity

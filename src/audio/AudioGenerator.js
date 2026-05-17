@@ -228,7 +228,7 @@ export class AudioGenerator {
     // WAV files generated via Suno API or browser Tone.js
     return {
       id,
-      filename: `${id}.wav`,
+      filename: `${id}.ogg`,
       vertente,
       duration,
       bpm,

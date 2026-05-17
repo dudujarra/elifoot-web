@@ -25,6 +25,7 @@
  */
 
 import { applyBuyBiases, applySellBiases } from './CognitiveBiases.js';
+import { EngineLogger } from '../../engine/EngineLogger.js';
 
 // ─── EMOTIONAL STATE SCALE (used by composite encoders) ──
 const EMO_SCALE = {
@@ -287,7 +288,7 @@ export function smartBuyDecision(brain, { team, player, askingPrice, biasCtx = {
                     biases: biases.biasesApplied
                 };
             }
-        } catch { /* continue with brain decision */ }
+        } catch (err) { EngineLogger.capture(err, 'SmartMarketEngine.buyBias'); }
     }
 
     return {
@@ -338,7 +339,7 @@ export function smartSellDecision(brain, { team, player, offerAmount }) {
                     biases: biases.biasesApplied
                 };
             }
-        } catch { /* continue with brain decision */ }
+        } catch (err) { EngineLogger.capture(err, 'SmartMarketEngine.sellBias'); }
     }
 
     return {

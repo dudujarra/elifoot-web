@@ -14,7 +14,7 @@ const _protected = new Map(); // managerId → protectionState
  * @throws 'AlreadyProtecting' se já há protegido
  * @throws 'PlayerUnavailableLongTerm' se injuryWeeksLeft > 8
  */
-export function protect({ managerId, playerId, playerName = 'Jogador', playerOvr = 70, publicDeclaration = false, injuryWeeksLeft = 0 } = {}) {
+export function protect({ managerId, playerId, playerName = 'Jogador', _playerOvr = 70, publicDeclaration = false, injuryWeeksLeft = 0 } = {}) {
     if (_protected.has(managerId)) throw new Error('AlreadyProtecting');
     if (injuryWeeksLeft > 8) throw new Error('PlayerUnavailableLongTerm');
 

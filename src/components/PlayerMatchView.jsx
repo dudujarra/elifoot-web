@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useState, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
 import { drawCard, enrichCardWithAtmosphere } from '../engine/MatchEventsDeck';

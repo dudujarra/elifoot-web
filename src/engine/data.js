@@ -146,7 +146,7 @@ export const Data = {
      * Caso contrário, usa a geração algorítmica de atributos com especialidades.
      */
     generatePlayer(position, tier, options = {}) {
-        const { forceSuper = false, forceAge = null, teamBudget = 0, realPlayer = null } = options;
+        const { forceSuper = false, forceAge = null, _teamBudget = 0, realPlayer = null } = options;
 
         let age, ovr, potential, name, specialtyName;
         let isSuper = false;
@@ -299,7 +299,7 @@ export const Data = {
         let wonderkidSpawned = false;
 
         // 11 titulares
-        formation.forEach((pos, idx) => {
+        formation.forEach((pos, _idx) => {
             const realData = pickRealPlayer(pos);
             let p;
 

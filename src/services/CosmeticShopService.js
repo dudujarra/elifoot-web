@@ -6,6 +6,7 @@
  */
 
 import { COSMETIC } from '../engine/EmojiConstants.js';
+import { EngineLogger } from '../engine/EngineLogger.js';
 
 const STORAGE_KEY = 'olefut_cosmetics';
 
@@ -28,13 +29,14 @@ function loadState() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         return raw ? JSON.parse(raw) : { owned: [], equipped: {}, points: 0 };
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'CosmeticShopService.loadState');
         return { owned: [], equipped: {}, points: 0 };
     }
 }
 
 function saveState(s) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch { /* ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (err) { EngineLogger.capture(err, 'CosmeticShopService.saveState'); }
 }
 
 export function getCosmeticState() {

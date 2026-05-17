@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfClubBadge v3 — pixel-art sprite-based club shield (SPEC-060).
  *

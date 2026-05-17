@@ -62,9 +62,9 @@
   --radius-xs: 4px;
 
   /* Modern Premium Fonts */
-  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
-  --font-sans: 'Inter', 'Outfit', system-ui, -apple-system, sans-serif;
-  --font-display: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-display: 'Pixelify Sans', 'Press Start 2P', system-ui, sans-serif;
+  --font-sans: 'Pixelify Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 
   /* Dashboard Sub-component tokens */
   --color-pure-black: #000000;
@@ -93,7 +93,7 @@ body {
 }
 
 h1, h2, h3, h4 { 
-  font-family: 'Outfit', system-ui, sans-serif; 
+  font-family: var(--font-display); 
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -215,7 +215,7 @@ h1, h2, h3, h4 {
 }
 
 .ef-modal-title {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--text-main);
@@ -277,7 +277,7 @@ h1, h2, h3, h4 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-weight: 500;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
@@ -372,7 +372,7 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
@@ -486,7 +486,7 @@ h1, h2, h3, h4 {
 
 .ef-card-player-name {
   font-size: 1.05rem;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   color: var(--text-main);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -506,7 +506,7 @@ h1, h2, h3, h4 {
 .ef-card-player-meta {
   font-size: 0.8rem;
   color: var(--text-muted);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 .ef-card-player-badge {
@@ -559,7 +559,7 @@ h1, h2, h3, h4 {
   color: var(--text-main);
   min-width: 24px;
   text-align: right;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: 500;
 }
 
@@ -658,7 +658,7 @@ h1, h2, h3, h4 {
   border-collapse: collapse;
   color: var(--text-main);
   font-size: 0.75rem;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
 }
 
 .ef-table th {
@@ -702,7 +702,7 @@ h1, h2, h3, h4 {
 
 /* Monospace numeric text — tabular figures so UI doesn't dance */
 .ef-mono {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
 
@@ -733,7 +733,7 @@ h1, h2, h3, h4 {
 .ef-stat-cell { text-align: center; }
 .ef-stat-cell__value {
   display: block;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   font-size: 1.2rem;
   font-weight: bold;
@@ -743,7 +743,7 @@ h1, h2, h3, h4 {
   align-items: center;
   gap: 4px;
   justify-content: center;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--text-muted);
 }
@@ -780,7 +780,7 @@ h1, h2, h3, h4 {
   width: 32px;
   height: 32px;
   font-size: 0.85rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: bold;
 }
 .ef-form-chip--w { background: #162D1C; color: var(--primary); }
@@ -799,7 +799,7 @@ h1, h2, h3, h4 {
 .ef-player-meta {
   font-size: 0.85rem;
   color: var(--text-muted);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -835,7 +835,7 @@ h1, h2, h3, h4 {
   border: 1px solid var(--glass-border);
   border-color: var(--bezel-dark) var(--bezel-light) var(--bezel-light) var(--bezel-dark);
   color: var(--text-muted);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
@@ -847,7 +847,7 @@ h1, h2, h3, h4 {
 }
 
 .ef-empty-state__title {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   color: var(--text-main);
   margin-bottom: 8px;
@@ -873,7 +873,7 @@ h1, h2, h3, h4 {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 /* Standings legend chip — flex row of icon + label */
@@ -882,7 +882,7 @@ h1, h2, h3, h4 {
   align-items: center;
   gap: 6px;
   font-size: 0.65rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 /* ==========================================================================
@@ -914,7 +914,7 @@ h1, h2, h3, h4 {
   gap: 8px;
 }
 .ef-sidebar__mode {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--text-muted, #8E9E94);
   padding: 0 8px 12px;
@@ -954,7 +954,7 @@ h1, h2, h3, h4 {
   color: var(--primary, #39FF14);
 }
 .ef-sidebar__label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-muted, #8E9E94);
   font-weight: normal;
@@ -1021,7 +1021,7 @@ h1, h2, h3, h4 {
   color: var(--text-muted, #8E9E94);
   padding: 4px 12px;
   font-size: 0.75rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   letter-spacing: 0.05em;
 }
 .ef-tag-mono--info   { color: #40BAF7;             background: #16242D; padding: 6px 12px; }
@@ -1040,7 +1040,7 @@ h1, h2, h3, h4 {
 .ef-sector-cell__value {
   font-size: 1.5rem;
   font-weight: bold;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 .ef-sector-cell__value--lg { font-size: 1.8rem; }
 .ef-sector-cell__label {
@@ -1068,7 +1068,7 @@ h1, h2, h3, h4 {
 .ef-match-log-row--sub    { background-color: #111417; border-left-color: #40BAF7; }
 .ef-match-log-row--injury { background-color: #8B0000; border-left-color: var(--danger, #FF3333); }
 .ef-match-log-row__min {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: bold;
   color: var(--text-muted, #8E9E94);
   min-width: 40px;
@@ -1086,7 +1086,7 @@ h1, h2, h3, h4 {
 }
 .ef-score-box--sm { padding: 12px 24px; }
 .ef-score-box__num {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: bold;
   font-size: 3.5rem;
   color: var(--text-main, #FDFBF7);
@@ -1094,7 +1094,7 @@ h1, h2, h3, h4 {
 }
 .ef-score-box__num--md { font-size: 2.5rem; }
 .ef-score-box__sep {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: bold;
   font-size: 2rem;
   color: #2D3748;
@@ -1111,7 +1111,7 @@ h1, h2, h3, h4 {
   border: 1px solid #2D3748;
 }
 .ef-clock__time {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1.2rem;
   color: var(--text-muted, #8E9E94);
   font-weight: bold;
@@ -1142,7 +1142,7 @@ h1, h2, h3, h4 {
 }
 .ef-stat-line__value {
   color: var(--text-main, #FDFBF7);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 
 /* --- SquadView filters / search ------------------------------------------- */
@@ -1252,7 +1252,7 @@ h1, h2, h3, h4 {
   background-color: #161B22;
 }
 .ef-press-option__letter {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1.2rem;
   color: #40BAF7;
   min-width: 24px;
@@ -1285,7 +1285,7 @@ h1, h2, h3, h4 {
 
 .ef-overview-cell { text-align: center; }
 .ef-overview-cell__value {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1.2rem;
   font-weight: bold;
   display: flex;
@@ -1294,7 +1294,7 @@ h1, h2, h3, h4 {
   justify-content: center;
 }
 .ef-overview-cell__label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--text-muted, #8E9E94);
 }
@@ -1386,7 +1386,7 @@ h1, h2, h3, h4 {
   font-weight: bold;
 }
 .ef-view-header__subtitle {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--text-muted, #8E9E94);
 }
@@ -1398,7 +1398,7 @@ h1, h2, h3, h4 {
   padding: 32px;
   text-align: center;
   border: 1px dashed #2D3748;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   color: var(--text-muted, #8E9E94);
 }
@@ -1414,7 +1414,7 @@ h1, h2, h3, h4 {
   padding-bottom: 12px;
   border-bottom: 1px solid #2D3748;
   margin-bottom: 20px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   color: #40BAF7;
   font-size: 1rem;
   font-weight: bold;
@@ -1432,7 +1432,7 @@ h1, h2, h3, h4 {
   gap: 6px;
   background-color: var(--bg-dark, #0D1117);
   padding: 6px 12px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: bold;
   border: 1px solid #2D3748;
@@ -1480,7 +1480,7 @@ h1, h2, h3, h4 {
   color: var(--text-muted, #8E9E94);
   cursor: pointer;
   font-size: 0.8rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1546,7 +1546,7 @@ h1, h2, h3, h4 {
   background-color: var(--primary, #39FF14);
   color: #000;
   font-size: 0.7rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: bold;
   padding: 4px;
   display: flex;
@@ -1585,7 +1585,7 @@ h1, h2, h3, h4 {
   flex: 1;
 }
 .ef-cosmetic-card__price {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 1.1rem;
   color: var(--accent, #FFD700);
   margin-bottom: 16px;
@@ -1619,13 +1619,13 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-main, #FDFBF7);
 }
 .ef-mon-sev {
   font-size: 0.75rem;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-weight: bold;
   text-transform: uppercase;
   display: flex;
@@ -1637,7 +1637,7 @@ h1, h2, h3, h4 {
   padding: 12px;
   font-size: 0.8rem;
   color: var(--text-muted, #8E9E94);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   overflow-x: auto;
   border: 1px solid #2D3748;
 }
@@ -1650,7 +1650,7 @@ h1, h2, h3, h4 {
 /* --- Arcade typography helpers (AutoPlayView Outfit theme) ------- */
 
 .ef-arcade-h {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   color: var(--accent, #FFD700);
   text-shadow: 2px 2px 0 #000;
   margin: 0;
@@ -1672,13 +1672,13 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 .ef-arcade-stat__label {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 0.4rem;
   color: var(--text-muted, #888);
   text-transform: uppercase;
 }
 .ef-arcade-stat__value {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   font-weight: 700;
   color: #E2E8F0;
@@ -2555,7 +2555,7 @@ body::after {
 .ef-badge-pill {
   display: inline-block;
   padding: 2px 8px;
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: var(--font-display);
   font-size: 0.45rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -2637,3 +2637,36 @@ body::after {
   background: var(--accent);
   box-shadow: 0 0 4px #3D3200;
 }
+
+/* ─── Icon alignment utilities (extracted from 402 inline styles) ─── */
+.ef-icon-inline    { vertical-align: -2px; margin-right: 4px; }
+.ef-icon-inline-md { vertical-align: -2px; margin-right: 6px; }
+.ef-icon-inline-lg { vertical-align: -3px; margin-right: 8px; }
+.ef-icon-inline-sm { vertical-align: -3px; margin-right: 6px; }
+.ef-icon-bare      { vertical-align: -2px; }
+
+/* ─── Common text utilities (extracted from inline styles) ─── */
+.ef-text-sm-muted  { font-size: 0.7rem; color: var(--text-muted); }
+.ef-text-xs-muted  { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px; }
+.ef-text-xs-label  { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-sans); font-weight: bold; }
+
+/* ─── Audio Controller ───────────────────────────────────── */
+.ef-audio-mute-btn {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 9999;
+  background: var(--bg-dark);
+  border: 1px solid var(--text-main);
+  border-radius: 4px;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  transition: opacity 0.2s ease;
+}
+.ef-audio-mute-btn:hover { opacity: 0.75; }
+
+/* ─── AutoPlay Telemetry ─────────────────────────────────── */
+.ef-text-primary { color: var(--primary); }
+.ef-text-danger  { color: var(--danger); }

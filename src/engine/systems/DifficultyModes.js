@@ -5,11 +5,13 @@
  * Persisted in localStorage 'olefut_difficulty'.
  */
 
+import { EngineLogger } from '../EngineLogger.js';
+import { DIFFICULTY } from '../EmojiConstants.js';
 export const DIFFICULTY_MODES = {
     easy: {
         id: 'easy',
         name: 'Fácil',
-        emoji: '🟢',
+        emoji: DIFFICULTY.EASY,
         description: 'Para quem quer relaxar. Dinheiro fácil, board paciente.',
         modifiers: {
             economyMult: 1.3,        // +30% receita
@@ -24,7 +26,7 @@ export const DIFFICULTY_MODES = {
     normal: {
         id: 'normal',
         name: 'Normal',
-        emoji: '🟡',
+        emoji: DIFFICULTY.NORMAL,
         description: 'Experiência balanceada. Default.',
         modifiers: {
             economyMult: 1.0,
@@ -39,7 +41,7 @@ export const DIFFICULTY_MODES = {
     hard: {
         id: 'hard',
         name: 'Difícil',
-        emoji: '🔴',
+        emoji: DIFFICULTY.HARD,
         description: 'Veterano. Economia apertada, board exige resultados.',
         modifiers: {
             economyMult: 0.7,        // -30% receita
@@ -54,7 +56,7 @@ export const DIFFICULTY_MODES = {
     sinistro: {
         id: 'sinistro',
         name: 'Sinistro',
-        emoji: '💀',
+        emoji: DIFFICULTY.SINISTRO,
         description: 'Maestria tática obrigatória. Cada decisão conta — técnica vence.',
         modifiers: {
             // === ECONOMIA: apertada mas não impossível ===
@@ -103,7 +105,7 @@ export function getDifficulty() {
     try {
         const id = localStorage.getItem(STORAGE_KEY);
         if (id && DIFFICULTY_MODES[id]) return DIFFICULTY_MODES[id];
-    } catch { /* localStorage unavailable (Node/test) */ }
+    } catch (err) { EngineLogger.capture(err, 'DifficultyModes.getDifficulty'); }
     // Fallback: in-memory state (set by setDifficulty in headless mode)
     if (_memoryFallback && DIFFICULTY_MODES[_memoryFallback]) {
         return DIFFICULTY_MODES[_memoryFallback];
@@ -114,11 +116,11 @@ export function getDifficulty() {
 export function setDifficulty(modeId) {
     if (!DIFFICULTY_MODES[modeId]) return false;
     _memoryFallback = modeId; // always set in-memory
-    try { localStorage.setItem(STORAGE_KEY, modeId); } catch { /* ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, modeId); } catch (err) { EngineLogger.capture(err, 'DifficultyModes.setDifficulty'); }
     return true;
 }
 
-export function applyDifficultyToValue(rawValue, modifierKey) {
+function _applyDifficultyToValue(rawValue, modifierKey) {
     const diff = getDifficulty();
     const mult = diff.modifiers[modifierKey] ?? 1.0;
     return Math.round(rawValue * mult);

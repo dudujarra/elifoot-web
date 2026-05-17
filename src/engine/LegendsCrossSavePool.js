@@ -9,6 +9,7 @@
  */
 
 const STORAGE_KEY = 'olefut_legends_pool';
+import { EngineLogger } from './EngineLogger.js';
 const SCHEMA_VERSION = 1;
 const MAX_POOL_SIZE = 200;
 
@@ -36,7 +37,8 @@ export function loadPool() {
         }
         if (!Array.isArray(parsed.pool)) return { version: SCHEMA_VERSION, pool: [] };
         return parsed;
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'LegendsCrossSavePool.loadPool');
         return { version: SCHEMA_VERSION, pool: [] };
     }
 }
@@ -53,7 +55,8 @@ function savePool(pool) {
         const trimmed = pool.slice(0, MAX_POOL_SIZE);
         localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: SCHEMA_VERSION, pool: trimmed }));
         return true;
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'LegendsCrossSavePool.savePool');
         return false;
     }
 }
@@ -192,7 +195,7 @@ function deriveRoleAttrs(legend, role) {
  */
 export function resetPool() {
     if (typeof localStorage === 'undefined') return;
-    try { localStorage.removeItem(STORAGE_KEY); } catch { /* noop */ }
+    try { localStorage.removeItem(STORAGE_KEY); } catch (err) { EngineLogger.capture(err, 'LegendsCrossSavePool.resetPool'); }
 }
 
 /**
@@ -219,7 +222,8 @@ export function importPool(jsonText) {
         if (!parsed || !Array.isArray(parsed.pool)) return false;
         if (parsed.version !== SCHEMA_VERSION) return false;
         return savePool(parsed.pool);
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'LegendsCrossSavePool.importPool');
         return false;
     }
 }

@@ -9,7 +9,7 @@
 
 const MIN_SQUAD = 11;
 const CRISIS_SQUAD = 8;
-const TRIGGER_COOLDOWN_KEY = '_squadMonitorLastWeek';
+const _TRIGGER_COOLDOWN_KEY = '_squadMonitorLastWeek';
 
 /**
  * Verifica saúde do squad e retorna ação necessária.

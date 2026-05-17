@@ -1,23 +1,21 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 import React, { useState, useCallback } from 'react';
 import { AnimatedStat } from '../hooks/useCountUp';
 import { Help } from './Help';
 import { useGame } from '../context/GameContext';
+import { ScarcityBanner, DreadIndicator, useKeyboardNav, TutorialOverlay } from './GDDSystems';
 import { FORMATIONS, TACTICS, TEAM_TALKS, TRAINING_TYPES } from '../engine/ManagerSystems';
 import { STAFF_ROLES, SCOUT_REGIONS, getStadiumInfo } from '../engine/StadiumSystem';
-import { getAcademyUpgradeCost } from '../engine/YouthAcademy';
 import { getClubColors } from '../data/clubColors';
-import { ChallengesWidget } from './ChallengesWidget';
-import { getAllAchievements } from '../engine/MetaProgression';
 import TrophyCeremony from './TrophyCeremony';
 import { UnlockTooltip, AhaMomentCard, AchievementPopup } from './ProgressiveDisclosure';
-import { ScarcityBanner, DreadIndicator, useKeyboardNav, TutorialOverlay, IronmanMode } from './GDDSystems';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';
 import { EfModal } from './ui/EfModal';
 import { 
   Users, ShoppingCart, ChartBar, SoccerBall, TrendUp, TrendDown, Heartbeat,
   Newspaper, Lightning, Envelope, Wallet, Bank, Building, GraduationCap, Binoculars, 
-  Megaphone, Microphone, MicrophoneStage, Lightbulb, WarningCircle, ChartLineUp
+  Megaphone, MicrophoneStage, Lightbulb, WarningCircle, ChartLineUp
 } from '@phosphor-icons/react';
 
 import '../styles/trophy-ceremony.css';
@@ -97,10 +95,10 @@ export function DashboardView() {
     const sectors = engine.getTeamSectors(team.id);
     const standings = engine.getStandings(team.zone, team.division);
     const pos = standings.findIndex(s => s.teamId === team.id) + 1;
-    const avgMoral = team.squad.reduce((s, p) => s + (p.moral || 50), 0) / (team.squad.length || 1);
+    const _avgMoral = team.squad.reduce((s, p) => s + (p.moral || 50), 0) / (team.squad.length || 1);
     const avgEnergy = team.squad.reduce((s, p) => s + (p.energy || 50), 0) / (team.squad.length || 1);
     const stats = engine.managerStats;
-    const cond = engine.matchCondition;
+    const _cond = engine.matchCondition;
     const boardStatus = engine.board ? engine.board.getStatus() : null;
     const injured = team.squad.filter(p => p.injury);
     const expiringContracts = team.squad.filter(p => p.contract && p.contract.weeksLeft <= 8);

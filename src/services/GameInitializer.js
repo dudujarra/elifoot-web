@@ -42,11 +42,11 @@ export class GameInitializer {
      */
     init(engine, name, teamId, mode = 'manager', scenario = 'livre', playerPosition = 'ATA') {
         engine.manager.name = name;
-        engine.manager.teamId = parseInt(teamId);
+        engine.manager.teamId = parseInt(teamId, 10);
         engine.mode = mode;
 
         this._initializeTeams(engine);
-        this._initializeNpcBrains(engine, parseInt(teamId));
+        this._initializeNpcBrains(engine, parseInt(teamId, 10));
         engine._aiDirector = new AIDirector();
         try { restoreAllBrains(engine.teams); } catch (err) { EngineLogger.capture(err, 'GameInitializer.restoreBrains'); }
 
@@ -76,8 +76,8 @@ export class GameInitializer {
      * SPEC-F2.3: tenta carregar /mods/cards/manifest.json e merge nos decks.
      * Fail-safe: erro de fetch / parse não bloqueia initGame.
      */
-    _loadMods(engine) {
-        if (typeof fetch === 'undefined') return;
+    _loadMods(_engine) {
+        if (typeof fetch === 'undefined' || typeof window === 'undefined') return;
         // Bug-fix V11: cache module-level — fetch UMA VEZ por sessão.
         // BatchRunner roda 100+ initGames → não dispara 100 fetches.
         if (GameInitializer._modsLoaded) return;
@@ -117,7 +117,7 @@ export class GameInitializer {
         let idCounter = 1;
         for (const zone of Object.keys(RealDB)) {
             for (const divStr of Object.keys(RealDB[zone])) {
-                const div = parseInt(divStr);
+                const div = parseInt(divStr, 10);
                 RealDB[zone][div].forEach(club => {
                     const tier = zone === 'BRA' ? div : (zone === 'ARG' || zone === 'COL' ? 1.5 : 2);
                     const squad = Data.generateSquad(tier, club.budget, club.name);
@@ -184,7 +184,7 @@ export class GameInitializer {
     _initializeLeagues(engine) {
         for (const zone of Object.keys(RealDB)) {
             for (const divStr of Object.keys(RealDB[zone])) {
-                const div = parseInt(divStr);
+                const div = parseInt(divStr, 10);
                 const leagueTeams = engine.teams.filter(t => t.zone === zone && t.division === div).map(t => t.id);
                 const league = new League(`${zone}_${div}`, `Liga ${zone} - Div ${div}`, div);
                 league.init(leagueTeams);

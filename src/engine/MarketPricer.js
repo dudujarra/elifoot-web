@@ -1,4 +1,5 @@
 import { rng as systemRng } from './rng.js';
+import { EngineLogger } from './EngineLogger.js';
 import { findContextualBuyers as _findContextualBuyers } from './AmbitionEngine';
 /**
  * MarketPricer — SPEC-133: Market Liquidity Fix
@@ -202,7 +203,7 @@ function getContextualBuyerName(player, allTeams, sellerTeam, findContextualBuye
             if (buyers.length > 0) {
                 return buyers[0].teamName;
             }
-        } catch { /* fallback */ }
+        } catch (err) { EngineLogger.capture(err, 'MarketPricer.getContextualBuyer'); }
     }
     // Fallback: gera nome genérico baseado na divisão
     const FALLBACK_BUYERS = [

@@ -162,7 +162,7 @@ export class AutoPlayLogger {
             const byOvr = {};
             sells.forEach(s => {
                 const priceM = parseFloat((priceRe.exec(s.msg) || [])[1] || '0') * 1e6;
-                const ovr = parseInt((ovrRe.exec(s.msg) || [])[1] || '0');
+                const ovr = parseInt((ovrRe.exec(s.msg) || [])[1] || '0', 10);
                 if (ovr && priceM) {
                     const bucket = Math.floor(ovr / 5) * 5;
                     if (!byOvr[bucket]) byOvr[bucket] = [];

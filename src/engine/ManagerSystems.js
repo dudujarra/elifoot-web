@@ -2,7 +2,7 @@ import { rng as systemRng } from './rng.js';
 import { calculateOvrFromAttributes } from './PlayerAttributes.js';
 import { getDifficulty } from './systems/DifficultyModes.js';
 import { getTicketFinanceModifiers } from './TicketPricingSystem.js';
-import { TALKS, TRAINING as TRAIN_ICONS, MATCH as MATCH_ICONS, FINANCE as FIN_ICONS } from './EmojiConstants.js';
+import { TALKS, TRAINING as TRAIN_ICONS, MATCH as MATCH_ICONS, FINANCE as _FIN_ICONS } from './EmojiConstants.js';
 import Morphocycle from './training/Morphocycle.js';
 /**
  * ManagerSystems.js — Sistemas avançados do Modo Treinador

@@ -79,7 +79,7 @@
 }
 
 .ef-trophy-ceremony__appbar-title {
-  font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: 20px;
   line-height: 1.4;
   letter-spacing: -0.02em;
@@ -117,7 +117,7 @@
 
 .ef-trophy-ceremony__victory-title h1 {
   margin: 0 0 8px;
-  font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: 24px;
   line-height: 32px;
   letter-spacing: 0.1em;
@@ -135,7 +135,7 @@
 
 .ef-trophy-ceremony__victory-title p {
   margin: 0;
-  font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: 12px;
   line-height: 16px;
   
@@ -161,7 +161,7 @@
   background-color: var(--primitive-color-gold-amber, #FBBF24);
   border: 1px solid var(--primitive-color-green-pitch, #52B788);
   color: var(--primitive-color-neutral-crt-black, #111417);
-  font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: 12px;
   line-height: 16px;
   
@@ -187,7 +187,7 @@
   background-color: var(--primitive-color-green-forest, #1B4332);
   border: 1px solid var(--primitive-color-green-neon, #39FF14);
   color: var(--primitive-color-green-neon, #39FF14);
-  font-family: var(--font-display, 'Outfit', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: 12px;
   line-height: 16px;
   
@@ -206,7 +206,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-family: var(--font-mono);
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.05em;
@@ -269,7 +269,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-family: var(--font-mono);
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.05em;

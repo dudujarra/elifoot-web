@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
 import '../styles/autoplay-lab-view.css';
  * AutoPlayLabView — F1 UI

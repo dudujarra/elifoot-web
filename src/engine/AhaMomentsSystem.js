@@ -7,6 +7,7 @@
  * Pure module. Determinístico via contexto.
  */
 
+import { EngineLogger } from './EngineLogger.js';
 const AHA_TEMPLATES = [
     {
         id: 'aha_home_advantage',
@@ -73,7 +74,7 @@ const STORAGE_KEY = 'olefut_aha_seen';
  *
  * @returns {Set<string>}
  */
-export function loadSeenIds() {
+function loadSeenIds() {
     if (typeof localStorage === 'undefined') return new Set();
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -81,7 +82,8 @@ export function loadSeenIds() {
         const arr = JSON.parse(raw);
         if (!Array.isArray(arr)) return new Set();
         return new Set(arr);
-    } catch {
+    } catch (err) {
+        EngineLogger.capture(err, 'AhaMomentsSystem.loadSeenIds');
         return new Set();
     }
 }
@@ -90,7 +92,7 @@ function persistSeenIds(set) {
     if (typeof localStorage === 'undefined') return;
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
-    } catch { /* noop */ }
+    } catch (err) { EngineLogger.capture(err, 'AhaMomentsSystem.persistSeenIds'); }
 }
 
 /**
@@ -112,7 +114,7 @@ export function evaluateAhaMoments(context = {}) {
                     body: template.body,
                 });
             }
-        } catch { /* defensive — trigger function may throw */ }
+        } catch (err) { EngineLogger.capture(err, 'AhaMomentsSystem.trigger'); }
     }
     return triggered;
 }
@@ -133,7 +135,7 @@ export function markAhaSeen(ahaId) {
  */
 export function resetAhaSeen() {
     if (typeof localStorage === 'undefined') return;
-    try { localStorage.removeItem(STORAGE_KEY); } catch { /* noop */ }
+    try { localStorage.removeItem(STORAGE_KEY); } catch (err) { EngineLogger.capture(err, 'AhaMomentsSystem.resetAhaSeen'); }
 }
 
 export { AHA_TEMPLATES, STORAGE_KEY };

@@ -23,7 +23,7 @@ const LEGACY_DELAY_YEARS = 16; // emerge 16-18 years after companion's prime
  * @param {number} [opts.seed]
  * @returns {{ regenAvailable, regen? }}
  */
-export function evaluate({ managerId = 0, saveYear = 2030, season = 1, formerCompanions = [], seed = null } = {}) {
+export function evaluate({ managerId: _managerId = 0, saveYear = 2030, season = 1, formerCompanions = [], seed = null } = {}) {
     const rand = seed !== null ? seededRandom(seed) : systemRng;
 
     // Check every 4 seasons at earliest

@@ -2,7 +2,7 @@ import { EfClubBadge } from '../ui';
 
 export function MatchScoreboard({ result, currentMinute, isPlaying, half, runningScore }) {
     // Match progress: 0-90' linear (45' = halftime marker)
-    const progressPct = Math.min(100, Math.round((currentMinute / 90) * 100));
+    const _progressPct = Math.min(100, Math.round((currentMinute / 90) * 100));
 
     return (
         <section className="relative w-full">

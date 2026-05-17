@@ -1,5 +1,6 @@
 import { rng as systemRng } from './rng.js';
 import { getNpcProfile } from './NpcBehaviorProfile.js';
+import { NPC } from './GameConstants.js';
 
 /**
  * NpcTacticAdvisor — SPEC-131: AI Tactic Pivot
@@ -33,8 +34,8 @@ export function adviseTactic({ currentTactic, recentResults = [], squadOvr = 65,
     const ovrDiff = squadOvr - opponentOvr;
 
     // SPEC-137: usar tacticFlexibility do profile se fornecido
-    const boredomThreshold = profile ? Math.round(1 / (profile.tacticFlexibility || 0.10)) : 10;
-    const boredomChance = profile ? profile.tacticFlexibility * 3 : 0.30;
+    const boredomThreshold = profile ? Math.round(1 / (profile.tacticFlexibility || 0.10)) : NPC.DEFAULT_BOREDOM_THRESHOLD;
+    const boredomChance = profile ? profile.tacticFlexibility * 3 : NPC.DEFAULT_BOREDOM_CHANCE;
 
     if (tacticAge >= boredomThreshold && rand() < boredomChance) {
         const newTactic = selectNewTactic(currentTactic, ovrDiff, rand, { isHome, losses, position, totalTeams });
@@ -106,10 +107,10 @@ function countTrailingLosses(results) {
 
 function selectNewTactic(current, ovrDiff, rand, context = {}) {
     const { isHome = true, losses = 0, position = 10, totalTeams = 20 } = context;
-    let preferred = [];
+    let preferred;
 
-    const isRelegationZone = position > totalTeams - 4;
-    const isEqual = Math.abs(ovrDiff) <= 3;
+    const isRelegationZone = position > totalTeams - NPC.RELEGATION_ZONE_OFFSET;
+    const isEqual = Math.abs(ovrDiff) <= NPC.OVR_DIFF_EQUAL;
     const needsResult = isHome && (losses === 1 || losses === 2); // perdeu recente e agora joga em casa
 
     if (losses >= 3 || isRelegationZone) {
@@ -118,10 +119,10 @@ function selectNewTactic(current, ovrDiff, rand, context = {}) {
     } else if (isEqual || needsResult) {
         // "Se ele tiver no igual ele joga solto" / "Se ele precisa de resultado joga solto"
         preferred = isHome ? ['offensive', 'pressing'] : ['normal', 'counter'];
-    } else if (ovrDiff <= -8) {
+    } else if (ovrDiff <= -NPC.OVR_DIFF_BIG) {
         // Muito mais fraco
         preferred = isHome ? ['defensive', 'counter'] : ['defensive'];
-    } else if (ovrDiff >= 8) {
+    } else if (ovrDiff >= NPC.OVR_DIFF_BIG) {
         // Muito mais forte
         preferred = isHome ? ['offensive', 'possession'] : ['normal', 'offensive'];
     } else {

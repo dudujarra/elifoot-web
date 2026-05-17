@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfTooltip — Stitch component (refactor de Tooltip.jsx legacy)
  *

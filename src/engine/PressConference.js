@@ -1,4 +1,5 @@
 import { rng as systemRng } from './rng.js';
+import { PRESS } from './EmojiConstants.js';
 /**
  * PressConference.js — Coletiva de Imprensa
  * Inspirado em FM (press conferences + mind games)
@@ -9,9 +10,9 @@ import { rng as systemRng } from './rng.js';
 
 // NPC: Jornalista
 export const JOURNALISTS = [
-    { name: "Marcos Brito", outlet: "ESPN Brasil", emoji: "🎙️", style: "direto" },
-    { name: "Ana Luíza Ferreira", outlet: "GloboEsporte", emoji: "📺", style: "provocadora" },
-    { name: "Carlos Henrique", outlet: "Gazeta Press", emoji: "📰", style: "técnico" },
+    { name: "Marcos Brito", outlet: "ESPN Brasil", emoji: PRESS.MICROPHONE, style: "direto" },
+    { name: "Ana Luíza Ferreira", outlet: "GloboEsporte", emoji: PRESS.TV, style: "provocadora" },
+    { name: "Carlos Henrique", outlet: "Gazeta Press", emoji: PRESS.NEWSPAPER, style: "técnico" },
 ];
 
 // Contextos que disparam coletiva

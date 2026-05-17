@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useRef, useEffect } from 'react';
 import { SoccerBall, ArrowsLeftRight, FirstAid, Play, Pause, FastForward, Strategy, CheckCircle } from '@phosphor-icons/react';
 import { MatchScoreboard } from './MatchScoreboard';
@@ -12,7 +13,7 @@ export function MatchLive({
     liveModalOpen, setLiveModalOpen, liveSubsCount, MAX_SUBS,
     benchPlayers, setPhase,
     handleLiveIntervention, handleMidMatchChoice, activeMidMatchCard, setActiveMidMatchCard,
-    starImpacts, matchIdsRef, firstHalfResult, getDisplayScore
+    starImpacts, matchIdsRef, _firstHalfResult, getDisplayScore
 }) {
     const logRef = useRef(null);
 

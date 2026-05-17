@@ -3,7 +3,7 @@
  * React hook component that wires MusicDirector to game state.
  *
  * - Maps gameState.view → subgenre per manual seção 3.3
- * - Lazy loads master WAVs (only when view activates)
+ * - Lazy loads master OGGs (only when view activates)
  * - Crossfade between subgêneros on view change
  * - Init via first user interaction (iOS AudioContext gate)
  * - Renders nothing — hooks only
@@ -119,7 +119,7 @@ export function AudioController() {
     let buffer = loadedBuffersRef.current.get(subgenre);
     if (!buffer) {
       try {
-        const url = `${STEMS_BASE_PATH}/${subgenre}/master.wav`;
+        const url = `${STEMS_BASE_PATH}/${subgenre}/master.ogg`;
         const response = await fetch(url);
         if (!response.ok) {
           console.warn(`[Audio] Master not found: ${url}`);
@@ -173,19 +173,7 @@ export function AudioController() {
     <button
       onClick={() => setMuted((m) => !m)}
       title={muted ? 'Unmute music' : 'Mute music'}
-      style={{
-        position: 'fixed',
-        top: 8,
-        right: 8,
-        zIndex: 9999,
-        background: '#040805',
-        border: '1px solid #F1FAEE',
-        borderRadius: 4,
-        color: '#fff',
-        cursor: 'pointer',
-        fontSize: 14,
-        padding: '4px 8px',
-      }}
+      className="ef-audio-mute-btn"
     >
       {muted ? '🔇' : '🎵'}
     </button>

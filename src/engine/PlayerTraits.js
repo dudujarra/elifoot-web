@@ -1,4 +1,5 @@
 import { rng as systemRng } from './rng.js';
+import { TRAIT } from './EmojiConstants.js';
 /**
  * PlayerTraits.js — Habilidades especiais, Career Stats, Mentoring, Morale Events
  * 
@@ -56,7 +57,7 @@ export const POSITION_TRAITS = [
 ];
 
 // IDs de todos os position traits (para validação de stacking)
-const POSITION_TRAIT_IDS = new Set(POSITION_TRAITS.map(t => t.id));
+const _POSITION_TRAIT_IDS = new Set(POSITION_TRAITS.map(t => t.id));
 
 // ============================================================
 // TRAITS — Habilidades Genéricas (qualquer posição)
@@ -197,9 +198,14 @@ export function initCareerStats(player) {
             seasonMotm: 0,
             history: [], // [{season, team, goals, assists, apps}]
         };
-    } else if (player.career.hatTricks === undefined) {
-        // BUG-086: backfill em saves antigos
-        player.career.hatTricks = 0;
+    } else {
+        if (player.career.hatTricks === undefined) {
+            // BUG-086: backfill em saves antigos
+            player.career.hatTricks = 0;
+        }
+        if (!Array.isArray(player.career.history)) {
+            player.career.history = [];
+        }
     }
 }
 
@@ -234,6 +240,8 @@ export function closeSeasonStats(player, seasonNum, teamName) {
         cards: player.career.seasonCards,
         motm: player.career.seasonMotm,
     });
+    // CRIT-01: Cap at 25 seasons to prevent unbounded heap growth in soak tests
+    if (player.career.history.length > 25) player.career.history.shift();
     // Reset season
     player.career.seasonGoals = 0;
     player.career.seasonAssists = 0;
@@ -245,7 +253,7 @@ export function closeSeasonStats(player, seasonNum, teamName) {
 // ============================================================
 // SEASON AWARDS
 // ============================================================
-export function calculateSeasonAwards(squad, teamName, seasonNum) {
+export function calculateSeasonAwards(squad, _teamName, _seasonNum) {
     const awards = [];
 
     // Golden Boot
@@ -253,7 +261,7 @@ export function calculateSeasonAwards(squad, teamName, seasonNum) {
     if (topScorer && (topScorer.career?.seasonGoals || 0) > 0) {
         awards.push({
             type: 'golden_boot',
-            emoji: '👟',
+            emoji: TRAIT.BOOT,
             name: 'Artilheiro',
             player: topScorer.name,
             value: `${topScorer.career.seasonGoals} gols`,
@@ -265,7 +273,7 @@ export function calculateSeasonAwards(squad, teamName, seasonNum) {
     if (topAssist && (topAssist.career?.seasonAssists || 0) > 0) {
         awards.push({
             type: 'assist_king',
-            emoji: '🎯',
+            emoji: TRAIT.PRECISION,
             name: 'Rei das Assistências',
             player: topAssist.name,
             value: `${topAssist.career.seasonAssists} assistências`,
@@ -277,7 +285,7 @@ export function calculateSeasonAwards(squad, teamName, seasonNum) {
     if (mvp && (mvp.career?.seasonMotm || 0) > 0) {
         awards.push({
             type: 'mvp',
-            emoji: '⭐',
+            emoji: TRAIT.STAR,
             name: 'Melhor Jogador',
             player: mvp.name,
             value: `${mvp.career.seasonMotm}x Craque do Jogo`,
@@ -290,7 +298,7 @@ export function calculateSeasonAwards(squad, teamName, seasonNum) {
     if (bestYouth && ((bestYouth.career?.seasonGoals || 0) + (bestYouth.career?.seasonAssists || 0)) > 0) {
         awards.push({
             type: 'best_youth',
-            emoji: '🌟',
+            emoji: TRAIT.GLOWING,
             name: 'Revelação',
             player: bestYouth.name,
             value: `${bestYouth.career.seasonGoals}G ${bestYouth.career.seasonAssists}A`,
@@ -302,7 +310,7 @@ export function calculateSeasonAwards(squad, teamName, seasonNum) {
     if (ironMan && (ironMan.career?.seasonApps || 0) >= 30) {
         awards.push({
             type: 'iron_man',
-            emoji: '🦾',
+            emoji: TRAIT.MECHANICAL,
             name: 'Cavalo de Aço',
             player: ironMan.name,
             value: `${ironMan.career.seasonApps} jogos`,

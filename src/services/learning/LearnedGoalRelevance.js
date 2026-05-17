@@ -25,6 +25,7 @@
  */
 
 import { rng as systemRng } from '../../engine/rng.js';
+import { EngineLogger } from '../../engine/EngineLogger.js';
 
 const STORAGE_KEY = 'olefut_goal_relevance';
 
@@ -220,7 +221,7 @@ export class LearnedGoalRelevance {
                 totalUpdates: this.totalUpdates,
                 savedAt: Date.now()
             }));
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'LearnedGoalRelevance.save'); }
     }
 
     _restore() {
@@ -231,7 +232,7 @@ export class LearnedGoalRelevance {
             const parsed = JSON.parse(raw);
             if (parsed.relevance) this.relevance = parsed.relevance;
             if (typeof parsed.totalUpdates === 'number') this.totalUpdates = parsed.totalUpdates;
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'LearnedGoalRelevance._restore'); }
     }
 
     reset() {
@@ -239,7 +240,7 @@ export class LearnedGoalRelevance {
         this.totalUpdates = 0;
         try {
             if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
-        } catch { /* ignore */ }
+        } catch (err) { EngineLogger.capture(err, 'LearnedGoalRelevance.reset'); }
         this._warmStartFromPriors();
     }
 

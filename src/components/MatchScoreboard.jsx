@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * MatchScoreboard — extracted from MatchView (AKITA-319 F1.4 partial split)
  *

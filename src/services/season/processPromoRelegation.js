@@ -45,7 +45,7 @@ export function handlePromoRelegation(engine, team) {
       if (!t.id || !/_\d+$/.test(t.id)) return;
       const lastUnder = t.id.lastIndexOf('_');
       const zone = t.id.substring(0, lastUnder);
-      const div = parseInt(t.id.substring(lastUnder + 1));
+      const div = parseInt(t.id.substring(lastUnder + 1), 10);
       if (!zone || isNaN(div) || div < 1 || div > 4) return;
       const divStandings = engine.getStandings(zone, div);
       if (divStandings.length < 2) return;

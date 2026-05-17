@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useEffect, useState } from 'react';
 import { EfButton, EfPanel } from './ui';
 import '../styles/trophy-ceremony.css';

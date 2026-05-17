@@ -1,9 +1,9 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 import React, { useState } from 'react';
 import '../styles/squad-view.css';
 import { useGame } from '../context/GameContext';
 import { ViewOnboarding } from './ViewOnboarding';
 import { electStarPlayer } from '../engine/StarPlayerLink';
-import { Help } from './Help';
 import { EfClubBadge } from './ui/EfClubBadge';
 import { EfPanel } from './ui/EfPanel';
 import { EfButton } from './ui/EfButton';

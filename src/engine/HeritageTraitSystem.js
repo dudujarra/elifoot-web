@@ -22,7 +22,7 @@ const TRAIT_CAP   = 100;
  * @param {number} [opts.seed] — seed para determinismo
  * @returns {{ traits: object, inheritedFrom: Array<string>, inheritanceNarrative: string }}
  */
-export function inherit({ clubId, hall, baseChance = 0.6, seed = null } = {}) {
+export function inherit({ clubId: _clubId, hall, baseChance = 0.6, seed = null } = {}) {
     const rand = seed !== null ? seededRandom(seed) : systemRng;
     const slots = hall?.slots || {};
     const filledSlots = Object.keys(slots);

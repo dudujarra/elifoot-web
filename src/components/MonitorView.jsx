@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * MonitorView — Telemetria e Diagnóstico OléFUT
  * Stitch v1.1 port (AKITA-393): match docs/stitch-designs/v1.1-all/65-monitor-telemetria-ol-fut.html

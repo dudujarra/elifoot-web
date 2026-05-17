@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfPanel — SNES 16-bit Brutalist Arcade Container
  *
@@ -21,7 +22,7 @@ function EfPanelImpl({
     children,
     onClick,
     className = '',
-    style = {}
+    _style = {}
 }) {
     // Ensure we don't pass `style` down blindly to avoid object spreads
     const panelStyle = {};

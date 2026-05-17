@@ -5,11 +5,12 @@
  * Modes are unlockable via MetaProgression.
  */
 
+import { CHALLENGE } from './EmojiConstants.js';
 export const CHALLENGE_MODES = {
     giant_killer: {
         id: 'giant_killer',
         name: 'Gigante Killer',
-        emoji: '🐜',
+        emoji: CHALLENGE.ANT,
         description: 'Vença a liga com o time de menor orçamento',
         constraint: 'Orçamento reduzido a 10%',
         bartle: 'achiever',
@@ -32,7 +33,7 @@ export const CHALLENGE_MODES = {
     youth_only: {
         id: 'youth_only',
         name: 'Prata da Casa',
-        emoji: '🌱',
+        emoji: CHALLENGE.SEEDLING,
         description: 'Apenas jogadores da base — zero transferências',
         constraint: 'Transferências bloqueadas',
         bartle: 'explorer',
@@ -52,7 +53,7 @@ export const CHALLENGE_MODES = {
     firefighter: {
         id: 'firefighter',
         name: 'Bombeiro',
-        emoji: '🧯',
+        emoji: CHALLENGE.EXTINGUISHER,
         description: 'Assuma na semana 20 — salve do rebaixamento',
         constraint: 'Começa na zona de rebaixamento',
         bartle: 'achiever',
@@ -76,7 +77,7 @@ export const CHALLENGE_MODES = {
     invincible: {
         id: 'invincible',
         name: 'Invencível',
-        emoji: '🛡️',
+        emoji: CHALLENGE.SHIELD,
         description: 'Termine a temporada sem nenhuma derrota',
         constraint: 'Nenhuma derrota permitida',
         bartle: 'achiever',
@@ -90,7 +91,7 @@ export const CHALLENGE_MODES = {
     moneyball: {
         id: 'moneyball',
         name: 'Moneyball',
-        emoji: '💰',
+        emoji: CHALLENGE.MONEY,
         description: 'Vença gastando o mínimo possível',
         constraint: 'Pontuação por eficiência financeira',
         bartle: 'explorer',
@@ -109,7 +110,7 @@ export const CHALLENGE_MODES = {
     one_club_man: {
         id: 'one_club_man',
         name: 'Um Clube Só',
-        emoji: '❤️',
+        emoji: CHALLENGE.HEART,
         description: 'Construa uma dinastia — 10 temporadas no mesmo clube',
         constraint: 'Nunca aceite proposta de outro clube',
         bartle: 'achiever',

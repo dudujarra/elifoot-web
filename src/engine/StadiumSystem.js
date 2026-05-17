@@ -1,4 +1,5 @@
 import { rng as systemRng } from './rng.js';
+import { STAFF } from './EmojiConstants.js';
 /**
  * StadiumSystem.js — Estádio, Staff e Scouting
  * Inspirado em Hattrick (stadium tiers) + FM (staff roles + scouting)
@@ -33,35 +34,35 @@ export function calculateTicketRevenue(stadiumLevel, teamReputation) {
 // ============================================================
 export const STAFF_ROLES = [
     {
-        id: "physio", name: "Fisioterapeuta", emoji: "🏥",
+        id: "physio", name: "Fisioterapeuta", emoji: STAFF.PHYSIO,
         npc: { name: "Dr. Marina Santos", personality: "metódica" },
         cost: 50000, // semanal
         effect: { injuryReduction: 0.5, energyRecoveryBonus: 5 },
         description: "Reduz chance de lesão em 50% e melhora recuperação de energia."
     },
     {
-        id: "scout", name: "Olheiro", emoji: "🔍",
+        id: "scout", name: "Olheiro", emoji: STAFF.SCOUT,
         npc: { name: "Carlos Mendes", personality: "observador" },
         cost: 40000,
         effect: { scoutRange: 2, revealAttributes: true },
         description: "Revela OVR e potencial de jogadores no mercado e em outros times."
     },
     {
-        id: "fitness", name: "Preparador Físico", emoji: "💪",
+        id: "fitness", name: "Preparador Físico", emoji: STAFF.FITNESS,
         npc: { name: "Sérgio Tavares", personality: "exigente" },
         cost: 45000,
         effect: { trainingBoost: 1, energyDecayReduction: 3 },
         description: "Treinos rendem +1 atributo extra e jogadores cansam menos."
     },
     {
-        id: "finance", name: "Diretor Financeiro", emoji: "💰",
+        id: "finance", name: "Diretor Financeiro", emoji: STAFF.FINANCE_DIR,
         npc: { name: "Patrícia Lemos", personality: "conservadora" },
         cost: 60000,
         effect: { revenueBonus: 0.1, salaryNegotiation: 0.9 },
         description: "+10% de receita e -10% nos salários negociados."
     },
     {
-        id: "youth_coach", name: "Treinador de Base", emoji: "🎓",
+        id: "youth_coach", name: "Treinador de Base", emoji: STAFF.YOUTH_COACH,
         npc: { name: "Edson Ribeiro", personality: "paciente" },
         cost: 35000,
         effect: { youthBoost: 1, academyLevelBonus: 1 },

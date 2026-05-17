@@ -5,11 +5,12 @@
 
 import { Data } from './data';
 import { ATTRIBUTE_CATEGORIES, calculateOvrFromAttributes } from './PlayerAttributes.js';
+import { STAFF, UI } from './EmojiConstants.js';
 
 import { rng as systemRng } from './rng.js';
 
 // NPC: Coordenador da Base
-export const YOUTH_COORDINATOR = { name: "Roberto Menezes", role: "Coord. da Base", emoji: "🎓" };
+export const YOUTH_COORDINATOR = { name: "Roberto Menezes", role: "Coord. da Base", emoji: STAFF.YOUTH_COACH };
 
 const YOUTH_PERSONALITIES = ["Profissional", "Ambicioso", "Casual", "Determinado", "Preguiçoso"];
 
@@ -141,7 +142,7 @@ export function processLoans(loans, team) {
                 }
 
                 const actualBoost = player.ovr - oldOvr;
-                player.loanResult = `✅ ${player.name} voltou de ${loan.destination} melhorado (+${Math.max(0, actualBoost)} OVR)!`;
+                player.loanResult = `${UI.CHECK} ${player.name} voltou de ${loan.destination} melhorado (+${Math.max(0, actualBoost)} OVR)!`;
             } else {
                 // Fracasso: atributos FIS -1, moral baixa
                 if (player.attributes && player.attributes.physical.stamina) {
@@ -152,7 +153,7 @@ export function processLoans(loans, team) {
                     player.ovr = calculateOvrFromAttributes(player.attributes, macroPos);
                 }
                 player.moral = Math.max(20, (player.moral || 50) - 10);
-                player.loanResult = `⚠️ ${player.name} voltou de ${loan.destination} sem evolução.`;
+                player.loanResult = `${UI.WARNING} ${player.name} voltou de ${loan.destination} sem evolução.`;
             }
 
             player.energy = 80;

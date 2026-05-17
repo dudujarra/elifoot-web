@@ -12,7 +12,7 @@ export class Tournament {
         this.isActive = true;
     }
 
-    advanceWeek(engine, week) {
+    advanceWeek(_engine, _week) {
         // Override in subclasses
         return null;
     }

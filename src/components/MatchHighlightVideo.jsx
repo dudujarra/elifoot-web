@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import './MatchHighlightVideo.css';
 
+import { useState, useEffect } from 'react';
 /**
  * MatchHighlightVideo
  * An interactive 2D cinematic viewer that translates match events into 

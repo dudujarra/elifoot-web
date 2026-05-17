@@ -129,7 +129,7 @@ export class TelemetryAggregator {
             this.history.squadOvrBySeason = { ...this.history.squadOvrBySeason, ...payload.squadOvrBySeason };
             
             // Limit to last 100 seasons to prevent infinite memory bloat
-            const keys = Object.keys(this.history.squadOvrBySeason).sort((a, b) => parseInt(a) - parseInt(b));
+            const keys = Object.keys(this.history.squadOvrBySeason).sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
             if (keys.length > 100) {
                 const pruned = {};
                 keys.slice(-100).forEach(k => {
@@ -168,7 +168,7 @@ export class TelemetryAggregator {
                 this.history.startedFromTutorial = 0;
                 this.history.startedFromSkip = 1;
             }
-        } catch { /* ignore in non-browser env */ }
+        } catch (err) { EngineLogger.capture(err, 'TelemetryAggregator.loadTutorialFunnel'); }
     }
 
     /**

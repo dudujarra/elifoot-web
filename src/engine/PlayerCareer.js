@@ -18,6 +18,7 @@
  */
 import { rng as systemRng } from './rng.js';
 import { generateDetailedAttributes, calculateOvrFromAttributes } from './PlayerAttributes.js';
+import { LIFESTYLE, PERSONALITY, PRESS, MOOD, NARRATIVE } from './EmojiConstants.js';
 // === SPEC-062 SUB-ATTRIBUTES (16 attrs in 4 groups) ===
 export const SUB_ATTRIBUTES = {
     technique: ['dribbling', 'passing', 'shooting', 'firstTouch'],
@@ -32,20 +33,20 @@ export const ALL_SUB_ATTRS = Object.values(SUB_ATTRIBUTES).flat();
 // === SPEC-065 LIFESTYLE CATALOG ===
 export const LIFESTYLE_CATALOG = {
     // Casa (Tier 1-3) — boost mood + actionSlots
-    apartment_t1:  { type: 'house', name: 'Apartamento Simples',  cost: 50000,   moodBonus: 5,  slotBonus: 0, fansBonus: 0,  emoji: '🏢' },
-    house_t2:      { type: 'house', name: 'Casa Confortável',     cost: 200000,  moodBonus: 10, slotBonus: 1, fansBonus: 0,  emoji: '🏠' },
-    mansion_t3:    { type: 'house', name: 'Mansão de Luxo',       cost: 1000000, moodBonus: 15, slotBonus: 2, fansBonus: 5,  emoji: '🏰' },
+    apartment_t1:  { type: 'house', name: 'Apartamento Simples',  cost: 50000,   moodBonus: 5,  slotBonus: 0, fansBonus: 0,  emoji: LIFESTYLE.APARTMENT },
+    house_t2:      { type: 'house', name: 'Casa Confortável',     cost: 200000,  moodBonus: 10, slotBonus: 1, fansBonus: 0,  emoji: LIFESTYLE.HOUSE },
+    mansion_t3:    { type: 'house', name: 'Mansão de Luxo',       cost: 1000000, moodBonus: 15, slotBonus: 2, fansBonus: 5,  emoji: LIFESTYLE.MANSION },
 
     // Carro
-    car_popular:   { type: 'car', name: 'Carro Popular',        cost: 30000,   moodBonus: 2,  slotBonus: 0, sponsorsBonus: 0,  emoji: '🚗' },
-    car_luxo:      { type: 'car', name: 'Carro Luxo',           cost: 200000,  moodBonus: 5,  slotBonus: 0, sponsorsBonus: 5,  emoji: '🚙' },
-    car_super:     { type: 'car', name: 'Super Esportivo',      cost: 2000000, moodBonus: 10, slotBonus: 0, sponsorsBonus: 20, emoji: '🏎️' },
+    car_popular:   { type: 'car', name: 'Carro Popular',        cost: 30000,   moodBonus: 2,  slotBonus: 0, sponsorsBonus: 0,  emoji: LIFESTYLE.CAR_POPULAR },
+    car_luxo:      { type: 'car', name: 'Carro Luxo',           cost: 200000,  moodBonus: 5,  slotBonus: 0, sponsorsBonus: 5,  emoji: LIFESTYLE.CAR_LUXURY },
+    car_super:     { type: 'car', name: 'Super Esportivo',      cost: 2000000, moodBonus: 10, slotBonus: 0, sponsorsBonus: 20, emoji: LIFESTYLE.CAR_SUPER },
 
     // Festas / lifestyle ações
-    party_private: { type: 'event', name: 'Festa Privada',      cost: 10000,   moodBonus: 5,  energyPenalty: -10, fansBonus: 2,  emoji: '🎉', oneShot: true },
-    charity_ngo:   { type: 'event', name: 'Doação ONG',         cost: 50000,   moodBonus: 3,  fansBonus: 10, bossBonus: 5, emoji: '❤️', oneShot: true },
-    investment_stocks: { type: 'investment', name: 'Investimento Ações', cost: 100000, returnPercent: 8, moodBonus: 0, emoji: '📈', oneShot: true },
-    wedding:       { type: 'event', name: 'Casamento', cost: 500000, moodBonus: 20, stabilityBonus: 10, sponsorsCut: 0.10, emoji: '💍', oneShot: true, requiresLifetimeFlag: 'unmarried' }
+    party_private: { type: 'event', name: 'Festa Privada',      cost: 10000,   moodBonus: 5,  energyPenalty: -10, fansBonus: 2,  emoji: LIFESTYLE.PARTY, oneShot: true },
+    charity_ngo:   { type: 'event', name: 'Doação ONG',         cost: 50000,   moodBonus: 3,  fansBonus: 10, bossBonus: 5, emoji: LIFESTYLE.CHARITY, oneShot: true },
+    investment_stocks: { type: 'investment', name: 'Investimento Ações', cost: 100000, returnPercent: 8, moodBonus: 0, emoji: LIFESTYLE.INVESTMENT, oneShot: true },
+    wedding:       { type: 'event', name: 'Casamento', cost: 500000, moodBonus: 20, stabilityBonus: 10, sponsorsCut: 0.10, emoji: LIFESTYLE.WEDDING, oneShot: true, requiresLifetimeFlag: 'unmarried' }
 };
 
 // Catálogo de Traits compráveis
@@ -61,7 +62,7 @@ export const TRAITS_CATALOG = {
 export const PERSONALITIES = {
     maverick: {
         name: "Maverick",
-        emoji: "🎭",
+        emoji: PERSONALITY.MAVERICK,
         description: "Showman. Jogadas arriscadas rendem 2x fans. Erros custam 2x boss.",
         fansMultiplier: 2.0,
         bossFailMultiplier: 2.0,
@@ -70,7 +71,7 @@ export const PERSONALITIES = {
     },
     virtuoso: {
         name: "Virtuoso",
-        emoji: "🎯",
+        emoji: PERSONALITY.VIRTUOSO,
         description: "Técnico. Treino dá +50% XP. Sponsors crescem -50%.",
         fansMultiplier: 1.0,
         bossFailMultiplier: 1.0,
@@ -79,7 +80,7 @@ export const PERSONALITIES = {
     },
     heartbeat: {
         name: "Heartbeat",
-        emoji: "🫀",
+        emoji: PERSONALITY.HEARTBEAT,
         description: "Líder. Teammates +1/semana. Nunca mais que +3 fans/evento.",
         fansMultiplier: 1.0,
         bossFailMultiplier: 1.0,
@@ -92,12 +93,12 @@ export const PERSONALITIES = {
 
 // NPCs Nomeados
 export const NPCS = [
-    { id: "coach", name: "Marcos Oliveira", role: "Técnico", emoji: "👔", personality: "pragmatic" },
-    { id: "journalist", name: "Juliana Reis", role: "Jornalista", emoji: "🎤", personality: "provocative", unlockWeek: 3 },
-    { id: "fanLeader", name: "Tio Dinho", role: "Líder da Torcida", emoji: "📣", personality: "passionate", unlockWeek: 1 },
-    { id: "veteran", name: "Rafael Monteiro", role: "Veterano", emoji: "🤝", personality: "mentor", unlockWeek: 2 },
-    { id: "agent", name: "Patrícia Lemos", role: "Empresária", emoji: "💼", personality: "ambitious", unlockRenown: 2 },
-    { id: "rival", name: "Diego Costa", role: "Rival", emoji: "⚔️", personality: "competitive", unlockWeek: 5 }
+    { id: "coach", name: "Marcos Oliveira", role: "Técnico", emoji: PRESS.TIE, personality: "pragmatic" },
+    { id: "journalist", name: "Juliana Reis", role: "Jornalista", emoji: PRESS.MIC, personality: "provocative", unlockWeek: 3 },
+    { id: "fanLeader", name: "Tio Dinho", role: "Líder da Torcida", emoji: PRESS.MEGAPHONE_NPC, personality: "passionate", unlockWeek: 1 },
+    { id: "veteran", name: "Rafael Monteiro", role: "Veterano", emoji: MOOD.HANDSHAKE, personality: "mentor", unlockWeek: 2 },
+    { id: "agent", name: "Patrícia Lemos", role: "Empresária", emoji: LIFESTYLE.BRIEFCASE, personality: "ambitious", unlockRenown: 2 },
+    { id: "rival", name: "Diego Costa", role: "Rival", emoji: NARRATIVE.CROSSED_SWORDS, personality: "competitive", unlockWeek: 5 }
 ];
 
 export class ProPlayer {
@@ -332,6 +333,8 @@ export class ProPlayer {
                 weekStart: 0, // engine sets currentWeek context (caller)
                 returnPercent: item.returnPercent
             });
+            // CRIT-02: Cap at 10 investments to prevent unbounded heap growth
+            if (this.lifestyle.investments.length > 10) this.lifestyle.investments.shift();
         }
 
         // Apply effects
