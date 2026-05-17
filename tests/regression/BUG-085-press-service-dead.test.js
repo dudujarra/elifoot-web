@@ -41,7 +41,7 @@ describe('BUG-085 — PressService is alive (audit confirmed not dead)', () => {
     });
 
     test('engineFactory.js instantiates and engine.js delegates to PressService', () => {
-        const FACTORY_SRC = readFileSync(resolve('src/engine/engineFactory.js'), 'utf-8');
+        const FACTORY_SRC = readFileSync(resolve('src/engine/engineFactory.ts'), 'utf-8');
         expect(FACTORY_SRC).toContain('new PressService()');
         expect(ENGINE_SRC).toContain('this._pressService.checkPressConference(this)');
         expect(ENGINE_SRC).toContain('this._pressService.answerPress(this');
