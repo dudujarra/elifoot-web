@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * BrainDashboard — Visual ML Dashboard for AutoPlay
  *
@@ -14,6 +13,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { EfPanel } from '../ui/EfPanel';
 import { Brain, ChartBar, Lightning, Trophy, TrendUp } from '@phosphor-icons/react';
+import '../../styles/brain-dashboard.css';
 
 // Colors for bar visualization
 const BAR_COLORS = [
@@ -107,45 +107,44 @@ export function BrainDashboard({ controllerRef }) {
     // Now safe to early return — all hooks called above
     if (totalUpdates === 0 && stateKeys.length === 0 && decisions.length === 0) return null;
 
+    const emotionColor =
+        emotionalState === 'CALM' ? 'var(--color-success-mid)' :
+        emotionalState === 'CONFIDENT' ? 'var(--color-learning-blue)' :
+        emotionalState === 'ANXIOUS' ? 'var(--color-amber-warning)' :
+        emotionalState === 'TILTED' ? 'var(--color-red-bright)' :
+        emotionalState === 'DESPERATE' ? 'var(--color-learning-red-dark)' : 'var(--text-muted)';
+
     return (
-        <EfPanel variant="elev" padding="md" style={{ marginBottom: '0.75rem' }}>
-            <div
-                onClick={() => setExpanded(!expanded)}
-                style={{
-                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                    cursor: 'pointer', userSelect: 'none'
-                }}
-            >
-                <h3 style={{ fontSize: '0.9rem', margin: 0 }}>
+        <EfPanel variant="elev" padding="md" className="bd-card--mb">
+            <div className="bd-header" onClick={() => setExpanded(!expanded)}>
+                <h3>
                     <Brain size={14} weight="fill" className="ef-icon-inline-md" />Brain ML Dashboard
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginLeft: '8px' }}>
+                    <span className="bd-header-meta">
                         {totalUpdates} updates • {stateKeys.length} states • {allActions.length} actions
                     </span>
                 </h3>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                    {expanded ? '▼' : '▶'}
-                </span>
+                <span className="bd-toggle">{expanded ? '▼' : '▶'}</span>
             </div>
 
             {expanded && (
-                <div style={{ marginTop: '0.75rem' }}>
+                <div className="bd-body">
                     {/* Row 1: Personality + Overview */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                    <div className="bd-row-2col">
                         {/* Personality */}
-                        <div style={cardStyle}>
-                            <div style={titleStyle}>[P] Personalidade — {String(archetypeLabel)}</div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div className="bd-card">
+                            <div className="bd-card-title">[P] Personalidade — {String(archetypeLabel)}</div>
+                            <div className="bd-traits">
                                 {Object.entries(traits).map(([trait, val]) => {
                                     if (typeof val !== 'number') return null;
                                     const pct = Math.round(val * 100);
                                     return (
-                                        <div key={trait} style={{ fontSize: '0.7rem' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                <span style={{ textTransform: 'capitalize' }}>{String(trait)}</span>
-                                                <span style={{ color: 'var(--color-success-mid)', fontWeight: 700 }}>{pct}%</span>
+                                        <div key={trait} className="bd-trait-row">
+                                            <div className="bd-trait-header">
+                                                <span className="bd-trait-name">{String(trait)}</span>
+                                                <span className="bd-trait-value">{pct}%</span>
                                             </div>
-                                            <div style={barBg}>
-                                                <div style={{ ...barFill, width: `${pct}%`, background: traitColor(trait) }} />
+                                            <div className="bd-bar-bg">
+                                                <div className="bd-bar-fill" style={{ width: `${pct}%`, background: traitColor(trait) }} />
                                             </div>
                                         </div>
                                     );
@@ -154,9 +153,9 @@ export function BrainDashboard({ controllerRef }) {
                         </div>
 
                         {/* Learning Overview */}
-                        <div style={cardStyle}>
-                            <div style={titleStyle}><ChartBar size={12} weight="bold" className="ef-icon-inline" />Aprendizado</div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.72rem' }}>
+                        <div className="bd-card">
+                            <div className="bd-card-title"><ChartBar size={12} weight="bold" className="ef-icon-inline" />Aprendizado</div>
+                            <div className="bd-stats-grid">
                                 <MiniStat label="Q Updates" value={totalUpdates} />
                                 <MiniStat label="States" value={stateKeys.length} />
                                 <MiniStat label="Actions" value={allActions.length} />
@@ -178,75 +177,60 @@ export function BrainDashboard({ controllerRef }) {
                     </div>
 
                     {/* Row 1.5: Convergence Metrics (Phase D) */}
-                    <div style={{ ...cardStyle, marginBottom: '10px' }}>
-                        <div style={titleStyle}><Lightning size={12} weight="fill" className="ef-icon-inline" />Convergência ML (Fase D)</div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', fontSize: '0.72rem' }}>
+                    <div className="bd-card bd-card--mb">
+                        <div className="bd-card-title"><Lightning size={12} weight="fill" className="ef-icon-inline" />Convergência ML (Fase D)</div>
+                        <div className="bd-row-4col">
                             <MiniStat label="Replay Buffer" value={replayBuffer} color="var(--color-learning-violet)" />
                             <MiniStat label="High Impact" value={replayImpactful} color="var(--color-amber-warning)" />
                             <MiniStat label="Active Traces" value={activeTraces} color="var(--color-learning-blue)" />
-                            <MiniStat label="Emotional" value={emotionalState} color={
-                                emotionalState === 'CALM' ? 'var(--color-success-mid)' :
-                                emotionalState === 'CONFIDENT' ? 'var(--color-learning-blue)' :
-                                emotionalState === 'ANXIOUS' ? 'var(--color-amber-warning)' :
-                                emotionalState === 'TILTED' ? 'var(--color-red-bright)' :
-                                emotionalState === 'DESPERATE' ? 'var(--color-learning-red-dark)' : 'var(--text-muted)'
-                            } />
+                            <MiniStat label="Emotional" value={emotionalState} color={emotionColor} />
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginTop: '8px' }}>
+                        <div className="bd-convergence-bars">
                             {/* Alpha decay bar */}
-                            <div style={{ fontSize: '0.68rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
+                            <div className="bd-decay-block">
+                                <div className="bd-decay-header">
                                     <span className="ef-text-muted">α (learning rate)</span>
-                                    <span style={{ color: 'var(--color-learning-teal)', fontWeight: 700 }}>{effectiveAlpha.toFixed(4)}</span>
+                                    <span className="bd-alpha-value">{effectiveAlpha.toFixed(4)}</span>
                                 </div>
-                                <div style={barBg}>
-                                    <div style={{ ...barFill, width: `${(effectiveAlpha / 0.1) * 100}%`, background: 'var(--color-learning-teal)' }} />
+                                <div className="bd-bar-bg">
+                                    <div className="bd-bar-fill" style={{ width: `${(effectiveAlpha / 0.1) * 100}%`, background: 'var(--color-learning-teal)' }} />
                                 </div>
                             </div>
                             {/* Epsilon decay bar */}
-                            <div style={{ fontSize: '0.68rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
+                            <div className="bd-decay-block">
+                                <div className="bd-decay-header">
                                     <span className="ef-text-muted">ε (exploration)</span>
-                                    <span style={{ color: 'var(--color-learning-pink)', fontWeight: 700 }}>{effectiveEpsilon.toFixed(4)}</span>
+                                    <span className="bd-epsilon-value">{effectiveEpsilon.toFixed(4)}</span>
                                 </div>
-                                <div style={barBg}>
-                                    <div style={{ ...barFill, width: `${(effectiveEpsilon / 0.15) * 100}%`, background: 'var(--color-learning-pink)' }} />
+                                <div className="bd-bar-bg">
+                                    <div className="bd-bar-fill" style={{ width: `${(effectiveEpsilon / 0.15) * 100}%`, background: 'var(--color-learning-pink)' }} />
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Row 2: Action Distribution (visual bar chart) */}
-                    <div style={{ ...cardStyle, marginBottom: '10px' }}>
-                        <div style={titleStyle}>[=] Distribuição de Ações ({totalDecisions} total)</div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                    <div className="bd-card bd-card--mb">
+                        <div className="bd-card-title">[=] Distribuição de Ações ({totalDecisions} total)</div>
+                        <div className="bd-actions-list">
                             {actionFreq.map(([action, count], i) => {
                                 const pct = totalDecisions > 0 ? (count / totalDecisions) * 100 : 0;
                                 return (
-                                    <div key={action} style={{ fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <span style={{ minWidth: '110px', color: 'var(--text-muted)', textAlign: 'right' }}>
-                                            {String(action)}
-                                        </span>
-                                        <div style={{ flex: 1, ...barBg, height: '14px' }}>
-                                            <div style={{
-                                                ...barFill,
-                                                width: `${pct}%`,
-                                                background: BAR_COLORS[i % BAR_COLORS.length],
-                                                height: '14px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                paddingLeft: '4px',
-                                                fontSize: '0.6rem',
-                                                color: 'var(--text-main)',
-                                                fontWeight: 700,
-                                                minWidth: pct > 5 ? 'auto' : '0'
-                                            }}>
+                                    <div key={action} className="bd-action-row">
+                                        <span className="bd-action-label">{String(action)}</span>
+                                        <div className="bd-bar-bg bd-bar-bg--tall" style={{ flex: 1 }}>
+                                            <div
+                                                className="bd-bar-fill--tall"
+                                                style={{
+                                                    width: `${pct}%`,
+                                                    background: BAR_COLORS[i % BAR_COLORS.length],
+                                                    minWidth: pct > 5 ? 'auto' : '0'
+                                                }}
+                                            >
                                                 {pct > 8 ? `${pct.toFixed(0)}%` : ''}
                                             </div>
                                         </div>
-                                        <span style={{ minWidth: '32px', fontWeight: 700, textAlign: 'right' }}>
-                                            {count}
-                                        </span>
+                                        <span className="bd-action-count">{count}</span>
                                     </div>
                                 );
                             })}
@@ -254,17 +238,13 @@ export function BrainDashboard({ controllerRef }) {
                     </div>
 
                     {/* Row 3: Q-Value Rankings + Reward Curve */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '10px' }}>
+                    <div className="bd-row-2col">
                         {/* Top Q-Value Actions */}
-                        <div style={cardStyle}>
-                            <div style={titleStyle}><Trophy size={12} weight="fill" className="ef-icon-inline" />Top Ações (Q-value total)</div>
+                        <div className="bd-card">
+                            <div className="bd-card-title"><Trophy size={12} weight="fill" className="ef-icon-inline" />Top Ações (Q-value total)</div>
                             {topActions.length === 0 && <div className="ef-text-sm-muted">Sem dados — rode o autoplay</div>}
                             {topActions.map((a, i) => (
-                                <div key={String(a.action)} style={{
-                                    display: 'flex', justifyContent: 'space-between',
-                                    fontSize: '0.7rem', padding: '2px 0',
-                                    borderBottom: '1px solid var(--color-bg-deep)'
-                                }}>
+                                <div key={String(a.action)} className="bd-q-row">
                                     <span>{i + 1}. {String(a.action)}</span>
                                     <strong style={{ color: a.totalQ >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)' }}>
                                         {a.totalQ >= 0 ? '+' : ''}{Number(a.totalQ).toFixed(1)}
@@ -274,11 +254,11 @@ export function BrainDashboard({ controllerRef }) {
                         </div>
 
                         {/* Reward Sparkline */}
-                        <div style={cardStyle}>
-                            <div style={titleStyle}><TrendUp size={12} weight="bold" className="ef-icon-inline" />Reward Curve (últimas {rewardHistory.length} decisões)</div>
+                        <div className="bd-card">
+                            <div className="bd-card-title"><TrendUp size={12} weight="bold" className="ef-icon-inline" />Reward Curve (últimas {rewardHistory.length} decisões)</div>
                             {rewardHistory.length === 0 && <div className="ef-text-sm-muted">Sem dados — rode o autoplay</div>}
                             {rewardHistory.length > 0 && (
-                                <div style={{ display: 'flex', alignItems: 'flex-end', height: '60px', gap: '1px' }}>
+                                <div className="bd-sparkline">
                                     {rewardHistory.slice(-30).map((r, i) => {
                                         const maxAbs = Math.max(1, ...rewardHistory.slice(-30).map(x => Math.abs(x.reward)));
                                         const normalized = r.reward / maxAbs;
@@ -286,13 +266,12 @@ export function BrainDashboard({ controllerRef }) {
                                         return (
                                             <div
                                                 key={i}
+                                                className="bd-spark-bar"
                                                 title={`wk${r.week}: ${r.action} → ${Number(r.reward).toFixed(1)}`}
                                                 style={{
-                                                    flex: 1,
                                                     height: `${height}px`,
-                                                    minHeight: '2px',
                                                     background: r.reward >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)',
-                                                    }}
+                                                }}
                                             />
                                         );
                                     })}
@@ -302,24 +281,18 @@ export function BrainDashboard({ controllerRef }) {
                     </div>
 
                     {/* Row 4: State Exploration */}
-                    <div style={{ ...cardStyle, marginBottom: '10px' }}>
-                        <div style={titleStyle}>[#] States Explorados ({stateVisits.length})</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', maxHeight: '120px', overflowY: 'auto' }}>
+                    <div className="bd-card bd-card--mb">
+                        <div className="bd-card-title">[#] States Explorados ({stateVisits.length})</div>
+                        <div className="bd-states-grid">
                             {stateVisits.slice(0, 30).map(sv => {
                                 const maxVisits = stateVisits.length > 0 ? stateVisits[0].visits : 1;
                                 const intensity = Math.min(1, sv.visits / Math.max(1, maxVisits));
                                 return (
                                     <div
                                         key={sv.state}
+                                        className="bd-state-chip"
                                         title={`${sv.state} — ${sv.visits} visitas`}
-                                        style={{
-                                            padding: '3px 6px',
-                                            fontSize: '0.6rem',
-                                            fontFamily: 'var(--font-mono)',
-                                            background: 'var(--color-learning-blue)',
-                                            border: `1px solid var(--color-learning-blue-dark)`,
-                                            color: intensity > 0.5 ? 'var(--text-main)' : 'var(--text-muted)'
-                                        }}
+                                        style={{ color: intensity > 0.5 ? 'var(--text-main)' : 'var(--text-muted)' }}
                                     >
                                         {String(sv.state)} <strong>({sv.visits})</strong>
                                     </div>
@@ -329,22 +302,18 @@ export function BrainDashboard({ controllerRef }) {
                     </div>
 
                     {/* Row 5: Episodic Memory Timeline */}
-                    <div style={cardStyle}>
-                        <div style={titleStyle}>[~] Memória Episódica (últimas {Math.min(10, memory.length)})</div>
-                        <div style={{ maxHeight: '140px', overflowY: 'auto' }}>
+                    <div className="bd-card">
+                        <div className="bd-card-title">[~] Memória Episódica (últimas {Math.min(10, memory.length)})</div>
+                        <div className="bd-memory-scroll">
                             {memory.slice(-10).reverse().map((m, i) => (
-                                <div key={i} style={{
-                                    display: 'flex', justifyContent: 'space-between', gap: '8px',
-                                    padding: '3px 0', fontSize: '0.68rem',
-                                    borderBottom: '1px solid var(--color-bg-deep)'
-                                }}>
+                                <div key={i} className="bd-memory-row">
                                     <span className="ef-text-muted">wk{m.week ?? '?'}</span>
-                                    <span style={{ flex: 1 }}>{String(m.action || m.decision || '?')}</span>
+                                    <span className="bd-memory-action">{String(m.action || m.decision || '?')}</span>
                                     <span style={{ color: m.result === 'W' ? 'var(--color-success-mid)' : m.result === 'L' ? 'var(--color-red-bright)' : 'var(--color-amber-warning)' }}>
                                         {String(m.result || '')}
                                     </span>
                                     {m.reward != null && (
-                                        <strong style={{ color: m.reward >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)', minWidth: '35px', textAlign: 'right' }}>
+                                        <strong className="bd-reward-badge" style={{ color: m.reward >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)' }}>
                                             {m.reward >= 0 ? '+' : ''}{Number(m.reward).toFixed(1)}
                                         </strong>
                                     )}
@@ -366,39 +335,12 @@ export function BrainDashboard({ controllerRef }) {
 // Helper components
 function MiniStat({ label, value, color }) {
     return (
-        <div style={{ textAlign: 'center', padding: '4px' }}>
-            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>{String(label)}</div>
-            <div style={{ fontSize: '0.85rem', fontWeight: 700, color: color || 'var(--color-soft-text)' }}>{String(value)}</div>
+        <div className="bd-mini-stat">
+            <div className="bd-mini-stat__label">{String(label)}</div>
+            <div className="bd-mini-stat__value" style={color ? { color } : undefined}>{String(value)}</div>
         </div>
     );
 }
-
-// Styles
-const cardStyle = {
-    padding: '8px 10px',
-    background: 'var(--bg-dark)',
-    border: '1px solid var(--bg-dark)',
-    };
-
-const titleStyle = {
-    fontSize: '0.72rem',
-    fontWeight: 700,
-    color: 'var(--accent)',
-    marginBottom: '6px',
-    textTransform: 'uppercase',
-    letterSpacing: '0.5px',
-};
-
-const barBg = {
-    background: 'var(--color-bg-deep)',
-    height: '6px',
-    overflow: 'hidden',
-};
-
-const barFill = {
-    height: '6px',
-    transition: 'width 0.3s ease',
-};
 
 function traitColor(trait) {
     const map = {

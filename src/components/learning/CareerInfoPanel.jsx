@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * CareerInfoPanel — SPEC-124
  *
@@ -18,6 +17,7 @@ import {
     Crown, Star, Sparkle, ClipboardText, Plant,
     SoccerBall, Trophy, ChartBar, Calendar, ArrowUp, ArrowDown
 } from '@phosphor-icons/react';
+import '../../styles/career-info-panel.css';
 
 function RepIcon({ rep }) {
     if (rep >= 80) return <Crown size={12} weight="fill" className="ef-icon-inline" />;
@@ -53,7 +53,7 @@ export default function CareerInfoPanel({ controllerRef }) {
             const stats = c.getStats?.() || {};
             const legacy = engine.legacy || {};
 
-            // Top scorers current season (seasonGoals reset each season — realistic numbers)
+            // Top scorers current season
             const topScorers = (team?.squad || [])
                 .map(p => ({
                     ...p,
@@ -65,14 +65,6 @@ export default function CareerInfoPanel({ controllerRef }) {
                 .filter(p => p.goals > 0 || p.totalGoals > 0)
                 .sort((a, b) => b.goals - a.goals || b.totalGoals - a.totalGoals)
                 .slice(0, 5);
-
-            // Build seasonHistory promotions/relegations
-            const _transitions = [];
-            const seasonHistory = stats.seasonHistory || [];
-            for (let i = 1; i < seasonHistory.length; i++) {
-                // Note: seasonHistory doesn't track division — derive from order
-                // (simplification: just show season summary)
-            }
 
             // Manager Identity (SPEC-070)
             const identity = engine.getManagerIdentity?.() || null;
@@ -110,121 +102,87 @@ export default function CareerInfoPanel({ controllerRef }) {
         return acc;
     }, {});
 
+    const posColor = snapshot.position <= 4 ? 'var(--color-success-mid)' : snapshot.position >= 17 ? 'var(--danger)' : 'var(--accent)';
+
     return (
-        <EfPanel variant="sunk" padding="md" style={{
-            marginTop: '0.5rem',
-            background: 'var(--color-forest-pulse)',
-            border: '1px solid var(--accent)',
-        }}>
-            <div
-                onClick={() => setOpen(o => !o)}
-                style={{
-                    cursor: 'pointer',
-                    fontWeight: 700,
-                    color: 'var(--accent)',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                }}
-            >
+        <EfPanel variant="sunk" padding="md" className="cip-root">
+            <div className="cip-header" onClick={() => setOpen(o => !o)}>
                 <span><SoccerBall size={14} weight="fill" className="ef-icon-inline-md" />CARREIRA INFO {open ? '▼' : '▶'}</span>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                    Season {snapshot.seasonNumber} · Wk {snapshot.currentWeek}
-                </span>
+                <span className="cip-header-meta">Season {snapshot.seasonNumber} · Wk {snapshot.currentWeek}</span>
             </div>
 
             {open && (
                 <>
                     {/* Team header */}
-                    <div style={{
-                        marginTop: '8px',
-                        padding: '8px',
-                        background: 'var(--color-shadow-deep)',
-                        display: 'flex',
-                        gap: '12px',
-                        flexWrap: 'wrap'
-                    }}>
+                    <div className="cip-team-bar">
                         <div>
                             <div className="ef-text-sm-muted">TIME</div>
-                            <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{snapshot.team.name}</div>
-                            <div style={{ color: divColor, fontWeight: 700 }}>
-                                {divName} ({snapshot.zone})
-                            </div>
+                            <div className="cip-team-name">{snapshot.team.name}</div>
+                            <div className="cip-division" style={{ color: divColor }}>{divName} ({snapshot.zone})</div>
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">POSIÇÃO</div>
-                            <div style={{ fontWeight: 700, fontSize: '1.2rem', color: snapshot.position <= 4 ? 'var(--color-success-mid)' : snapshot.position >= 17 ? 'var(--danger)' : 'var(--accent)' }}>
-                                {snapshot.position}º
-                            </div>
+                            <div className="cip-position" style={{ color: posColor }}>{snapshot.position}º</div>
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">SQUAD</div>
-                            <div style={{ fontWeight: 700 }}>{snapshot.squadSize} jog · OVR {snapshot.avgOvr}</div>
+                            <div className="cip-squad-info">{snapshot.squadSize} jog · OVR {snapshot.avgOvr}</div>
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">BALANÇO</div>
-                            <div style={{ fontWeight: 700, color: snapshot.balance < 0 ? 'var(--danger)' : 'var(--color-success-mid)' }}>
+                            <div className="cip-balance" style={{ color: snapshot.balance < 0 ? 'var(--danger)' : 'var(--color-success-mid)' }}>
                                 R$ {(snapshot.balance / 1_000_000).toFixed(1)}M
                             </div>
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">REPUTAÇÃO</div>
-                            <div style={{ color: repBadge.color, fontWeight: 700 }}><RepIcon rep={snapshot.reputation} />{repBadge.label}</div>
+                            <div className="cip-reputation" style={{ color: repBadge.color }}><RepIcon rep={snapshot.reputation} />{repBadge.label}</div>
                             <div className="ef-text-sm-muted">{snapshot.reputation}/100</div>
                         </div>
                     </div>
 
                     {/* Manager Identity (SPEC-070) */}
                     {snapshot.identity && (
-                        <div style={{
-                            marginTop: '8px',
-                            padding: '8px',
-                            background: 'var(--color-shadow-deep)',
-                            borderLeft: '3px solid var(--accent)',
-                        }}>
+                        <div className="cip-identity">
                             <div className="ef-text-xs-muted">
                                 <Crown size={12} weight="fill" className="ef-icon-inline" />IDENTIDADE TÁTICA
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.75rem' }}>
+                            <div className="cip-identity-grid">
                                 <span className="ef-text-muted">Estilo:</span>
-                                <strong style={{ color: 'var(--accent)' }}>
+                                <strong className="cip-identity-style">
                                     {snapshot.identity.dominantStyle}
                                     {snapshot.identity.styleConfidence > 0 && ` (${snapshot.identity.styleConfidence}%)`}
                                 </strong>
                                 <span className="ef-text-muted">Tier:</span>
                                 <strong>{snapshot.identity.reputationTier}</strong>
                                 <span className="ef-text-muted">Destaque:</span>
-                                <span style={{ fontStyle: 'italic' }}>{snapshot.identity.careerHighlight}</span>
+                                <span className="cip-identity-highlight">{snapshot.identity.careerHighlight}</span>
                             </div>
                         </div>
                     )}
 
                     {/* Titles + insights row */}
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px', flexWrap: 'wrap' }}>
-                        <div style={{ flex: 1, minWidth: '180px' }}>
+                    <div className="cip-row">
+                        <div className="cip-col">
                             <div className="ef-text-xs-muted">
                                 <Trophy size={12} weight="fill" className="ef-icon-inline" />TÍTULOS ({snapshot.titles.length})
                             </div>
                             {snapshot.titles.length === 0 ? (
-                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                                    Nenhum título ainda
-                                </div>
+                                <div className="cip-empty-text">Nenhum título ainda</div>
                             ) : (
                                 <div>
                                     {Object.entries(titlesByDiv).map(([title, count]) => (
-                                        <div key={title} style={{ fontSize: '0.7rem' }}>
-                                            • {title} <strong>×{count}</strong>
-                                        </div>
+                                        <div key={title} className="cip-title-item">• {title} <strong>×{count}</strong></div>
                                     ))}
                                 </div>
                             )}
                         </div>
 
-                        <div style={{ flex: 1, minWidth: '180px' }}>
+                        <div className="cip-col">
                             <div className="ef-text-xs-muted">
                                 <ChartBar size={12} weight="bold" className="ef-icon-inline" />INSIGHTS CARREIRA
                             </div>
-                            <div style={{ fontSize: '0.7rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
+                            <div className="cip-insights-grid">
                                 <span>Maior streak V:</span>
                                 <strong>{snapshot.insights.longestWinStreak ?? 0}</strong>
                                 <span>Maior goleada:</span>
@@ -243,25 +201,24 @@ export default function CareerInfoPanel({ controllerRef }) {
 
                     {/* Top scorers */}
                     {snapshot.topScorers.length > 0 && (
-                        <div style={{ marginTop: '8px' }}>
+                        <div className="cip-scorers">
                             <div className="ef-text-xs-muted">
                                 <SoccerBall size={12} weight="fill" className="ef-icon-inline" />ARTILHEIROS (TEMPORADA ATUAL)
                             </div>
-                            <div style={{ background: 'var(--color-shadow-deep)', padding: '8px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {/* Destaque o Top 1 com o Hexagon Chart */}
+                            <div className="cip-scorers-list">
                                 {snapshot.topScorers.length > 0 && (
                                     <>
-                                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '8px', background: 'var(--color-bg-deep)', border: '1px solid var(--color-forest-pulse)' }}>
-                                        <div style={{ width: '120px', height: '120px', flexShrink: 0 }}>
+                                    <div className="cip-highlight-card">
+                                        <div className="cip-hexagon-wrap">
                                             <HexagonChart player={snapshot.topScorers[0]} size={120} showLabels={true} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <div style={{ color: 'var(--accent)', fontSize: '0.7rem', fontWeight: 700, marginBottom: '4px' }}><Trophy size={11} weight="fill" className="ef-icon-inline" />DESTAQUE DA TEMPORADA</div>
-                                            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)' }}>{snapshot.topScorers[0].name}</div>
-                                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
+                                            <div className="cip-highlight-label"><Trophy size={11} weight="fill" className="ef-icon-inline" />DESTAQUE DA TEMPORADA</div>
+                                            <div className="cip-highlight-name">{snapshot.topScorers[0].name}</div>
+                                            <div className="cip-highlight-pos">
                                                 {snapshot.topScorers[0].position} · OVR {snapshot.topScorers[0].ovr}
                                             </div>
-                                            <div style={{ fontSize: '0.8rem' }}>
+                                            <div className="cip-highlight-stats">
                                                 <strong style={{ color: 'var(--color-success-mid)' }}>{snapshot.topScorers[0].goals}G</strong>{' '}
                                                 <span className="ef-text-muted">
                                                     {snapshot.topScorers[0].assists}A · {snapshot.topScorers[0].apps}j
@@ -269,22 +226,17 @@ export default function CareerInfoPanel({ controllerRef }) {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* Mostrar grade detalhada do artilheiro */}
-                                    <div style={{ marginTop: '4px', borderTop: '1px solid var(--color-bg-deep)', paddingTop: '8px' }}>
+                                    <div className="cip-attrs-divider">
                                         <PlayerAttributesGrid player={snapshot.topScorers[0]} />
                                     </div>
                                     </>
                                 )}
-                                
+
                                 {/* Lista dos demais artilheiros */}
                                 {snapshot.topScorers.slice(1).map((p, i) => (
-                                    <div key={i + 1} style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        fontSize: '0.7rem',
-                                        padding: '4px',
-                                        borderBottom: i < snapshot.topScorers.length - 2 ? '1px solid var(--color-bg-deep)' : 'none'
-                                    }}>
+                                    <div key={i + 1} className="cip-scorer-row"
+                                        style={{ borderBottom: i < snapshot.topScorers.length - 2 ? '1px solid var(--color-bg-deep)' : 'none' }}
+                                    >
                                         <span>
                                             <strong className="ef-text-muted">{i + 2}.</strong>{' '}
                                             {p.name} ({p.position} · OVR {p.ovr})
@@ -303,17 +255,11 @@ export default function CareerInfoPanel({ controllerRef }) {
 
                     {/* Last seasons compact */}
                     {snapshot.seasons.length > 0 && (
-                        <div style={{ marginTop: '8px' }}>
+                        <div className="cip-seasons">
                             <div className="ef-text-xs-muted">
                                 <Calendar size={12} weight="fill" className="ef-icon-inline" />ÚLTIMAS {snapshot.seasons.length} TEMPORADAS
                             </div>
-                            <div style={{
-                                display: 'flex',
-                                gap: '4px',
-                                flexWrap: 'wrap',
-                                background: 'var(--color-shadow-deep)',
-                                padding: '4px',
-                                }}>
+                            <div className="cip-seasons-wrap">
                                 {snapshot.seasons.map((s, i) => {
                                     const div = DIV_NAMES[s.division] || `D${s.division}`;
                                     let TitleIcon = null;
@@ -321,13 +267,10 @@ export default function CareerInfoPanel({ controllerRef }) {
                                     else if (s.title?.startsWith('Campeão')) TitleIcon = Trophy;
                                     else if (s.title === 'Rebaixado') TitleIcon = ArrowDown;
                                     return (
-                                        <div key={i} style={{
-                                            fontSize: '0.65rem',
-                                            padding: '2px 6px',
-                                            background: TitleIcon ? 'var(--color-forest-pulse)' : 'transparent',
-                                            border: TitleIcon ? '1px solid var(--accent)' : '1px solid var(--color-bg-deep)',
-                                            fontFamily: 'var(--font-mono)'
-                                        }} title={s.title || s.record}>
+                                        <div key={i}
+                                            className={`cip-season-chip ${TitleIcon ? 'cip-season-chip--highlight' : 'cip-season-chip--normal'}`}
+                                            title={s.title || s.record}
+                                        >
                                             {TitleIcon && <TitleIcon size={10} weight="fill" style={{verticalAlign:'-1px',marginRight:'3px'}} />}{div} · {s.position}º
                                         </div>
                                     );
