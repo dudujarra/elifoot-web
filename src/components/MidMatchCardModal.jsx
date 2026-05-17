@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /* eslint-disable react-refresh/only-export-components */
 /**
  * MidMatchCardModal — SPEC-B2.2
@@ -9,6 +8,7 @@
 
 import { useCallback, useEffect } from 'react';
 import { ChatCircle, X } from '@phosphor-icons/react';
+import '../styles/decision-modal.css';
 
 // ─── helpers exportados para teste ───
 
@@ -50,72 +50,33 @@ export function MidMatchCardModal({ card, onChoose, onClose }) {
 
     return (
         <div
-            className="ef-midmatch-card-modal"
+            className="ef-decision-overlay"
             role="dialog"
             aria-modal="true"
             aria-labelledby="ef-midmatch-title"
-            style={{
-                position: 'fixed',
-                inset: 0,
-                backgroundColor: 'rgba(5, 10, 15, 0.92)',
-                zIndex: 950,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '24px',
-            }}
         >
-            <div style={{
-                maxWidth: '560px',
-                width: '100%',
-                backgroundColor: 'var(--color-bg-deep)',
-                border: '2px solid var(--accent)',
-                padding: '24px',
-                position: 'relative',
-            }}>
+            <div className="ef-decision-card" style={{ '--decision-accent': 'var(--accent)' }}>
                 <button
                     type="button"
                     onClick={handleClose}
                     aria-label="Fechar carta"
-                    style={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: '10px',
-                        background: 'transparent',
-                        border: '1px solid var(--color-soft-border)',
-                        color: 'var(--text-main)',
-                        padding: '4px',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                    }}
+                    className="ef-decision-close"
                 >
                     <X size={14} weight="bold" />
                 </button>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <div className="ef-decision-header">
                     <ChatCircle size={20} color="var(--accent)" weight="fill" />
-                    <span id="ef-midmatch-title" style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--accent)',
-                        fontFamily: 'var(--font-sans)',
-                        fontWeight: 'bold',
-                        letterSpacing: '0.1em',
-                    }}>
+                    <span id="ef-midmatch-title" className="ef-decision-title">
                         DECISÃO DO TÉCNICO
                     </span>
                 </div>
 
-                <p style={{
-                    color: 'var(--text-main)',
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '1rem',
-                    lineHeight: 1.5,
-                    margin: '0 0 20px 0',
-                }}>
+                <p className="ef-decision-body">
                     {card.text}
                 </p>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div className="ef-decision-options">
                     {card.options.map((opt, idx) => {
                         const chip = formatEffectChip(opt.effect);
                         return (
@@ -123,21 +84,11 @@ export function MidMatchCardModal({ card, onChoose, onClose }) {
                                 key={`${card.id}-opt-${idx}`}
                                 type="button"
                                 onClick={() => handleChoose(opt, idx)}
-                                className="ef-midmatch-option-btn"
-                                style={{
-                                    backgroundColor: 'var(--bg-panel)',
-                                    border: '1px solid var(--color-soft-border)',
-                                    padding: '12px 16px',
-                                    fontFamily: 'var(--font-sans)',
-                                    color: 'var(--text-main)',
-                                    cursor: 'pointer',
-                                    textAlign: 'left',
-                                    fontSize: '0.9rem',
-                                }}
+                                className="ef-decision-option-btn"
                             >
-                                <div style={{ fontWeight: 'bold', marginBottom: chip ? '4px' : 0 }}>{opt.label}</div>
+                                <div className={`ef-decision-option-label${chip ? ' ef-decision-option-label--has-chip' : ''}`}>{opt.label}</div>
                                 {chip && (
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                                    <div className="ef-decision-option-chip">
                                         {chip}
                                     </div>
                                 )}

@@ -155,9 +155,9 @@ function HallTab({ hall }) {
                         <div
                             key={slotKey}
                             className={`ef-hall-slot${filled ? ' ef-hall-slot--filled' : ''}`}
-                            style={{ borderColor: accent, color: accent }}
+                            style={{ '--slot-accent': accent }}
                         >
-                            <div className="ef-hall-slot__inner" style={{ borderColor: accent }}>
+                            <div className="ef-hall-slot__inner">
                                 <div className="ef-hall-slot__icon-wrap">
                                     <Icon
                                         size={56}
@@ -165,10 +165,7 @@ function HallTab({ hall }) {
                                         weight={filled ? 'fill' : 'regular'}
                                     />
                                 </div>
-                                <span
-                                    className="ef-hall-slot__pill"
-                                    style={{ background: accent }}
-                                >
+                                <span className="ef-hall-slot__pill">
                                     {meta.label.toUpperCase()}
                                 </span>
                                 {filled ? (
@@ -176,21 +173,18 @@ function HallTab({ hall }) {
                                         <div className="ef-hall-slot__name">
                                             {filled.playerName}
                                         </div>
-                                        <div
-                                            className="ef-hall-slot__stats"
-                                            style={{ borderTopColor: accent }}
-                                        >
+                                        <div className="ef-hall-slot__stats">
                                             <div className="ef-hall-slot__stat-block">
-                                                <span className="ef-hall-slot__stat-label" style={{ color: accent }}>JOGOS</span>
+                                                <span className="ef-hall-slot__stat-label">JOGOS</span>
                                                 <span className="ef-hall-slot__stat-value">{filled.stats?.apps ?? 0}</span>
                                             </div>
                                             <div className="ef-hall-slot__stat-block">
-                                                <span className="ef-hall-slot__stat-label" style={{ color: accent }}>GOLS</span>
+                                                <span className="ef-hall-slot__stat-label">GOLS</span>
                                                 <span className="ef-hall-slot__stat-value">{filled.stats?.goals ?? 0}</span>
                                             </div>
                                             {slotKey === 'carrasco' && (
                                                 <div className="ef-hall-slot__stat-block">
-                                                    <span className="ef-hall-slot__stat-label" style={{ color: accent }}>v/CLUBE</span>
+                                                    <span className="ef-hall-slot__stat-label">v/CLUBE</span>
                                                     <span className="ef-hall-slot__stat-value">{filled.stats?.goalsVsThisClub ?? 0}</span>
                                                 </div>
                                             )}
@@ -199,10 +193,7 @@ function HallTab({ hall }) {
                                 ) : (
                                     <>
                                         <div className="ef-hall-slot__placeholder">—</div>
-                                        <div
-                                            className="ef-hall-slot__criteria"
-                                            style={{ borderTopColor: accent }}
-                                        >
+                                        <div className="ef-hall-slot__criteria">
                                             {meta.criteria}
                                         </div>
                                     </>
@@ -272,12 +263,12 @@ function HeritageTab({ players, hasHall }) {
                                     <div key={traitKey} className="ef-heritage-trait">
                                         <div className="ef-heritage-trait__label">
                                             <span>{traitMeta.label.toUpperCase()}</span>
-                                            <span className="ef-heritage-trait__value" style={{ color: traitMeta.color }}>{value}</span>
+                                            <span className="ef-heritage-trait__value" style={{ '--trait-color': traitMeta.color }}>{value}</span>
                                         </div>
                                         <div className="ef-heritage-bar">
                                             <div
                                                 className="ef-heritage-bar__fill"
-                                                style={{ width: `${pct}%`, backgroundColor: traitMeta.color }}
+                                                style={{ width: `${pct}%`, '--trait-color': traitMeta.color }}
                                             />
                                         </div>
                                     </div>

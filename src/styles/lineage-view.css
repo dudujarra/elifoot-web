@@ -41,7 +41,8 @@
 
 .ef-hall-slot {
   background: var(--color-bg-secondary);
-  border: var(--primitive-border-thick) solid var(--color-text-secondary);
+  border: var(--primitive-border-thick) solid var(--slot-accent, var(--color-text-secondary));
+  color: var(--slot-accent, var(--color-text-secondary));
   padding: 4px;
   position: relative;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
@@ -57,7 +58,7 @@
 }
 
 .ef-hall-slot__inner {
-  border: var(--primitive-border-thin) solid var(--color-text-secondary);
+  border: var(--primitive-border-thin) solid var(--slot-accent, var(--color-text-secondary));
   background: rgba(4, 8, 5, 0.6);
   padding: 24px;
   display: flex;
@@ -78,7 +79,7 @@
   font-size: var(--primitive-font-size-badge-desktop);
   letter-spacing: 0.08em;
   color: var(--color-bg);
-  background: var(--color-text-secondary);
+  background: var(--slot-accent, var(--color-text-secondary));
   margin-bottom: 16px;
 }
 
@@ -111,7 +112,7 @@
   gap: 12px;
   margin-top: auto;
   padding-top: 16px;
-  border-top: var(--primitive-border-thin) solid var(--color-text-secondary);
+  border-top: var(--primitive-border-thin) solid var(--slot-accent, var(--color-text-secondary));
 }
 
 .ef-hall-slot__stat-block {
@@ -125,8 +126,7 @@
   font-family: var(--font-mono);
   font-size: var(--primitive-font-size-badge-desktop);
   letter-spacing: 0.08em;
-  color: var(--color-text-secondary);
-  
+  color: var(--slot-accent, var(--color-text-secondary));
 }
 
 .ef-hall-slot__stat-value {
@@ -150,7 +150,7 @@
   line-height: 1.5;
   margin-top: auto;
   padding-top: 16px;
-  border-top: var(--primitive-border-hairline) dashed var(--color-text-secondary);
+  border-top: var(--primitive-border-hairline) dashed var(--slot-accent, var(--color-text-secondary));
   width: 100%;
 }
 
@@ -279,6 +279,7 @@
 
 .ef-heritage-trait__value {
   font-weight: 700;
+  color: var(--trait-color, inherit);
 }
 
 .ef-heritage-bar {
@@ -290,6 +291,7 @@
 
 .ef-heritage-bar__fill {
   height: 100%;
+  background-color: var(--trait-color, var(--color-primary));
   transition: width 0.3s ease;
 }
 

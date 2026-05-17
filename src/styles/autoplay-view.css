@@ -667,3 +667,59 @@
 .ef-ap__velocity-cell--max {
   box-shadow: 0 0 12px rgba(57, 255, 20, 0.45);
 }
+
+/* AKITA-424 — CSS extraction from inline styles */
+
+.ef-ap__llm-status-text {
+  font-size: 0.72rem;
+  color: var(--llm-status-color, var(--ef-ap-info-grey));
+}
+
+.ef-ap__brain-q-value {
+  color: var(--q-color, var(--ef-ap-info-grey));
+}
+
+.ef-ap__gdd-coverage-score {
+  color: var(--coverage-color, var(--ef-ap-info-grey));
+  font-size: 0.85rem;
+}
+
+.ef-ap__telemetry-score-inline {
+  margin-left: 8px;
+  font-size: 0.75rem;
+  color: var(--score-color, var(--ef-ap-info-grey));
+}
+
+.ef-ap__telemetry-card-border {
+  border: 3px solid var(--score-color, var(--ef-ap-info-grey));
+}
+
+.ef-ap__telemetry-score-value {
+  font-weight: 700;
+  color: var(--score-color, var(--ef-ap-info-grey));
+}
+
+.ef-ap__pacing-border {
+  border-left: 4px solid var(--pacing-color, var(--ef-ap-info));
+}
+
+.ef-ap__gdd-status-icon {
+  vertical-align: -2px;
+  margin-right: 4px;
+}
+
+.ef-ap__gdd-status-icon--ok {
+  color: var(--primary);
+}
+
+.ef-ap__gdd-status-icon--fail {
+  color: var(--danger);
+}
+
+.ef-ap__gdd-cell-count--fired {
+  color: var(--ef-ap-success-green);
+}
+
+.ef-ap__gdd-cell-count--empty {
+  color: var(--ef-ap-err-red);
+}

@@ -521,7 +521,7 @@ export function AutoPlayView() {
                         </span>
                     </div>
                     {llmStatus.mode === 'webllm' && (
-                        <div style={{ fontSize: '0.72rem', color: llmStatus.loadStatus === 'error' ? 'var(--danger)' : 'var(--ef-ap-info-grey)' }}>
+                        <div className="ef-ap__llm-status-text" style={{ '--llm-status-color': llmStatus.loadStatus === 'error' ? 'var(--danger)' : undefined }}>
                             status: <strong>{llmStatus.loadStatus}</strong>
                             {llmStatus.loadProgress > 0 && llmStatus.loadProgress < 1 && (
                                 <span> ({(llmStatus.loadProgress * 100).toFixed(0)}%)</span>
@@ -571,7 +571,7 @@ export function AutoPlayView() {
                                 Top actions:&nbsp;
                                 {stats.brain.topActions.slice(0, 3).map((a, i) => (
                                     <span key={i} className="ef-ap__brain-action-item">
-                                        {a.action} <strong style={{ color: a.totalQ >= 0 ? 'var(--ef-ap-success-green)' : 'var(--ef-ap-fail-red)' }}>
+                                        {a.action} <strong className="ef-ap__brain-q-value" style={{ '--q-color': a.totalQ >= 0 ? 'var(--ef-ap-success-green)' : 'var(--ef-ap-fail-red)' }}>
                                             {a.totalQ >= 0 ? '+' : ''}{a.totalQ.toFixed(1)}
                                         </strong>
                                     </span>
@@ -741,7 +741,7 @@ export function AutoPlayView() {
                             const color = pct >= 80 ? 'var(--ef-ap-success-green)' : pct >= 50 ? 'var(--ef-ap-warn-amber)' : 'var(--ef-ap-err-red)';
                             return (
                                 <span>
-                                    GDD Coverage: <strong style={{ color, fontSize: '0.85rem' }}>{active}/{total} ({pct}%)</strong>
+                                    GDD Coverage: <strong className="ef-ap__gdd-coverage-score" style={{ '--coverage-color': color }}>{active}/{total} ({pct}%)</strong>
                                     {pct >= 100 && ' [*] FULL PARITY'}
                                     {pct >= 80 && pct < 100 && ' — rode mais seasons para cobertura total'}
                                 </span>
@@ -761,7 +761,7 @@ export function AutoPlayView() {
                         <h3 className="ef-arcade-h ef-arcade-h--md">
                             <ChartBar size={14} weight="bold" className="ef-icon-inline-md" />
                             Telemetria ({Object.keys(stats.telemetry.results).length} detectores)
-                            <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: scoreColor(stats.telemetry.overallScore) }}>
+                            <span className="ef-ap__telemetry-score-inline" style={{ '--score-color': scoreColor(stats.telemetry.overallScore) }}>
                                 Score Geral: {stats.telemetry.overallScore}
                             </span>
                         </h3>
@@ -775,18 +775,18 @@ export function AutoPlayView() {
                                 <div
                                     key={spec}
                                     onClick={() => setExpandedSpec(expandedSpec === spec ? null : spec)}
-                                    className="ef-ap__telemetry-card"
-                                    style={{ border: `3px solid ${scoreColor(res.score)}` }}
+                                    className="ef-ap__telemetry-card ef-ap__telemetry-card-border"
+                                    style={{ '--score-color': scoreColor(res.score) }}
                                 >
                                     <div className="ef-ap__telemetry-card-head">
                                         <strong className="ef-ap__telemetry-card-name">{spec}</strong>
-                                        <span style={{ fontWeight: 700, color: scoreColor(res.score) }}>{res.score}</span>
+                                        <span className="ef-ap__telemetry-score-value" style={{ '--score-color': scoreColor(res.score) }}>{res.score}</span>
                                     </div>
                                     <div className="ef-ap__telemetry-card-desc">
                                         {res.name}
                                     </div>
                                     {res.signals?.[0] && (
-                                        <div className="ef-ap__telemetry-signal-top" style={{ color: scoreColor(100 - (res.signals[0].severity * 100)) }}>
+                                        <div className="ef-ap__telemetry-signal-top" style={{ '--score-color': scoreColor(100 - (res.signals[0].severity * 100)), color: 'var(--score-color)' }}>
                                             <WarningCircle size={11} weight="bold" className="ef-icon-inline" />{res.signals[0].id}
                                         </div>
                                     )}
@@ -900,7 +900,7 @@ export function AutoPlayView() {
                 const borderColor = sevColors[evt.severity] || 'var(--ef-ap-info)';
                 return (
                     <EfModal title={evt.title} onClose={() => {}}>
-                        <div className="ef-ap__pacing-body" style={{ borderLeft: `4px solid ${borderColor}` }}>
+                        <div className="ef-ap__pacing-body ef-ap__pacing-border" style={{ '--pacing-color': borderColor }}>
                             <p className="ef-sans ef-text-main ef-ap__pacing-text">{evt.body}</p>
                         </div>
                         <div className="ef-ap__pacing-actions">
@@ -935,13 +935,12 @@ function GDDStatus({ label, count }) {
         <div className={`ef-arcade-cell${fired ? ' ef-arcade-cell--fired' : ' ef-ap__gdd-cell-empty'}`}>
             <span>
                 {fired
-                    ? <CheckCircle size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px',color:'var(--primary)'}} />
-                    : <XCircle size={12} weight="fill" style={{verticalAlign:'-2px',marginRight:'4px',color:'var(--danger)'}} />}
+                    ? <CheckCircle size={12} weight="fill" className="ef-ap__gdd-status-icon ef-ap__gdd-status-icon--ok" />
+                    : <XCircle size={12} weight="fill" className="ef-ap__gdd-status-icon ef-ap__gdd-status-icon--fail" />}
                 {label}
             </span>
             <strong
-                className="ef-ap__gdd-cell-count"
-                style={{ color: fired ? 'var(--ef-ap-success-green)' : 'var(--ef-ap-err-red)' }}
+                className={`ef-ap__gdd-cell-count ${fired ? 'ef-ap__gdd-cell-count--fired' : 'ef-ap__gdd-cell-count--empty'}`}
             >
                 {count}×
             </strong>
