@@ -1375,3 +1375,72 @@
     padding: 18px;
   }
 }
+
+/* ── Wave: inline-style extraction (AKITA-420) ───────── */
+.ef-dashboard-error {
+  padding: 24px;
+  font-family: var(--font-mono);
+}
+
+.ef-dashboard-nav-tab-btn {
+  width: 100%;
+  justify-content: flex-start;
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+.ef-dashboard-nav-action-btn {
+  width: 100%;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  gap: 8px;
+}
+
+.ef-dashboard-nav-play-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 1rem;
+  padding: 24px;
+  font-family: var(--font-sans);
+  font-weight: bold;
+  gap: 8px;
+}
+
+.ef-dashboard-alert--clickable { cursor: pointer; }
+
+.ef-dashboard-progress--mt { margin-top: 16px; }
+.ef-dashboard-progress--mb { margin-bottom: 16px; }
+
+.ef-dashboard-section-label--prele {
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+/* Press Conference modal */
+.ef-dashboard-press-question {
+  margin-bottom: 24px;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-family: var(--font-sans);
+}
+
+.ef-dashboard-press-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ef-dashboard-press-opt-btn {
+  text-align: left;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 16px;
+  font-family: var(--font-sans);
+}
+
+.ef-dashboard-press-icon {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
