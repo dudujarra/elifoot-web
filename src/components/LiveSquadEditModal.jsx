@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+
 import { useState } from 'react';
 import { TACTICS } from '../engine/ManagerSystems';
 import { getFormEmoji } from '../engine/systems/FormSystem.js';
@@ -54,7 +54,7 @@ function PlayerCard({ player, onClick, actionLabel, actionVariant = 'primary', s
                         <span className={`ef-livesq__stat ef-livesq__energy--${eMod}`}>
                             <Lightning size={12} weight="fill" /> {player.energy}%
                         </span>
-                        <span className="ef-livesq__stat" style={{ color: moral.color }}>
+                        <span className="ef-livesq__stat ef-livesq__stat--dynamic" style={{ '--stat-color': moral.color }}>
                             <Heart size={12} weight="fill" /> {moral.text}
                         </span>
                         <span className="ef-livesq__stat ef-text-muted">
@@ -62,7 +62,7 @@ function PlayerCard({ player, onClick, actionLabel, actionVariant = 'primary', s
                         </span>
                     </div>
                     {/* SPEC-161: Exibir todas as infos dos players na tela de substituição */}
-                    <div className="ef-livesq__player-skills-row" style={{ display: 'flex', gap: '8px', fontSize: '10px', marginTop: '4px', color: 'var(--text-muted)' }}>
+                    <div className="ef-livesq__player-skills-row">
                         <span>PAS: {player.skills?.PAS || '?'}</span>
                         <span>FIN: {player.skills?.FIN || '?'}</span>
                         <span>DRI: {player.skills?.DRI || '?'}</span>
@@ -203,7 +203,7 @@ export function LiveSquadEditModal({ team, engine, currentMinute, liveSubsCount,
                         {!selectedOut && (
                             <div>
                                 <div className="ef-livesq__section-label">
-                                    <Users size={16} /> SUBSTITUIR QUEM? <span className="ef-text-muted" style={{ fontWeight: 400, fontSize: '0.85em' }}>({subsLeft} restante{subsLeft !== 1 ? 's' : ''})</span>
+                                    <Users size={16} /> SUBSTITUIR QUEM? <span className="ef-text-muted ef-livesq__sub-hint">({subsLeft} restante{subsLeft !== 1 ? 's' : ''})</span>
                                 </div>
                                 <div className="ef-livesq__player-list">
                                     {titulares.map(p => (

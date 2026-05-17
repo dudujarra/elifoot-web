@@ -723,3 +723,26 @@
 .ef-ap__gdd-cell-count--empty {
   color: var(--ef-ap-err-red);
 }
+
+/* Dynamic Modifier Classes added by AKITA-434 */
+.ef-ap__llm-status-text--error { color: var(--danger); }
+.ef-ap__brain-q-value--positive { color: var(--ef-ap-success-green); }
+.ef-ap__brain-q-value--negative { color: var(--ef-ap-fail-red); }
+.ef-ap__gdd-coverage-score--high { color: var(--ef-ap-success-green); }
+.ef-ap__gdd-coverage-score--med { color: var(--ef-ap-warn-amber); }
+.ef-ap__gdd-coverage-score--low { color: var(--ef-ap-err-red); }
+.ef-ap__telemetry-score-inline--high,
+.ef-ap__telemetry-score-value--high,
+.ef-ap__telemetry-signal-top--high { color: #4CAF50; }
+.ef-ap__telemetry-score-inline--med,
+.ef-ap__telemetry-score-value--med,
+.ef-ap__telemetry-signal-top--med { color: #FF9800; }
+.ef-ap__telemetry-score-inline--low,
+.ef-ap__telemetry-score-value--low,
+.ef-ap__telemetry-signal-top--low { color: #F44336; }
+.ef-ap__telemetry-card--high { border-color: #4CAF50; }
+.ef-ap__telemetry-card--med { border-color: #FF9800; }
+.ef-ap__telemetry-card--low { border-color: #F44336; }
+.ef-ap__pacing-body--critical { border-color: var(--danger); }
+.ef-ap__pacing-body--warning { border-color: var(--accent); }
+.ef-ap__pacing-body--info { border-color: var(--ef-ap-info); }

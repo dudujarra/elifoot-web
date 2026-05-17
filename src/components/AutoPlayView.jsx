@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+
 /**
  * AutoPlayView — Soak Test UI
  *
@@ -521,7 +521,7 @@ export function AutoPlayView() {
                         </span>
                     </div>
                     {llmStatus.mode === 'webllm' && (
-                        <div className="ef-ap__llm-status-text" style={{ '--llm-status-color': llmStatus.loadStatus === 'error' ? 'var(--danger)' : undefined }}>
+                        <div className={`ef-ap__llm-status-text ${llmStatus.loadStatus === 'error' ? 'ef-ap__llm-status-text--error' : ''}`}>
                             status: <strong>{llmStatus.loadStatus}</strong>
                             {llmStatus.loadProgress > 0 && llmStatus.loadProgress < 1 && (
                                 <span> ({(llmStatus.loadProgress * 100).toFixed(0)}%)</span>
@@ -571,7 +571,7 @@ export function AutoPlayView() {
                                 Top actions:&nbsp;
                                 {stats.brain.topActions.slice(0, 3).map((a, i) => (
                                     <span key={i} className="ef-ap__brain-action-item">
-                                        {a.action} <strong className="ef-ap__brain-q-value" style={{ '--q-color': a.totalQ >= 0 ? 'var(--ef-ap-success-green)' : 'var(--ef-ap-fail-red)' }}>
+                                        {a.action} <strong className={`ef-ap__brain-q-value ef-ap__brain-q-value--${a.totalQ >= 0 ? 'positive' : 'negative'}`}>
                                             {a.totalQ >= 0 ? '+' : ''}{a.totalQ.toFixed(1)}
                                         </strong>
                                     </span>
@@ -738,10 +738,10 @@ export function AutoPlayView() {
                                 stats.decisions?.some(d => d.action === 'UPGRADE_STADIUM' || d.action === 'UPGRADE_ACADEMY'),
                             ].filter(Boolean).length;
                             const pct = Math.round((active / total) * 100);
-                            const color = pct >= 80 ? 'var(--ef-ap-success-green)' : pct >= 50 ? 'var(--ef-ap-warn-amber)' : 'var(--ef-ap-err-red)';
+                            const coverageMod = pct >= 80 ? 'high' : pct >= 50 ? 'med' : 'low';
                             return (
                                 <span>
-                                    GDD Coverage: <strong className="ef-ap__gdd-coverage-score" style={{ '--coverage-color': color }}>{active}/{total} ({pct}%)</strong>
+                                    GDD Coverage: <strong className={`ef-ap__gdd-coverage-score ef-ap__gdd-coverage-score--${coverageMod}`}>{active}/{total} ({pct}%)</strong>
                                     {pct >= 100 && ' [*] FULL PARITY'}
                                     {pct >= 80 && pct < 100 && ' — rode mais seasons para cobertura total'}
                                 </span>
@@ -761,7 +761,7 @@ export function AutoPlayView() {
                         <h3 className="ef-arcade-h ef-arcade-h--md">
                             <ChartBar size={14} weight="bold" className="ef-icon-inline-md" />
                             Telemetria ({Object.keys(stats.telemetry.results).length} detectores)
-                            <span className="ef-ap__telemetry-score-inline" style={{ '--score-color': scoreColor(stats.telemetry.overallScore) }}>
+                            <span className={`ef-ap__telemetry-score-inline ef-ap__telemetry-score-inline--${scoreClass(stats.telemetry.overallScore)}`}>
                                 Score Geral: {stats.telemetry.overallScore}
                             </span>
                         </h3>
@@ -775,18 +775,17 @@ export function AutoPlayView() {
                                 <div
                                     key={spec}
                                     onClick={() => setExpandedSpec(expandedSpec === spec ? null : spec)}
-                                    className="ef-ap__telemetry-card ef-ap__telemetry-card-border"
-                                    style={{ '--score-color': scoreColor(res.score) }}
+                                    className={`ef-ap__telemetry-card ef-ap__telemetry-card-border ef-ap__telemetry-card--${scoreClass(res.score)}`}
                                 >
                                     <div className="ef-ap__telemetry-card-head">
                                         <strong className="ef-ap__telemetry-card-name">{spec}</strong>
-                                        <span className="ef-ap__telemetry-score-value" style={{ '--score-color': scoreColor(res.score) }}>{res.score}</span>
+                                        <span className={`ef-ap__telemetry-score-value ef-ap__telemetry-score-value--${scoreClass(res.score)}`}>{res.score}</span>
                                     </div>
                                     <div className="ef-ap__telemetry-card-desc">
                                         {res.name}
                                     </div>
                                     {res.signals?.[0] && (
-                                        <div className="ef-ap__telemetry-signal-top" style={{ '--score-color': scoreColor(100 - (res.signals[0].severity * 100)), color: 'var(--score-color)' }}>
+                                        <div className={`ef-ap__telemetry-signal-top ef-ap__telemetry-signal-top--${scoreClass(100 - (res.signals[0].severity * 100))}`}>
                                             <WarningCircle size={11} weight="bold" className="ef-icon-inline" />{res.signals[0].id}
                                         </div>
                                     )}
@@ -896,11 +895,10 @@ export function AutoPlayView() {
             {/* Pacing Friction Modal Auto-Resolution UI */}
             {pacingQueue.length > 0 && (() => {
                 const evt = pacingQueue[0];
-                const sevColors = { critical: 'var(--danger)', warning: 'var(--accent)', info: 'var(--ef-ap-info)' };
-                const borderColor = sevColors[evt.severity] || 'var(--ef-ap-info)';
+                const pacingMod = evt.severity || 'info';
                 return (
                     <EfModal title={evt.title} onClose={() => {}}>
-                        <div className="ef-ap__pacing-body ef-ap__pacing-border" style={{ '--pacing-color': borderColor }}>
+                        <div className={`ef-ap__pacing-body ef-ap__pacing-border ef-ap__pacing-body--${pacingMod}`}>
                             <p className="ef-sans ef-text-main ef-ap__pacing-text">{evt.body}</p>
                         </div>
                         <div className="ef-ap__pacing-actions">

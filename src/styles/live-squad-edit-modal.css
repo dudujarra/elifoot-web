@@ -252,6 +252,23 @@
   gap: 3px;
 }
 
+.ef-livesq__stat--dynamic {
+  color: var(--stat-color);
+}
+
 .ef-livesq__stat strong {
   color: var(--text-main);
+}
+
+.ef-livesq__player-skills-row {
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+  margin-top: 4px;
+  color: var(--text-muted);
+}
+
+.ef-livesq__sub-hint {
+  font-weight: 400;
+  font-size: 0.85em;
 }
