@@ -2306,6 +2306,18 @@ h1, h2, h3, h4 {
   gap: 8px;
 }
 
+.ef-fab-category-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ef-fab-category-btn {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+}
+
 /* ==========================================================================
    CRT Scanline Overlay (Global Atmosphere — SNES Premium 32-bit)
    Fixed overlay, pointer-events: none, ultra-subtle. Uses repeating

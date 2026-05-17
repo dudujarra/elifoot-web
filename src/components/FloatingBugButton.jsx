@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
+/* eslint-disable no-restricted-syntax -- title prop requires inline style */
 /**
  * FloatingBugButton — v1.6
  *
@@ -75,12 +75,12 @@ export function FloatingBugButton() {
                         </div>
                     ) : (
                         <>
-                            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                            <div className="ef-fab-category-row">
                                 <EfButton
                                     variant={category === 'bug' ? 'primary' : 'secondary'}
                                     size="sm"
                                     onClick={() => setCategory('bug')}
-                                    style={{ flex: 1, display: 'flex', gap: '6px' }}
+                                    className="ef-fab-category-btn"
                                 >
                                     <Bug size={16} /> BUG
                                 </EfButton>
@@ -88,7 +88,7 @@ export function FloatingBugButton() {
                                     variant={category === 'feedback' ? 'primary' : 'secondary'}
                                     size="sm"
                                     onClick={() => setCategory('feedback')}
-                                    style={{ flex: 1, display: 'flex', gap: '6px' }}
+                                    className="ef-fab-category-btn"
                                 >
                                     <ChatCircleText size={16} /> FEEDBACK
                                 </EfButton>
@@ -96,7 +96,7 @@ export function FloatingBugButton() {
                                     variant={category === 'note' ? 'primary' : 'secondary'}
                                     size="sm"
                                     onClick={() => setCategory('note')}
-                                    style={{ flex: 1, display: 'flex', gap: '6px' }}
+                                    className="ef-fab-category-btn"
                                 >
                                     <Note size={16} /> NOTA
                                 </EfButton>

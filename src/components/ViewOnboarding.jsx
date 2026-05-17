@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /**
  * ViewOnboarding — SPEC-F5.1 wire component
  *
@@ -13,6 +12,7 @@ import {
     getOnboardingForView,
     markOnboardingSeen,
 } from '../engine/OnboardingTriggers';
+import '../styles/view-onboarding.css';
 
 export function ViewOnboarding({ viewId }) {
     const [step, setStep] = useState(0);
@@ -55,69 +55,33 @@ export function ViewOnboarding({ viewId }) {
         <div
             role="dialog"
             aria-label={`Tutorial ${content.title}`}
-            style={{
-                position: 'fixed',
-                bottom: '24px',
-                left: '24px',
-                width: '300px',
-                maxWidth: 'calc(100vw - 48px)',
-                backgroundColor: 'var(--color-bg-deep)',
-                border: '2px solid var(--info)',
-                padding: '14px',
-                zIndex: 200,
-                boxShadow: '0 4px 16px rgba(0,0,0,0.7)',
-            }}
+            className="ef-onboarding"
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+            <div className="ef-onboarding__header">
                 <ChatCircle size={14} color="var(--info)" weight="fill" />
-                <span style={{
-                    flex: 1,
-                    fontSize: '0.7rem',
-                    color: 'var(--info)',
-                    fontFamily: 'var(--font-sans)',
-                    fontWeight: 'bold',
-                    letterSpacing: '0.1em',
-                }}>
+                <span className="ef-onboarding__title">
                     {content.title}
                 </span>
                 <button
                     type="button"
                     onClick={close}
                     aria-label="Fechar tutorial"
-                    style={{ background: 'transparent', border: '1px solid var(--color-soft-border)', color: 'var(--text-main)', padding: '2px 4px', cursor: 'pointer' }}
+                    className="ef-onboarding__close"
                 >
                     <X size={10} weight="bold" />
                 </button>
             </div>
-            <p style={{
-                margin: '0 0 10px 0',
-                fontSize: '0.8rem',
-                color: 'var(--text-main)',
-                fontFamily: 'var(--font-sans)',
-                lineHeight: 1.4,
-            }}>
+            <p className="ef-onboarding__body">
                 {currentStep}
             </p>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+            <div className="ef-onboarding__footer">
+                <span className="ef-onboarding__step-counter">
                     {step + 1}/{content.steps.length}
                 </span>
                 <button
                     type="button"
                     onClick={next}
-                    style={{
-                        background: 'var(--info)',
-                        color: 'var(--color-bg-deep)',
-                        border: 'none',
-                        padding: '5px 12px',
-                        fontFamily: 'var(--font-sans)',
-                        fontSize: '0.7rem',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                    }}
+                    className="ef-onboarding__next-btn"
                 >
                     {isLast ? 'ENTENDI' : 'PRÓXIMA'}
                     {!isLast && <ArrowRight size={10} weight="bold" />}

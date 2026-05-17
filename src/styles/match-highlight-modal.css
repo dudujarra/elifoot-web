@@ -1,10 +1,46 @@
-/* MatchHighlightModal — semantic CSS marker
- * Component primarily consumes global tokens from isssd-premium.css.
- * This file scopes MatchHighlightModal-specific component tokens + utility classes.
- */
+/* MatchHighlightModal — overlay (AKITA-425) */
 
-.ef-match-highli {
-  /* Component-local tokens (extend as needed) */
+.ef-highlight-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(5, 10, 15, 0.92);
+  z-index: 980;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
 }
 
-/* Add MatchHighlightModal-specific BEM classes below as inline styles are extracted */
+.ef-highlight-card {
+  max-width: 600px;
+  width: 90%;
+  background-color: var(--color-bg-deep);
+  border: 3px solid var(--highlight-color, var(--text-main));
+  padding: 32px;
+  text-align: center;
+  pointer-events: auto;
+  animation: ef-highlight-pulse 0.4s ease-out;
+}
+
+.ef-highlight-icon-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.ef-highlight-minute {
+  font-size: 0.7rem;
+  color: var(--highlight-color, var(--text-main));
+  font-family: var(--font-sans);
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+
+.ef-highlight-text {
+  font-size: 1.4rem;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-weight: bold;
+  line-height: 1.3;
+}
