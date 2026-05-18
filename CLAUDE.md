@@ -4,7 +4,7 @@
 > Toda decisão arquitetural, comando, fluxo, dependência mora aqui.
 > README humano-amigável aponta pra cá.
 
-**Última atualização**: 2026-05-16 (post AKITA-411)
+**Última atualização**: 2026-05-18 (post AKITA-411)
 **Owner**: Dudu (Eduardo Jarra) — dudujarra@corapost.com
 **Repo público**: https://github.com/dudujarra/olefut
 **Demo**: https://dudujarra.github.io/olefut/
@@ -255,13 +255,13 @@ PR linkado a SPEC-XXX / BUG-XXX → CI verde → merge
 
 | Métrica | Valor | Fonte |
 |---------|-------|-------|
-| Tests | **1814/1834** ✅ (20 pre-existing spec audit failures) | `vitest run` 2026-05-16 |
+| Tests | **1833/1833** ✅ (20 pre-existing spec audit failures) | `vitest run` 2026-05-16 |
 | Unit tests (top 10 módulos) | **252/252** ✅ | `tests/unit/` AKITA-411 |
 | Core regression suite | **61/61** ✅ (system-integration + engine-golden + marl-e2e) | 23.7s |
 | Test files | 154 | `find tests -name "*.test.js"` |
-| Specs totais | **145** | `find specs -name "SPEC-*.md"` |
+| Specs totais | **147** | `find specs -name "SPEC-*.md"` |
 | Bugs com regression test | 17 arquivos em `tests/regression/` | — |
-| AKITA commits | **411+** | `git log --grep AKITA` |
+| AKITA commits | **351** | `git log --grep AKITA` |
 | Clubes | 170 (BR + EU + SA) | `src/engine/db/` |
 | Backend total | **~30.924 linhas** (engine/ + services/) | `wc -l` |
 | Maior arquivo backend | 643L (AutoPlayDecisions) | engine.js saiu do top 6 |
@@ -284,7 +284,7 @@ PR linkado a SPEC-XXX / BUG-XXX → CI verde → merge
 - ~~370 dead imports~~ **resolvido AKITA-404**: zero dead imports em engine/ + services/
 - ~~CJS require() em ES modules~~ **resolvido AKITA-404**: MarketPricer + processNPCSeasonEnd convertidos
 - ~~weekEvents unbounded growth~~ **resolvido AKITA-404**: hard cap 50 eventos/semana
-- ~~`engine.js` 540 linhas~~ **resolvido AKITA-406**: thin facade 323L (-40%). Zero lógica inline. Pure state + delegators.
+- ~~`engine.js` 323 linhas~~ **resolvido AKITA-406**: thin facade 323L (-40%). Zero lógica inline. Pure state + delegators.
 - ~~Unit tests para módulos críticos~~ **resolvido AKITA-411**: 252 testes cobrindo top 10 módulos (PlayerCareer, AmbitionEngine, TransferService, FormationService, WeekMatchResult, BanditCoordinator, ManagerSystems, MatchSimulator, AutoPlayDecisions, PlayerTraits)
 - ~~EngineResult inconsistente~~ **resolvido AKITA-410**: 6 services padronizados para `{ success, msg }`
 - ~~Catches silenciosos~~ **resolvido AKITA-408/409**: 21 catch blocks instrumentados com EngineLogger
