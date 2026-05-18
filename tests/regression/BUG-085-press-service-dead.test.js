@@ -50,9 +50,10 @@ describe('BUG-085 — PressService is alive (audit confirmed not dead)', () => {
         expect(ENGINE_SRC).toContain('this._pressService.respondCoachProposal(this');
     });
 
-    test('DashboardView consumes engine.checkPressConference + engine.answerPress', () => {
+    test('Dashboard components consume engine.checkPressConference + engine.answerPress', () => {
+        const MODALS_SRC = readFileSync(resolve('src/components/dashboard/DashboardModals.jsx'), 'utf-8');
         expect(DASHBOARD_SRC).toContain('engine.checkPressConference()');
-        expect(DASHBOARD_SRC).toContain('engine.answerPress(');
+        expect(MODALS_SRC).toContain('engine.answerPress(');
     });
 
     test('AutoPlayService consumes engine.checkPressConference + engine.answerPress (headless flow)', () => {

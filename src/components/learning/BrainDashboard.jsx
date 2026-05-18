@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic inline styles for graphs and tables */
 /**
  * BrainDashboard — Visual ML Dashboard for AutoPlay
  *
@@ -95,8 +96,13 @@ export function BrainDashboard({ controllerRef }) {
     }, [memory]);
 
     const cumulativeReward = useMemo(() => {
-        let total = 0;
-        return rewardHistory.map(r => { total += r.reward; return total; });
+        let currentTotal = 0;
+        const result = [];
+        for (const r of rewardHistory) {
+            currentTotal += r.reward;
+            result.push(currentTotal);
+        }
+        return result;
     }, [rewardHistory]);
 
     const allQValues = stateKeys.flatMap(s => Object.values(qTable[s] || {}));

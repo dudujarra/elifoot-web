@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax -- dynamic inline styles for graphs and tables */
 /**
  * CareerInfoPanel — SPEC-124
  *

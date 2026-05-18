@@ -6,7 +6,7 @@
  * (gol, vermelho) durante partida live. Pausa ticker via prop.
  */
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { CheckCircle, Warning, SoccerBall } from '@phosphor-icons/react';
 import '../styles/match-highlight-modal.css';
@@ -69,6 +69,7 @@ export function MatchHighlightModal({ context, onDismiss, autoDismissMs = 3000 }
             role="alert"
             aria-live="assertive"
         >
+            {/* eslint-disable-next-line no-restricted-syntax -- dynamic highlight color */}
             <div className="ef-highlight-card" style={{ '--highlight-color': color }}>
                 <div className="ef-highlight-icon-row">
                     <Icon size={64} color={color} weight="fill" />
