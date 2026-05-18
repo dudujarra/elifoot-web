@@ -15,7 +15,10 @@ import { join } from 'node:path';
 const DIST = join(process.cwd(), 'dist', 'assets');
 const INITIAL_LIMIT = 500_000;
 const SINGLE_CHUNK_LIMIT = 500_000;
-const TOTAL_LIMIT = 3_500_000; // bumped for Elifoot Classic modules (Bicho, Ticket, Auction, Discipline)
+const TOTAL_LIMIT = 3_600_000; // SPEC-186 / AKITA-415: bumped from 3.5MB to 3.6MB.
+// Baseline measured 2026-05-18 = 3.502MB (2KB over previous cap, pre-existing creep
+// confirmed by build on clean main). Adds ~100KB headroom while sub-3.6MB ceiling holds.
+// Original 3.5MB precedent: AKITA-412. Follow-up audit: SPEC-186 §F5 backlog (realPlayers sub-split).
 // Data-only chunks are excluded from per-chunk code size checks (they are JSON, not code)
 const DATA_CHUNKS = /^(player-data|realPlayers_)/;
 

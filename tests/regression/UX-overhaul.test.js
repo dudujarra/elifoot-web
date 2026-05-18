@@ -13,11 +13,17 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../..');
 
 describe('UX overhaul P0-P2: regressions', () => {
-    test('P0-1: MatchView dedupe via key (minute, text)', () => {
-        const file = path.join(projectRoot, 'src/components/MatchView.jsx');
+    test('P0-1: MatchView event display reset-on-start (avoid dup via additive accumulation)', () => {
+        // SPEC-186: post-AKITA-411 refactor moved ticker logic to useMatchEngine.js.
+        // Original dedupe-via-key impl replaced by reset-on-start pattern:
+        // - startLiveTicker: setDisplayedEvents([]) (line ~65)
+        // - tick: setDisplayedEvents(prev => [...prev, ...eventsThisMinute])
+        // - skipToEnd: setDisplayedEvents(eventsToShow) (full replace)
+        // Bug guarded by construction — no duplicate accumulation across ticker restarts.
+        const file = path.join(projectRoot, 'src/components/match/useMatchEngine.js');
         const c = fs.readFileSync(file, 'utf-8');
-        expect(c).toMatch(/dedupe via key/);
-        expect(c).toMatch(/`\${ev\.minute}-\${ev\.text}`/);
+        expect(c).toMatch(/setDisplayedEvents\(\[\]\)/);
+        expect(c).toMatch(/setDisplayedEvents\(prev =>/);
     });
 
     test('P0-2: Scoreboard fallback final score', () => {
