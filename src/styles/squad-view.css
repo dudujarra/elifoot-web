@@ -12,24 +12,6 @@
   gap: 24px;
 }
 
-.ef-squad__tag-wrap {
-  margin-bottom: 12px;
-}
-
-.ef-squad__header-actions {
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-}
-
-.ef-squad__action-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
 .ef-squad__btn-bold {
   font-weight: bold;
 }
@@ -37,30 +19,6 @@
 .ef-squad__manager-stats {
   font-size: 0.85rem;
   margin-top: 4px;
-}
-
-.ef-squad__toolbar {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  background: rgba(10, 14, 23, 0.6);
-  backdrop-filter: blur(12px);
-}
-
-.ef-squad__tabs {
-  display: flex;
-  gap: 8px;
-}
-
-.ef-squad__filters {
-  display: flex;
-  gap: 8px;
-}
-
-.ef-squad__btn-tab {
-  font-weight: bold;
-  gap: 8px;
 }
 
 .ef-squad__panel-table {
@@ -100,10 +58,6 @@
   text-align: left;
 }
 
-.ef-squad__th--ovr {
-  width: 70px;
-}
-
 .ef-squad__th--energy {
   width: 120px;
 }
@@ -118,12 +72,6 @@
 
 .ef-squad__th--sortable {
   cursor: pointer;
-}
-
-.ef-squad__row-zebra {
-  background: rgba(10, 14, 23, 0.6);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--bg-panel);
 }
 
 .ef-squad__badge-wrap {
@@ -151,23 +99,8 @@
   padding: 12px;
 }
 
-.ef-squad__td--left {
-  text-align: left;
-  padding: 12px;
-}
-
-.ef-squad__section-header-pad {
-  padding: 24px;
-  margin-bottom: 0;
-  border-bottom: 2px solid var(--color-soft-border);
-}
-
 .ef-squad__section-header-mb {
   margin-bottom: 24px;
-}
-
-.ef-squad__section-header-accent {
-  color: var(--accent);
 }
 
 .ef-squad__h3-accent {
@@ -184,26 +117,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
-}
-
-.ef-squad__stat-card {
-  background: rgba(10, 14, 23, 0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--color-soft-border);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.ef-squad__loan-row {
-  background: rgba(10, 14, 23, 0.6);
-  backdrop-filter: blur(12px);
-  padding: 16px;
-  border: 1px solid var(--border-panel);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .ef-squad__flex-gap {
@@ -255,25 +168,11 @@
   font-size: 0.9rem;
 }
 
-.ef-squad__injury-icon {
-  margin-left: 4px;
-}
-
-.ef-squad__pos-mono {
-  font-size: 0.7rem;
-  
-}
-
 .ef-squad__ovr-cell {
   text-align: center;
   font-weight: bold;
   font-size: 1.1rem;
   padding: 12px;
-}
-
-.ef-squad__flex-center {
-  display: flex;
-  justify-content: center;
 }
 
 .ef-squad__flex-center-gap {
@@ -414,26 +313,6 @@
   border: var(--primitive-border-hairline) solid var(--color-tertiary);
 }
 
-.ef-squad__pos-badge--gol {
-  background: var(--primitive-color-green-forest);
-  color: var(--color-primary);
-}
-
-.ef-squad__pos-badge--def {
-  background: var(--primitive-color-red-dark-danger);
-  color: var(--color-text-primary);
-}
-
-.ef-squad__pos-badge--mei {
-  background: var(--primitive-color-green-forest);
-  color: var(--color-primary);
-}
-
-.ef-squad__pos-badge--ata {
-  background: var(--primitive-color-green-forest);
-  color: var(--color-secondary);
-}
-
 /* SUB-LABEL — age or injury info under player name */
 .ef-squad__sub-label {
   font-family: var(--font-mono);
@@ -466,10 +345,6 @@
   min-width: 36px;
 }
 
-.ef-squad__cond-pct--ok { color: var(--color-text-primary); }
-.ef-squad__cond-pct--warn { color: var(--color-warning); }
-.ef-squad__cond-pct--danger { color: var(--color-danger); }
-
 .ef-squad__cond-track {
   width: 80px;
   height: 6px;
@@ -480,10 +355,6 @@
   height: 100%;
   transition: width 0.25s ease;
 }
-
-.ef-squad__cond-fill--ok { background: var(--color-primary); }
-.ef-squad__cond-fill--warn { background: var(--color-warning); }
-.ef-squad__cond-fill--danger { background: var(--color-danger); }
 
 /* MOR cell — icon + numeric value */
 .ef-squad__mor {

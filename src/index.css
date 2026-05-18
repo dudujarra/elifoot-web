@@ -2,7 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 @import './styles/isssd-premium.css';
 @import './styles/animations.css';
-@import './styles/ef-helpers.css';
 @import './styles/mobile.css';
 
 @import './styles/market-view.css';
@@ -21,7 +20,6 @@
 @import './styles/pre-match-screen.css';
 @import './styles/formation-board.css';
 @import './styles/live-squad-edit-modal.css';
-@import './styles/player-match-view.css';
 @import './styles/styleguide-view.css';
 @import './styles/autoplay-view.css';
 @import './styles/ef-banner.css';

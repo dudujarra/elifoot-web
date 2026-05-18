@@ -5,10 +5,6 @@
  *   2. matchSummary: full Stitch resumo-da-partida screen (scoreboard, stats, MVP, events).
  */
 
-.ef-match-post-m {
-  /* Reserved for future component-local tokens */
-}
-
 /* ============================================================
    MODE 1 — 3-card analysis (legacy SPEC-A4 contract)
    ============================================================ */
@@ -28,9 +24,6 @@
 
 .ef-postmortem__card--best { border-color: var(--primary); }
 .ef-postmortem__card--dubious { border-color: var(--accent); }
-.ef-postmortem__card--luck-good { border-color: var(--primary); }
-.ef-postmortem__card--luck-bad { border-color: var(--danger); }
-.ef-postmortem__card--luck-neutral { border-color: var(--accent); }
 
 .ef-postmortem__head {
   display: flex;
@@ -47,9 +40,6 @@
 }
 .ef-postmortem__label--best { color: var(--primary); }
 .ef-postmortem__label--dubious { color: var(--accent); }
-.ef-postmortem__label--luck-good { color: var(--primary); }
-.ef-postmortem__label--luck-bad { color: var(--danger); }
-.ef-postmortem__label--luck-neutral { color: var(--accent); }
 
 .ef-postmortem__title {
   font-size: 0.9rem;
@@ -111,10 +101,6 @@
     font-size: 64px;
   }
 }
-
-.ef-postmortem-screen__verdict--win { color: var(--primary); }
-.ef-postmortem-screen__verdict--loss { color: var(--danger); }
-.ef-postmortem-screen__verdict--draw { color: var(--accent); }
 
 .ef-postmortem-screen__subtitle {
   font-family: var(--font-mono);

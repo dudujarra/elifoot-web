@@ -4,7 +4,6 @@
   --ef-livesq-info: #40BAF7;
   --ef-livesq-soft-border: #2D3748;
   --ef-livesq-muted-text: #8E9E94;
-  --ef-livesq-success-bg: #1B4332;
   --ef-livesq-error-bg: #8B0000;
 }
 
@@ -73,18 +72,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.ef-livesq__feedback--success {
-  background-color: var(--ef-livesq-success-bg);
-  border: 1px solid var(--primary);
-  color: var(--primary);
-}
-
-.ef-livesq__feedback--error {
-  background-color: var(--ef-livesq-error-bg);
-  border: 1px solid var(--danger);
-  color: var(--danger);
 }
 
 .ef-livesq__section-label {
@@ -165,35 +152,9 @@
   font-weight: 600;
 }
 
-.ef-livesq__player-energy {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
-  font-family: var(--font-mono);
-}
-
-.ef-livesq__energy--low { color: var(--danger); }
-.ef-livesq__energy--mid { color: var(--accent); }
-.ef-livesq__energy--high { color: var(--primary); }
-
 .ef-livesq__player-meta {
   display: flex;
   flex-direction: column;
-}
-
-.ef-livesq__player-stats {
-  color: var(--ef-livesq-muted-text);
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-}
-
-.ef-livesq__player-stats strong {
-  color: var(--text-main);
-}
-
-.ef-livesq__player-stats--energy {
-  color: var(--primary);
 }
 
 .ef-livesq__selected-banner {

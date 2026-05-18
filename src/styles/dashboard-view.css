@@ -357,30 +357,6 @@
 }
 
 /* Week Events */
-.ef-dashboard-events__item {
-  padding: 12px;
-  border-left: 2px solid;
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-}
-
-.ef-dashboard-events__item--good {
-  background: #1d7aa8;
-  border-left-color: var(--color-success);
-  color: var(--color-success);
-}
-
-.ef-dashboard-events__item--bad {
-  background: #6c2b75;
-  border-left-color: var(--color-danger);
-  color: var(--color-danger);
-}
-
-.ef-dashboard-events__item--neutral {
-  background: var(--color-bg-secondary);
-  border-left-color: var(--color-text-secondary);
-  color: var(--color-text-primary);
-}
 
 /* Board Tension */
 .ef-dashboard-board-tension {
@@ -391,11 +367,6 @@
 .ef-dashboard-board-tension--danger {
   border-color: var(--color-danger);
   background: #6c2b75;
-}
-
-.ef-dashboard-board-tension--success {
-  border-color: var(--color-success);
-  background: #1d7aa8;
 }
 
 .ef-dashboard-board-tension__title {
@@ -412,10 +383,6 @@
   color: var(--color-danger);
 }
 
-.ef-dashboard-board-tension__title--success {
-  color: var(--color-success);
-}
-
 .ef-dashboard-board-tension__title--warning {
   color: var(--color-secondary);
 }
@@ -429,23 +396,6 @@
   font-weight: bold;
 }
 
-.ef-dashboard-board-tension__status-text {
-  color: var(--color-text-primary);
-}
-
-.ef-dashboard-board-tension__score {
-  font-family: var(--font-mono);
-  font-size: 1.2rem;
-}
-
-.ef-dashboard-board-tension__score--positive {
-  color: var(--color-success);
-}
-
-.ef-dashboard-board-tension__score--negative {
-  color: var(--color-danger);
-}
-
 /* Form Chips */
 .ef-form-chip {
   font-family: var(--font-mono);
@@ -454,27 +404,7 @@
   font-size: 0.75rem;
 }
 
-.ef-form-chip--v {
-  background: var(--color-success);
-  color: var(--color-bg);
-}
-
-.ef-form-chip--d {
-  background: var(--color-secondary);
-  color: var(--color-bg);
-}
-
-.ef-form-chip--l {
-  background: var(--color-danger);
-  color: var(--color-text-primary);
-}
-
 /* Tab: Tactics */
-.ef-dashboard-tactics {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
 
 .ef-dashboard-tactics__section-title {
   font-family: var(--font-body);
@@ -499,11 +429,6 @@
 }
 
 /* Tab: Training */
-.ef-dashboard-training {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
 
 .ef-dashboard-training__title {
   font-family: var(--font-body);
@@ -514,11 +439,6 @@
 }
 
 /* Tab: Club */
-.ef-dashboard-club {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
 
 .ef-dashboard-club__left,
 .ef-dashboard-club__right {
@@ -527,92 +447,9 @@
   gap: 24px;
 }
 
-.ef-dashboard-club-panel {
-  background: var(--color-bg-secondary);
-}
-
-.ef-dashboard-club-panel__title {
-  font-family: var(--font-body);
-  font-weight: bold;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.ef-dashboard-club-panel__info {
-  font-size: 0.85rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 16px;
-  font-family: var(--font-body);
-}
-
-.ef-dashboard-club-panel__progress {
-  margin-bottom: 16px;
-}
-
-.ef-dashboard-club-panel__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ef-dashboard-club-panel__level {
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  color: var(--color-text-secondary);
-}
-
 /* Staff Table */
-.ef-dashboard-staff__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-}
-
-.ef-dashboard-staff__row {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.ef-dashboard-staff__cell {
-  padding: 12px 0;
-}
-
-.ef-dashboard-staff__name {
-  color: var(--color-success);
-  font-weight: bold;
-}
 
 /* Scouting */
-.ef-dashboard-scout__buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.ef-dashboard-scout__table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-}
-
-.ef-dashboard-scout__row {
-  border-bottom: 1px solid var(--color-border);
-}
-
-.ef-dashboard-scout__player-name {
-  color: var(--color-text-primary);
-}
-
-.ef-dashboard-scout__player-info {
-  color: var(--color-text-secondary);
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-}
 
 /* Tab: Transfers */
 .ef-dashboard-transfers__table {
@@ -626,39 +463,16 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.ef-dashboard-transfers__cell {
-  padding: 16px 0;
-  vertical-align: middle;
-}
-
 .ef-dashboard-transfers__player-name {
   color: var(--color-text-primary);
   font-size: 1rem;
   font-weight: bold;
 }
 
-.ef-dashboard-transfers__player-info {
-  font-size: 0.8rem;
-  color: var(--color-text-secondary);
-  margin-top: 6px;
-  font-family: var(--font-body);
-}
-
-.ef-dashboard-transfers__offer-amount {
-  font-family: var(--font-mono);
-  color: var(--color-success);
-}
-
 .ef-dashboard-transfers__actions {
   text-align: right;
   vertical-align: middle;
   padding: 16px 0;
-}
-
-.ef-dashboard-transfers__action-buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
 }
 
 /* Bottom Navigation */
@@ -684,73 +498,8 @@
 }
 
 /* Modals */
-.ef-dashboard-press-modal__question {
-  margin-bottom: 24px;
-  font-size: 1rem;
-  line-height: 1.5;
-  font-family: var(--font-body);
-}
-
-.ef-dashboard-press-modal__options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.ef-dashboard-advice-modal__content {
-  border-left: 2px solid var(--notification-info-border);
-  padding-left: 16px;
-  margin-bottom: 24px;
-  min-height: 60px;
-}
-
-.ef-dashboard-advice-modal__loading {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--color-text-secondary);
-  font-family: var(--font-body);
-  font-style: italic;
-}
-
-.ef-dashboard-advice-modal__text {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.6;
-  font-family: var(--font-body);
-  color: var(--color-text-primary);
-}
 
 /* Pacing Friction Modal */
-.ef-dashboard-pacing-modal__content {
-  border-left: 2px solid;
-  padding-left: 16px;
-  margin-bottom: 24px;
-}
-
-.ef-dashboard-pacing-modal__critical {
-  border-left-color: var(--color-danger);
-}
-
-.ef-dashboard-pacing-modal__warning {
-  border-left-color: var(--color-secondary);
-}
-
-.ef-dashboard-pacing-modal__info {
-  border-left-color: var(--notification-info-border);
-}
-
-.ef-dashboard-pacing-modal__text {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.6;
-  font-family: var(--font-body);
-  color: var(--color-text-primary);
-}
-
-.ef-dashboard-pacing-modal__actions {
-  display: flex;
-  gap: 12px;
-}
 
 /* Match Narrative */
 .ef-dashboard-narrative {

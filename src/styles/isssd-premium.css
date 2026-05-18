@@ -20,11 +20,9 @@
   --accent-dark: #A87823;
   
   --danger: #FF3366; /* Vibrant Red/Pink */
-  --danger-aaa: #FF5C85;
   --danger-dark: #991F3D;
   
   --info: #33A1FF; /* Bright Blue */
-  --info-dark: #1F6099;
   
   --text-main: #FFFFFF;
   --text-muted: #8E99B0;
@@ -33,11 +31,7 @@
   --color-bg-deep: #05070A;
   --color-shadow-deep: rgba(0, 0, 0, 0.6);
   --color-soft-text: #B4C0D8;
-  --color-input-error-bg: rgba(255, 51, 102, 0.1);
-  --color-input-error-deep: #991F3D;
   --color-success-mid: #00F0FF;
-  --color-panel-tone: rgba(22, 28, 45, 0.4);
-  --color-tooltip-bg: rgba(7, 9, 15, 0.95);
   
   /* Borders & Shadows */
   --glass-border: rgba(255, 255, 255, 0.12);
@@ -49,12 +43,8 @@
   --bezel-dark: transparent;
   --bezel-highlight: transparent;
   --bezel-drop: rgba(0, 0, 0, 0.4);
-  --bezel-primary-light: transparent;
   --bezel-primary-dark: transparent;
-  --bezel-danger-light: transparent;
   --bezel-danger-dark: transparent;
-  --bezel-accent-light: transparent;
-  --bezel-accent-dark: transparent;
 
   /* Sizing & Radius — Premium rounded aesthetic */
   --radius: 16px;
@@ -67,17 +57,6 @@
   --font-mono: 'IBM Plex Mono', monospace;
 
   /* Dashboard Sub-component tokens */
-  --color-pure-black: #000000;
-  --color-text-faint: #64748B;
-  --color-text-fainter: #475569;
-  --color-progress-track: rgba(255, 255, 255, 0.05);
-  --color-progress-track-light: rgba(255, 255, 255, 0.1);
-  --color-info-alt: #00F0FF;
-  --color-info-alt-dark: #008899;
-  --ef-dash-alert-danger-bg: rgba(255, 51, 102, 0.05);
-  --ef-dash-alert-warning-bg: rgba(226, 166, 59, 0.05);
-  --ef-dash-alert-info-bg: rgba(51, 161, 255, 0.05);
-  --ef-dash-alert-info-hover-bg: rgba(51, 161, 255, 0.1);
 }
 
 /* ==========================================================================
@@ -161,50 +140,11 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
 }
 
-.ef-input-helper-error {
-  color: var(--danger);
-}
-
 /* ==========================================================================
    EfModal Component
    ========================================================================== */
 
-.ef-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 7, 12, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: efModalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ef-modal-window {
-  background: var(--bg-panel);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  animation: efModalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
 /* Modal Variants */
-.ef-modal-danger {
-  border-color: rgba(255, 51, 102, 0.4);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 51, 102, 0.1);
-}
-
-.ef-modal-success {
-  border-color: rgba(0, 240, 255, 0.4);
-}
 
 .ef-modal-header {
   padding: 20px 24px;
@@ -256,16 +196,6 @@ h1, h2, h3, h4 {
   justify-content: flex-end;
   gap: 12px;
   background: rgba(0, 0, 0, 0.2);
-}
-
-@keyframes efModalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes efModalSlideUp {
-  from { opacity: 0; transform: translateY(20px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ==========================================================================
@@ -424,23 +354,6 @@ h1, h2, h3, h4 {
   overflow: hidden;
 }
 
-.ef-card-player-row {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
-  min-width: 200px;
-}
-
-.ef-card-player-col {
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  min-width: 120px;
-  text-align: center;
-}
-
 .ef-card-player[role="button"]:hover {
   transform: translateY(-3px);
   cursor: pointer;
@@ -462,26 +375,10 @@ h1, h2, h3, h4 {
   gap: 4px;
 }
 
-.ef-card-player-row .ef-card-player-info {
-  text-align: left;
-}
-
-.ef-card-player-col .ef-card-player-info {
-  text-align: center;
-}
-
 .ef-card-player-header {
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.ef-card-player-row .ef-card-player-header {
-  justify-content: space-between;
-}
-
-.ef-card-player-col .ef-card-player-header {
-  justify-content: center;
 }
 
 .ef-card-player-name {
@@ -611,43 +508,6 @@ h1, h2, h3, h4 {
 }
 
 .ef-flex-1 { flex: 1; }
-.ef-flex-col { display: flex; flexDirection: column; gap: 12px; }
-
-.ef-form-input {
-  flex: 1 1 200px;
-  padding: 8px 12px;
-  background: #040805;
-  border: 1px solid var(--glass-border);
-  color: var(--text-main);
-  font-size: 0.85rem;
-  outline: none;
-  font-weight: 600;
-  font-family: 'Inter', system-ui, sans-serif;
-  transition: border-color 0.1s;
-}
-
-.ef-form-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-}
-
-.ef-form-select {
-  padding: 8px 12px;
-  background: #0A130E;
-  border: 1px solid var(--glass-border);
-  color: var(--text-main);
-  font-size: 0.85rem;
-  outline: none;
-  font-weight: 600;
-  font-family: 'Inter', system-ui, sans-serif;
-  cursor: pointer;
-  transition: border-color 0.1s;
-}
-
-.ef-form-select:hover, .ef-form-select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 6px var(--primary-glow);
-}
 
 /* ==========================================================================
    Table Utilities
@@ -665,15 +525,6 @@ h1, h2, h3, h4 {
   padding: 12px 8px;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-subtle);
-}
-
-.ef-table th.sortable {
-  cursor: pointer;
-  transition: color 0.1s;
-}
-
-.ef-table th.sortable:hover {
-  color: var(--text-main);
 }
 
 .ef-table th.active-sort {
@@ -783,9 +634,6 @@ h1, h2, h3, h4 {
   font-family: var(--font-mono);
   font-weight: bold;
 }
-.ef-form-chip--w { background: #162D1C; color: var(--primary); }
-.ef-form-chip--d { background: #2D2916; color: var(--accent); }
-.ef-form-chip--l { background: #2D1616; color: var(--danger); }
 
 /* Position badge — small uppercase pill (GOL/DEF/MEI/ATA) */
 .ef-pos-badge {
@@ -823,8 +671,6 @@ h1, h2, h3, h4 {
   background: var(--bg-sunk, #0C0F12);
   border: 1px solid var(--border-panel);
 }
-.ef-list-row--accent  { border-left: 2px solid var(--accent); }
-.ef-list-row--neutral { border-left: 2px solid var(--border-panel); }
 .ef-list-row--primary { border-left: 2px solid var(--primary); }
 
 /* Empty-state box (Market: nenhum jogador encontrado) */
@@ -1029,50 +875,7 @@ h1, h2, h3, h4 {
 
 /* --- Sector readout (Match/Squad sector pills) ---------------------------- */
 
-.ef-sector-grid {
-  display: flex;
-  justify-content: space-around;
-  background-color: #1A1F24;
-  padding: 16px;
-  border: 1px solid #2D3748;
-}
-.ef-sector-cell { text-align: center; }
-.ef-sector-cell__value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  font-family: var(--font-mono);
-}
-.ef-sector-cell__value--lg { font-size: 1.8rem; }
-.ef-sector-cell__label {
-  font-size: 0.8rem;
-  color: var(--text-muted, #8E9E94);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: bold;
-}
-
 /* --- MatchView log entry --------------------------------------------------- */
-
-.ef-match-log-row {
-  display: flex;
-  gap: 16px;
-  padding: 12px 16px;
-  background-color: #1A1F24;
-  border-left: 4px solid transparent;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.9rem;
-  color: var(--text-main, #FDFBF7);
-  align-items: center;
-}
-.ef-match-log-row--goal   { background-color: #1B4332; border-left-color: var(--primary, #39FF14); }
-.ef-match-log-row--card   { background-color: #1B4332; border-left-color: var(--accent, #FFD700); }
-.ef-match-log-row--sub    { background-color: #111417; border-left-color: #40BAF7; }
-.ef-match-log-row--injury { background-color: #8B0000; border-left-color: var(--danger, #FF3333); }
-.ef-match-log-row__min {
-  font-family: var(--font-mono);
-  font-weight: bold;
-  color: var(--text-muted, #8E9E94);
-  min-width: 40px;
-}
 
 /* --- MatchView scoreboard / score block ------------------------------------ */
 
@@ -1084,7 +887,6 @@ h1, h2, h3, h4 {
   border: 1px solid #2D3748;
   align-items: center;
 }
-.ef-score-box--sm { padding: 12px 24px; }
 .ef-score-box__num {
   font-family: var(--font-mono);
   font-weight: bold;
@@ -1092,7 +894,6 @@ h1, h2, h3, h4 {
   color: var(--text-main, #FDFBF7);
   line-height: 1;
 }
-.ef-score-box__num--md { font-size: 2.5rem; }
 .ef-score-box__sep {
   font-family: var(--font-mono);
   font-weight: bold;
@@ -1100,7 +901,6 @@ h1, h2, h3, h4 {
   color: #2D3748;
   line-height: 1;
 }
-.ef-score-box__sep--sm { font-size: 1.5rem; }
 
 .ef-clock {
   display: flex;
@@ -1132,17 +932,6 @@ h1, h2, h3, h4 {
   padding: 12px;
   background-color: #1A1F24;
   border: 1px solid #2D3748;
-}
-.ef-stat-line__label {
-  color: var(--text-muted, #8E9E94);
-  font-family: 'Inter', system-ui, sans-serif;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.ef-stat-line__value {
-  color: var(--text-main, #FDFBF7);
-  font-family: var(--font-mono);
 }
 
 /* --- SquadView filters / search ------------------------------------------- */
@@ -1185,16 +974,6 @@ h1, h2, h3, h4 {
 .ef-st-toggle--disabled { cursor: not-allowed; }
 
 /* SquadView health blocks (energy 5-pip indicator) */
-.ef-health-pip {
-  width: 8px;
-  height: 14px;
-}
-.ef-health-row {
-  display: flex;
-  gap: 3px;
-  align-items: center;
-  justify-content: center;
-}
 
 /* SquadView icon button (loan / sell quick action) */
 .ef-icon-btn {
@@ -1229,9 +1008,6 @@ h1, h2, h3, h4 {
   background: var(--primary, #39FF14);
   transition: width 200ms ease-out;
 }
-.ef-bar__fill--info    { background: #40BAF7; }
-.ef-bar__fill--accent  { background: var(--accent, #FFD700); }
-.ef-bar__fill--danger  { background: var(--danger, #FF3333); }
 
 /* --- PressView option button ---------------------------------------------- */
 
@@ -1283,50 +1059,12 @@ h1, h2, h3, h4 {
 
 /* --- Status overview cell (PlayerDashboard) ------------------------------- */
 
-.ef-overview-cell { text-align: center; }
-.ef-overview-cell__value {
-  font-family: var(--font-mono);
-  font-size: 1.2rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  justify-content: center;
-}
-.ef-overview-cell__label {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--text-muted, #8E9E94);
-}
-
 /* --- Step indicator (MatchView pre-match wizard) -------------------------- */
-
-.ef-step {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
-  color: var(--text-muted, #8E9E94);
-  font-weight: normal;
-  opacity: 0.5;
-}
-.ef-step--active,
-.ef-step--done {
+.ef-step--active {
   color: var(--text-main, #FDFBF7);
   font-weight: bold;
   opacity: 1;
 }
-.ef-step__bubble {
-  width: 32px;
-  height: 32px;
-  background-color: #2D3748;
-  color: var(--text-main, #FDFBF7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.ef-step--active .ef-step__bubble { background-color: #40BAF7; }
-.ef-step--done   .ef-step__bubble { background-color: var(--primary, #39FF14); color: var(--bg-dark, #0D1117); }
 
 /* ==========================================================================
    B3.1 UI Consistency Batch 2 Utilities (SPEC-173)
@@ -1426,33 +1164,9 @@ h1, h2, h3, h4 {
 
 /* --- Pill / badge cluster (small mono uppercase) ------------------------- */
 
-.ef-pill-mono {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background-color: var(--bg-dark, #0D1117);
-  padding: 6px 12px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: bold;
-  border: 1px solid #2D3748;
-}
-
 /* --- Generic horizontal progress (replaces ad-hoc inline progress bars) -- */
 /* Bigger than .ef-progress (which is 4-6px). 8px / 12px for visible
    progress bars on Achievement / overall progress / RelBar. */
-
-.ef-pbar {
-  background-color: var(--bg-dark, #0D1117);
-  border: 1px solid #2D3748;
-  overflow: hidden;
-}
-.ef-pbar--sm { height: 8px; }
-.ef-pbar--md { height: 12px; }
-.ef-pbar__fill {
-  height: 100%;
-  transition: width 300ms ease-out;
-}
 
 /* --- Step progress bar (Tutorial dots) ----------------------------------- */
 
@@ -1489,112 +1203,9 @@ h1, h2, h3, h4 {
 
 /* --- Rivalry row (decorative left border by intensity) ------------------- */
 
-.ef-rivalry-row {
-  background-color: #1A1F24;
-  border: 1px solid #2D3748;
-  border-left-width: 6px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.ef-rivalry-row--start       { border-left-color: #2D3748; }
-.ef-rivalry-row--growing     { border-left-color: #FF8C00; }
-.ef-rivalry-row--new-classic { border-left-color: var(--accent, #FFD700); }
-.ef-rivalry-row--consolidated{ border-left-color: var(--danger, #FF3333); }
-
 /* --- Saveslot card highlight --------------------------------------------- */
 
-.ef-slot-card { /* EfPanel inner card layout helpers */ }
-.ef-slot-card__mc {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid transparent;
-}
-.ef-slot-card__mc--empty {
-  background-color: var(--bg-dark, #0D1117);
-  border-color: #2D3748;
-  color: #2D3748;
-}
-.ef-slot-card__mc--filled {
-  background-color: var(--primary, #39FF14);
-  color: #000;
-}
-
 /* --- Cosmetic shop item card --------------------------------------------- */
-
-.ef-cosmetic-card {
-  background-color: #1A1F24;
-  padding: 20px 16px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid #2D3748;
-}
-.ef-cosmetic-card--owned    { border-color: #40BAF7; }
-.ef-cosmetic-card--equipped { border-color: var(--primary, #39FF14); }
-.ef-cosmetic-card__equipped-banner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: var(--primary, #39FF14);
-  color: #000;
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  font-weight: bold;
-  padding: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-}
-.ef-cosmetic-card__icon {
-  width: 64px;
-  height: 64px;
-  margin: 16px auto 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  background-color: var(--bg-dark, #0D1117);
-  color: var(--text-muted, #8E9E94);
-  border: 1px solid var(--glass-border);
-}
-.ef-cosmetic-card--owned .ef-cosmetic-card__icon {
-  background-color: #40BAF7;
-  color: #000;
-  border-color: transparent;
-}
-.ef-cosmetic-card--equipped .ef-cosmetic-card__icon {
-  background-color: var(--primary, #39FF14);
-  color: #000;
-  border-color: transparent;
-}
-.ef-cosmetic-card__name {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.95rem;
-  color: var(--text-main, #FDFBF7);
-  margin-bottom: 8px;
-  font-weight: bold;
-  flex: 1;
-}
-.ef-cosmetic-card__price {
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  color: var(--accent, #FFD700);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-weight: bold;
-}
 
 /* --- Achievement card pieces --------------------------------------------- */
 
@@ -1655,15 +1266,12 @@ h1, h2, h3, h4 {
   text-shadow: 2px 2px 0 #000;
   margin: 0;
 }
-.ef-arcade-h--xs { font-size: 0.4rem; }
-.ef-arcade-h--sm { font-size: 0.5rem; }
 .ef-arcade-h--md { font-size: 0.55rem; text-shadow: 2px 2px 0 #000; }
 .ef-arcade-h--lg { font-size: 0.6rem; text-shadow: 2px 2px 0 #000; }
 .ef-arcade-h--xl { font-size: 0.7rem; text-shadow: 3px 3px 0 #000; }
 .ef-arcade-h--xxl{ font-size: 0.8rem; text-shadow: 3px 3px 0 #000; }
 .ef-arcade-h--primary { color: var(--primary, #39FF14); }
 .ef-arcade-h--danger  { color: var(--danger, #FF3333); }
-.ef-arcade-h--info    { color: #40BAF7; }
 
 .ef-arcade-stat {
   padding: 8px;
@@ -2347,22 +1955,6 @@ body::after {
    Apply via utility classes on interactive/highlight elements.
    ========================================================================== */
 
-.ef-glow-primary {
-  text-shadow: 0 0 8px var(--primary-glow), 0 0 2px var(--primary);
-}
-
-.ef-glow-accent {
-  text-shadow: 0 0 8px #3D3200, 0 0 2px var(--accent);
-}
-
-.ef-glow-danger {
-  text-shadow: 0 0 8px #3D0A0A, 0 0 2px var(--danger);
-}
-
-.ef-glow-info {
-  text-shadow: 0 0 8px #0A2A3D, 0 0 2px var(--info);
-}
-
 /* Panel header titles get subtle phosphor glow */
 .ef-panel-header {
   text-shadow: 2px 2px 0 #000, 0 0 6px #3D3200;
@@ -2381,28 +1973,6 @@ body::after {
 @keyframes ef-breathe {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
-}
-
-@keyframes ef-heartbeat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-}
-
-@keyframes ef-glow-pulse {
-  0%, 100% { box-shadow: 0 0 4px var(--primary-glow); }
-  50% { box-shadow: 0 0 12px var(--primary-glow), 0 0 4px var(--primary); }
-}
-
-.ef-anim-breathe {
-  animation: ef-breathe 2s ease-in-out infinite;
-}
-
-.ef-anim-heartbeat {
-  animation: ef-heartbeat 1.5s ease-in-out infinite;
-}
-
-.ef-anim-glow-pulse {
-  animation: ef-glow-pulse 2s ease-in-out infinite;
 }
 
 /* Spinner for loading states */
@@ -2504,151 +2074,18 @@ body::after {
 }
 
 /* Loading Skeleton — stepped pixel shimmer */
-.ef-skeleton {
-  background: var(--bg-sunk, #0C0F12);
-  border: 2px solid var(--border-panel);
-  position: relative;
-  overflow: hidden;
-}
-
-.ef-skeleton::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    #1A2E22 40%,
-    #1A2E22 60%,
-    transparent 100%
-  );
-  animation: ef-skeleton-sweep 1.5s steps(8) infinite;
-}
-
-@keyframes ef-skeleton-sweep {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
-}
 
 /* Stat Bar — horizontal fill bar with stepped glow */
-.ef-stat-bar {
-  height: 8px;
-  background: var(--bg-sunk, #0C0F12);
-  border: 2px solid;
-  border-color: #000 var(--bezel-light) var(--bezel-light) #000;
-  overflow: hidden;
-}
-
-.ef-stat-bar__fill {
-  height: 100%;
-  background: var(--primary);
-  transition: width 300ms steps(10);
-  box-shadow: inset 0 0 4px var(--primary-glow);
-}
-
-.ef-stat-bar__fill--danger { background: var(--danger); box-shadow: inset 0 0 4px #3D0A0A; }
-.ef-stat-bar__fill--accent { background: var(--accent); box-shadow: inset 0 0 4px #3D3200; }
-.ef-stat-bar__fill--info   { background: var(--info);   box-shadow: inset 0 0 4px #0A1A3D; }
 
 /* Spring Stagger — cascade entrance for lists/grids */
-.ef-stagger > *:nth-child(1)  { animation-delay: 0ms; }
-.ef-stagger > *:nth-child(2)  { animation-delay: 50ms; }
-.ef-stagger > *:nth-child(3)  { animation-delay: 100ms; }
-.ef-stagger > *:nth-child(4)  { animation-delay: 150ms; }
-.ef-stagger > *:nth-child(5)  { animation-delay: 200ms; }
-.ef-stagger > *:nth-child(6)  { animation-delay: 250ms; }
-.ef-stagger > *:nth-child(7)  { animation-delay: 300ms; }
-.ef-stagger > *:nth-child(8)  { animation-delay: 350ms; }
-.ef-stagger > *:nth-child(9)  { animation-delay: 400ms; }
-.ef-stagger > *:nth-child(10) { animation-delay: 450ms; }
-.ef-stagger > *:nth-child(n+11) { animation-delay: 500ms; }
 
 /* Badge Pill — for compact inline status labels */
-.ef-badge-pill {
-  display: inline-block;
-  padding: 2px 8px;
-  font-family: var(--font-display);
-  font-size: 0.45rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border: 2px solid;
-  font-weight: 700;
-}
-
-.ef-badge-pill--success {
-  background: #081A10;
-  color: #6ABC3A;
-  border-color: #6ABC3A #2A5A1A #2A5A1A #6ABC3A;
-}
-
-.ef-badge-pill--danger {
-  background: #1A0808;
-  color: #EF4444;
-  border-color: #EF4444 #7A1A1A #7A1A1A #EF4444;
-}
-
-.ef-badge-pill--accent {
-  background: #1A1808;
-  color: #FFD700;
-  border-color: #FFD700 #AA8800 #AA8800 #FFD700;
-}
-
-.ef-badge-pill--info {
-  background: #081018;
-  color: #60A5FA;
-  border-color: #60A5FA #2858A0 #2858A0 #60A5FA;
-}
-
-.ef-badge-pill--muted {
-  background: #120818;
-  color: #A78BFA;
-  border-color: #A78BFA #5A3D8A #5A3D8A #A78BFA;
-}
 
 /* Tooltip position helper — auto bezel with pixel arrow */
-.ef-tooltip {
-  position: absolute;
-  z-index: 10000;
-  padding: 6px 10px;
-  background: #0E1418;
-  color: var(--text-main);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.72rem;
-  border: 1px solid var(--bezel-light);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  pointer-events: none;
-  white-space: nowrap;
-  animation: ef-fade-in 100ms ease-out;
-}
 
 /* Divider — SNES hardware separator line */
-.ef-divider {
-  height: 0;
-  border: none;
-  border-top: 2px solid var(--border-panel);
-  border-bottom: 1px solid var(--bezel-light);
-  margin: 16px 0;
-}
 
 /* Pulse Dot — live/active indicator */
-.ef-pulse-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--primary);
-  display: inline-block;
-  animation: ef-heartbeat 1.5s ease-in-out infinite;
-  box-shadow: 0 0 4px var(--primary-glow);
-}
-
-.ef-pulse-dot--danger {
-  background: var(--danger);
-  box-shadow: 0 0 4px #3D0A0A;
-}
-
-.ef-pulse-dot--accent {
-  background: var(--accent);
-  box-shadow: 0 0 4px #3D3200;
-}
 
 /* ─── Icon alignment utilities (extracted from 402 inline styles) ─── */
 .ef-icon-inline    { vertical-align: -2px; margin-right: 4px; }
@@ -2660,7 +2097,6 @@ body::after {
 /* ─── Common text utilities (extracted from inline styles) ─── */
 .ef-text-sm-muted  { font-size: 0.7rem; color: var(--text-muted); }
 .ef-text-xs-muted  { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px; }
-.ef-text-xs-label  { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-sans); font-weight: bold; }
 
 /* ─── Audio Controller ───────────────────────────────────── */
 .ef-audio-mute-btn {

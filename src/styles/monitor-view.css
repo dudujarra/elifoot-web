@@ -6,10 +6,8 @@
 
 .ef-mon {
   --ef-mon-info: #40BAF7;          /* electric blue (matches isssd-premium.ef-text-info) */
-  --ef-mon-muted-text: var(--color-text-secondary);
   --ef-mon-scanline: rgba(0, 0, 0, 0.1);
   --ef-mon-glow-soft: rgba(57, 255, 20, 0.18);
-  --ef-mon-glow-warn: rgba(251, 191, 36, 0.18);
   --ef-mon-glow-danger: rgba(255, 51, 51, 0.22);
   position: relative;
 }
@@ -413,15 +411,6 @@
   letter-spacing: 0.04em;
 }
 
-.ef-mon__kernel-msg--critical,
-.ef-mon__kernel-msg--error {
-  color: var(--color-danger);
-}
-
-.ef-mon__kernel-msg--warning {
-  color: var(--color-warning);
-}
-
 .ef-mon__sev-pill {
   display: inline-block;
   padding: 2px 8px;
@@ -430,31 +419,6 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   border: 1px solid;
-}
-
-.ef-mon__sev-pill--info {
-  color: var(--ef-mon-info);
-  border-color: var(--ef-mon-info);
-  background: rgba(64, 186, 247, 0.1);
-}
-
-.ef-mon__sev-pill--warning {
-  color: var(--color-warning);
-  border-color: var(--color-warning);
-  background: rgba(251, 191, 36, 0.1);
-}
-
-.ef-mon__sev-pill--error,
-.ef-mon__sev-pill--critical {
-  color: var(--color-danger);
-  border-color: var(--color-danger);
-  background: rgba(255, 51, 51, 0.12);
-}
-
-.ef-mon__sev-pill--default {
-  color: var(--color-text-secondary);
-  border-color: var(--color-text-secondary);
-  background: rgba(160, 186, 174, 0.08);
 }
 
 /* ============ EMPTY STATE ============ */
@@ -725,23 +689,6 @@
   gap: 12px;
 }
 
-.ef-mon__entry--critical,
-.ef-mon__entry--error {
-  border-left: 2px solid var(--color-danger);
-}
-
-.ef-mon__entry--warning {
-  border-left: 2px solid var(--color-warning);
-}
-
-.ef-mon__entry--info {
-  border-left: 2px solid var(--ef-mon-info);
-}
-
-.ef-mon__entry--default {
-  border-left: 2px solid var(--ef-mon-muted-text);
-}
-
 .ef-mon__entry-header {
   display: flex;
   justify-content: space-between;
@@ -753,23 +700,6 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-}
-
-.ef-mon__sev--critical,
-.ef-mon__sev--error {
-  color: var(--color-danger);
-}
-
-.ef-mon__sev--warning {
-  color: var(--color-warning);
-}
-
-.ef-mon__sev--info {
-  color: var(--ef-mon-info);
-}
-
-.ef-mon__sev--default {
-  color: var(--ef-mon-muted-text);
 }
 
 .ef-mon__entry-ts {

@@ -142,20 +142,6 @@
 }
 
 /* §22.7 Keyboard hints */
-.keyboard-hint {
-    display: none;
-    font-size: 0.6rem;
-    color: #F1FAEE;
-    margin-left: 0.3rem;
-    border: 1px solid #F1FAEE;
-    padding: 0.1rem 0.3rem;
-    border-radius: var(--radius-md);
-    font-family: monospace;
-}
-
-@media (min-width: 769px) {
-    .keyboard-hint { display: inline; }
-}
 
 /* §22.7 Reduced motion */
 @media (prefers-reduced-motion: reduce) {

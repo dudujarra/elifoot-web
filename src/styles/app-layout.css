@@ -72,27 +72,3 @@
     background: var(--primary);
     color: var(--bg-base);
 }
-
-.app-toast--loading {
-    background: var(--warning);
-    color: var(--bg-base);
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    max-width: 22rem;
-}
-
-.app-toast--ok {
-    background: var(--primary);
-    color: var(--bg-base);
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    max-width: 22rem;
-}
-
-.app-toast--err {
-    background: var(--danger);
-    color: var(--bg-base);
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    max-width: 22rem;
-}

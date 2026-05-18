@@ -8,7 +8,6 @@
     --ef-mc-bevel-light: rgba(255, 255, 255, 0.08);
     --ef-mc-bevel-dark: rgba(0, 0, 0, 0.5);
     --ef-mc-bevel-shadow: rgba(0, 0, 0, 0.85);
-    --ef-mc-empty-overlay: rgba(160, 186, 174, 0.08);
     position: relative;
 }
 

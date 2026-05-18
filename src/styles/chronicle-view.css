@@ -6,7 +6,6 @@
 
 .ef-chron {
   --ef-chron-info: #40BAF7;
-  --ef-chron-border-soft: var(--color-border);
 }
 
 .ef-chron__error {
@@ -366,20 +365,3 @@
 }
 
 /* Keep public API surface compatible (toolbar fallback if needed) */
-.ef-chron__toolbar {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ef-chron__tab-group,
-.ef-chron__export-group {
-  display: flex;
-  gap: 8px;
-}
-
-.ef-chron__btn-export {
-  border-color: var(--ef-chron-border-soft);
-}

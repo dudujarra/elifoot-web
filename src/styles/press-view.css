@@ -15,7 +15,6 @@
   --ef-press-danger:       var(--color-danger,    var(--primitive-color-red-danger));
   --ef-press-crt-black:    var(--primitive-color-neutral-crt-black);
   --ef-press-parchment:    var(--primitive-color-neutral-parchment);
-  --ef-press-smoke:        var(--primitive-color-neutral-smoke);
 }
 
 .ef-press__root {

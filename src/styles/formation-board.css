@@ -1,15 +1,9 @@
 /* FormationBoard — semantic CSS + design tokens */
 
 .ef-form {
-  --ef-form-info: #40BAF7;
   --ef-form-soft-border: #2D3748;
   --ef-form-muted-text: #8E9E94;
   --ef-form-field: #1E3A2F;
-  --ef-form-field-lines: #111417;
-  --ef-form-jersey-blue: #1E40AF;
-  --ef-form-jersey-gold: #B8860B;
-  --ef-form-jersey-stroke-gold: #8B6508;
-  --ef-form-jersey-stroke-blue: #1E3A8A;
   --ef-form-shadow-deep: #040805;
   --ef-form-info-bg: #0E1F14;
   display: flex;

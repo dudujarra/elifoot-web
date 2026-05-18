@@ -241,26 +241,6 @@
   width: max-content;
 }
 
-.ef-riv-card__label--consolidated {
-  color: var(--color-secondary);
-  border-color: var(--color-secondary);
-}
-
-.ef-riv-card__label--new-classic {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.ef-riv-card__label--growing {
-  color: var(--color-warning);
-  border-color: var(--color-warning);
-}
-
-.ef-riv-card__label--start {
-  color: var(--ef-riv-muted);
-  border-color: var(--ef-riv-muted);
-}
-
 .ef-riv-card__stats {
   background: var(--color-bg-tertiary);
   border: var(--primitive-border-hairline) solid var(--color-border);

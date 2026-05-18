@@ -1,17 +1,6 @@
 /* EfBanner — semantic CSS + design tokens */
 
 .ef-banner {
-  --ef-banner-stripe: #0F1A14;
-  --ef-banner-promo: #2D5A3D;
-  --ef-banner-relegation: #6B0000;
-  --ef-banner-fired: #000000;
-  --ef-banner-hired: #002E63;
-  --ef-banner-retirement: #4A0E7A;
-  --ef-banner-offer: #C8941F;
-  --ef-banner-sponsor: #6ABC3A;
-  --ef-banner-motm: #F7B538;
-  --ef-banner-hattrick: #D62828;
-  --ef-banner-injury: #4A0000;
   position: fixed;
   inset: 0;
   background: var(--color-shadow-deep);

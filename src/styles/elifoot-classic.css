@@ -378,22 +378,6 @@
     gap: var(--ef-space-100);
 }
 
-.ef-auction__raise-input {
-    flex: 1;
-    padding: var(--ef-space-100) var(--ef-space-200);
-    background: var(--ef-color-bg-input);
-    border: 1px solid var(--ef-color-border-subtle);
-    border-radius: var(--ef-radius-sm);
-    color: var(--ef-color-neutral-text-hi);
-    font-family: var(--ef-font-mono);
-    font-size: 0.8rem;
-}
-
-.ef-auction__raise-input:focus {
-    outline: var(--ef-focus-ring);
-    border-color: var(--ef-color-accent-gold);
-}
-
 .ef-auction__countdown {
     display: flex;
     align-items: center;

@@ -1,12 +1,6 @@
 /* HexagonChart — semantic CSS + design tokens */
 
 .ef-hex {
-  --ef-hex-azure: #3A7DCE;
-  --ef-hex-purple: #7B2CBF;
-  --ef-hex-salmon: #E59866;
-  --ef-hex-info: #40BAF7;
-  --ef-hex-red: #D62828;
-  --ef-hex-forest-dark: #2D5A3D;
   --ef-hex-forest-pitch: #1B4332;
   --ef-hex-axis: #0E1F14;
   --ef-hex-outline: #0F1A14;

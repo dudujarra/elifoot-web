@@ -5,10 +5,6 @@
  */
 
 .ef-lin {
-  --ef-lin-info: #40BAF7;
-  --ef-lin-purple: #8E5BFF;
-  --ef-lin-orange: #FF8C00;
-  --ef-lin-muted: var(--color-text-secondary);
 }
 
 .ef-lin__error {
@@ -91,18 +87,6 @@
   letter-spacing: 0.12em;
   
   word-break: break-word;
-}
-
-.ef-hall-slot__title {
-  display: none;
-}
-
-.ef-hall-slot__header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 16px;
 }
 
 .ef-hall-slot__stats {

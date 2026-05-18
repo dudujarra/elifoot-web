@@ -299,16 +299,6 @@
     border: 1px solid var(--color-border);
 }
 
-.ef-prematch__location-pill--home {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-}
-
-.ef-prematch__location-pill--away {
-    color: var(--color-danger);
-    border-color: var(--color-danger);
-}
-
 .ef-prematch__tournament {
     display: inline-flex;
     align-items: center;
@@ -473,21 +463,6 @@
     font-weight: var(--font-weight-bold);
     letter-spacing: var(--primitive-letter-spacing-press-start);
     border: 1px solid var(--color-bg-tertiary);
-}
-
-.ef-prematch__pip--v {
-    background-color: var(--color-primary);
-    color: var(--color-bg);
-}
-
-.ef-prematch__pip--d {
-    background-color: var(--color-warning);
-    color: var(--color-bg);
-}
-
-.ef-prematch__pip--l {
-    background-color: var(--color-danger);
-    color: var(--color-text-primary);
 }
 
 /* ━━━ RESPONSIVE ━━━ */
