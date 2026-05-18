@@ -11,7 +11,6 @@ import { MusicDirector, eventBus, GameEvents, emitGameEvent } from './index.js';
  * Example: Initialize audio system on game boot
  */
 export async function initAudioSystem() {
-  console.log('🎵 Initializing audio system...');
 
   const music = new MusicDirector({
     bpm: 120,
@@ -33,7 +32,6 @@ export async function initAudioSystem() {
     );
 
     await music.loadStems(stemData);
-    console.log(`✅ Loaded ${stemData.length} stems`);
   } catch (err) {
     console.warn('⚠️ Could not load stems:', err.message);
   }
@@ -63,26 +61,22 @@ export function updateAudioFromGameState(music, gameState) {
 export function setupAudioEventListeners(music) {
   // Goal scored
   eventBus.on(GameEvents.GOAL_SCORED, (data) => {
-    console.log('⚽ Goal! Updating music...');
     // MusicDirector reacts automatically, but you can add custom logic
     // e.g., trigger achievement sound, visual FX, etc.
   });
 
   // Card issued
   eventBus.on(GameEvents.CARD_ISSUED, (data) => {
-    console.log(`🟨 ${data.color} card!`);
     // Music decreases intensity automatically
   });
 
   // Phase change
   eventBus.on(GameEvents.GAME_PHASE_CHANGE, (data) => {
-    console.log(`📍 Phase: ${data.phase}`);
     // FSM transitions automatically
   });
 
   // Match ended
   eventBus.on(GameEvents.MATCH_ENDED, (data) => {
-    console.log(`🏁 Match ended: ${data.result}`);
     // Victory/defeat stinger plays automatically
   });
 }
@@ -190,7 +184,6 @@ export async function gameFlowExample() {
   // Continue match...
   // etc.
 
-  console.log('✅ Game flow example complete');
 }
 
 /**

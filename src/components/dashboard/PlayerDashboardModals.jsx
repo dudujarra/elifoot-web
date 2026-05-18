@@ -1,4 +1,3 @@
-import React from 'react';
 import { EfModal } from '../ui/EfModal';
 import { EfButton } from '../ui/EfButton';
 
@@ -7,7 +6,7 @@ export function PlayerDashboardModals({
     setOffPitchEvent, 
     handleOffPitchChoice, 
     mentalBreakModal, 
-    setMentalBreakModal, 
+    _setMentalBreakModal, 
     player, 
     handleMentalBreak 
 }) {

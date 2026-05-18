@@ -53,14 +53,12 @@ export class AutoPlayLLMBridge {
                 {
                     initProgressCallback: (report) => {
                         this._loadProgress = report.progress || 0;
-                        console.log(`[SPEC-119] WebLLM: ${(this._loadProgress * 100).toFixed(0)}% — ${report.text || ''}`);
                     }
                 }
             );
             this._webllmEngine = engine;
             this._loadStatus = 'ready';
             this._loadProgress = 1;
-            console.log('[SPEC-119] WebLLM engine ready');
         } catch (err) {
             EngineLogger.capture(err, 'AutoPlayLLMBridge.init');
             this._loadStatus = 'error';

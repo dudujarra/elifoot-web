@@ -19,7 +19,6 @@
  * SPEC-184 ceiling: inline style count ≤ 4 (dynamic width/color only).
  */
 
-import React from 'react';
 import { PERSONALITIES } from '../engine/PlayerCareer';
 import { EfBanner } from './ui';
 import { Star } from '@phosphor-icons/react';

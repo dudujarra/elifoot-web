@@ -24,39 +24,31 @@ export class AudioGenerator {
   }
 
   async generate() {
-    console.log('🎵 Starting audio generation...');
     const startTime = Date.now();
 
     try {
       // Tier 1: Context (4 fixed)
       await this.generateContextTracks();
-      console.log(`✅ Context tracks: ${this.tracks.length}`);
 
       // Tier 2: Pre-Match (2)
       await this.generatePreMatchTracks();
-      console.log(`✅ Pre-match tracks: ${this.tracks.length}`);
 
       // Tier 3: Match (50 base grooves)
       await this.generateMatchTracks();
-      console.log(`✅ Match tracks: ${this.tracks.length}`);
 
       // Tier 4: Post-Match (9)
       await this.generatePostMatchTracks();
-      console.log(`✅ Post-match tracks: ${this.tracks.length}`);
 
       // Tier 5: Narrative (6)
       await this.generateNarrativeTracks();
-      console.log(`✅ Narrative tracks: ${this.tracks.length}`);
 
       // Tier 6: Admin (1)
       await this.generateAdminTracks();
-      console.log(`✅ Admin tracks: ${this.tracks.length}`);
 
       // Build manifest
       this.buildManifest();
 
       const elapsed = Date.now() - startTime;
-      console.log(`\n🎉 Generation complete: ${this.tracks.length} tracks in ${(elapsed / 1000).toFixed(2)}s`);
 
       return this.buildOutput();
     } catch (error) {

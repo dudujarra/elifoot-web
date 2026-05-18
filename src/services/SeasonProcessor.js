@@ -26,8 +26,6 @@ import { evaluateSponsor } from '../engine/SeasonSystem';
 import { getDifficulty } from '../engine/systems/DifficultyModes.js';
 import { closeSeasonStats, calculateSeasonAwards } from '../engine/PlayerTraits';
 import { ageSquad } from '../engine/PlayerDevelopment';
-import { rng as systemRng } from '../engine/rng.js';
-import { saveAllBrains } from './learning/BrainPersistence';
 import { EngineLogger } from '../engine/EngineLogger.js';
 import { processLegacy } from './season/processLegacy.js';
 import { processManagerIdentity } from './season/processManagerIdentity.js';

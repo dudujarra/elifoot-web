@@ -5,7 +5,7 @@
  * Cada preset: { id, label, description, category, defaultConfig, analyze }
  */
 
-import { aggregateStat, diffBatches, histogram, extractCrashes, groupCrashesByStack } from './DiffEngine.js';
+import { aggregateStat, histogram, extractCrashes, groupCrashesByStack } from './DiffEngine.js';
 
 // ─── F1: Balance Win-Rate ──────────────────────────────────────────────
 

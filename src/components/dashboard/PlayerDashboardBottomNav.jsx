@@ -1,4 +1,3 @@
-import React from 'react';
 import { EfButton } from '../ui/EfButton';
 import { Target, ChartBar } from '@phosphor-icons/react';
 

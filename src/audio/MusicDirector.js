@@ -101,14 +101,12 @@ export class MusicDirector {
       this.faders[stem.id] = 1.0;
     }
 
-    console.log(`✅ Loaded ${stemData.length} stems`);
   }
 
   /**
    * FSM: transiciona entre estados
    */
   transitionTo(newState) {
-    console.log(`🎵 FSM: ${this.state} → ${newState}`);
 
     const previous = this.state;
     this.state = newState;
@@ -247,7 +245,6 @@ export class MusicDirector {
    * Event handlers
    */
   onGoalScored(data) {
-    console.log('⚽ GOAL!', data);
     // Trigger stinger (short celebratory stem)
     this.playStinger('goal', data.moment);
 
@@ -260,7 +257,6 @@ export class MusicDirector {
   }
 
   onCardIssued(data) {
-    console.log('🟨 Card:', data);
     this.playStinger('card', data.color);
 
     // Decrease intensity momentarily
@@ -272,12 +268,10 @@ export class MusicDirector {
   }
 
   onGamePhaseChange(data) {
-    console.log('📍 Phase:', data.phase);
     this.transitionTo(data.phase); // 'dashboard', 'preMatch', 'live', 'postMatch'
   }
 
   onMatchEnded(data) {
-    console.log('🏁 Match ended:', data.result);
     this.transitionTo('postMatch');
 
     // Play victory/defeat stinger
@@ -295,7 +289,6 @@ export class MusicDirector {
 
     if (stem) {
       stem.player.start(this.Tone.now());
-      console.log(`🎺 Stinger: ${stingerId}`);
     } else {
       console.warn(`⚠️ Stinger not found: ${stingerId}`);
     }

@@ -5,6 +5,36 @@ Este arquivo existe para Gemini ter o mesmo ponto de partida que Claude.
 
 ---
 
+## 🚨 ORDENS EXPRESSAS (NÃO NEGOCIÁVEL)
+
+### HONESTIDADE BRUTAL — SEM MASSAGEM
+
+Quando o Dudu perguntar "como está?", "tá bom?", "ficou certo?", "pronto?":
+- **NUNCA** responda de forma polida ou amenizada.
+- **NUNCA** diga "está ótimo!" se não está.
+- **SEMPRE** dê um score de 0 a 10 com justificativa.
+- **SEMPRE** liste o que está quebrado/faltando/ruim ANTES de dizer o que está bom.
+
+```
+SCORE: X/10
+PROBLEMAS: [lista sem filtro]
+BOM: [o que funciona]
+VEREDICTO: [1 frase brutal]
+```
+
+Score < 7 = "NÃO está pronto". Score < 5 = "está uma merda".
+
+### PROTOCOLO ANTI-MENTIRA
+
+```
+MENTIRA: "Fiz e está funcionando." (sem output)
+VERDADE: "Output: $ ./scripts/gates.sh → LIBERADO" (com output)
+```
+
+Sem output real = não é "pronto". É chute.
+
+---
+
 ## 🚨 REGRA SUPREMA — GATES OBRIGATÓRIOS (NÃO NEGOCIÁVEL)
 
 > **ANTES de commitar, ANTES de declarar trabalho completo, ANTES de dizer "pronto":**

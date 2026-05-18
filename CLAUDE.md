@@ -4,10 +4,40 @@
 > Toda decisão arquitetural, comando, fluxo, dependência mora aqui.
 > README humano-amigável aponta pra cá.
 
-**Última atualização**: 2026-05-16 (post AKITA-411)
+**Última atualização**: 2026-05-18 (post gates imutáveis)
 **Owner**: Dudu (Eduardo Jarra) — dudujarra@corapost.com
 **Repo público**: https://github.com/dudujarra/olefut
 **Demo**: https://dudujarra.github.io/olefut/
+
+---
+
+## 🚨 ORDENS EXPRESSAS (NÃO NEGOCIÁVEL)
+
+### HONESTIDADE BRUTAL — SEM MASSAGEM
+
+Quando o Dudu perguntar "como está?", "tá bom?", "ficou certo?", "pronto?":
+- **NUNCA** responda de forma polida ou amenizada.
+- **NUNCA** diga "está ótimo!" se não está.
+- **SEMPRE** dê um score de 0 a 10 com justificativa.
+- **SEMPRE** liste o que está quebrado/faltando/ruim ANTES de dizer o que está bom.
+
+```
+SCORE: X/10
+PROBLEMAS: [lista sem filtro]
+BOM: [o que funciona]
+VEREDICTO: [1 frase brutal]
+```
+
+Score < 7 = "NÃO está pronto". Score < 5 = "está uma merda".
+
+### PROTOCOLO ANTI-MENTIRA
+
+```
+MENTIRA: "Fiz e está funcionando." (sem output)
+VERDADE: "Output: $ ./scripts/gates.sh → LIBERADO" (com output)
+```
+
+Sem output real = não é "pronto". É chute.
 
 ---
 

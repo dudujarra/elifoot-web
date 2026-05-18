@@ -1,5 +1,3 @@
-import React from 'react';
-import { ChartBar } from '@phosphor-icons/react';
 
 // Hexagon radar geometry — six axes, 360° / 6 = 60° apart, start at top (270°).
 export function hexPoint(idx, valuePct) {

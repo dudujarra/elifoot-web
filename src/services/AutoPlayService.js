@@ -25,7 +25,7 @@ import { AdaptiveBrain } from './learning/AdaptiveBrain.js';
 import { ThompsonBandit } from './learning/ThompsonBandit.js';
 import { DAggerBootstrap } from './learning/DAggerBootstrap.js';
 import { generateGameDesignInsights } from './learning/LLMBridge.js';
-import { checkChallengeWin, getAllChallengeModes } from '../engine/ChallengeModes.js';
+import { getAllChallengeModes } from '../engine/ChallengeModes.js';
 import { SessionMetrics } from '../components/GDDSystems.jsx';
 import { AutoPlayLLMBridge } from './AutoPlayLLMBridge.js';
 import { AutoPlayPersistence } from './AutoPlayPersistence.js';
@@ -35,7 +35,6 @@ import { AutoPlayLogger } from './AutoPlayLogger.js';
 import { AutoPlayBanditCoordinator } from './AutoPlayBanditCoordinator.js';
 import { AutoPlayDecisions } from './AutoPlayDecisions.js';
 
-import { rng as systemRng } from '../engine/rng.js';
 import { devLog } from '../engine/DevLog.js';
 
 // BUG-027 fix: pull training catalog from engine source of truth (was hardcoded

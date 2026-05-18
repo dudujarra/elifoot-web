@@ -1,4 +1,3 @@
-import React from 'react';
 
 /**
  * Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.

@@ -1,4 +1,3 @@
-import React from 'react';
 import { EfPanel } from '../ui/EfPanel';
 import { EfButton } from '../ui/EfButton';
 import { SoccerBall } from '@phosphor-icons/react';

@@ -63,7 +63,6 @@ export function AudioController() {
         masterGainRef.current = new Tone.Gain(0.7).toDestination();
 
         setAudioStarted(true);
-        console.log('🎵 AudioController initialized');
       } catch (err) {
         console.error('AudioController init failed:', err);
       }
@@ -128,7 +127,6 @@ export function AudioController() {
         const arrayBuffer = await response.arrayBuffer();
         buffer = await Tone.getContext().decodeAudioData(arrayBuffer);
         loadedBuffersRef.current.set(subgenre, buffer);
-        console.log(`🎵 Loaded ${subgenre} master (${(arrayBuffer.byteLength / 1024 / 1024).toFixed(1)} MB)`);
       } catch (err) {
         console.error(`[Audio] Load failed: ${subgenre}`, err);
         return;
@@ -156,7 +154,6 @@ export function AudioController() {
     }
 
     currentPlayerRef.current = player;
-    console.log(`🎵 Transition → ${subgenre}`);
   }
 
   // Cleanup on unmount

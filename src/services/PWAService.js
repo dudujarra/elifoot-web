@@ -16,7 +16,6 @@ let swRegistration = null;
  */
 export async function registerServiceWorker() {
     if (!('serviceWorker' in navigator)) {
-        console.log('[PWA] Service workers not supported');
         return null;
     }
 
@@ -25,7 +24,6 @@ export async function registerServiceWorker() {
         swRegistration = await navigator.serviceWorker.register(`${base}sw.js`, {
             scope: base,
         });
-        console.log('[PWA] Service worker registered:', swRegistration.scope);
         return swRegistration;
     } catch (err) {
         EngineLogger.capture(err, 'PWAService.register');

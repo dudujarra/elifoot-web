@@ -29,7 +29,6 @@ async function preloadStem(subgenre) {
         link.as = 'fetch';
         link.crossOrigin = 'anonymous';
         document.head.appendChild(link);
-        console.log(`[AudioPreload] Prefetching ${subgenre}`);
     } catch {
         // Silent — prefetch is best-effort
     }

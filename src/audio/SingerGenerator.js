@@ -17,7 +17,6 @@ export class SingerGenerator {
    * Pré-gera stingers via Tone.Offline
    */
   async generateAllStingers(Tone) {
-    console.log('🎺 Generating stinger sounds...');
 
     const stingerTypes = [
       { name: 'goal', fn: this.goalStinger },
@@ -37,7 +36,6 @@ export class SingerGenerator {
       try {
         const buffer = await this.renderStinger(stinger.name, stinger.fn, Tone);
         this.stingers[stinger.name] = buffer;
-        console.log(`  ✅ ${stinger.name}`);
       } catch (err) {
         console.warn(`  ⚠️ Failed to generate ${stinger.name}:`, err.message);
       }
