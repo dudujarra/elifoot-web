@@ -27,6 +27,11 @@ export default defineConfig({
           if (id.includes('realPlayers.json')) return 'player-data';
           // ML/learning subsystem — heavy, split into its own chunk
           if (id.includes('/services/learning/')) return 'ml-brain';
+          // AKITA-416: Split engine core from services to reduce monolithic GameContext chunk
+          if (id.includes('/engine/') && !id.includes('.json')) return 'engine-core';
+          if (id.includes('/services/') && !id.includes('/services/learning/')) return 'engine-services';
+          // AKITA-416: Save system extracted — own chunk
+          if (id.includes('gameSaveManager')) return 'save-system';
         },
       },
     },

@@ -36,11 +36,15 @@ Este arquivo existe para Gemini ter o mesmo ponto de partida que Claude.
 3. **PROIBIDO commitar com "(a reverter)" no título** — se não está pronto, não comite.
 4. **PROIBIDO editar mais de 5 arquivos sem rodar gates intermediários** — a cada batch de edições, valide.
 5. **PROIBIDO ignorar erros de TypeScript** — se `tsc` mostra erros, o código está quebrado.
+6. **PROIBIDO rodar `git config core.hooksPath`** — os hooks estão em `~/.git-hooks/olefut/` (fora do repo, read-only). Não mexa.
+7. **PROIBIDO modificar/deletar arquivos em `~/.git-hooks/olefut/`** — eles são chmod 555. Não tente.
 
 ### O que acontece se você não seguir:
 
-O pre-commit hook VAI bloquear seu commit automaticamente. Mas mesmo que o commit fosse aceito,
-o Dudu vai encontrar o lixo, e você vai ser chamado de irresponsável. Novamente.
+- O **pre-commit** bloqueia o commit.
+- Se bypassar com `--no-verify`, o **pre-push** bloqueia o push.
+- Se bypassar o push, o **CI** rejeita o PR.
+- São 3 camadas. Nenhum agente passa pelas 3.
 
 ---
 

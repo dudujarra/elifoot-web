@@ -46,7 +46,8 @@ describe('SeasonHistory Strategic Data', () => {
                     if (!Array.isArray(autoplay.stats.seasonHistory)) autoplay.stats.seasonHistory = [];
                     const team = engine.getTeam(engine.manager?.teamId);
                     const standings = team ? engine.getStandings(team.zone, team.division) : [];
-                    const position = team ? (standings.findIndex(s => s.teamId === team.id) + 1) || standings.length : 0;
+                    const idx = team ? standings.findIndex(s => s.teamId === team.id) : -1;
+                    const position = idx >= 0 ? idx + 1 : Math.max(1, standings.length);
                     const totalTeams = standings.length || 20;
                     const promoted = position > 0 && position <= Math.max(2, Math.floor(totalTeams * 0.1));
                     const relegated = position > 0 && position > totalTeams - Math.max(2, Math.floor(totalTeams * 0.1));

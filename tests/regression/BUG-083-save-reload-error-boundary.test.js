@@ -46,12 +46,12 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ctxFile = path.resolve(__dirname, '../../src/context/GameContext.jsx');
+const ctxFile = path.resolve(__dirname, '../../src/context/gameSaveManager.js');
 
 function extractEngineClassFields() {
     const src = fs.readFileSync(ctxFile, 'utf-8');
     const match = src.match(/const ENGINE_CLASS_FIELDS = \[([\s\S]*?)\];/);
-    if (!match) throw new Error('ENGINE_CLASS_FIELDS not found in GameContext.jsx');
+    if (!match) throw new Error('ENGINE_CLASS_FIELDS not found in gameSaveManager.js');
     return match[1]
         .split(',')
         .map(s => s.trim().replace(/^['"]|['"]$/g, ''))

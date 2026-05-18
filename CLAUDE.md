@@ -242,7 +242,7 @@ Dudu aprova spec
     ↓
 Implementa contra spec + escreve harness no MESMO PR (Regra 0)
     ↓
-npm run lint && npm test && npm run build   (Mandamento #6 — 0 erros)
+./scripts/gates.sh   (tsc + lint + test — OBRIGATÓRIO antes de commit)
     ↓
 Bug? → cria issue + regression test + fix (3-artefact)
     ↓
@@ -344,3 +344,6 @@ Fonte canônica: [`specs/ROADMAP-NARRATIVE-MASTER.md`](specs/ROADMAP-NARRATIVE-M
 8. Bug fix sem issue + regression test pareados.
 9. Chamada `https://api.anthropic.com` com API key (Mandamento #7 — usar Ollama local ou `claude -p` subprocess).
 10. README/docs com números fantasiosos (Regra 0 — mentira viva).
+11. Commit com `--no-verify` — hooks existem por um motivo. São 3 camadas (pre-commit, pre-push, CI).
+12. Rodar `git config core.hooksPath` — os hooks moram em `~/.git-hooks/olefut/` (fora do repo, chmod 555).
+13. Modificar/deletar arquivos em `~/.git-hooks/olefut/` — são read-only.
