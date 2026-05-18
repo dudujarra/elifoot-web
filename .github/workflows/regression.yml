@@ -34,8 +34,10 @@ jobs:
           PASSED=0
           FAILED=0
           FAILED_FILES=""
-          # SPEC-157: deep-soak files rodam em suite separada (test:soak), pulados aqui.
-          for f in $(find tests -name "*.test.js" | grep -v "deep-soak-" | sort); do
+          # SPEC-157/AKITA-415: heavy soak/lab files rodam em suite separada (test:soak com SOAK=1),
+          # pulados aqui pra alinhar com vite.config.js test.exclude (deep-soak, sinistro, lab-presets).
+          # Em CI sem SOAK=1, vitest run desses arquivos retorna "no test files found" → exit 1.
+          for f in $(find tests -name "*.test.js" | grep -vE "deep-soak-|sinistro-|lab-presets-" | sort); do
             echo "::group::$f"
             if npx vitest run "$f" --reporter=dot; then
               PASSED=$((PASSED + 1))
