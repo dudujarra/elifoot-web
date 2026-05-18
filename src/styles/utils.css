@@ -248,3 +248,15 @@
 }
 
 .ef-dyn-top { top: var(--ef-dyn-top); }
+
+/* MatchLive star impact toast container (replaces 8 ef-dyn vars) */
+.ef-star-impact-toast-container {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

@@ -203,3 +203,11 @@
     background: transparent;
     border: 1px solid var(--color-bg-deep);
 }
+
+/* Replacements for ef-dyn layout classes */
+.cip-highlight-flex { flex: 1; }
+.cip-scorer-row--bordered { border-bottom: 1px solid var(--color-bg-deep); }
+.cip-season-icon { vertical-align: -1px; margin-right: 3px; }
+
+/* Utility: flex center with gap */
+.ef-flex-center-gap { display: flex; align-items: center; gap: 8px; }

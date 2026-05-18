@@ -55,8 +55,7 @@ export function FloatingBugButton() {
                     onClose={() => setOpen(false)}
                     title={
                         <div
-                            style={{ "--ef-dyn-display": 'flex', "--ef-dyn-alignItems": 'center', "--ef-dyn-gap": '8px' }}
-                            className="ef-dyn-display ef-dyn-alignItems ef-dyn-gap">
+                            className="ef-flex-center-gap">
                             <Bug size={24} color="var(--accent)" /> SISTEMA DE REPORT
                         </div>
                     }

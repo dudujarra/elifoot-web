@@ -13,6 +13,7 @@
 import { useState, useEffect } from 'react';
 import { EfPanel } from '../ui/EfPanel';
 import { TrendUp } from '@phosphor-icons/react';
+import '../../styles/learning-panel.css';
 
 function Sparkline({ data, width = 200, height = 40, color = 'var(--color-success-mid)' }) {
     if (!Array.isArray(data) || data.length < 2) {
@@ -28,17 +29,8 @@ function Sparkline({ data, width = 200, height = 40, color = 'var(--color-succes
         return `${x},${y}`;
     }).join(' ');
     return (
-        <svg
-            width={width}
-            height={height}
-            style={{ "--ef-dyn-background": 'var(--color-shadow-deep)', }}
-            className="ef-dyn-background">
-            <polyline
-                points={points}
-                fill="none"
-                stroke={color}
-                strokeWidth="1.5"
-            />
+        <svg width={width} height={height} className="lp-sparkline-svg">
+            <polyline points={points} fill="none" stroke={color} strokeWidth="1.5" />
         </svg>
     );
 }
@@ -47,42 +39,14 @@ function ActionBar({ action, q, max }) {
     const positive = q >= 0;
     const widthPct = Math.min(100, (Math.abs(q) / Math.max(1, max)) * 100);
     return (
-        <div
-            style={{
-                "--ef-dyn-display": 'flex',
-                "--ef-dyn-alignItems": 'center',
-                "--ef-dyn-gap": '6px',
-                "--ef-dyn-fontSize": '0.7rem',
-                "--ef-dyn-marginBottom": '2px'
-            }}
-            className="ef-dyn-display ef-dyn-alignItems ef-dyn-gap ef-dyn-fontSize ef-dyn-marginBottom">
-            <div
-                style={{ "--ef-dyn-minWidth": '120px', "--ef-dyn-fontFamily": 'var(--font-mono)' }}
-                className="ef-dyn-minWidth ef-dyn-fontFamily">{action}</div>
-            <div
-                style={{
-                    "--ef-dyn-flex": 1,
-                    "--ef-dyn-background": 'var(--color-shadow-deep)',
-                    "--ef-dyn-height": '12px',
-                    "--ef-dyn-overflow": 'hidden'
-                }}
-                className="ef-dyn-flex ef-dyn-background ef-dyn-height ef-dyn-overflow">
-                <div
-                    style={{
-                        "--ef-dyn-height": '100%',
-                        "--ef-dyn-background": positive ? 'var(--color-success-mid)' : 'var(--danger)',
-                        "--ef-dyn-transition": 'width 300ms'
-                    }}
-                    className={`w-${Math.round(widthPct)} ef-dyn-height ef-dyn-background ef-dyn-transition`} />
+        <div className="lp-action-row">
+            <div className="lp-action-label">{action}</div>
+            <div className="lp-action-track">
+                <div className={`lp-action-fill w-${Math.round(widthPct)}`}
+                     style={{ background: positive ? 'var(--color-success-mid)' : 'var(--danger)' }} />
             </div>
-            <div
-                style={{
-                    "--ef-dyn-minWidth": '50px',
-                    "--ef-dyn-textAlign": 'right',
-                    "--ef-dyn-color": positive ? 'var(--color-success-mid)' : 'var(--danger)',
-                    "--ef-dyn-fontFamily": 'var(--font-mono)'
-                }}
-                className="ef-dyn-minWidth ef-dyn-textAlign ef-dyn-color ef-dyn-fontFamily">
+            <div className="lp-action-value"
+                 style={{ color: positive ? 'var(--color-success-mid)' : 'var(--danger)' }}>
                 {positive ? '+' : ''}{q.toFixed(1)}
             </div>
         </div>
@@ -93,21 +57,12 @@ function MemoryEntry({ entry }) {
     const reward = entry.reward;
     const color = reward > 0 ? 'var(--color-success-mid)' : reward < 0 ? 'var(--danger)' : 'var(--text-muted)';
     return (
-        <div
-            style={{
-                "--ef-dyn-display": 'flex',
-                "--ef-dyn-justifyContent": 'space-between',
-                "--ef-dyn-fontSize": '0.7rem',
-                "--ef-dyn-padding": '2px 4px',
-                "--ef-dyn-borderBottom": '1px solid var(--color-bg-deep)',
-                "--ef-dyn-fontFamily": 'var(--font-mono)'
-            }}
-            className="ef-dyn-display ef-dyn-justifyContent ef-dyn-fontSize ef-dyn-padding ef-dyn-borderBottom ef-dyn-fontFamily">
+        <div className="lp-memory-row">
             <span>
                 <strong>wk{entry.week ?? '?'}/s{entry.season ?? '?'}</strong>{' '}
                 {entry.action || entry.decision || '—'}
             </span>
-            <span style={{ "--ef-dyn-color": color }} className="ef-dyn-color">
+            <span style={{ color }}>
                 {entry.result || ''} {reward != null && (
                     <strong>{reward >= 0 ? '+' : ''}{reward.toFixed(1)}</strong>
                 )}
@@ -147,30 +102,10 @@ export default function LearningPanel({ controllerRef }) {
     const transferSeries = seasonHistory.map(s => s.seasonTransfers || 0);
 
     return (
-        <EfPanel
-            variant="sunk"
-            padding="md"
-            style={{
-                "--ef-dyn-marginTop": '0.5rem',
-                "--ef-dyn-background": 'var(--color-forest-pulse)',
-                "--ef-dyn-border": '1px solid var(--color-success-mid)',
-            }}
-            className="ef-dyn-marginTop ef-dyn-background ef-dyn-border">
-            <div
-                onClick={() => setOpen(o => !o)}
-                style={{
-                    "--ef-dyn-cursor": 'pointer',
-                    "--ef-dyn-fontWeight": 700,
-                    "--ef-dyn-color": 'var(--color-success-mid)',
-                    "--ef-dyn-display": 'flex',
-                    "--ef-dyn-justifyContent": 'space-between',
-                    "--ef-dyn-alignItems": 'center'
-                }}
-                className="ef-dyn-cursor ef-dyn-fontWeight ef-dyn-color ef-dyn-display ef-dyn-justifyContent ef-dyn-alignItems">
+        <EfPanel variant="sunk" padding="md" className="lp-root">
+            <div onClick={() => setOpen(o => !o)} className="lp-header">
                 <span><TrendUp size={14} weight="bold" className="ef-icon-inline-md" />LEARNING REAL-TIME (SPEC-123) {open ? '▼' : '▶'}</span>
-                <span
-                    style={{ "--ef-dyn-fontSize": '0.72rem', "--ef-dyn-color": 'var(--text-muted)' }}
-                    className="ef-dyn-fontSize ef-dyn-color">
+                <span className="lp-header-meta">
                     {brainSummary.states} states · {brainSummary.totalUpdates} upd · {memory.length} mem
                     {brainSummary.replayBuffer > 0 && ` · ${brainSummary.replayBuffer} replay`}
                     {brainSummary.activeTraces > 0 && ` · ${brainSummary.activeTraces} traces`}
@@ -180,21 +115,15 @@ export default function LearningPanel({ controllerRef }) {
                 <>
                     {/* Win/Transfer sparklines */}
                     {seasonHistory.length >= 2 && (
-                        <div
-                            style={{ "--ef-dyn-display": 'flex', "--ef-dyn-gap": '12px', "--ef-dyn-marginTop": '8px', "--ef-dyn-flexWrap": 'wrap' }}
-                            className="ef-dyn-display ef-dyn-gap ef-dyn-marginTop ef-dyn-flexWrap">
+                        <div className="lp-sparklines-row">
                             <div>
-                                <div
-                                    style={{ "--ef-dyn-fontSize": '0.7rem', "--ef-dyn-color": 'var(--text-muted)', "--ef-dyn-marginBottom": '2px' }}
-                                    className="ef-dyn-fontSize ef-dyn-color ef-dyn-marginBottom">
+                                <div className="lp-sparkline-label">
                                     Wins per season ({seasonHistory.length} samples)
                                 </div>
                                 <Sparkline data={winSeries} color="var(--color-success-mid)" />
                             </div>
                             <div>
-                                <div
-                                    style={{ "--ef-dyn-fontSize": '0.7rem', "--ef-dyn-color": 'var(--text-muted)', "--ef-dyn-marginBottom": '2px' }}
-                                    className="ef-dyn-fontSize ef-dyn-color ef-dyn-marginBottom">
+                                <div className="lp-sparkline-label">
                                     Transfers per season
                                 </div>
                                 <Sparkline data={transferSeries} color="var(--accent)" />
@@ -204,7 +133,7 @@ export default function LearningPanel({ controllerRef }) {
 
                     {/* Top Q-actions */}
                     {topActions.length > 0 && (
-                        <div style={{ "--ef-dyn-marginTop": '12px' }} className="ef-dyn-marginTop">
+                        <div className="lp-section">
                             <div className="ef-text-xs-muted">
                                 Top actions Q-values:
                             </div>
@@ -216,18 +145,11 @@ export default function LearningPanel({ controllerRef }) {
 
                     {/* Episodic memory */}
                     {memory.length > 0 && (
-                        <div style={{ "--ef-dyn-marginTop": '12px' }} className="ef-dyn-marginTop">
+                        <div className="lp-section">
                             <div className="ef-text-xs-muted">
                                 Recent memories (last {memory.length}):
                             </div>
-                            <div
-                                style={{
-                                    "--ef-dyn-maxHeight": '160px',
-                                    "--ef-dyn-overflowY": 'auto',
-                                    "--ef-dyn-background": 'var(--color-shadow-deep)',
-                                    "--ef-dyn-padding": '4px'
-                                }}
-                                className="ef-dyn-maxHeight ef-dyn-overflowY ef-dyn-background ef-dyn-padding">
+                            <div className="lp-memory-scroll">
                                 {memory.slice().reverse().map((m, i) => (
                                     <MemoryEntry key={i} entry={m} />
                                 ))}

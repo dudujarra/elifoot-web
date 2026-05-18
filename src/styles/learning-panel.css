@@ -1,13 +1,89 @@
-/* LearningPanel — extracted from inline styles (SPEC-123) */
+/* LearningPanel — SPEC-123 real CSS (replaces ef-dyn-* indirection) */
 
-/* Sparklines row */
+.lp-root {
+  margin-top: 0.5rem;
+  background: var(--color-forest-pulse);
+  border: 1px solid var(--color-success-mid);
+}
 
-/* Section label */
+.lp-header {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-success-mid);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-/* ActionBar helper */
+.lp-header-meta {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
 
-/* Memory entry */
+.lp-sparklines-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
 
-/* Memory scroll container */
+.lp-sparkline-svg {
+  background: var(--color-shadow-deep);
+}
 
-/* Sparkline empty state */
+.lp-sparkline-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.lp-section {
+  margin-top: 12px;
+}
+
+.lp-action-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  margin-bottom: 2px;
+}
+
+.lp-action-label {
+  min-width: 120px;
+  font-family: var(--font-mono);
+}
+
+.lp-action-track {
+  flex: 1;
+  background: var(--color-shadow-deep);
+  height: 12px;
+  overflow: hidden;
+}
+
+.lp-action-fill {
+  height: 100%;
+  transition: width 300ms;
+}
+
+.lp-action-value {
+  min-width: 50px;
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.lp-memory-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--color-bg-deep);
+  font-family: var(--font-mono);
+}
+
+.lp-memory-scroll {
+  max-height: 160px;
+  overflow-y: auto;
+  background: var(--color-shadow-deep);
+  padding: 4px;
+}

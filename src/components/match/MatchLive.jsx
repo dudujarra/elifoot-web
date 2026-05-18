@@ -178,9 +178,7 @@ export function MatchLive({
                     }}
                 />
             )}
-            <div
-                style={{ "--ef-dyn-position": 'fixed', "--ef-dyn-bottom": '80px', "--ef-dyn-left": '50%', "--ef-dyn-transform": 'translateX(-50%)', "--ef-dyn-zIndex": 1000, "--ef-dyn-display": 'flex', "--ef-dyn-flexDirection": 'column', "--ef-dyn-gap": '8px' }}
-                className="ef-dyn-position ef-dyn-bottom ef-dyn-left ef-dyn-transform ef-dyn-zIndex ef-dyn-display ef-dyn-flexDirection ef-dyn-gap">
+            <div className="ef-star-impact-toast-container">
                 {starImpacts.map(entry => (
                     <StarImpactToast
                         key={entry.id}

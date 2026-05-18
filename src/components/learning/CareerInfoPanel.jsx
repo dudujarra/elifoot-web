@@ -117,11 +117,11 @@ export default function CareerInfoPanel({ controllerRef }) {
                         <div>
                             <div className="ef-text-sm-muted">TIME</div>
                             <div className="cip-team-name">{snapshot.team.name}</div>
-                            <div className="cip-division ef-dyn-color" style={{ "--ef-dyn-color": divColor }}>{divName} ({snapshot.zone})</div>
+                            <div className="cip-division" style={{ color: divColor }}>{divName} ({snapshot.zone})</div>
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">POSIÇÃO</div>
-                            <div className="cip-position ef-dyn-color" style={{ "--ef-dyn-color": posColor }}>{snapshot.position}º</div>
+                            <div className="cip-position" style={{ color: posColor }}>{snapshot.position}º</div>
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">SQUAD</div>
@@ -129,13 +129,13 @@ export default function CareerInfoPanel({ controllerRef }) {
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">BALANÇO</div>
-                            <div className="cip-balance ef-dyn-color" style={{ "--ef-dyn-color": snapshot.balance < 0 ? 'var(--danger)' : 'var(--color-success-mid)' }}>
+                            <div className="cip-balance" style={{ color: snapshot.balance < 0 ? 'var(--danger)' : 'var(--color-success-mid)' }}>
                                 R$ {(snapshot.balance / 1_000_000).toFixed(1)}M
                             </div>
                         </div>
                         <div>
                             <div className="ef-text-sm-muted">REPUTAÇÃO</div>
-                            <div className="cip-reputation ef-dyn-color" style={{ "--ef-dyn-color": repBadge.color }}><RepIcon rep={snapshot.reputation} />{repBadge.label}</div>
+                            <div className="cip-reputation" style={{ color: repBadge.color }}><RepIcon rep={snapshot.reputation} />{repBadge.label}</div>
                             <div className="ef-text-sm-muted">{snapshot.reputation}/100</div>
                         </div>
                     </div>
@@ -187,15 +187,14 @@ export default function CareerInfoPanel({ controllerRef }) {
                                 <span>Maior goleada:</span>
                                 <strong>{snapshot.insights.biggestWin?.score || '—'}</strong>
                                 <span>Pior derrota:</span>
-                                <strong style={{ "--ef-dyn-color": 'var(--danger)' }} className="ef-dyn-color">{snapshot.insights.worstLoss?.score || '—'}</strong>
+                                <strong style={{ color: 'var(--danger)' }}>{snapshot.insights.worstLoss?.score || '—'}</strong>
                                 <span>Clean sheets:</span>
                                 <strong>{snapshot.insights.cleanSheets ?? 0}</strong>
                                 <span>Promoções:</span>
                                 <strong
-                                    style={{ "--ef-dyn-color": 'var(--color-success-mid)' }}
-                                    className="ef-dyn-color">{snapshot.insights.promotionsWon ?? 0}</strong>
+                                    style={{ color: 'var(--color-success-mid)' }}>{snapshot.insights.promotionsWon ?? 0}</strong>
                                 <span>Rebaixamentos:</span>
-                                <strong style={{ "--ef-dyn-color": 'var(--danger)' }} className="ef-dyn-color">{snapshot.insights.relegationsTaken ?? 0}</strong>
+                                <strong style={{ color: 'var(--danger)' }}>{snapshot.insights.relegationsTaken ?? 0}</strong>
                             </div>
                         </div>
                     </div>
@@ -213,7 +212,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                                         <div className="cip-hexagon-wrap">
                                             <HexagonChart player={snapshot.topScorers[0]} size={120} showLabels={true} />
                                         </div>
-                                        <div style={{ "--ef-dyn-flex": 1 }} className="ef-dyn-flex">
+                                        <div className="cip-highlight-flex">
                                             <div className="cip-highlight-label"><Trophy size={11} weight="fill" className="ef-icon-inline" />DESTAQUE DA TEMPORADA</div>
                                             <div className="cip-highlight-name">{snapshot.topScorers[0].name}</div>
                                             <div className="cip-highlight-pos">
@@ -221,8 +220,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                                             </div>
                                             <div className="cip-highlight-stats">
                                                 <strong
-                                                    style={{ "--ef-dyn-color": 'var(--color-success-mid)' }}
-                                                    className="ef-dyn-color">{snapshot.topScorers[0].goals}G</strong>{' '}
+                                                    style={{ color: 'var(--color-success-mid)' }}>{snapshot.topScorers[0].goals}G</strong>{' '}
                                                 <span className="ef-text-muted">
                                                     {snapshot.topScorers[0].assists}A · {snapshot.topScorers[0].apps}j
                                                 </span>
@@ -237,17 +235,14 @@ export default function CareerInfoPanel({ controllerRef }) {
 
                                 {/* Lista dos demais artilheiros */}
                                 {snapshot.topScorers.slice(1).map((p, i) => (
-                                    <div key={i + 1} className="cip-scorer-row ef-dyn-borderBottom"
-                                        style={{ "--ef-dyn-borderBottom": i < snapshot.topScorers.length - 2 ? '1px solid var(--color-bg-deep)' : 'none' }}
-                                    >
+                                    <div key={i + 1} className={`cip-scorer-row ${i < snapshot.topScorers.length - 2 ? 'cip-scorer-row--bordered' : ''}`}>
                                         <span>
                                             <strong className="ef-text-muted">{i + 2}.</strong>{' '}
                                             {p.name} ({p.position} · OVR {p.ovr})
                                         </span>
                                         <span>
                                             <strong
-                                                style={{ "--ef-dyn-color": 'var(--color-success-mid)' }}
-                                                className="ef-dyn-color">{p.goals}G</strong>{' '}
+                                                style={{ color: 'var(--color-success-mid)' }}>{p.goals}G</strong>{' '}
                                             <span className="ef-text-muted">
                                                 {p.assists}A · {p.apps}j
                                             </span>
@@ -279,8 +274,7 @@ export default function CareerInfoPanel({ controllerRef }) {
                                             {TitleIcon && <TitleIcon
                                                 size={10}
                                                 weight="fill"
-                                                style={{"--ef-dyn-verticalAlign": '-1px',"--ef-dyn-marginRight": '3px'}}
-                                                className="ef-dyn-verticalAlign ef-dyn-marginRight" />}{div}· {s.position}º
+                                                className="cip-season-icon" />}{div}· {s.position}º
                                                                                     </div>
                                     );
                                 })}
