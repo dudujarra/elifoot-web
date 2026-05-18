@@ -1,0 +1,295 @@
+
+/Users/dudujarra/Documents/ELIFOOT/.agent/AutoPlayLabView.backup.jsx
+   97:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+   98:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  101:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  115:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  120:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  138:38  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  145:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  153:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  164:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  172:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  183:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  189:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  200:28  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  215:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  217:38  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  223:42  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  238:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  239:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  243:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  256:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  263:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/scripts/test-synth.js
+  262:43  warning  The value assigned to 'offset' is not used in subsequent statements  no-useless-assignment
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/AppHeader.jsx
+  30:13  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  28 |             const engine = getEngine?.();
+  29 |             if (!engine?.llmNarrative) return;
+> 30 |             setLlmEnabled(!!engine.llmNarrative.isLLMEnabled?.());
+     |             ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  31 |         } catch { /* engine not ready yet */ }
+  32 |     }, [gameState.started, gameState.view, getEngine]);
+  33 |  react-hooks/set-state-in-effect
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/AutoPlayView.jsx
+  923:52  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/ChronicleSeasonEndModal.jsx
+  146:13  warning  The value assigned to 'highlightY' is not used in subsequent statements                                                                                                                                                                                                                                                                                                                                                                                                                         no-useless-assignment
+  172:9   warning  Error: This value cannot be modified
+
+Modifying a value previously passed as an argument to a hook is not allowed. Consider moving the modification before calling the hook.
+
+  170 |     const close = useCallback(() => {
+  171 |         if (!engine) return;
+> 172 |         engine.pendingChronicleSeason = null;
+      |         ^^^^^^ `engine` cannot be modified
+  173 |         if (typeof forceUpdate === 'function') forceUpdate();
+  174 |     }, [engine, forceUpdate]);
+  175 |  react-hooks/immutability
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/DashboardView.jsx
+  60:8  warning  React Hook React.useEffect has missing dependencies: 'engine.weekEvents' and 'team'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/MatchHighlightModal.jsx
+  31:9   warning  The value assigned to 'type' is not used in subsequent statements                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      no-useless-assignment
+  74:22  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  72 |             <div className="ef-highlight-card" style={{ '--highlight-color': color }} /* eslint-disable-line no-restricted-syntax */ >
+  73 |                 <div className="ef-highlight-icon-row">
+> 74 |                     <Icon size={64} color={color} weight="fill" />
+     |                      ^^^^ This component is created during render
+  75 |                 </div>
+  76 |                 <div className="ef-highlight-minute">
+  77 |                     MINUTO {context.minute}
+
+  60 |     if (!context) return null;
+  61 |
+> 62 |     const Icon = getHighlightIcon(context.type);
+     |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+  63 |     const color = getHighlightColor(context.type);
+  64 |
+  65 |     return (  react-hooks/static-components
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/MatchHighlightVideo.jsx
+  44:13  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  42 |
+  43 |         if (imgSrc) {
+> 44 |             setAnimState({
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  45 |                 imageSrc: imgSrc,
+  46 |                 isGoal,
+  47 |                 flash: isGoal,  react-hooks/set-state-in-effect
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/MonitorView.jsx
+  123:22  warning  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  121 |     // Telemetry derived from real state — NOT mocked.
+  122 |     void tick; // re-render every second
+> 123 |     const uptimeMs = Date.now() - sessionStart;
+      |                      ^^^^^^^^^^ Cannot call impure function
+  124 |     const uptimeStr = formatUptime(uptimeMs);
+  125 |
+  126 |     const critCount = useMemo(() => {                        react-hooks/purity
+  131:8   warning  React Hook useMemo has an unnecessary dependency: 'entries.length'. Either exclude it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+  141:21  warning  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  139 |         const all = monitor.getAll();
+  140 |         const buckets = new Array(18).fill(0);
+> 141 |         const now = Date.now();
+      |                     ^^^^^^^^^^ Cannot call impure function
+  142 |         const stepMs = 5_000; // 5s buckets => 90s window
+  143 |         for (const e of all) {
+  144 |             const ageMs = now - (e.ts || 0);  react-hooks/purity
+  151:8   warning  React Hook useMemo has an unnecessary dependency: 'entries.length'. Either exclude it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+  162:8   warning  React Hook useMemo has an unnecessary dependency: 'entries.length'. Either exclude it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/PlayerDashboardView.jsx
+   95:5   warning  React Hook useEffect contains a call to 'setBanner'. Without a list of dependencies, this can lead to an infinite chain of updates. To fix this, pass [player] as a second argument to the useEffect Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+  127:23  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  125 |     const handleOffPitchChoice = (option) => {
+  126 |         const eff = option.effect;
+> 127 |         if (eff.boss) player.relationships.boss = Math.max(0, Math.min(100, player.relationships.boss + eff.boss));
+      |                       ^^^^^^^^^^^^^^^^^^^^ `player` cannot be modified
+  128 |         if (eff.fans) player.relationships.fans = Math.max(0, Math.min(100, player.relationships.fans + eff.fans));
+  129 |         if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+  130 |         if (eff.sponsors) player.relationships.sponsors = Math.max(0, Math.min(100, player.relationships.sponsors + eff.sponsors));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-hooks/immutability
+  131:24  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  129 |         if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+  130 |         if (eff.sponsors) player.relationships.sponsors = Math.max(0, Math.min(100, player.relationships.sponsors + eff.sponsors));
+> 131 |         if (eff.money) player.money += eff.money;
+      |                        ^^^^^^ `player` cannot be modified
+  132 |         if (eff.energy) player.energy = Math.max(0, Math.min(100, player.energy + eff.energy));
+  133 |         if (eff.actionSlots) player.actionSlots = Math.max(0, player.actionSlots + eff.actionSlots);
+  134 |         if (eff.wage_multiplier) player.wage = Math.floor(player.wage * eff.wage_multiplier);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/immutability
+  392:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  390 |                                     <EfPanel padding="md">
+  391 |                                         <div className="ef-player-dashboard__panel-title ef-sans ef-text-accent"><Handshake weight="fill" /> LOCKER ROOM STANDING</div>
+> 392 |                                         <RelBar label="Treinador" value={player.relationships.boss} type="boss" icon={<User weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  393 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+  394 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+  395 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+
+  152 |
+  153 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 154 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 155 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 156 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 174 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 175 |     };
+      | ^^^^^^ The component is created during render here
+  176 |
+  177 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  178 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;  react-hooks/static-components
+  393:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  391 |                                         <div className="ef-player-dashboard__panel-title ef-sans ef-text-accent"><Handshake weight="fill" /> LOCKER ROOM STANDING</div>
+  392 |                                         <RelBar label="Treinador" value={player.relationships.boss} type="boss" icon={<User weight="fill" />} />
+> 393 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  394 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+  395 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+  396 |                                     </EfPanel>
+
+  152 |
+  153 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 154 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 155 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 156 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 174 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 175 |     };
+      | ^^^^^^ The component is created during render here
+  176 |
+  177 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  178 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;              react-hooks/static-components
+  394:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  392 |                                         <RelBar label="Treinador" value={player.relationships.boss} type="boss" icon={<User weight="fill" />} />
+  393 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+> 394 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  395 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+  396 |                                     </EfPanel>
+  397 |
+
+  152 |
+  153 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 154 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 155 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 156 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 174 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 175 |     };
+      | ^^^^^^ The component is created during render here
+  176 |
+  177 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  178 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;                                                                                                                                                                                      react-hooks/static-components
+  395:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  393 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+  394 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+> 395 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  396 |                                     </EfPanel>
+  397 |
+  398 |                                     {offPitchResult && (
+
+  152 |
+  153 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 154 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 155 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 156 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 174 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 175 |     };
+      | ^^^^^^ The component is created during render here
+  176 |
+  177 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  178 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;                                                                                                                                                                                                                                                                              react-hooks/static-components
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/PlayerMatchView.jsx
+   60:8   warning  React Hook useEffect has missing dependencies: 'engine', 'player', and 'team.id'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react-hooks/exhaustive-deps
+  110:8   warning  React Hook useEffect has missing dependencies: 'player.id', 'player.position', and 'team.name'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/exhaustive-deps
+  115:27  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  113 |         if (activeEvent.isBench) {
+  114 |             const eff = option.effect;
+> 115 |             if (eff.boss) player.relationships.boss = Math.max(0, Math.min(100, player.relationships.boss + eff.boss));
+      |                           ^^^^^^^^^^^^^^^^^^^^ `player` cannot be modified
+  116 |             if (eff.fans) player.relationships.fans = Math.max(0, Math.min(100, player.relationships.fans + eff.fans));
+  117 |             if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+  118 |             if (eff.energy) player.energy = Math.max(0, Math.min(100, player.energy + eff.energy));  react-hooks/immutability
+  118:29  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  116 |             if (eff.fans) player.relationships.fans = Math.max(0, Math.min(100, player.relationships.fans + eff.fans));
+  117 |             if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+> 118 |             if (eff.energy) player.energy = Math.max(0, Math.min(100, player.energy + eff.energy));
+      |                             ^^^^^^ `player` cannot be modified
+  119 |             setEventResult(option.resultText);
+  120 |         } else {
+  121 |             const energyFactor = Math.max(0.3, player.energy / 100);                                                                           react-hooks/immutability
+
+✖ 46 problems (0 errors, 46 warnings)
+

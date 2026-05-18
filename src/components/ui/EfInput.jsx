@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfInput — Stitch component
  *
@@ -42,13 +41,12 @@ export function EfInput({
             {label && (
                 <label 
                     htmlFor={inputId} 
-                    className="ef-input-label font-display text-color-muted uppercase tracking-[0.04em] font-semibold"
-                    style={{ fontSize: '0.5rem' }}
+                    className="ef-input-label font-display text-color-muted uppercase tracking-[0.04em] font-semibold ef-dyn-fontSize"
+                    style={{ "--ef-dyn-fontSize": '0.5rem' }}
                 >
                     {label}
                 </label>
             )}
-
             <div className="relative flex items-center">
                 {icon && (
                     <span className="absolute left-2 text-color-muted pointer-events-none">
@@ -65,11 +63,11 @@ export function EfInput({
                     aria-label={ariaLabel}
                     aria-invalid={!!error || undefined}
                     aria-describedby={helper ? `${inputId}-helper` : undefined}
-                    className={`ef-input flex-1 font-mono text-color-soft-text bg-bg-dark border-4 outline-none transition-colors duration-100 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'} ${error ? 'border-danger' : 'border-bg-dark border-b-border-panel border-r-border-panel focus:border-info'} shadow-[inset_2px_2px_0_var(--color-shadow-deep)]`}
+                    className={`ef-input flex-1 font-mono text-color-soft-text bg-bg-dark border-4 outline-none transition-colors duration-100 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'} ${error ? 'border-danger' : 'border-bg-dark border-b-border-panel border-r-border-panel focus:border-info'} shadow-[inset_2px_2px_0_var(--color-shadow-deep)] ef-dyn-padding ef-dyn-paddingLeft ef-dyn-fontSize`}
                     style={{
-                        padding: sizing.padding,
-                        paddingLeft: icon ? '32px' : sizing.padding.split(' ')[1],
-                        fontSize: sizing.fontSize
+                        "--ef-dyn-padding": sizing.padding,
+                        "--ef-dyn-paddingLeft": icon ? '32px' : sizing.padding.split(' ')[1],
+                        "--ef-dyn-fontSize": sizing.fontSize
                     }}
                     name={name}
                     min={min}
@@ -81,13 +79,11 @@ export function EfInput({
                     autoFocus={autoFocus}
                 />
             </div>
-
             {error && (
                 <span className="ef-input-error text-danger font-display text-[0.45rem]">
                     {error}
                 </span>
             )}
-
             {helper && !error && (
                 <span id={`${inputId}-helper`} className="ef-input-helper text-color-muted font-display text-[0.45rem]">
                     {helper}

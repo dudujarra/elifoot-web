@@ -26,7 +26,7 @@ describe('AKITA-204 — AdaptiveBrain skipAutoRestore opt-in', () => {
     test.skipIf(!HAS_PERSISTENT_STORAGE)('persona persists across constructor when skipAutoRestore omitted', () => {
         const b1 = new AdaptiveBrain('GUARDIOLA');
         b1.qTable['test|state'] = { TACTIC_offensive: 42 };
-        b1.totalUpdates = 7;
+        b1.qEngine.totalUpdates = 7;
         b1.save();
 
         const b2 = new AdaptiveBrain();
@@ -39,7 +39,7 @@ describe('AKITA-204 — AdaptiveBrain skipAutoRestore opt-in', () => {
     test('skipAutoRestore=true bypasses restore — fresh state', () => {
         const seed = new AdaptiveBrain('GUARDIOLA');
         seed.qTable['saved|state'] = { ACTION: 99 };
-        seed.totalUpdates = 50;
+        seed.qEngine.totalUpdates = 50;
         seed.save();
 
         // NPC brain with opt-out

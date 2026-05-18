@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { Pause, Strategy, ArrowsLeftRight, CheckCircle, Play } from '@phosphor-icons/react';
 import { EfClubBadge } from '../ui';
 import { getFormEmoji } from '../../engine/systems/FormSystem.js';
@@ -78,7 +77,9 @@ export function MatchHalfTime({
                                                     <span className="font-data-mono text-primary-container">{p.ovr} OVR</span>
                                                 </div>
                                                 <div className="font-data-mono text-[10px] text-smoke">
-                                                    <span style={{ color: getEnergyColor(p.energy) }}>COND: {p.energy}%</span> | MORAL: {p.moral || 50}%
+                                                    <span
+                                                        style={{ "--ef-dyn-color": getEnergyColor(p.energy) }}
+                                                        className="ef-dyn-color">COND: {p.energy}%</span> | MORAL: {p.moral || 50}%
                                                 </div>
                                             </button>
                                         ))}
@@ -97,7 +98,9 @@ export function MatchHalfTime({
                                                 <div>
                                                     <div className="font-label-caps mb-1"><strong>{p.position}</strong> {p.name} {getFormEmoji(p.form?.trend)}</div>
                                                     <div className="font-data-mono text-[10px] text-smoke">
-                                                        <span className="text-primary-container">{p.ovr} OVR</span> | <span style={{ color: getEnergyColor(p.energy) }}>COND: {p.energy}%</span>
+                                                        <span className="text-primary-container">{p.ovr} OVR</span> | <span
+                                                        style={{ "--ef-dyn-color": getEnergyColor(p.energy) }}
+                                                        className="ef-dyn-color">COND: {p.energy}%</span>
                                                     </div>
                                                 </div>
                                                 <button type="button" className="bg-primary-container text-abyss px-3 py-1 font-label-caps text-[10px] pixel-bevel hover:brightness-110 flex items-center gap-1 cursor-pointer" onClick={() => {
@@ -168,7 +171,6 @@ export function MatchHalfTime({
                     <Play aria-hidden="true" size={24} weight="fill" /> <span className="font-headline-md">INICIAR 2º TEMPO</span>
                 </button>
             </div>
-            
             {/* Decorative CRT Overlay */}
             <div className="fixed inset-0 pointer-events-none z-[100] scanline opacity-10"></div>
             <div className="fixed inset-0 pointer-events-none z-[101] shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]"></div>

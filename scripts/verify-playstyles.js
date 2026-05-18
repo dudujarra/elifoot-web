@@ -1,5 +1,5 @@
 import { MatchSimulator } from '../src/services/MatchSimulator.js';
-import { rng } from '../src/engine/rng.js';
+
 
 // Mock engine
 const engine = {

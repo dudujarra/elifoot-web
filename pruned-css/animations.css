@@ -1,0 +1,235 @@
+/**
+ * OléFUT v2.0 — Pixel-Art Animations
+ *
+ * Sprite-frame animations via background-position + steps() pra preservar pixel-art crispness.
+ * Easing curves smooth quebram aesthetic SNES — usar steps() ou linear sempre.
+ *
+ * Direção arte:
+ * -  (nearest-neighbor)
+ * - steps() animation timing (não cubic-bezier)
+ * - duration ms múltiplos de 100ms (12 FPS feel)
+ */
+
+/* ========== KEYFRAMES sprite-frame ========== */
+
+@keyframes ef-goal-burst {
+    /* 6 frames horizontal, goal-burst-6frames.png */
+    from { background-position: 0 0; }
+    to   { background-position: -576px 0; } /* 6 × 96px = 576px */
+}
+
+@keyframes ef-trophy-unlock {
+    /* 6 frames horizontal, trophy-unlock-6frames.png */
+    from { background-position: 0 0; }
+    to   { background-position: -576px 0; } /* 6 × 96px = 576px */
+}
+
+@keyframes ef-crowd-wave {
+    /* 4 frames vertical, crowd-wave-4frames.png */
+    from { background-position: 0 0; }
+    to   { background-position: 0 -320px; } /* 4 × 80px = 320px */
+}
+
+@keyframes ef-crowd-flag-wave {
+    /* 4 frames horizontal, crowd-flag-wave-4frames.png */
+    from { background-position: 0 0; }
+    to   { background-position: -512px 0; } /* 4 × 128px */
+}
+
+/* ========== KEYFRAMES UI ========== */
+
+@keyframes ef-shake {
+    /* Goal banner shake — 1200ms */
+    0%, 100% { transform: translateX(0); }
+    10%      { transform: translateX(-4px); }
+    20%      { transform: translateX(4px); }
+    30%      { transform: translateX(-3px); }
+    40%      { transform: translateX(3px); }
+    50%      { transform: translateX(-2px); }
+    60%      { transform: translateX(2px); }
+    70%      { transform: translateX(-1px); }
+    80%      { transform: translateX(1px); }
+    90%      { transform: translateX(0); }
+}
+
+@keyframes ef-pop-in {
+    /* Modal/card pop-in — 200ms */
+    0%   { opacity: 0; transform: scale(0.85); }
+    60%  { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ef-slide-down {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ef-slide-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ef-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes ef-pulse-glow {
+    /* Highlight pulsing — focus rings, important badges */
+    0%, 100% { box-shadow: 0 0 4px var(--primary-glow, #0A3D1A); }
+    50%      { box-shadow: 0 0 12px var(--primary-glow, #0A3D1A), 0 0 4px var(--primary, #00FF66); }
+}
+
+@keyframes ef-counter {
+    /* Score counter increment — 300ms */
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-50%); }
+    100% { transform: translateY(0); }
+}
+
+/* ========== UTILITY CLASSES ========== */
+
+/* Sprite-frame containers */
+
+.ef-anim-goal-burst {
+    width: 96px;
+    height: 96px;
+    background-image: url('/olefut/sprites/animations/goal-burst-6frames.png');
+    background-repeat: no-repeat;
+    
+    animation: ef-goal-burst 1200ms steps(6) forwards;
+}
+
+.ef-anim-spinner-sm {
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    background-image: url('/olefut/sprites/animations/spinner-8frames.png');
+    background-repeat: no-repeat;
+    background-size: 128px 16px; /* 8 frames × 16px scaled */
+    
+    animation: ef-spinner-sm 800ms steps(8) infinite;
+}
+
+@keyframes ef-spinner-sm {
+    from { background-position: 0 0; }
+    to   { background-position: -128px 0; }
+}
+
+/* ========== EVENT SPRITES (match-events.png 4×3) ========== */
+
+/* Animated entry */
+
+@keyframes ef-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* ========== GLOBAL MICROINTERACTIONS ========== */
+
+/* All buttons get hover-lift unless opted out */
+button:not(.no-anim):not([disabled]):hover {
+    transform: translateY(-1px);
+    transition: transform 80ms steps(1);
+}
+button:not(.no-anim):not([disabled]):active {
+    transform: translateY(2px);
+    transition: transform 50ms steps(1);
+}
+
+/* Tooltip fade-in — apply to .tooltip class */
+.tooltip {
+    animation: ef-fade-in 150ms ease-out;
+}
+
+/* Toast/event-toast slide-down + auto fade */
+.event-toast {
+    animation: ef-slide-down 200ms ease-out, ef-fade-out 400ms ease-out 2600ms forwards;
+}
+
+/* Tab content fade-in (DashboardView) */
+
+/* Card hover lift (game cards, player cards) */
+.card.interactive:hover {
+    transform: translateY(-2px);
+    transition: transform 100ms steps(1);
+    box-shadow: 0 0 8px var(--primary-glow, #0A3D1A);
+}
+
+/* Stat counter pulse on update */
+
+/* ========== POSITION ICONS (position-icons.png 4×2) ========== */
+
+/* ========== TROPHY ICONS (trophy-set.png 4×2) ========== */       /* Gold cup tier 1 */   /* Silver cup tier 2 */   /* Bronze cup tier 3 */  /* Copper cup tier 4 */
+
+/* ========== SCORE DIGITS LED (score-digits.png 5×2) ========== */
+
+.ef-anim-trophy-unlock {
+    width: 96px;
+    height: 128px;
+    background-image: url('/olefut/sprites/animations/trophy-unlock-6frames.png');
+    background-repeat: no-repeat;
+    
+    animation: ef-trophy-unlock 1500ms steps(6) forwards;
+}
+
+.ef-anim-crowd-wave {
+    width: 256px;
+    height: 80px;
+    background-image: url('/olefut/sprites/animations/crowd-wave-4frames.png');
+    background-repeat: no-repeat;
+    
+    animation: ef-crowd-wave 1000ms steps(4) infinite;
+}
+
+.ef-anim-crowd-flag-wave {
+    width: 128px;
+    height: 96px;
+    background-image: url('/olefut/sprites/animations/crowd-flag-wave-4frames.png');
+    background-size: 512px 96px;
+    background-repeat: no-repeat;
+    
+    animation: ef-crowd-flag-wave 1200ms steps(4) infinite;
+}
+
+/* UI animations */
+.ef-anim-shake          { animation: ef-shake       1200ms ease-in-out 1; }
+.ef-anim-pop-in         { animation: ef-pop-in      200ms ease-out 1; }
+.ef-anim-slide-down     { animation: ef-slide-down  200ms ease-out 1; }
+.ef-anim-slide-up       { animation: ef-slide-up    200ms ease-out 1; }
+.ef-anim-fade-in        { animation: ef-fade-in     150ms ease-out 1; }
+.ef-anim-pulse-glow     { animation: ef-pulse-glow  1500ms ease-in-out infinite; }
+.ef-anim-counter        { animation: ef-counter     300ms steps(2) 1; }
+
+/* Hover/active microinteractions (defined in tokens but apply via class) */
+
+/* ========== ATMOSPHERIC ART (full-image backgrounds) ========== */
+
+.ef-art-champion-celebration {
+    background-image: url('/olefut/sprites/banners/champion-celebration.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+}
+
+/* Atmospheric art overlay helper — dimmed background panel */
+
+/* Reduced-motion accessibility — respect user preference */
+@media (prefers-reduced-motion: reduce) {
+    
+    .ef-anim-goal-burst,
+    .ef-anim-trophy-unlock,
+    .ef-anim-crowd-wave,
+    .ef-anim-crowd-flag-wave,
+    .ef-anim-shake,
+    .ef-anim-pop-in,
+    .ef-anim-slide-down,
+    .ef-anim-slide-up,
+    .ef-anim-fade-in,
+    .ef-anim-pulse-glow,
+    .ef-anim-counter {
+        animation: none !important;
+    }
+}

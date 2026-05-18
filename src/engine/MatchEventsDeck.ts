@@ -73,7 +73,7 @@ export function enrichCardWithAtmosphere(card: MatchCard | null, eventType: stri
             _atmosphereApplied: eventType,
         };
     } catch (err) {
-        EngineLogger.capture(err, 'MatchEventsDeck.enrichAtmosphere');
+        EngineLogger.capture(err as Error, 'MatchEventsDeck.enrichAtmosphere');
         return card;
     }
 }

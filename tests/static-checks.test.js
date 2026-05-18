@@ -34,23 +34,23 @@ describe('BUG-004: Reset preStep/talkDone no fulltime', () => {
     });
 });
 
-describe('BUG-005: No dead imports in MarketView', () => {
-    const marketView = readSrc('components/MarketView.jsx');
+describe('BUG-005: No dead imports in MarketView/MarketContext', () => {
+    const marketContext = readSrc('context/MarketContext.jsx');
 
     it('não deve importar generateCounterOffer', () => {
-        expect(marketView).not.toContain('generateCounterOffer');
+        expect(marketContext).not.toContain('generateCounterOffer');
     });
 });
 
-describe('BUG-006: MarketView deve usar engine.sellPlayer', () => {
-    const marketView = readSrc('components/MarketView.jsx');
+describe('BUG-006: MarketContext deve usar engine.sellPlayer', () => {
+    const marketContext = readSrc('context/MarketContext.jsx');
 
     it('deve chamar engine.sellPlayer para vender', () => {
-        expect(marketView).toContain('engine.sellPlayer');
+        expect(marketContext).toContain('engine.sellPlayer');
     });
 
     it('não deve mutar team.squad diretamente', () => {
-        expect(marketView).not.toContain('team.squad = team.squad.filter');
+        expect(marketContext).not.toContain('team.squad = team.squad.filter');
     });
 });
 
@@ -74,15 +74,15 @@ describe('Engine methods completeness', () => {
     });
 });
 
-describe('BUG-007: MarketView handleBuy não deve usar filter assignment', () => {
-    const marketView = readSrc('components/MarketView.jsx');
+describe('BUG-007: MarketContext handleBuy não deve usar filter assignment', () => {
+    const marketContext = readSrc('context/MarketContext.jsx');
 
     it('não deve reatribuir engine.marketPlayers via filter', () => {
-        expect(marketView).not.toContain('engine.marketPlayers = engine.marketPlayers.filter');
+        expect(marketContext).not.toContain('engine.marketPlayers = engine.marketPlayers.filter');
     });
 
     it('deve usar splice para remover do market', () => {
-        expect(marketView).toContain('.splice(');
+        expect(marketContext).toContain('.splice(');
     });
 });
 

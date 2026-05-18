@@ -1,6 +1,6 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 import { ATTRIBUTE_CATEGORIES } from '../../engine/PlayerAttributes';
 import { useMemo } from 'react';
+import '../../styles/player-attributes-grid.css';
 
 const ATTRIBUTE_TRANSLATIONS = {
     // Technical
@@ -67,15 +67,9 @@ function getAttributeColor(value) {
 
 function AttributeRow({ label, value }) {
     return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0', borderBottom: '1px solid var(--color-bg-deep)' }}>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{label}</span>
-            <span style={{ 
-                color: getAttributeColor(value), 
-                fontWeight: 700, 
-                fontSize: '0.8rem',
-                minWidth: '24px',
-                textAlign: 'right'
-            }}>
+        <div className="ef-attr-row">
+            <span className="ef-attr-row-label">{label}</span>
+            <span className="ef-attr-row-val ef-dyn-color" style={{ "--ef-dyn-color": getAttributeColor(value) }}>
                 {value || '-'}
             </span>
         </div>
@@ -85,23 +79,8 @@ function AttributeRow({ label, value }) {
 function CategoryBox({ title, attributes, data }) {
     if (!data) return null;
     return (
-        <div style={{ 
-            flex: '1', 
-            minWidth: '140px', 
-            background: 'var(--color-shadow-deep)', 
-            padding: '8px', 
-            borderRadius: 0,
-            border: '1px solid var(--color-soft-border)'
-        }}>
-            <div style={{ 
-                fontSize: '0.65rem', 
-                color: 'var(--text-main)', 
-                fontWeight: 'bold', 
-                marginBottom: '6px',
-                textTransform: 'uppercase',
-                borderBottom: '2px solid var(--color-panel-tone)',
-                paddingBottom: '4px'
-            }}>
+        <div className="ef-attr-grid-box">
+            <div className="ef-attr-grid-title">
                 {title}
             </div>
             <div>
@@ -128,7 +107,7 @@ export function PlayerAttributesGrid({ player }) {
 
     if (!attributes) {
         return (
-            <div style={{ padding: '12px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+            <div className="ef-attr-grid-empty">
                 Dados detalhados indisponíveis para este jogador.
             </div>
         );
@@ -137,13 +116,7 @@ export function PlayerAttributesGrid({ player }) {
     const isGk = player.position === 'GOL' || player.naturalPosition === 'GOL' || (player.position && player.position.startsWith('G'));
 
     return (
-        <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '12px',
-            width: '100%',
-            marginTop: '8px'
-        }}>
+        <div className="ef-attr-grid">
             <CategoryBox 
                 title="Técnico" 
                 attributes={ATTRIBUTE_CATEGORIES.technical} 

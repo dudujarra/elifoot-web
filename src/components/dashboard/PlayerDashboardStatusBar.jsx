@@ -13,8 +13,8 @@ export function PlayerDashboardStatusBar({ player, stressColor, handleRest, hand
                     <span className="ef-player-dashboard__cell-label">ENERGIA</span>
                 </div>
                 <div className="ef-player-dashboard__overview-cell">
-                    {/* eslint-disable-next-line no-restricted-syntax -- dynamic stress color */}
-                    <span className="ef-player-dashboard__cell-value" style={{ color: stressColor }}>
+                    {}
+                    <span className="ef-player-dashboard__cell-value ef-dyn-color" style={{ "--ef-dyn-color": stressColor }}>
                         <Brain weight="fill" /> {player.stress}%
                     </span>
                     <span className="ef-player-dashboard__cell-label">STRESS</span>

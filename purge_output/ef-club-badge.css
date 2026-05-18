@@ -1,0 +1,8 @@
+/* ef-club-badge.css - BEM Token-based CSS for EfClubBadge */
+
+.ef-club-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}

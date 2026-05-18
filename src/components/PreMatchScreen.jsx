@@ -82,8 +82,8 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     <span className="ef-prematch__bar-value">{value ?? '-'}</span>
                 </div>
                 <div className="ef-prematch__bar-track">
-                    {/* eslint-disable-next-line no-restricted-syntax */}
-                    <div className="ef-prematch__bar-fill" style={{ width: `${pct}%` }} /* dynamic per-instance: width depends on sector score */ />
+                    {}
+                    <div className={`ef-prematch__bar-fill w-${Math.round(pct)}`} />
                 </div>
             </div>
         );
@@ -98,7 +98,6 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     {(context?.isHome ? 'CASA' : 'FORA')} {context?.seasonWeek ? `• SEMANA ${context.seasonWeek}/38` : ''} {context?.tournament ? `• ${context.tournament}` : ''}
                 </p>
             </header>
-
             {/* HERO — VS card with team sides */}
             <section className={`ef-prematch__hero${isDerby ? ' ef-prematch__hero--derby' : ''}`}>
                 {isDerby && (
@@ -133,10 +132,10 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                                     <ChartBar size={14} weight="fill" /> PROBABILIDADE
                                 </div>
                                 <div className="ef-prematch__prob-bar">
-                                    {/* eslint-disable-next-line no-restricted-syntax */}
-                                    <div className="ef-prematch__prob-our" style={{ width: `${winProb.our}%` }} /* dynamic per-instance: derived from sector totals */ />
-                                    {/* eslint-disable-next-line no-restricted-syntax */}
-                                    <div className="ef-prematch__prob-opp" style={{ width: `${winProb.opp}%` }} /* dynamic per-instance: derived from sector totals */ />
+                                    {}
+                                    <div className={`ef-prematch__prob-our w-${Math.round(winProb.our)}`} />
+                                    {}
+                                    <div className={`ef-prematch__prob-opp w-${Math.round(winProb.opp)}`} />
                                     <div className="ef-prematch__prob-overlay">
                                         <span className="ef-prematch__prob-our-label">{winProb.our}%</span>
                                         <span className="ef-prematch__prob-opp-label">{winProb.opp}%</span>
@@ -191,7 +190,6 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     </div>
                 </div>
             </section>
-
             {/* FORMATION + SUGGESTION ROW */}
             <section className="ef-prematch__row-grid">
                 <div className="ef-prematch__formation-card">
@@ -214,7 +212,6 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     </div>
                 )}
             </section>
-
             {/* H2H + FORM ROW */}
             {(ourForm.length > 0 || (context?.h2h && context.h2h.length > 0)) && (
                 <section className="ef-prematch__h2h-card">
@@ -269,7 +266,6 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     )}
                 </section>
             )}
-
             {/* ELIFOOT CLASSIC: BICHO (Match Bonus) */}
             <section className="ef-prematch__classic-section">
                 <div className="ef-bicho">
@@ -313,7 +309,6 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     )}
                 </div>
             </section>
-
             {/* ELIFOOT CLASSIC: TICKET PRICING */}
             <section className="ef-prematch__classic-section">
                 <div className="ef-ticket">
@@ -372,7 +367,6 @@ export function PreMatchScreen({ team, context, sectors, engine, onSaveLayout })
                     )}
                 </div>
             </section>
-
             {showFormationModal && (
                 <EfModal
                     open={showFormationModal}

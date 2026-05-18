@@ -20,7 +20,8 @@ export default defineConfig({
           if (id.includes('realPlayers_BRA.json')) return 'realPlayers_BRA';
           if (id.includes('realPlayers_EUR.json')) return 'realPlayers_EUR';
           if (id.includes('realPlayers_SAM.json')) return 'realPlayers_SAM';
-          if (id.includes('realPlayers_pool.json')) return 'realPlayers_pool';
+          if (id.includes('realPlayers_pool_1.json')) return 'realPlayers_pool_1';
+          if (id.includes('realPlayers_pool_2.json')) return 'realPlayers_pool_2';
           // SPEC-159 legacy fallback (kept in case any code still references the
           // monolithic JSON — it shouldn't, but we play defense).
           if (id.includes('realPlayers.json')) return 'player-data';

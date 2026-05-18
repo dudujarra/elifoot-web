@@ -1,0 +1,153 @@
+/* §12.4 Scarcity Banner */
+.scarcity-banner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    background: #1A1808;
+    border: 1px solid #2A2510;
+    border-radius: var(--radius-md);
+    animation: scarcityFade 0.4s ease;
+}
+
+.scarcity-item {
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* §12.4 Loss Avoidance Dread */
+.dread-indicator {
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.dread-warning {
+    background: #1A1808;
+    border: 1px solid #f59e0b;
+    color: #f59e0b;
+}
+
+.dread-critical {
+    background: #1A0808;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    animation: dreadPulse 1.5s infinite;
+}
+
+.dread-pulse {
+    animation: dreadTextPulse 1.2s infinite;
+}
+
+@keyframes dreadPulse {
+    0%, 100% { border-color: #ef4444; box-shadow: 0 0 4px #3D0A0A; }
+    50% { border-color: #FF5555; box-shadow: 0 0 12px #3D0A0A; }
+}
+
+@keyframes dreadTextPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes scarcityFade {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* §17 Tutorial Overlay */
+.tutorial-overlay {
+    position: fixed;
+    inset: 0;
+    background: #040805;
+    /* No backdrop-filter — SNES: solid opaque overlays only */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: tutorialFadeIn 0.4s ease;
+}
+
+.tutorial-card {
+    background: #0E1418;
+    border: 1px solid #2D3748;
+    border-radius: var(--radius-md);
+    padding: 2rem 2.5rem;
+    max-width: 420px;
+    width: 90%;
+    box-shadow:
+      inset -1px -1px 0 var(--bezel-dark),
+      inset 1px 1px 0 var(--bezel-highlight),
+      4px 4px 0 var(--bezel-drop);
+}
+
+.tutorial-progress {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+}
+
+.tutorial-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-md);
+    background: #F1FAEE;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.tutorial-dot.active {
+    background: #3b82f6;
+    transform: scale(1.2);
+}
+
+.tutorial-title {
+    font-size: 1.1rem;
+    color: #a5b4fc;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.tutorial-text {
+    font-size: 0.85rem;
+    color: #F1FAEE;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+.tutorial-action {
+    font-size: 0.78rem;
+    color: #fbbf24;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.tutorial-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+@keyframes tutorialFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* §22.7 Keyboard hints */
+
+/* §22.7 Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .dread-critical,
+    .dread-pulse,
+    .scarcity-banner,
+    .tutorial-overlay { animation: none !important; }
+    .tutorial-dot { transition: none !important; }
+}

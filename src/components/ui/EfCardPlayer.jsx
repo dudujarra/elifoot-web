@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfCardPlayer — Stitch component
  *

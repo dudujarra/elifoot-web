@@ -1,72 +1,41 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
-/**
- * DashboardHeader — Stitch refactor (zero inline styles funcionais).
- *
- * Substitui linhas 38-63 de DashboardView legacy.
- */
 
-import { Flame, Snowflake } from '@phosphor-icons/react';
-import { EfPanel, EfTooltip, EfClubBadge } from '../ui';
-import { getClubColors } from '../../data/clubColors';
-import './dashboard.css';
+import { TrendUp, TrendDown, Wallet } from '@phosphor-icons/react';
+import { EfPanel } from '../ui/EfPanel';
 
-export function DashboardHeader({ team, stats, boardStatus, board, balance, seasonWeek, seasonNumber, legacyLevel, division }) {
-    const clubColors = getClubColors(team.name);
-    const themeStyle = {
-        '--ef-club-primary': clubColors.primary,
-        '--ef-club-secondary': clubColors.secondary,
-        '--ef-club-accent': clubColors.accent
-    };
-
+export function DashboardHeader({ pos, team, stats, boardStatus, engine }) {
     return (
-        <EfPanel padding="md" className="ef-dash-header" style={themeStyle}>
-            <div className="ef-dash-header-row">
-                <div className="ef-dash-header-identity">
-                    <EfClubBadge name={team.name} size="md" />
-                    <div>
-                        <h2 className="ef-dash-header-title">{team.name}</h2>
-                        {clubColors.nickname && (
-                            <span className="ef-dash-header-nickname">{clubColors.nickname}</span>
-                        )}
-                        <span className="ef-dash-header-meta">
-                            {stats.position}º · Série {['A','B','C','D'][division - 1]} · {stats.wins}V {stats.draws}E {stats.losses}D
-                            {stats.streak > 0 ? (
-                                <> <Flame size={12} weight="fill" className="ef-icon-bare" />{stats.streak}</>
-                            ) : stats.streak < 0 ? (
-                                <> <Snowflake size={12} weight="bold" className="ef-icon-bare" />{Math.abs(stats.streak)}</>
-                            ) : null}
+        <EfPanel variant="hero" padding="lg" className="ef-dashboard-header">
+            <div className="ef-dashboard-header__left">
+                <div className="ef-dashboard-team-badge">
+                    {pos}º • SÉRIE {['A','B','C','D'][team.division - 1]}
+                </div>
+                <h2 className="ef-dashboard-team-name">
+                    {team.name}
+                </h2>
+                <span className="ef-dashboard-team-stats">
+                    {stats.wins}V {stats.draws}E {stats.losses}D
+                    {stats.streak > 0 ? (
+                        <span className="ef-dashboard-team-stats__win">
+                            <TrendUp weight="bold"/> {stats.streak}
                         </span>
-                    </div>
-                </div>
-                <div className="ef-dash-header-right">
-                    <div
-                        className="ef-dash-balance"
-                        style={{ color: balance > 0 ? 'var(--primary)' : 'var(--danger)' }}
-                    >
-                        R$ {(balance / 1000000).toFixed(1)}M
-                    </div>
-                    {boardStatus && (
-                        <EfTooltip content={`Diretoria: ${boardStatus.label} (${board?.confidence ?? 60}%). Demissão se < 10%.`}>
-                            <span className="ef-dash-board-status" style={{ color: boardStatus.color }}>
-                                {boardStatus.emoji} {boardStatus.label}
-                            </span>
-                        </EfTooltip>
-                    )}
-                </div>
+                    ) : stats.streak < 0 ? (
+                        <span className="ef-dashboard-team-stats__loss">
+                            <TrendDown weight="bold"/> {Math.abs(stats.streak)}
+                        </span>
+                    ) : ''}
+                </span>
             </div>
-
-            <div className="ef-dash-progress-track">
-                <div
-                    className="ef-dash-progress-fill"
-                    style={{ width: `${(seasonWeek / 38) * 100}%` }}
-                />
-            </div>
-            <div className="ef-dash-progress-meta">
-                <span>Temp {seasonNumber} · Semana {seasonWeek}/38</span>
-                {legacyLevel && <span>{legacyLevel.emoji} {legacyLevel.label}</span>}
+            <div className="ef-dashboard-header__right">
+                <div className={`ef-dashboard-balance ${team.balance > 0 ? 'ef-dashboard-balance--positive' : 'ef-dashboard-balance--negative'}`}>
+                    <Wallet weight="fill" className="ef-dashboard-balance__icon" />
+                    R$ {(team.balance / 1000000).toFixed(1)}M
+                </div>
+                {boardStatus && (
+                    <div className="ef-dashboard-board-status" title={`Diretoria: ${boardStatus.label} (${engine.board?.confidence ?? 60}%).`}>
+                        <span>{boardStatus.emoji}</span> {boardStatus.label}
+                    </div>
+                )}
             </div>
         </EfPanel>
     );
 }
-
-export default DashboardHeader;

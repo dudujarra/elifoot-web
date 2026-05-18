@@ -3,6 +3,7 @@
 @import './styles/isssd-premium.css';
 @import './styles/animations.css';
 @import './styles/mobile.css';
+@import './styles/utils.css';
 
 @import './styles/market-view.css';
 @import './styles/cosmetic-shop-view.css';

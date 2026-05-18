@@ -138,7 +138,7 @@ export class CareerService {
         // SPEC-F2.2: push pra Legends Cross-Save Pool
         try {
             // Lazy import pra evitar cycle + permitir tree-shake em saves novos
-            // eslint-disable-next-line no-unused-vars
+             
             import('../engine/LegendsCrossSavePool.js').then(({ markRetired }) => {
                 markRetired({
                     playerId: proPlayer.id || `pp-${proPlayer.name}`,

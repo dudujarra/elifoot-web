@@ -1,0 +1,379 @@
+/* SaveSlotsView — Memory Card Save Manager
+ * Stitch v1.1 port (AKITA-396): docs/stitch-designs/v1.1-all/24-memory-card-ol-fut-save-manager.html
+ * Tokens-only — zero raw hex. Outfit + Inter + JetBrains Mono.
+ */
+
+.ef-mc {
+    --ef-mc-scanline: rgba(0, 0, 0, 0.1);
+    --ef-mc-bevel-light: rgba(255, 255, 255, 0.08);
+    --ef-mc-bevel-dark: rgba(0, 0, 0, 0.5);
+    --ef-mc-bevel-shadow: rgba(0, 0, 0, 0.85);
+    position: relative;
+}
+
+/* CRT scanline veil */
+.ef-mc__scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(var(--ef-mc-scanline) 50%, transparent 50%);
+    background-size: 100% 4px;
+    z-index: 1;
+    opacity: 0.32;
+}
+
+.ef-mc .ef-view-container,
+.ef-mc .ef-view-container--wide {
+    position: relative;
+    z-index: 2;
+}
+
+/* ============ HEADER ============ */
+
+.ef-mc__header {
+    border-bottom: var(--primitive-border-thin) solid var(--color-secondary);
+}
+
+.ef-mc__icon-box {
+    background: var(--color-bg-secondary);
+    border: var(--primitive-border-thin) solid var(--color-secondary);
+}
+
+.ef-mc__header-icon {
+    color: var(--color-secondary);
+}
+
+.ef-mc__title {
+    color: var(--color-secondary);
+    letter-spacing: 0.04em;
+}
+
+.ef-mc__subtitle {
+    font-family: var(--font-mono);
+    color: var(--color-text-secondary);
+    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+}
+
+/* ============ SLOTS GRID ============ */
+
+.ef-mc__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+    align-items: start;
+}
+
+/* ============ SLOT WRAPPER ============ */
+
+.ef-mc__slot {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ============ CARD (memory-card-bevel) ============ */
+
+.ef-mc__card {
+    position: relative;
+    background: var(--color-bg-secondary);
+    border: var(--primitive-border-thick) solid var(--color-secondary);
+    border-radius: var(--radius-md);
+    padding: 24px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 360px;
+    box-shadow:
+        inset 4px 4px 0 var(--ef-mc-bevel-light),
+        inset -4px -4px 0 var(--ef-mc-bevel-dark),
+        4px 4px 0 var(--ef-mc-bevel-shadow);
+}
+
+.ef-mc__slot--empty .ef-mc__card {
+    border-style: dashed;
+    border-color: var(--color-text-secondary);
+    border-width: var(--primitive-border-thick);
+    background: var(--color-bg);
+    opacity: 0.78;
+    box-shadow: none;
+}
+
+.ef-mc__slot--corrupted .ef-mc__card {
+    border-color: var(--color-danger);
+}
+
+/* SLOT TAG (top floating chip) */
+.ef-mc__slot-tag {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-secondary);
+    color: var(--color-bg);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 4px 14px;
+    border: var(--primitive-border-hairline) solid var(--color-bg);
+    box-shadow: 2px 2px 0 var(--ef-mc-bevel-shadow);
+    z-index: 3;
+}
+
+.ef-mc__slot--empty .ef-mc__slot-tag {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-secondary);
+    border-color: var(--color-text-secondary);
+    box-shadow: none;
+}
+
+.ef-mc__slot--corrupted .ef-mc__slot-tag {
+    background: var(--color-danger);
+    color: var(--color-bg);
+}
+
+/* ============ SCREEN (icon panel inside filled card) ============ */
+
+.ef-mc__screen {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    background: var(--color-bg-tertiary);
+    border: var(--primitive-border-thin) solid var(--color-tertiary);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ef-mc__screen-glyph {
+    color: var(--color-tertiary);
+    opacity: 0.55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ef-mc__screen-mark {
+    position: absolute;
+    bottom: 6px;
+    right: 8px;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    color: var(--color-primary);
+    letter-spacing: 0.08em;
+    text-shadow: 1px 1px 0 var(--color-bg);
+}
+
+/* ============ ROWS (manager / club / meta) ============ */
+
+.ef-mc__rows {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ef-mc__row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ef-mc__row-label {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    color: var(--color-primary);
+    letter-spacing: 0.08em;
+    margin: 0;
+}
+
+.ef-mc__row-value {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+    letter-spacing: 0.04em;
+    margin: 0;
+    line-height: 1.25;
+    word-break: break-word;
+}
+
+.ef-mc__row-meta {
+    display: flex;
+    justify-content: space-between;
+    border-top: var(--primitive-border-hairline) solid var(--color-tertiary);
+    padding-top: 12px;
+    margin-top: 4px;
+}
+
+.ef-mc__meta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ef-mc__meta-col--right {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.ef-mc__meta-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.12em;
+    margin: 0;
+}
+
+.ef-mc__meta-value {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-primary);
+    letter-spacing: 0.04em;
+    margin: 0;
+}
+
+/* ============ EMPTY STATE ============ */
+
+.ef-mc__empty {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 36px 12px;
+}
+
+.ef-mc__empty-icon {
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+    margin-bottom: 8px;
+}
+
+.ef-mc__slot--corrupted .ef-mc__empty-icon {
+    color: var(--color-danger);
+    opacity: 1;
+}
+
+.ef-mc__empty-title {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+.ef-mc__slot--corrupted .ef-mc__empty-title {
+    color: var(--color-danger);
+}
+
+.ef-mc__empty-sub {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.14em;
+    margin: 0;
+}
+
+/* ============ ACTIONS GRID ============ */
+
+.ef-mc__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.ef-mc__btn {
+    font-family: var(--font-display);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    justify-content: center;
+}
+
+.ef-mc__btn--danger:not(:disabled) {
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+}
+
+.ef-mc__btn--danger:not(:disabled):hover {
+    background: var(--color-danger);
+    color: var(--color-bg);
+    border-color: var(--color-danger);
+}
+
+/* ============ IMPORT SECTION ============ */
+
+.ef-mc__import {
+    background: var(--color-bg);
+    border: var(--primitive-border-hairline) dashed var(--color-secondary);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ef-mc__import-label {
+    font-family: var(--font-display);
+    font-size: 0.62rem;
+    color: var(--color-secondary);
+    letter-spacing: 0.08em;
+}
+
+.ef-mc__file-input {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-primary);
+    background: var(--color-bg-secondary);
+    border: var(--primitive-border-hairline) solid var(--color-tertiary);
+    padding: 6px 8px;
+    width: 100%;
+}
+
+/* ============ WARNING STRIP ============ */
+
+.ef-mc__warning {
+    margin-top: 32px;
+    padding: 14px 16px;
+    background: var(--color-bg-secondary);
+    border-left: var(--primitive-border-thick) solid var(--color-warning);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ef-mc__warning-icon {
+    color: var(--color-warning);
+    flex-shrink: 0;
+}
+
+.ef-mc__warning-text {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-text-primary);
+    letter-spacing: 0.14em;
+    
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 640px) {
+    .ef-mc__grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .ef-mc__card {
+        min-height: 320px;
+    }
+
+    .ef-mc__warning-text {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+    }
+}

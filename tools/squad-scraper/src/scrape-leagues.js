@@ -100,7 +100,7 @@ async function main() {
                 allGlobalPlayers = allGlobalPlayers.concat(parsed);
                 successCount++;
             }
-        } catch (error) {
+        } catch {
             failCount++;
         }
         
@@ -110,6 +110,7 @@ async function main() {
 
     spinner.succeed(`Sincronização global concluída!`);
     console.log(chalk.green(`✅ ${successCount} times baixados com sucesso.`));
+    if (failCount > 0) console.log(chalk.red(`❌ ${failCount} falharam.`));
     console.log(chalk.cyan(`👥 Total de Gringos extraídos: ${allGlobalPlayers.length}`));
 
     // 3. Salvar o JSON local

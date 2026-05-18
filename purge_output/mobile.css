@@ -1,0 +1,55 @@
+/**
+ * Mobile responsive — SPEC-076 Sprint M
+ *
+ * Breakpoints:
+ *   <480px : phone portrait
+ *   480-768px : phone landscape / small tablet
+ *   >768px : desktop (default)
+ */
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 0.5rem;
+    }
+
+    .card {
+        padding: 0.5rem !important;
+    }
+
+    .btn {
+        min-height: 44px;  /* Apple HIG touch target */
+    }
+
+    .btn-sm {
+        min-height: 36px;
+    }
+
+    /* EfBanner mobile resize */
+    [role="dialog"][aria-label] > div {
+        padding: 16px 24px !important;
+        min-width: 280px !important;
+        max-width: 90vw !important;
+    }
+
+    [role="dialog"][aria-label] h2 {
+        font-size: 22px !important;
+    }
+
+    /* Match scoreboard */
+
+    /* Match teams */
+
+    /* Form inputs */
+    select, input[type="text"] {
+        font-size: 16px !important; /* iOS no zoom */
+    }
+
+    /* Floating bug button repositioning */
+
+    /* Tutorial mobile */
+}
+
+@media (max-width: 480px) {
+
+    /* Achievements grid: single column */
+}

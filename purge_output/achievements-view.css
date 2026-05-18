@@ -1,0 +1,365 @@
+/* AchievementsView — semantic CSS + design tokens (v1.1 Stitch port)
+ * Source: docs/stitch-designs/v1.1-all/83-achievements-ol-fut-manager.html
+ * SPEC-176/183 — Outfit + Inter + JetBrains Mono.
+ * Tokens-only (raw hex restricted to component-local rarity vars).
+ */
+
+/* === COMPONENT TOKENS === */
+
+.ef-ach {
+}
+
+/* === HEADER === */
+
+.ef-ach__header {
+  border-bottom: var(--primitive-border-thin) solid var(--color-primary);
+}
+
+.ef-ach__header-icon {
+  color: var(--color-secondary);
+}
+
+/* === HALL OF FAME DASHBOARD PANEL — Stitch beveled hero === */
+
+.ef-ach__dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border: var(--primitive-border-thick) solid var(--color-tertiary);
+  background: var(--color-bg-secondary);
+  box-shadow:
+    inset -4px -4px 0 0 var(--primitive-color-green-forest-dark),
+    inset 4px 4px 0 0 var(--color-primary);
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .ef-ach__dashboard {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 48px;
+  }
+}
+
+.ef-ach__dashboard-points {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.ef-ach__dashboard-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.45);
+}
+
+.ef-ach__dashboard-score {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ef-ach__dashboard-points-num {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(57, 255, 20, 0.35);
+}
+
+.ef-ach__dashboard-points-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  
+  padding-bottom: 4px;
+}
+
+.ef-ach__dashboard-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .ef-ach__dashboard-progress {
+    width: 40%;
+  }
+}
+
+.ef-ach__dashboard-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  
+}
+
+.ef-ach__dashboard-progress-footer {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  
+}
+
+/* === BLOCKY PROGRESS — Stitch inset bevel container === */
+
+.ef-ach__blocky-track {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--color-bg-tertiary);
+  border: var(--primitive-border-thick) solid var(--primitive-color-green-forest-dark);
+  box-shadow:
+    inset 4px 4px 0 0 var(--color-bg-tertiary),
+    inset -2px -2px 0 0 var(--color-tertiary);
+  min-height: 32px;
+}
+
+.ef-ach__blocky-cell {
+  flex: 1;
+  height: 22px;
+  min-width: 8px;
+  background: var(--color-primary);
+  box-shadow: 0 0 4px rgba(57, 255, 20, 0.5);
+}
+
+.ef-ach__blocky-cell--empty {
+  background: var(--primitive-color-green-forest);
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+/* === CARDS GRID === */
+
+.ef-ach__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+/* === CARD — Stitch beveled tile === */
+
+.ef-ach__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border: var(--primitive-border-thick) solid var(--color-tertiary);
+  background: var(--color-bg-secondary);
+  box-shadow:
+    inset -4px -4px 0 0 var(--primitive-color-green-forest-dark),
+    inset 4px 4px 0 0 var(--color-primary);
+  transition: transform 0.15s ease;
+}
+
+.ef-ach__card--unlocked:hover {
+  transform: translateY(-4px);
+}
+
+.ef-ach__card--locked {
+  opacity: 0.6;
+  filter: grayscale(1);
+  border-color: var(--color-text-secondary);
+  box-shadow: none;
+  background: var(--color-bg);
+}
+
+.ef-ach__card--progress {
+  border-color: var(--color-tertiary);
+}
+
+/* === CARD TOP — badge + status icon row === */
+
+.ef-ach__card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.ef-ach-badge {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-text-secondary);
+  border: var(--primitive-border-thin) solid var(--color-bg-tertiary);
+  transition: transform 0.2s ease;
+}
+
+.ef-ach__badge-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.ef-ach__card-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ef-ach__check-icon {
+  color: var(--color-primary);
+  filter: drop-shadow(0 0 4px rgba(57, 255, 20, 0.5));
+}
+
+.ef-ach__lock-icon {
+  color: var(--color-text-secondary);
+}
+
+.ef-ach__pending-icon {
+  color: var(--color-text-secondary);
+}
+
+/* === CARD BODY === */
+
+.ef-ach__card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  margin-top: 16px;
+}
+
+.ef-ach__card-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.ef-ach__card--locked .ef-ach__card-name {
+  color: var(--color-text-secondary);
+}
+
+.ef-ach__card--unlocked .ef-ach__card-name {
+  color: var(--color-primary);
+  text-shadow: 0 0 6px rgba(57, 255, 20, 0.3);
+}
+
+.ef-ach__card-desc {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.ef-ach__card--locked .ef-ach__card-desc {
+  color: var(--color-text-secondary);
+}
+
+/* === CARD FOOTER === */
+
+.ef-ach__card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.ef-ach__reward-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  
+}
+
+.ef-ach__reward-label {
+  color: var(--color-primary);
+}
+
+.ef-ach__card--locked .ef-ach__reward-label {
+  color: var(--color-text-secondary);
+}
+
+.ef-ach__reward-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
+.ef-ach__card--locked .ef-ach__reward-value {
+  color: var(--color-text-secondary);
+}
+
+/* === STATUS BANNERS — Stitch CTA-like rows === */
+
+.ef-ach__status-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background: var(--color-bg-tertiary);
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  
+}
+
+.ef-ach__status-banner--completed {
+  border: var(--primitive-border-thin) solid var(--color-primary);
+  color: var(--color-primary);
+  text-shadow: 0 0 4px rgba(57, 255, 20, 0.4);
+}
+
+.ef-ach__status-banner--locked {
+  border: var(--primitive-border-thin) solid var(--color-text-secondary);
+  color: var(--color-text-secondary);
+}
+
+/* === IN-PROGRESS BAR === */
+
+.ef-ach__progress-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ef-ach__progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  
+  color: var(--color-text-secondary);
+}
+
+.ef-ach__progress-bar {
+  background: var(--color-bg-tertiary);
+  border: var(--primitive-border-thin) solid var(--primitive-color-green-forest-dark);
+  box-shadow:
+    inset 2px 2px 0 0 var(--color-bg-tertiary),
+    inset -1px -1px 0 0 var(--primitive-color-green-forest);
+  height: 14px;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.ef-ach__progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* === LEGACY back-compat selectors === */

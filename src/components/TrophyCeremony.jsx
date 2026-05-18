@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useEffect, useState } from 'react';
 import { EfButton, EfPanel } from './ui';
 import '../styles/trophy-ceremony.css';
@@ -94,17 +93,14 @@ export default function TrophyCeremony({ trophy, team, season, onDismiss, visibl
     return (
         <div className="trophy-ceremony-overlay ef-art-champion-celebration ef-trophy-shell"
              role="dialog" aria-label="Cerimônia de troféu">
-
             {/* CRT scanline + confetti + vignette layers (Stitch v1.1) */}
             <div className="ef-trophy-ceremony__crt-overlay" aria-hidden="true" />
             <div className="ef-trophy-ceremony__confetti-overlay" aria-hidden="true" />
             <div className="ef-trophy-ceremony__vignette" aria-hidden="true" />
-
             {/* Top AppBar */}
             <header className="ef-trophy-ceremony__appbar">
                 <h2 className="ef-trophy-ceremony__appbar-title">TROPHY ROOM</h2>
             </header>
-
             <main className="ef-trophy-ceremony__main">
 
                 {/* Victory Title (Stitch) — sempre visível */}
@@ -191,10 +187,7 @@ export default function TrophyCeremony({ trophy, team, season, onDismiss, visibl
                                     aria-valuemin={0}
                                     aria-valuemax={100}
                                 >
-                                    <div
-                                        className="ef-trophy-ceremony__meter-fill"
-                                        style={{ width: `${dominance}%` }}
-                                    />
+                                    <div className={`ef-trophy-ceremony__meter-fill w-${Math.round(dominance)}`} />
                                 </div>
                             </div>
 
@@ -227,7 +220,6 @@ export default function TrophyCeremony({ trophy, team, season, onDismiss, visibl
                 )}
 
             </main>
-
             {/* Ambient corner labels */}
             <div className="ef-trophy-ceremony__ambient ef-trophy-ceremony__ambient--left" aria-hidden="true">
                 <SoccerBall size={14} weight="fill" />
@@ -237,7 +229,6 @@ export default function TrophyCeremony({ trophy, team, season, onDismiss, visibl
                 <span>BIT-MODE: 32</span>
                 <Cpu size={14} weight="fill" />
             </div>
-
             {/* Crowd atmosphere */}
             <div className="trophy-crowd ef-trophy-crowd">
                 <HandsClapping size={64} weight="duotone" color="var(--text-main)" className="ef-anim-crowd-wave ef-trophy-ceremony__crowd-clap" />

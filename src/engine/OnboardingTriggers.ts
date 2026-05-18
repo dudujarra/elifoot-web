@@ -88,7 +88,7 @@ export function hasOnboardingPending(viewId: string): boolean {
     try {
         return localStorage.getItem(STORAGE_PREFIX + viewId) !== 'true';
     } catch (err) {
-        EngineLogger.capture(err, 'OnboardingTriggers.hasOnboardingPending');
+        EngineLogger.capture(err as Error, 'OnboardingTriggers.hasOnboardingPending');
         return false;
     }
 }
@@ -101,7 +101,7 @@ export function markOnboardingSeen(viewId: string): void {
     if (typeof localStorage === 'undefined') return;
     try {
         localStorage.setItem(STORAGE_PREFIX + viewId, 'true');
-    } catch (err) { EngineLogger.capture(err, 'OnboardingTriggers.markOnboardingSeen'); }
+    } catch (err) { EngineLogger.capture(err as Error, 'OnboardingTriggers.markOnboardingSeen'); }
 }
 
 export function resetAllOnboarding(): void {
@@ -113,7 +113,7 @@ export function resetAllOnboarding(): void {
         // also reset main onboarding
         localStorage.removeItem('olefut_onboarding_done');
         localStorage.removeItem('olefut_onboarding_step');
-    } catch (err) { EngineLogger.capture(err, 'OnboardingTriggers.resetAllOnboarding'); }
+    } catch (err) { EngineLogger.capture(err as Error, 'OnboardingTriggers.resetAllOnboarding'); }
 }
 
 export function getSeenViews(): string[] {
@@ -125,7 +125,7 @@ export function getSeenViews(): string[] {
                 seen.push(viewId);
             }
         });
-    } catch (err) { EngineLogger.capture(err, 'OnboardingTriggers.getSeenViews'); }
+    } catch (err) { EngineLogger.capture(err as Error, 'OnboardingTriggers.getSeenViews'); }
     return seen;
 }
 

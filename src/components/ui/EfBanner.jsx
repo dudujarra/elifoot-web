@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfBanner — full-screen narrative moment overlay.
  */
@@ -132,12 +131,12 @@ export function EfBanner({ type, customTitle, customSubtitle, onDismiss }) {
             onClick={onDismiss}
             role="dialog"
             aria-label={cfg.title}
-            className="ef-banner"
-            style={{ animationDelay: `0ms, ${cfg.duration - 400}ms` }}
+            className="ef-banner ef-dyn-animationDelay"
+            style={{ "--ef-dyn-animationDelay": `0ms, ${cfg.duration - 400}ms` }}
         >
             <div
-                className="ef-anim-pop-in ef-banner__card"
-                style={{ background: cfg.bg, color: cfg.color }}
+                className="ef-anim-pop-in ef-banner__card ef-dyn-background ef-dyn-color"
+                style={{ "--ef-dyn-background": cfg.bg, "--ef-dyn-color": cfg.color }}
             >
                 {cfg.spriteClass ? (
                     <div className={`${cfg.spriteClass} ef-banner__sprite`} />

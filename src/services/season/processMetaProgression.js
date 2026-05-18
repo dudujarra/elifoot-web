@@ -24,7 +24,7 @@
 import { evaluateAchievements } from '../../engine/MetaProgression';
 import { EngineLogger } from '../../engine/EngineLogger.js';
 
-export function processMetaProgression(engine, team, pos) {
+export function processMetaProgression(engine, team, _pos) {
   try {
     const stats = {
       titlesWon: engine.legacy?.titles?.length || 0,

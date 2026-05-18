@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * AutoPlayTelemetry — GDD Status + Telemetry + Anomalies + Decisions
  * Extracted from AutoPlayView (lines 645-892)
@@ -67,7 +66,6 @@ export default function AutoPlayTelemetry({ stats }) {
                     <GDDStatus label="Market" count={stats.decisions?.filter(d => d.action === 'BUY_OFFER' || d.action === 'MARKET_INQUIRY').length || 0} />
                 </div>
             </EfPanel>
-
             {/* Telemetry */}
             {stats.telemetry?.results && (
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
@@ -75,7 +73,7 @@ export default function AutoPlayTelemetry({ stats }) {
                         <h3 className="ef-arcade-h ef-arcade-h--md">
                             <ChartBar size={14} weight="bold" className="ef-icon-inline-md" />
                             Telemetria ({Object.keys(stats.telemetry.results).length})
-                            <span className="ef-ap__telemetry-score" style={{ color: scoreColor(stats.telemetry.overallScore) }}>
+                            <span className="ef-ap__telemetry-score ef-dyn-color" style={{ "--ef-dyn-color": scoreColor(stats.telemetry.overallScore) }}>
                                 Score: {stats.telemetry.overallScore}
                             </span>
                         </h3>
@@ -85,11 +83,13 @@ export default function AutoPlayTelemetry({ stats }) {
                         <div className="ef-ap__telemetry-grid">
                             {Object.entries(stats.telemetry.results).map(([spec, res]) => (
                                 <div key={spec} onClick={() => setExpandedSpec(expandedSpec === spec ? null : spec)}
-                                    className="ef-ap__telemetry-card"
-                                    style={{ border: `3px solid ${scoreColor(res.score)}` }}>
+                                    className="ef-ap__telemetry-card ef-dyn-border"
+                                    style={{ "--ef-dyn-border": `3px solid ${scoreColor(res.score)}` }}>
                                     <div className="ef-ap__telemetry-card-head">
                                         <strong className="ef-ap__telemetry-card-name">{spec}</strong>
-                                        <span style={{ fontWeight: 700, color: scoreColor(res.score) }}>{res.score}</span>
+                                        <span
+                                            style={{ "--ef-dyn-fontWeight": 700, "--ef-dyn-color": scoreColor(res.score) }}
+                                            className="ef-dyn-fontWeight ef-dyn-color">{res.score}</span>
                                     </div>
                                     <div className="ef-ap__telemetry-card-desc">{res.name}</div>
                                 </div>
@@ -98,7 +98,6 @@ export default function AutoPlayTelemetry({ stats }) {
                     )}
                 </EfPanel>
             )}
-
             {/* Successes */}
             {stats.successes?.length > 0 && (
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
@@ -119,7 +118,6 @@ export default function AutoPlayTelemetry({ stats }) {
                     </div>
                 </EfPanel>
             )}
-
             {/* Anomalies */}
             {stats.anomalies?.length > 0 && (
                 <EfPanel variant="elev" padding="md" className="ef-ap__panel-mb-sm">
@@ -144,7 +142,6 @@ export default function AutoPlayTelemetry({ stats }) {
                     </div>
                 </EfPanel>
             )}
-
             {/* Recent decisions */}
             {stats.decisions?.length > 0 && (
                 <EfPanel variant="elev" padding="md">

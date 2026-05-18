@@ -1,0 +1,21 @@
+/**
+ * OléFUT Color Tokens
+ * AUTO-GERADO por scripts/tokens-to-css.js — não editar manualmente.
+ * Source: src/styles/tokens/tokens.json
+ * Versão: 1.0.0
+ */
+:root { /* Linha de campo, highlight */
+  --ef-color-grass-300: #7DBE8E; /* Verde claro, hover/elevação */ /* Verde médio, fundo painel */ /* Verde Pacaembu, fundo principal match */ /* Sombra de campo, base painel escuro */ /* Infill compartilhado, preto-musgo (Celeste) */
+  --ef-color-func-success: #6ABC3A;
+  --ef-color-func-warning: #F7B538;
+  --ef-color-func-danger: #D62828;
+  --ef-color-func-info: #3A7DCE; /* Lendário/narrativo/moral baixa */ /* CBF amarelo — só Copa/seleção */ /* Branco-CBF off-white */
+  --ef-color-neutral-bg-elev: #1A2E22;
+  --ef-color-neutral-bg-card: #243B2D;
+  --ef-color-neutral-text-hi: #F4F1DE; /* Off-white quente Placar */
+  --ef-color-neutral-text-md: #C9C2A6;
+  --ef-color-neutral-text-lo: #8A876E;
+  --ef-color-accent-gold: #FFD700; /* Accent dourado canonical (CTAs, scoreboard, badges premium) */
+  --ef-color-accent-gold-dark: #C8941F;
+  --ef-color-border-subtle: #2D5A3D; /* Replaces non-canonical #2a3530 (was 1.4:1 contrast fail) */ /* Replaces non-canonical #1a2520 */ /* Deep pitch overlay 78% */ /* Near-black overlay 95% */
+}

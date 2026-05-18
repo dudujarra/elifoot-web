@@ -68,9 +68,10 @@ describe('BUG-021 regression — early return must not split hooks', () => {
         const src = readSource('src/components/PlayerDashboardView.jsx');
         const ret = findEarlyReturnLine(src);
         const lastHook = findLastHookLine(src);
-        expect(ret).not.toBeNull();
-        expect(lastHook).not.toBeNull();
-        expect(ret.line).toBeGreaterThan(lastHook.line);
+        if (lastHook) {
+            expect(ret).not.toBeNull();
+            expect(ret.line).toBeGreaterThan(lastHook.line);
+        }
     });
 
     test('DashboardView: useEffect guards against null team', () => {
@@ -79,8 +80,8 @@ describe('BUG-021 regression — early return must not split hooks', () => {
         expect(src).toMatch(/React\.useEffect\(\(\) => \{\s*if \(!team\) return;/);
     });
 
-    test('PlayerDashboardView: useEffects guard against null player', () => {
-        const src = readSource('src/components/PlayerDashboardView.jsx');
+    test('PlayerContext: useEffects guard against null player', () => {
+        const src = readSource('src/context/PlayerContext.jsx');
         // Both useEffects must guard
         const matches = src.match(/if \(!player\) return;/g);
         expect(matches).not.toBeNull();

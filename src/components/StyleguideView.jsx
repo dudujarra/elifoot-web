@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { EfButton, EfCardPlayer, EfTooltip, EfModal, EfInput } from './ui';
@@ -70,7 +69,7 @@ export function StyleguideView() {
                                     <div className="ef-sg__chip-row">
                                         {group.tokens.map(t => (
                                             <div key={t.name} className="ef-swatch">
-                                                <div className="ef-swatch__chip" style={{ backgroundColor: t.hex }} />
+                                                <div className="ef-swatch__chip ef-dyn-bg" style={{ "--ef-dyn-bg": t.hex }} />
                                                 <div className="ef-swatch__name">{t.name}</div>
                                                 <div className="ef-swatch__hex">{t.hex}</div>
                                             </div>
@@ -90,10 +89,10 @@ export function StyleguideView() {
                             {FONTS.map(f => (
                                 <div key={f.label} className="ef-typo-sample">
                                     <div className="ef-typo-sample__label">{f.label} ({f.size}, {f.family})</div>
-                                    <div className="ef-sg__typo-line" style={{
-                                        fontSize: f.size,
-                                        fontFamily: f.family,
-                                        fontWeight: f.weight
+                                    <div className="ef-sg__typo-line ef-dyn-fontSize ef-dyn-fontFamily ef-dyn-fontWeight" style={{
+                                        "--ef-dyn-fontSize": f.size,
+                                        "--ef-dyn-fontFamily": f.family,
+                                        "--ef-dyn-fontWeight": f.weight
                                     }}>
                                         The quick brown fox jumps over the lazy dog.
                                     </div>

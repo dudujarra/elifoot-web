@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- title prop requires inline style */
 /**
  * FloatingBugButton — v1.6
  *
@@ -50,13 +49,14 @@ export function FloatingBugButton() {
             >
                 <Bug size={28} weight="fill" />
             </button>
-
             {open && (
                 <EfModal
                     open={open}
                     onClose={() => setOpen(false)}
                     title={
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div
+                            style={{ "--ef-dyn-display": 'flex', "--ef-dyn-alignItems": 'center', "--ef-dyn-gap": '8px' }}
+                            className="ef-dyn-display ef-dyn-alignItems ef-dyn-gap">
                             <Bug size={24} color="var(--accent)" /> SISTEMA DE REPORT
                         </div>
                     }

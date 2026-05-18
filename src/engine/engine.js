@@ -78,6 +78,7 @@ export class Engine {
         this.ticketPolicy = 'normal';
         this.activeAuctions = [];
         this.starPlayerId = null;        // SPEC-C2
+        this.uiEvents = [];              // For communication with UI layer
     }
 
     // ================================================================
@@ -304,6 +305,16 @@ export class Engine {
 
     startNewSeason() {
         return this._seasonProcessor.rolloverSeason(this);
+    }
+
+    // ================================================================
+    // UI EVENT CONSUMER
+    // ================================================================
+
+    consumeUIEvents() {
+        const events = [...(this.uiEvents || [])];
+        this.uiEvents = [];
+        return events;
     }
 
     // ================================================================

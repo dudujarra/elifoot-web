@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- progress bar width is dynamic */
 /**
  * AutoPlayLabView — F1 UI
  *
@@ -191,7 +190,7 @@ export function AutoPlayLabView() {
                             <div className="ef-aplab__progress-info">
                                 Progress: {Math.round(progress * 100)}% · ETA {eta}
                                 <div className="ef-aplab__progress-track">
-                                    <div className="ef-aplab__progress-fill" style={{ width: `${progress * 100}%` }} />
+                                    <div className={`ef-aplab__progress-fill w-${Math.round(progress * 100)}`} />
                                 </div>
                             </div>
                         )}

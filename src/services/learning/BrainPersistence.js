@@ -146,10 +146,14 @@ function compactBrain(brain) {
  * @param {Object} data — compact representation from compactBrain
  */
 function expandBrain(brain, data) {
-    if (data.q) brain.qTable = data.q;
-    if (data.v) brain.visitCount = data.v;
-    if (typeof data.u === 'number') brain.totalUpdates = data.u;
-    if (Array.isArray(data.m)) brain.memory = data.m;
+    if (data.q || data.v || typeof data.u === 'number') {
+        brain.qEngine.restore({
+            qTable: data.q || {},
+            visitCount: data.v || {},
+            totalUpdates: data.u || 0
+        });
+    }
+    if (Array.isArray(data.m)) brain.memoryEngine.restore(data.m);
     if (data.p) brain.personality = data.p;
     if (data.e && brain.emotions) brain.emotions.restore(data.e);
 }

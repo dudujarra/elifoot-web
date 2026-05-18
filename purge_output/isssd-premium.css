@@ -1,0 +1,2120 @@
+/**
+ * Olé FUT — ISSSD-Premium 32-bit Design System
+ * Inspired by International Super Star Soccer Deluxe (Konami, SNES 1995)
+ * The single source of truth for UI standardization.
+ * See: docs/brand-guidelines.md (v1.1+) — SPEC-176
+ */
+
+:root {
+  /* Core Colors - High-End Premium Sports */
+  --bg-dark: #07090F; /* Ultra deep blue/black */
+  --bg-panel: rgba(22, 28, 45, 0.65); /* Glassmorphism base */
+  --bg-panel-hover: rgba(30, 38, 60, 0.8);
+  --bg-panel-sunk: rgba(5, 7, 12, 0.5);
+  
+  --primary: #00F0FF; /* Neon Cyan */
+  --primary-dark: #008899;
+  --primary-glow: rgba(0, 240, 255, 0.4);
+  
+  --accent: #E2A63B; /* Premium Gold */
+  --accent-dark: #A87823;
+  
+  --danger: #FF3366; /* Vibrant Red/Pink */
+  --danger-dark: #991F3D;
+  
+  --info: #33A1FF; /* Bright Blue */
+  
+  --text-main: #FFFFFF;
+  --text-muted: #8E99B0;
+  
+  --color-soft-border: rgba(255, 255, 255, 0.08);
+  --color-bg-deep: #05070A;
+  --color-shadow-deep: rgba(0, 0, 0, 0.6);
+  --color-soft-text: #B4C0D8;
+  --color-success-mid: #00F0FF;
+  
+  /* Borders & Shadows */
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-panel: rgba(255, 255, 255, 0.08);
+  
+  /* Bezel overrides (deprecated, mapped to soft glass shadows) */
+  --bezel-light: transparent;
+  --bezel-dark: transparent;
+  --bezel-highlight: transparent;
+  --bezel-drop: rgba(0, 0, 0, 0.4);
+  --bezel-primary-dark: transparent;
+  --bezel-danger-dark: transparent;
+
+  /* Sizing & Radius — Premium rounded aesthetic */
+  --radius: 16px;
+  --radius-sm: 8px;
+  --radius-xs: 4px;
+
+  /* Modern Premium Fonts */
+  --font-display: 'Pixelify Sans', 'Press Start 2P', system-ui, sans-serif;
+  --font-sans: 'Pixelify Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Dashboard Sub-component tokens */
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-dark);
+  background-image: radial-gradient(circle at 50% 0%, rgba(30, 38, 60, 0.4) 0%, transparent 70%);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { 
+  font-family: var(--font-display); 
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   EfInput & EfSelect Component
+   ========================================================================== */
+
+.ef-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.ef-input-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.ef-input {
+  width: 100%;
+  background: rgba(10, 14, 23, 0.6);
+  color: var(--text-main);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.ef-input:focus {
+  border-color: var(--primary);
+  background: rgba(10, 14, 23, 0.8);
+  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.2);
+}
+
+.ef-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.ef-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.ef-input-error {
+  border-color: var(--danger);
+  background: rgba(255, 51, 102, 0.05);
+}
+
+.ef-input-error:focus {
+  box-shadow: 0 0 0 2px rgba(255, 51, 102, 0.2);
+}
+
+.ef-input-helper {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   EfModal Component
+   ========================================================================== */
+
+/* Modal Variants */
+
+.ef-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ef-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.ef-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-xs);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ef-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+.ef-modal-content {
+  padding: 24px;
+  overflow-y: auto;
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  color: var(--color-soft-text);
+}
+
+.ef-modal-footer {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   EfButton Component
+   ========================================================================== */
+
+.ef-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ef-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ef-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Button Sizes */
+.ef-btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+.ef-btn-md { padding: 10px 20px; font-size: 0.9rem; }
+.ef-btn-lg { padding: 14px 28px; font-size: 1rem; }
+
+/* Button Variants */
+.ef-btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #000;
+  border-color: rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+.ef-btn-primary:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 6px 20px var(--primary-glow);
+  transform: translateY(-2px);
+}
+
+.ef-btn-secondary {
+  background: var(--bg-panel);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-main);
+  border-color: var(--glass-border);
+}
+.ef-btn-secondary:hover {
+  background: var(--bg-panel-hover);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.ef-btn-danger {
+  background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.ef-btn-danger:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 6px 20px rgba(255, 51, 102, 0.4);
+  transform: translateY(-2px);
+}
+
+.ef-btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  box-shadow: none;
+}
+.ef-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   EfPanel Component
+   ========================================================================== */
+
+.ef-panel {
+  color: var(--text-main);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  background: var(--bg-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px var(--color-shadow-deep);
+  overflow: hidden;
+}
+
+.ef-panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Panel Padding Sizes */
+.ef-panel-p-sm { padding: 12px; }
+.ef-panel-p-md { padding: 20px; }
+.ef-panel-p-lg { padding: 32px; }
+
+/* Panel Variants */
+.ef-panel-default, .ef-panel-elev {
+  /* Inherits base */
+}
+
+.ef-panel-sunk {
+  background: var(--bg-panel-sunk);
+  box-shadow: inset 0 2px 12px rgba(0,0,0,0.5);
+  border-top-color: rgba(0,0,0,0.5);
+}
+
+.ef-panel-hero {
+  border-color: var(--primary-dark);
+  box-shadow: 0 8px 32px var(--color-shadow-deep), 0 0 20px var(--primary-glow);
+}
+
+.ef-panel-warning {
+  border-color: var(--accent-dark);
+}
+
+.ef-panel-danger {
+  border-color: var(--danger-dark);
+}
+
+/* ==========================================================================
+   EfCardPlayer Component
+   ========================================================================== */
+
+.ef-card-player {
+  display: flex;
+  background: rgba(30, 33, 36, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.ef-card-player[role="button"]:hover {
+  transform: translateY(-3px);
+  cursor: pointer;
+  background: rgba(40, 44, 48, 0.75);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.ef-card-player.ef-selected {
+  border-color: var(--primary);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
+}
+
+.ef-card-player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ef-card-player-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ef-card-player-name {
+  font-size: 1.05rem;
+  font-family: var(--font-display);
+  color: var(--text-main);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.ef-card-player-pos {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  border-radius: var(--radius-xs);
+  font-weight: 600;
+  font-family: 'Inter', system-ui, sans-serif;
+  text-transform: uppercase;
+}
+
+.ef-card-player-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.ef-card-player-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px 8px;
+  background: var(--accent);
+  color: #000;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+/* Mini Progress Bar */
+.ef-minibar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.ef-minibar-label {
+  color: var(--text-muted);
+  min-width: 24px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.ef-minibar-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ef-minibar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ef-minibar-value {
+  color: var(--text-main);
+  min-width: 24px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Layout Utilities
+   ========================================================================== */
+
+.ef-layout-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ef-layout-pitch {
+  background-color: #0A130E;
+  background-size: cover;
+  background-position: center 20%;
+  background-attachment: fixed;
+  min-height: 100dvh;
+  padding: 16px;
+  color: #E2E8F0;
+  position: relative;
+  z-index: 1;
+}
+
+.ef-layout-pitch::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: #0A130E; /* Deep pitch overlay */
+  opacity: 0.85;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.ef-flex-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ef-flex-row-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ef-flex-1 { flex: 1; }
+
+/* ==========================================================================
+   Table Utilities
+   ========================================================================== */
+
+.ef-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-main);
+  font-size: 0.75rem;
+  font-family: var(--font-display);
+}
+
+.ef-table th {
+  padding: 12px 8px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ef-table th.active-sort {
+  color: var(--accent);
+}
+
+.ef-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border-panel);
+}
+
+.ef-table tbody tr {
+  transition: background-color 0.1s, transform 0.1s;
+}
+
+.ef-table tbody tr:hover {
+  background: #0E1F14;
+  transform: translateX(2px);
+  border-left-color: var(--primary) !important;
+}
+
+/* ==========================================================================
+   B3.1 UI Consistency Utilities (SPEC-170)
+   Extracted from DashboardView / MarketView / StandingsView inline styles.
+   ========================================================================== */
+
+/* Monospace numeric text — tabular figures so UI doesn't dance */
+.ef-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Heading sans per ISSSD-Premium brand (SPEC-176/183) */
+.ef-sans {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Section header label (icon + uppercase muted label inside a panel) */
+.ef-panel-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.ef-panel-section-label--strong {
+  color: var(--text-main);
+}
+
+/* Stat cell — used in Dashboard sector readout (GOL/DEF/MEI/ATA) */
+.ef-stat-cell { text-align: center; }
+.ef-stat-cell__value {
+  display: block;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.ef-stat-cell__label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+/* Color-bound stat values, mapped to canonical token semantics */
+.ef-text-accent  { color: var(--accent); }       /* gold */
+.ef-text-info    { color: #40BAF7; }              /* electric blue */
+.ef-text-primary { color: var(--primary); }       /* neon turf */
+.ef-text-danger  { color: var(--danger); }
+.ef-text-muted   { color: var(--text-muted); }
+.ef-text-main    { color: var(--text-main); }
+
+/* Generic "thin progress bar" — 4-6px tall, no gradient (per SPEC-163) */
+.ef-progress {
+  width: 100%;
+  background: var(--bg-panel, #1A1F24);
+  overflow: hidden;
+}
+.ef-progress--xs { height: 4px; }
+.ef-progress--sm { height: 6px; }
+.ef-progress__fill {
+  height: 100%;
+  background: var(--primary);
+}
+.ef-progress__fill--accent  { background: var(--accent); }
+.ef-progress__fill--info    { background: #40BAF7; }
+.ef-progress__fill--danger  { background: var(--danger); }
+
+/* Form recent-result chip (W/D/L) — used in Dashboard */
+.ef-form-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-weight: bold;
+}
+
+/* Position badge — small uppercase pill (GOL/DEF/MEI/ATA) */
+.ef-pos-badge {
+  color: var(--bg-dark);
+  background: var(--text-muted);
+  padding: 2px 6px;
+  font-weight: bold;
+}
+
+/* Player card row meta line */
+.ef-player-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Player card row name */
+.ef-player-name {
+  font-weight: bold;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.1rem;
+}
+
+/* Player list row container (Market buy/sell/scout) */
+.ef-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--bg-sunk, #0C0F12);
+  border: 1px solid var(--border-panel);
+}
+.ef-list-row--primary { border-left: 2px solid var(--primary); }
+
+/* Empty-state box (Market: nenhum jogador encontrado) */
+.ef-empty-state {
+  background: var(--bg-sunk, #0C0F12);
+  padding: 40px 32px;
+  text-align: center;
+  border: 1px solid var(--glass-border);
+  border-color: var(--bezel-dark) var(--bezel-light) var(--bezel-light) var(--bezel-dark);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.ef-empty-state__icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+  filter: grayscale(0.5);
+  animation: ef-breathe 3s ease-in-out infinite;
+}
+
+.ef-empty-state__title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ef-empty-state__p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Toast banner (success / log) — Market notification */
+.ef-toast-success {
+  background: #064E3B;
+  border: 1px solid var(--glass-border);
+  color: #FFF;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+}
+
+/* Standings legend chip — flex row of icon + label */
+.ef-legend-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   B3.1 UI Consistency Continuation Utilities (SPEC-172)
+   Extracted from Sidebar / SquadView / MatchView / PressView /
+   PlayerDashboardView inline styles.
+   ========================================================================== */
+
+/* --- Sidebar (SPEC-099 nav) ------------------------------------------------ */
+
+.ef-sidebar {
+  width: 180px;
+  min-width: 180px;
+  background: var(--bg-dark, #0D1117);
+  border-right: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  position: sticky;
+  top: 0;
+  z-index: 998;
+  overflow-y: auto;
+  box-shadow: 4px 0 20px #040805;
+}
+.ef-sidebar__inner {
+  padding: 24px 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ef-sidebar__mode {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted, #8E9E94);
+  padding: 0 8px 12px;
+  border-bottom: 1px solid #2D3748;
+  margin-bottom: 12px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+}
+.ef-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 10px;
+  cursor: pointer;
+  background-color: transparent;
+  border-left: 4px solid transparent;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease, border-left-color 0.15s ease;
+}
+.ef-sidebar__item:hover {
+  background-color: #0E1F14;
+  border-left-color: #2D3748;
+}
+.ef-sidebar__item--active,
+.ef-sidebar__item--active:hover {
+  background-color: #161B22;
+  border-left-color: var(--primary, #39FF14);
+}
+.ef-sidebar__icon {
+  color: var(--text-muted, #8E9E94);
+  display: flex;
+  align-items: center;
+}
+.ef-sidebar__item--active .ef-sidebar__icon {
+  color: var(--primary, #39FF14);
+}
+.ef-sidebar__label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted, #8E9E94);
+  font-weight: normal;
+}
+.ef-sidebar__item--active .ef-sidebar__label {
+  color: var(--text-main, #FDFBF7);
+  font-weight: bold;
+}
+
+/* --- Generic page chrome --------------------------------------------------- */
+
+.ef-view-shell {
+  padding: 24px;
+  width: 100%;
+  min-height: 100dvh;
+  background-color: var(--bg-dark, #0D1117);
+  overflow-y: auto;
+}
+.ef-view-shell--fixed { height: 100%; min-height: 0; }
+.ef-view-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.ef-view-container--wide { max-width: 1200px; }
+.ef-view-container--narrow { max-width: 800px; }
+
+/* --- Section header inside an EfPanel ------------------------------------- */
+
+.ef-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-main, #FDFBF7);
+}
+.ef-section-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-family: inherit;
+  color: inherit;
+}
+
+/* --- Heading variants ------------------------------------------------------ */
+
+.ef-heading-xl {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: var(--text-main, #FDFBF7);
+}
+
+/* --- Tag / chip pattern (icon + uppercase mono label) --------------------- */
+
+.ef-tag-mono {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1A1F24;
+  color: var(--text-muted, #8E9E94);
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+.ef-tag-mono--info   { color: #40BAF7;             background: #16242D; padding: 6px 12px; }
+.ef-tag-mono--accent { color: var(--accent, #FFD700); background: #2D2916; padding: 6px 12px; }
+
+/* --- Sector readout (Match/Squad sector pills) ---------------------------- */
+
+/* --- MatchView log entry --------------------------------------------------- */
+
+/* --- MatchView scoreboard / score block ------------------------------------ */
+
+.ef-score-box {
+  display: flex;
+  gap: 16px;
+  background-color: var(--bg-dark, #0D1117);
+  padding: 16px 32px;
+  border: 1px solid #2D3748;
+  align-items: center;
+}
+.ef-score-box__num {
+  font-family: var(--font-mono);
+  font-weight: bold;
+  font-size: 3.5rem;
+  color: var(--text-main, #FDFBF7);
+  line-height: 1;
+}
+.ef-score-box__sep {
+  font-family: var(--font-mono);
+  font-weight: bold;
+  font-size: 2rem;
+  color: #2D3748;
+  line-height: 1;
+}
+
+.ef-clock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--bg-dark, #0D1117);
+  padding: 8px 24px;
+  border: 1px solid #2D3748;
+}
+.ef-clock__time {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  color: var(--text-muted, #8E9E94);
+  font-weight: bold;
+}
+.ef-clock__time--playing { color: var(--primary, #39FF14); }
+.ef-clock__dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--danger, #FF3333);
+  animation: pulse 1s infinite;
+}
+
+/* --- MatchView fulltime stats list row ------------------------------------- */
+
+.ef-stat-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  background-color: #1A1F24;
+  border: 1px solid #2D3748;
+}
+
+/* --- SquadView filters / search ------------------------------------------- */
+
+.ef-input,
+.ef-select {
+  padding: 8px 12px;
+  background: #1A1F24;
+  border: 1px solid #2D3748;
+  color: var(--text-main, #FDFBF7);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+}
+.ef-input--search { padding-left: 36px; width: 200px; }
+.ef-search-wrap { position: relative; }
+.ef-search-wrap__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted, #8E9E94);
+}
+
+/* SquadView ST checkbox cell (Titular toggle) */
+.ef-st-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #2D3748;
+  border: 1px solid #4A5059;
+  cursor: pointer;
+}
+.ef-st-toggle--active {
+  background: #162D1C;
+  border-color: var(--primary, #39FF14);
+}
+.ef-st-toggle--disabled { cursor: not-allowed; }
+
+/* SquadView health blocks (energy 5-pip indicator) */
+
+/* SquadView icon button (loan / sell quick action) */
+.ef-icon-btn {
+  padding: 6px 8px;
+  cursor: pointer;
+  background: #1A1F24;
+  border: 1px solid #2D3748;
+  color: var(--text-muted, #8E9E94);
+}
+.ef-icon-btn--info   { background: #16242D; border-color: #40BAF7;        color: #40BAF7; }
+.ef-icon-btn--danger { background: #2D1616; border-color: var(--danger, #FF3333);  color: var(--danger, #FF3333); }
+
+/* --- PlayerDashboardView slot dots (action pips) --------------------------- */
+
+.ef-action-slot {
+  width: 24px;
+  height: 6px;
+  background: #1A1F24;
+}
+.ef-action-slot--filled { background: var(--primary, #39FF14); }
+
+/* --- Generic horizontal bar (for skill XP / relationship bars) ------------ */
+
+.ef-bar {
+  height: 6px;
+  background: #1A1F24;
+  overflow: hidden;
+}
+.ef-bar--xs { height: 4px; }
+.ef-bar__fill {
+  height: 100%;
+  background: var(--primary, #39FF14);
+  transition: width 200ms ease-out;
+}
+
+/* --- PressView option button ---------------------------------------------- */
+
+.ef-press-option {
+  background-color: #1A1F24;
+  border: 1px solid #2D3748;
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  text-align: left;
+  color: var(--text-main, #FDFBF7);
+}
+.ef-press-option:hover {
+  border-color: #40BAF7;
+  background-color: #161B22;
+}
+.ef-press-option__letter {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  color: #40BAF7;
+  min-width: 24px;
+  font-weight: bold;
+}
+.ef-press-option__text {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-main, #FDFBF7);
+  font-weight: 500;
+}
+
+/* --- Card grid container (lifestyle / traits / shop) ---------------------- */
+
+.ef-shop-card {
+  background: #1A1F24;
+  border: 1px solid #2D3748;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+.ef-shop-card--owned {
+  background: #162D1C;
+  border-color: var(--primary, #39FF14);
+}
+.ef-shop-card--disabled { opacity: 0.5; }
+
+/* --- Status overview cell (PlayerDashboard) ------------------------------- */
+
+/* --- Step indicator (MatchView pre-match wizard) -------------------------- */
+.ef-step--active {
+  color: var(--text-main, #FDFBF7);
+  font-weight: bold;
+  opacity: 1;
+}
+
+/* ==========================================================================
+   B3.1 UI Consistency Batch 2 Utilities (SPEC-173)
+   Extracted from Achievements / CosmeticShop / Chronicle / Rivalries /
+   AutoPlay / Monitor / SaveSlots / Tutorial inline styles.
+   ========================================================================== */
+
+/* --- Scene shell (background image + scroll boilerplate) ----------------- */
+
+.ef-scene-shell {
+  background-color: var(--bg-dark, #0D1117);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100dvh;
+  padding: 24px;
+  color: var(--text-main, #FDFBF7);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-y: auto;
+}
+.ef-scene-shell--centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- View header (icon box + title + subtitle + back button) ------------- */
+/* Recurring pattern across 6 views (Achievements/CosmeticShop/Chronicle/
+   Rivalries/Monitor/SaveSlots): EfPanel containing left identity cluster
+   (48x48 icon box, title, subtitle) and right exit button. */
+
+.ef-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ef-view-header__identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ef-view-header__icon-box {
+  width: 48px;
+  height: 48px;
+  background-color: #1A1F24;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #2D3748;
+}
+.ef-view-header__title {
+  margin: 0 0 4px 0;
+  font-size: 1.2rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-main, #FDFBF7);
+  font-weight: bold;
+}
+.ef-view-header__subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted, #8E9E94);
+}
+
+/* --- Dashed empty state ---------------------------------------------------- */
+
+.ef-empty-dashed {
+  background-color: #1A1F24;
+  padding: 32px;
+  text-align: center;
+  border: 1px dashed #2D3748;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-muted, #8E9E94);
+}
+
+/* --- Section heading inside an EfPanel (icon + uppercase label) ---------- */
+/* Variant of .ef-section-header but designed for the small mono category */
+/* headers in CosmeticShop/Rivalries/Monitor. */
+
+.ef-panel-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #2D3748;
+  margin-bottom: 20px;
+  font-family: var(--font-mono);
+  color: #40BAF7;
+  font-size: 1rem;
+  font-weight: bold;
+}
+.ef-panel-cat-header--accent  { color: var(--accent, #FFD700); border-bottom-color: #2D3748; }
+.ef-panel-cat-header--primary { color: var(--primary, #39FF14); }
+.ef-panel-cat-header--info    { color: #40BAF7; }
+.ef-panel-cat-header--danger  { color: var(--danger, #FF3333); }
+
+/* --- Pill / badge cluster (small mono uppercase) ------------------------- */
+
+/* --- Generic horizontal progress (replaces ad-hoc inline progress bars) -- */
+/* Bigger than .ef-progress (which is 4-6px). 8px / 12px for visible
+   progress bars on Achievement / overall progress / RelBar. */
+
+/* --- Step progress bar (Tutorial dots) ----------------------------------- */
+
+.ef-stepbar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 8px 0;
+}
+.ef-stepbar__pip {
+  flex: 1;
+  height: 4px;
+  background-color: #2D3748;
+  transition: background-color 300ms ease;
+}
+.ef-stepbar__pip--current { background-color: #40BAF7; }
+.ef-stepbar__pip--past    { background-color: var(--primary, #39FF14); }
+
+/* --- Skip button (Tutorial low-emphasis link button) --------------------- */
+
+.ef-skip-link {
+  background: none;
+  border: none;
+  color: var(--text-muted, #8E9E94);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+}
+
+/* --- Rivalry row (decorative left border by intensity) ------------------- */
+
+/* --- Saveslot card highlight --------------------------------------------- */
+
+/* --- Cosmetic shop item card --------------------------------------------- */
+
+/* --- Achievement card pieces --------------------------------------------- */
+
+.ef-ach-badge {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid var(--glass-border);
+  background-color: var(--bg-dark, #0D1117);
+  color: var(--text-muted, #8E9E94);
+}
+
+/* --- Monitor entry pieces ------------------------------------------------- */
+
+.ef-mon-cat-tag {
+  background-color: #0E1F14;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-main, #FDFBF7);
+}
+.ef-mon-sev {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ef-mon-codeblock {
+  background-color: var(--bg-dark, #0D1117);
+  padding: 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted, #8E9E94);
+  font-family: var(--font-mono);
+  overflow-x: auto;
+  border: 1px solid #2D3748;
+}
+.ef-mon-codeblock--stack {
+  font-size: 0.75rem;
+  color: var(--danger, #FF3333);
+  margin-top: 8px;
+}
+
+/* --- Arcade typography helpers (AutoPlayView Outfit theme) ------- */
+
+.ef-arcade-h {
+  font-family: var(--font-display);
+  color: var(--accent, #FFD700);
+  text-shadow: 2px 2px 0 #000;
+  margin: 0;
+}
+.ef-arcade-h--md { font-size: 0.55rem; text-shadow: 2px 2px 0 #000; }
+.ef-arcade-h--lg { font-size: 0.6rem; text-shadow: 2px 2px 0 #000; }
+.ef-arcade-h--xl { font-size: 0.7rem; text-shadow: 3px 3px 0 #000; }
+.ef-arcade-h--xxl{ font-size: 0.8rem; text-shadow: 3px 3px 0 #000; }
+.ef-arcade-h--primary { color: var(--primary, #39FF14); }
+.ef-arcade-h--danger  { color: var(--danger, #FF3333); }
+
+.ef-arcade-stat {
+  padding: 8px;
+  background-color: #1E2124;
+  border: 1px solid var(--glass-border);
+  text-align: center;
+}
+.ef-arcade-stat__label {
+  font-family: var(--font-display);
+  font-size: 0.4rem;
+  color: var(--text-muted, #888);
+  text-transform: uppercase;
+}
+.ef-arcade-stat__value {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  margin-top: 4px;
+}
+.ef-arcade-cell {
+  padding: 6px 10px;
+  background-color: #111417;
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.ef-arcade-cell--fired { background-color: #111417; border-color: var(--primary, #39FF14); }
+
+/* =========================================================================
+   B3.1 UI Consistency Final Utilities (SPEC-175)
+   Extracted from StartView / StyleguideView / PlayerMatchView /
+   ChallengesWidget / TrophyCeremony / FloatingBugButton inline styles.
+   ========================================================================== */
+
+/* --- Centered start/launch shell (boot screen scene) --------------------- */
+
+.ef-start-shell {
+  background-color: var(--bg-dark, #0D1117);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+.ef-start-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+.ef-start-logo-wrap {
+  text-align: center;
+  margin-bottom: 8px;
+}
+.ef-start-logo {
+  width: 200px;
+  height: 200px;
+  box-shadow: 0 0 0 4px #2D3748;
+  
+  background: #1A1F24;
+  margin-bottom: 16px;
+}
+.ef-start-title {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-main, #FDFBF7);
+  font-family: var(--font-sans);
+  font-weight: 800;
+}
+.ef-start-subtitle {
+  margin: 0;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary, #39FF14);
+  font-size: 0.85rem;
+  font-weight: bold;
+  font-family: var(--font-mono);
+}
+.ef-start-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: #1A1F24;
+  border: 1px solid #2D3748;
+  color: var(--text-main, #FDFBF7);
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  font-weight: bold;
+  outline: none;
+}
+.ef-start-select {
+  width: 100%;
+  padding: 14px 16px;
+  background: #1A1F24;
+  color: var(--text-main, #FDFBF7);
+  border: 1px solid #2D3748;
+  font-family: var(--font-sans);
+  font-weight: bold;
+  font-size: 1rem;
+  outline: none;
+}
+.ef-start-team-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1A1F24;
+  padding: 12px 16px;
+  border: 1px solid #2D3748;
+}
+.ef-start-team-row select {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-main, #FDFBF7);
+  outline: none;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  font-weight: bold;
+  appearance: none;
+  cursor: pointer;
+}
+.ef-start-team-badge {
+  flex-shrink: 0;
+  padding-left: 12px;
+  border-left: 1px solid #2D3748;
+}
+.ef-start-field-label {
+  font-size: 0.8rem;
+  color: var(--text-muted, #8E9E94);
+  margin-bottom: 8px;
+  font-family: var(--font-sans);
+  font-weight: bold;
+}
+
+/* --- Section header inside panel (icon + uppercase label) ---------------- */
+/* Used in StyleguideView panel sections — variant of ef-panel-cat-header
+   but with secondary (blue) color by default and no border-bottom. */
+
+.ef-panel-section-icon-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: #40BAF7;
+  font-weight: bold;
+}
+
+/* --- Styleguide swatches ------------------------------------------------- */
+
+.ef-swatch {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 80px;
+}
+.ef-swatch__chip {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #2D3748;
+}
+.ef-swatch__name {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-main, #FDFBF7);
+}
+.ef-swatch__hex {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted, #8E9E94);
+}
+.ef-typo-sample {
+  border-bottom: 1px solid #2D3748;
+  padding-bottom: 12px;
+}
+.ef-typo-sample__label {
+  color: var(--text-muted, #8E9E94);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  margin-bottom: 4px;
+}
+
+/* --- PlayerMatchView (live match player-mode HUD) ------------------------ */
+
+.ef-bench-banner {
+  background-color: var(--bg-dark, #0D1117);
+  color: var(--danger, #FF3333);
+  padding: 16px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid var(--danger, #FF3333);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.ef-match-scoreboard {
+  text-align: center;
+  position: relative;
+}
+.ef-match-scoreboard__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+.ef-match-scoreboard__team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+.ef-match-scoreboard__name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-main, #FDFBF7);
+  font-family: var(--font-sans);
+}
+.ef-match-scoreboard__placeholder {
+  width: 64px;
+  height: 64px;
+  background-color: var(--bg-dark, #0D1117);
+}
+.ef-match-scoreboard__score {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--primary, #39FF14);
+  font-family: var(--font-mono);
+  padding: 0 32px;
+  background-color: var(--bg-dark, #0D1117);
+  border: 1px solid var(--glass-border);
+}
+.ef-match-scoreboard__dash { color: #2D3748; }
+.ef-match-clock {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ef-match-clock__time {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #40BAF7;
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: var(--font-mono);
+}
+.ef-match-clock__track {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--bg-dark, #0D1117);
+  height: 8px;
+  border: 1px solid #2D3748;
+  overflow: hidden;
+}
+.ef-match-clock__fill {
+  height: 100%;
+  background-color: #40BAF7;
+  transition: width 0.3s ease;
+}
+.ef-match-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #111417;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+}
+.ef-match-event-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.ef-match-event-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+}
+.ef-match-event-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-main, #FDFBF7);
+  margin-bottom: 24px;
+}
+.ef-match-narration {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+.ef-match-narration-empty {
+  color: var(--text-muted, #8E9E94);
+  font-style: italic;
+  padding: 12px;
+  text-align: center;
+}
+.ef-match-narration-row {
+  padding: 12px 16px;
+  border-left: 4px solid #2D3748;
+  background-color: #1A1F24;
+  color: var(--text-main, #FDFBF7);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ef-match-narration-row--goal {
+  border-left-color: var(--primary, #39FF14);
+  background-color: var(--bg-dark, #0D1117);
+}
+.ef-match-narration-row__min {
+  font-family: var(--font-mono);
+  font-weight: bold;
+  color: #40BAF7;
+  width: 32px;
+}
+.ef-match-narration-row--goal .ef-match-narration-row__min {
+  color: var(--primary, #39FF14);
+}
+
+/* --- Challenges widget --------------------------------------------------- */
+
+.ef-challenge-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #1A1F24;
+  border: 1px solid #2D3748;
+  transition: all 0.2s ease;
+}
+.ef-challenge-card--completed {
+  background-color: #1B4332;
+  border-color: var(--primary, #39FF14);
+  opacity: 0.7;
+}
+.ef-challenge-card--claimable {
+  border-color: var(--accent, #FFD700);
+}
+.ef-challenge-card__body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ef-challenge-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted, #8E9E94);
+}
+.ef-challenge-card--completed .ef-challenge-card__icon { color: var(--primary, #39FF14); }
+.ef-challenge-card--claimable .ef-challenge-card__icon { color: var(--accent, #FFD700); }
+.ef-challenge-card__title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  color: var(--text-main, #FDFBF7);
+}
+.ef-challenge-card--completed .ef-challenge-card__title { color: var(--text-muted, #8E9E94); }
+.ef-challenge-card__desc {
+  font-size: 0.7rem;
+  color: var(--text-muted, #8E9E94);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}
+.ef-challenge-card__aside {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.ef-challenge-card__reward {
+  font-size: 0.7rem;
+  color: var(--accent, #FFD700);
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #1B4332;
+  padding: 2px 6px;
+}
+.ef-widget-title {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 12px 0;
+  font-family: var(--font-mono);
+  color: #40BAF7;
+}
+.ef-widget-title__hint {
+  font-size: 0.7rem;
+  color: var(--text-muted, #8E9E94);
+  font-weight: 400;
+  margin-left: auto;
+}
+
+/* --- Trophy ceremony ----------------------------------------------------- */
+
+.ef-trophy-shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: var(--font-sans);
+  color: var(--text-main, #FDFBF7);
+  background-color: #111417;
+  background-size: cover;
+  background-position: center;
+  
+}
+.ef-trophy-reveal-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.ef-trophy-pulse-bg {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: #1B4332;
+  z-index: -1;
+  animation: pulse-glow-trophy 2s infinite alternate;
+}
+.ef-trophy-image {
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+  
+  filter: drop-shadow(0 10px 20px #1B4332);
+}
+.ef-trophy-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background-color: #111417;
+  padding: 16px 32px;
+  border: 1px solid var(--accent, #FFD700);
+}
+.ef-trophy-banner__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ef-trophy-banner__title {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--accent, #FFD700);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.ef-trophy-banner__sub {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text-main, #FDFBF7);
+  font-weight: bold;
+}
+.ef-trophy-stats {
+  margin-top: 32px;
+  width: 100%;
+  max-width: 600px;
+}
+.ef-trophy-stats__panel {
+  background-color: #111417;
+}
+.ef-trophy-stats__header {
+  text-align: center;
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+  color: #40BAF7;
+  font-weight: bold;
+}
+.ef-trophy-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.ef-trophy-stat-cell {
+  background-color: var(--bg-dark, #0D1117);
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #2D3748;
+}
+.ef-trophy-stat-cell__label {
+  font-size: 0.8rem;
+  color: var(--text-muted, #8E9E94);
+  font-family: var(--font-mono);
+  margin-bottom: 4px;
+}
+.ef-trophy-stat-cell__value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: var(--font-mono);
+}
+.ef-trophy-stat-cell__value--primary { color: var(--primary, #39FF14); }
+.ef-trophy-stat-cell__value--accent  { color: var(--accent, #FFD700); }
+.ef-trophy-stat-cell__value--danger  { color: var(--danger, #FF3333); }
+.ef-trophy-stat-cell__goals {
+  font-size: 1.2rem;
+  color: var(--text-main, #FDFBF7);
+  font-weight: bold;
+  font-family: var(--font-mono);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+}
+.ef-trophy-stat-cell__goals-sep {
+  margin: 0 4px;
+  color: #2D3748;
+}
+.ef-trophy-topscorer {
+  margin-top: 16px;
+  background-color: #1B4332;
+  border: 1px dashed var(--accent, #FFD700);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--accent, #FFD700);
+  font-weight: bold;
+}
+.ef-trophy-hall {
+  margin-top: 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.ef-trophy-hall__badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  color: var(--accent, #FFD700);
+  font-size: 0.9rem;
+  background-color: #040805;
+  padding: 8px 16px;
+}
+.ef-trophy-crowd {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  gap: 48px;
+  pointer-events: none;
+}
+@keyframes pulse-glow-trophy {
+  0%   { transform: scale(0.9); }
+  100% { transform: scale(1.1); }
+}
+
+/* --- Floating bug report button ----------------------------------------- */
+
+.ef-fab-bug {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background-color: var(--accent, #FFD700);
+  color: #000;
+  border: 1px solid var(--glass-border);
+  cursor: pointer;
+  box-shadow: 0 4px 20px #1B4332;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9000;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.ef-fab-bug:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px #1B4332;
+}
+.ef-fab-confirm {
+  padding: 32px;
+  text-align: center;
+  color: var(--primary, #39FF14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+}
+.ef-fab-textarea {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--bg-dark, #0D1117);
+  color: var(--text-main, #FDFBF7);
+  border: 1px solid #2D3748;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.ef-fab-textarea:focus {
+  border-color: #40BAF7;
+}
+.ef-fab-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted, #8E9E94);
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  background-color: #0E1F14;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ef-fab-category-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ef-fab-category-btn {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   CRT Scanline Overlay (Global Atmosphere — SNES Premium 32-bit)
+   Fixed overlay, pointer-events: none, ultra-subtle. Uses repeating
+   2px horizontal lines for authentic CRT phosphor row effect.
+   ========================================================================== */
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.06) 2px,
+      rgba(0, 0, 0, 0.06) 4px
+    );
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   Phosphor Glow Utilities
+   Text-shadow + box-shadow glow for that authentic CRT phosphor bleed.
+   Apply via utility classes on interactive/highlight elements.
+   ========================================================================== */
+
+/* Panel header titles get subtle phosphor glow */
+.ef-panel-header {
+  text-shadow: 2px 2px 0 #000, 0 0 6px #3D3200;
+}
+
+/* Active sidebar item glows */
+.ef-sidebar__item--active .ef-sidebar__icon {
+  filter: drop-shadow(0 0 4px var(--primary-glow));
+}
+
+/* ==========================================================================
+   Breathing / Pulse Micro-Animations
+   "Perpetual micro-interactions" — the UI feels alive even when idle.
+   ========================================================================== */
+
+@keyframes ef-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Spinner for loading states */
+@keyframes ef-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ef-anim-spinner-sm {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--glass-border);
+  border-top-color: var(--primary);
+  animation: ef-spin 0.6s linear infinite;
+}
+
+/* ==========================================================================
+   SNES Button Active Press — Bezel Inversion Physics
+   When pressed, the 3D bezel inverts (light goes bottom-right,
+   dark goes top-left) creating authentic hardware depression.
+   ========================================================================== */
+
+.ef-btn-primary:active {
+  box-shadow:
+    inset 1px 1px 0 var(--bezel-primary-dark),
+    inset -1px -1px 0 #4AFF3A,
+    1px 1px 0 #000;
+}
+
+.ef-btn-secondary:active {
+  box-shadow:
+    inset 1px 1px 0 var(--bezel-dark),
+    inset -1px -1px 0 var(--bezel-highlight),
+    1px 1px 0 #000;
+}
+
+.ef-btn-danger:active {
+  box-shadow:
+    inset 1px 1px 0 var(--bezel-danger-dark),
+    inset -1px -1px 0 #FF5555,
+    1px 1px 0 #000;
+}
+
+/* ==========================================================================
+   Custom Scrollbars (Pixel-Art SNES Style)
+   Thin, dark, squared — no round pill scrollbars.
+   ========================================================================== */
+
+/* Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark, #111417);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bezel-light, #4A5059);
+  border: 1px solid var(--bezel-dark, #0C0F12);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-glow);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bg-dark, #111417);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bezel-light, #4A5059) var(--bg-dark, #111417);
+}
+
+/* ==========================================================================
+   Phase 4 — Global Polish (SNES Premium 32-bit)
+   Selection, focus rings, loading skeleton, stat bars, spring stagger.
+   ========================================================================== */
+
+/* Text Selection — SNES green-on-dark */
+::selection {
+  background: var(--primary, #00FF66);
+  color: #040805;
+}
+
+::-moz-selection {
+  background: var(--primary, #00FF66);
+  color: #040805;
+}
+
+/* Focus-Visible Ring — dotted gold pixel ring */
+:focus-visible {
+  outline: 2px dotted var(--accent, #FFD700);
+  outline-offset: 2px;
+}
+
+/* Loading Skeleton — stepped pixel shimmer */
+
+/* Stat Bar — horizontal fill bar with stepped glow */
+
+/* Spring Stagger — cascade entrance for lists/grids */
+
+/* Badge Pill — for compact inline status labels */
+
+/* Tooltip position helper — auto bezel with pixel arrow */
+
+/* Divider — SNES hardware separator line */
+
+/* Pulse Dot — live/active indicator */
+
+/* ─── Icon alignment utilities (extracted from 402 inline styles) ─── */
+.ef-icon-inline    { vertical-align: -2px; margin-right: 4px; }
+.ef-icon-inline-md { vertical-align: -2px; margin-right: 6px; }
+.ef-icon-inline-lg { vertical-align: -3px; margin-right: 8px; }
+.ef-icon-inline-sm { vertical-align: -3px; margin-right: 6px; }
+.ef-icon-bare      { vertical-align: -2px; }
+
+/* ─── Common text utilities (extracted from inline styles) ─── */
+.ef-text-sm-muted  { font-size: 0.7rem; color: var(--text-muted); }
+.ef-text-xs-muted  { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px; }
+
+/* ─── Audio Controller ───────────────────────────────────── */
+.ef-audio-mute-btn {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 9999;
+  background: var(--bg-dark);
+  border: 1px solid var(--text-main);
+  border-radius: 4px;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  transition: opacity 0.2s ease;
+}
+.ef-audio-mute-btn:hover { opacity: 0.75; }
+
+/* ─── AutoPlay Telemetry ─────────────────────────────────── */
+.ef-text-primary { color: var(--primary); }
+.ef-text-danger  { color: var(--danger); }

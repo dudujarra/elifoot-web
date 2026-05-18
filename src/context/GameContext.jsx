@@ -295,12 +295,14 @@ export const GameProvider = ({ children }) => {
     const location = useLocation();
 
     // Sync URL → gameState.view on popstate (browser back/forward)
+    /* eslint-disable react-hooks/set-state-in-effect */
     useEffect(() => {
         const viewFromUrl = PATH_TO_VIEW[location.pathname];
         if (viewFromUrl && viewFromUrl !== gameState.view) {
             setGameState(prev => ({ ...prev, view: viewFromUrl }));
         }
-    }, [location.pathname]);
+    }, [location.pathname, gameState.view]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     // SPEC-169: handlers memoizados pra evitar invalidação do context value
     // a cada render. gameState.mode/view só são lidos onde mudam.

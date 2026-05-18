@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic inline styles for graphs and tables */
 /**
  * BrainDashboard — Visual ML Dashboard for AutoPlay
  *
@@ -131,7 +130,6 @@ export function BrainDashboard({ controllerRef }) {
                 </h3>
                 <span className="bd-toggle">{expanded ? '▼' : '▶'}</span>
             </div>
-
             {expanded && (
                 <div className="bd-body">
                     {/* Row 1: Personality + Overview */}
@@ -150,7 +148,9 @@ export function BrainDashboard({ controllerRef }) {
                                                 <span className="bd-trait-value">{pct}%</span>
                                             </div>
                                             <div className="bd-bar-bg">
-                                                <div className="bd-bar-fill" style={{ width: `${pct}%`, background: traitColor(trait) }} />
+                                                <div className={`bd-bar-fill w-${Math.round(pct)} ef-dyn-background`} style={{
+                                                    "--ef-dyn-background": traitColor(trait)
+                                                }} />
                                             </div>
                                         </div>
                                     );
@@ -199,7 +199,9 @@ export function BrainDashboard({ controllerRef }) {
                                     <span className="bd-alpha-value">{effectiveAlpha.toFixed(4)}</span>
                                 </div>
                                 <div className="bd-bar-bg">
-                                    <div className="bd-bar-fill" style={{ width: `${(effectiveAlpha / 0.1) * 100}%`, background: 'var(--color-learning-teal)' }} />
+                                    <div className={`bd-bar-fill w-${Math.round((effectiveAlpha / 0.1) * 100)} ef-dyn-background`} style={{
+                                        "--ef-dyn-background": 'var(--color-learning-teal)'
+                                    }} />
                                 </div>
                             </div>
                             {/* Epsilon decay bar */}
@@ -209,7 +211,9 @@ export function BrainDashboard({ controllerRef }) {
                                     <span className="bd-epsilon-value">{effectiveEpsilon.toFixed(4)}</span>
                                 </div>
                                 <div className="bd-bar-bg">
-                                    <div className="bd-bar-fill" style={{ width: `${(effectiveEpsilon / 0.15) * 100}%`, background: 'var(--color-learning-pink)' }} />
+                                    <div className={`bd-bar-fill w-${Math.round((effectiveEpsilon / 0.15) * 100)} ef-dyn-background`} style={{
+                                        "--ef-dyn-background": 'var(--color-learning-pink)'
+                                    }} />
                                 </div>
                             </div>
                         </div>
@@ -224,13 +228,12 @@ export function BrainDashboard({ controllerRef }) {
                                 return (
                                     <div key={action} className="bd-action-row">
                                         <span className="bd-action-label">{String(action)}</span>
-                                        <div className="bd-bar-bg bd-bar-bg--tall" style={{ flex: 1 }}>
+                                        <div className="bd-bar-bg bd-bar-bg--tall ef-dyn-flex" style={{ "--ef-dyn-flex": 1 }}>
                                             <div
-                                                className="bd-bar-fill--tall"
+                                                className={`bd-bar-fill--tall w-${Math.round(pct)} ef-dyn-background ef-dyn-minWidth`}
                                                 style={{
-                                                    width: `${pct}%`,
-                                                    background: BAR_COLORS[i % BAR_COLORS.length],
-                                                    minWidth: pct > 5 ? 'auto' : '0'
+                                                    "--ef-dyn-background": BAR_COLORS[i % BAR_COLORS.length],
+                                                    "--ef-dyn-minWidth": pct > 5 ? 'auto' : '0'
                                                 }}
                                             >
                                                 {pct > 8 ? `${pct.toFixed(0)}%` : ''}
@@ -252,7 +255,9 @@ export function BrainDashboard({ controllerRef }) {
                             {topActions.map((a, i) => (
                                 <div key={String(a.action)} className="bd-q-row">
                                     <span>{i + 1}. {String(a.action)}</span>
-                                    <strong style={{ color: a.totalQ >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)' }}>
+                                    <strong
+                                        style={{ "--ef-dyn-color": a.totalQ >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)' }}
+                                        className="ef-dyn-color">
                                         {a.totalQ >= 0 ? '+' : ''}{Number(a.totalQ).toFixed(1)}
                                     </strong>
                                 </div>
@@ -272,11 +277,11 @@ export function BrainDashboard({ controllerRef }) {
                                         return (
                                             <div
                                                 key={i}
-                                                className="bd-spark-bar"
+                                                className="bd-spark-bar ef-dyn-height ef-dyn-background"
                                                 title={`wk${r.week}: ${r.action} → ${Number(r.reward).toFixed(1)}`}
                                                 style={{
-                                                    height: `${height}px`,
-                                                    background: r.reward >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)',
+                                                    "--ef-dyn-height": `${height}px`,
+                                                    "--ef-dyn-background": r.reward >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)',
                                                 }}
                                             />
                                         );
@@ -296,9 +301,9 @@ export function BrainDashboard({ controllerRef }) {
                                 return (
                                     <div
                                         key={sv.state}
-                                        className="bd-state-chip"
+                                        className="bd-state-chip ef-dyn-color"
                                         title={`${sv.state} — ${sv.visits} visitas`}
-                                        style={{ color: intensity > 0.5 ? 'var(--text-main)' : 'var(--text-muted)' }}
+                                        style={{ "--ef-dyn-color": intensity > 0.5 ? 'var(--text-main)' : 'var(--text-muted)' }}
                                     >
                                         {String(sv.state)} <strong>({sv.visits})</strong>
                                     </div>
@@ -315,11 +320,13 @@ export function BrainDashboard({ controllerRef }) {
                                 <div key={i} className="bd-memory-row">
                                     <span className="ef-text-muted">wk{m.week ?? '?'}</span>
                                     <span className="bd-memory-action">{String(m.action || m.decision || '?')}</span>
-                                    <span style={{ color: m.result === 'W' ? 'var(--color-success-mid)' : m.result === 'L' ? 'var(--color-red-bright)' : 'var(--color-amber-warning)' }}>
+                                    <span
+                                        style={{ "--ef-dyn-color": m.result === 'W' ? 'var(--color-success-mid)' : m.result === 'L' ? 'var(--color-red-bright)' : 'var(--color-amber-warning)' }}
+                                        className="ef-dyn-color">
                                         {String(m.result || '')}
                                     </span>
                                     {m.reward != null && (
-                                        <strong className="bd-reward-badge" style={{ color: m.reward >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)' }}>
+                                        <strong className="bd-reward-badge ef-dyn-color" style={{ "--ef-dyn-color": m.reward >= 0 ? 'var(--color-success-mid)' : 'var(--color-red-bright)' }}>
                                             {m.reward >= 0 ? '+' : ''}{Number(m.reward).toFixed(1)}
                                         </strong>
                                     )}
@@ -343,7 +350,7 @@ function MiniStat({ label, value, color }) {
     return (
         <div className="bd-mini-stat">
             <div className="bd-mini-stat__label">{String(label)}</div>
-            <div className="bd-mini-stat__value" style={color ? { color } : undefined}>{String(value)}</div>
+            <div className={`bd-mini-stat__value ${color ? 'ef-dyn-color' : ''}`} style={color ? { '--ef-dyn-color': color } : undefined}>{String(value)}</div>
         </div>
     );
 }

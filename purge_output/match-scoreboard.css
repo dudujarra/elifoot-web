@@ -1,0 +1,75 @@
+/* MatchScoreboard — semantic CSS (AKITA-421) */
+
+.ef-scoreboard {
+  position: relative;
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 2px solid var(--scoreboard-border, var(--color-soft-border));
+}
+
+.ef-scoreboard__burst {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-forest-pulse);
+  animation: pulse 1s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ef-scoreboard__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+}
+
+.ef-scoreboard__label {
+  flex: 1;
+  letter-spacing: 0.1em;
+}
+.ef-scoreboard__label--home { text-align: right; }
+.ef-scoreboard__label--away { text-align: left; }
+
+.ef-scoreboard__half-badge {
+  padding: 6px 12px;
+  background-color: var(--scoreboard-bg, var(--bg-panel));
+  border: 1px solid var(--scoreboard-border, var(--color-soft-border));
+}
+
+.ef-scoreboard__body {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.ef-scoreboard__team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.ef-scoreboard__team-name {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.ef-scoreboard__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}

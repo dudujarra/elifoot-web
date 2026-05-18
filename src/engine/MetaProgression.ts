@@ -69,7 +69,7 @@ export function loadMeta(): MetaState {
     try {
         const raw = localStorage.getItem(META_KEY);
         if (raw) return JSON.parse(raw) as MetaState;
-    } catch (err) { EngineLogger.capture(err, 'MetaProgression.loadMeta'); }
+    } catch (err) { EngineLogger.capture(err as Error, 'MetaProgression.loadMeta'); }
     return { unlocked: [], stats: {} };
 }
 
@@ -79,7 +79,7 @@ export function loadMeta(): MetaState {
 export function saveMeta(meta: MetaState): void {
     try {
         localStorage.setItem(META_KEY, JSON.stringify(meta));
-    } catch (err) { EngineLogger.capture(err, 'MetaProgression.saveMeta'); }
+    } catch (err) { EngineLogger.capture(err as Error, 'MetaProgression.saveMeta'); }
 }
 
 /**
@@ -96,7 +96,7 @@ export function evaluateAchievements(stats: AchievementStats): EvaluationResult 
                 meta.unlocked.push(id);
                 newlyUnlocked.push(ach);
             }
-        } catch (err) { EngineLogger.capture(err, 'MetaProgression.evaluateCondition'); }
+        } catch (err) { EngineLogger.capture(err as Error, 'MetaProgression.evaluateCondition'); }
     }
 
     meta.stats = { ...meta.stats, ...stats };
@@ -120,5 +120,5 @@ export function getAllAchievements(): AchievementView[] {
  * Reset meta-progression (debug only).
  */
 export function resetMeta(): void {
-    try { localStorage.removeItem(META_KEY); } catch (err) { EngineLogger.capture(err, 'MetaProgression.resetMeta'); }
+    try { localStorage.removeItem(META_KEY); } catch (err) { EngineLogger.capture(err as Error, 'MetaProgression.resetMeta'); }
 }

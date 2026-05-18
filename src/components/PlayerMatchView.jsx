@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useState, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
 import { drawCard, enrichCardWithAtmosphere } from '../engine/MatchEventsDeck';
@@ -57,7 +56,7 @@ export function PlayerMatchView() {
         }
 
         return () => clearInterval(timerRef.current);
-    }, []);
+    }, [engine, player, team?.id]);
     /* eslint-enable react-hooks/set-state-in-effect */
 
     useEffect(() => {
@@ -107,7 +106,7 @@ export function PlayerMatchView() {
         }, speed);
 
         return () => clearInterval(timerRef.current);
-    }, [matchFinished, activeEvent, isBenched]);
+    }, [matchFinished, activeEvent, isBenched, player?.id, player?.position, team?.name]);
 
     const handleChoice = (option) => {
         if (activeEvent.isBench) {
@@ -204,7 +203,7 @@ export function PlayerMatchView() {
                             <Clock size={24} weight="bold" /> {matchFinished ? 'FIM DE JOGO' : `${minute}'`}
                         </div>
                         <div className="ef-match-clock__track">
-                            <div className="ef-match-clock__fill" style={{ width: `${(minute / 90) * 100}%` }} />
+                            <div className={`ef-match-clock__fill w-${Math.round((minute / 90) * 100)}`} />
                         </div>
                     </div>
                 </EfPanel>

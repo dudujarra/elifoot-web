@@ -18,6 +18,7 @@ export default function MatchHighlightVideo({ event, isHomeAttacking = true }) {
         showBanner: true
     });
 
+    /* eslint-disable react-hooks/set-state-in-effect */
     useEffect(() => {
         if (!event) return;
 
@@ -60,6 +61,7 @@ export default function MatchHighlightVideo({ event, isHomeAttacking = true }) {
         }
 
     }, [event, isHomeAttacking]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     if (!event || !animState.imageSrc) return null;
 

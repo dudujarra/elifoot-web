@@ -62,7 +62,7 @@ async function main() {
             } else {
                 unmatched.push(team.name);
             }
-        } catch (error) {
+        } catch {
             unmatched.push(team.name);
         }
 

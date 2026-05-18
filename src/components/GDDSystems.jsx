@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /* eslint-disable react-refresh/only-export-components */
 import { useEffect, useState } from 'react';
 import { EfButton } from './ui/EfButton';
@@ -41,7 +40,7 @@ export function ScarcityBanner({ engine }) {
             {items.map((item, i) => {
                 const IconComp = item.Icon;
                 return (
-                    <span key={i} className="scarcity-item" style={{ color: item.color }}>
+                    <span key={i} className="scarcity-item ef-dyn-color" style={{ "--ef-dyn-color": item.color }}>
                         <IconComp size={12} weight="fill" className="ef-icon-inline" />
                         {item.text}
                     </span>
@@ -207,7 +206,7 @@ export function TutorialOverlay({ visible, onDismiss }) {
                 {current.action && (
                     <p className="tutorial-action">&gt; {current.action}</p>
                 )}
-                <div className="tutorial-buttons" style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                <div className="tutorial-buttons ef-dyn-display ef-dyn-gap ef-dyn-justifyContent" style={{ "--ef-dyn-display": 'flex', "--ef-dyn-gap": '0.5rem', "--ef-dyn-justifyContent": 'center' }}>
                     <EfButton variant="secondary" size="sm" onClick={() => {
                         try { localStorage.setItem('olefut_tutorial_done', 'true'); } catch { /* storage full */ }
                         onDismiss();

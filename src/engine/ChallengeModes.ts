@@ -32,7 +32,7 @@ export const CHALLENGE_MODES: Record<string, ChallengeMode> = {
             const team = engine.getTeam(engine.manager?.teamId);
             if (team) {
                 team.balance = Math.floor(team.balance * 0.1);
-                team.squad.forEach(p => { p.ovr = Math.max(30, p.ovr - 15); });
+                team.squad.forEach((p: any) => { p.ovr = Math.max(30, p.ovr - 15); });
             }
         },
         winCondition: (engine: any) => {
@@ -59,7 +59,7 @@ export const CHALLENGE_MODES: Record<string, ChallengeMode> = {
                 engine.getTeam(engine.manager?.teamId)?.zone,
                 engine.getTeam(engine.manager?.teamId)?.division
             );
-            const pos = standings?.findIndex(s => s.teamId === engine.manager?.teamId);
+            const pos = standings?.findIndex((s: any) => s.teamId === engine.manager?.teamId);
             return pos !== undefined && pos <= 3;
         },
     },
@@ -76,13 +76,13 @@ export const CHALLENGE_MODES: Record<string, ChallengeMode> = {
             const team = engine.getTeam(engine.manager?.teamId);
             if (team) {
                 team.balance = Math.floor(team.balance * 0.3);
-                team.squad.forEach(p => { p.moral = Math.max(10, (p.moral || 50) - 30); });
+                team.squad.forEach((p: any) => { p.moral = Math.max(10, (p.moral || 50) - 30); });
             }
         },
         winCondition: (engine: any) => {
             const team = engine.getTeam(engine.manager?.teamId);
             const standings = engine.getStandings(team?.zone, team?.division);
-            const pos = standings?.findIndex(s => s.teamId === engine.manager?.teamId);
+            const pos = standings?.findIndex((s: any) => s.teamId === engine.manager?.teamId);
             const total = standings?.length || 20;
             return pos !== undefined && pos < total - 4; // survive relegation
         },

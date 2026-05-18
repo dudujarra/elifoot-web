@@ -19,6 +19,7 @@ export function ViewOnboarding({ viewId }) {
     const [shown, setShown] = useState(false);
 
     // Trigger only on first mount per view
+    /* eslint-disable react-hooks/set-state-in-effect */
     useEffect(() => {
         if (!viewId) return;
         if (hasOnboardingPending(viewId)) {
@@ -26,6 +27,7 @@ export function ViewOnboarding({ viewId }) {
             setStep(0);
         }
     }, [viewId]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     const content = getOnboardingForView(viewId);
     const close = useCallback(() => {

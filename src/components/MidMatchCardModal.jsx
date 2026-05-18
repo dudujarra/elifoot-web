@@ -55,7 +55,7 @@ export function MidMatchCardModal({ card, onChoose, onClose }) {
             aria-modal="true"
             aria-labelledby="ef-midmatch-title"
         >
-            {/* eslint-disable-next-line no-restricted-syntax -- dynamic accent color */}
+            {}
             <div className="ef-decision-card" style={{ '--decision-accent': 'var(--accent)' }}>
                 <button
                     type="button"

@@ -1,0 +1,381 @@
+
+/Users/dudujarra/Documents/ELIFOOT/.agent/AutoPlayLabView.backup.jsx
+   97:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+   98:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  101:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  115:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  120:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  138:38  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  145:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  153:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  164:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  172:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  183:35  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  189:33  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  200:28  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  215:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  217:38  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  223:42  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  238:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  239:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  243:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  256:30  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  263:34  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/purge_custom.js
+  12:7   warning  'words' is assigned a value but never used. Allowed unused vars must match /^_/u            no-unused-vars
+  15:7   warning  'dynamicPrefixes' is assigned a value but never used. Allowed unused vars must match /^_/u  no-unused-vars
+  19:5   warning  'removedClasses' is assigned a value but never used. Allowed unused vars must match /^_/u   no-unused-vars
+  20:5   warning  'bytesSaved' is assigned a value but never used. Allowed unused vars must match /^_/u       no-unused-vars
+  28:11  warning  'origSize' is assigned a value but never used. Allowed unused vars must match /^_/u         no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/run_purge.js
+  3:8  warning  'path' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/scripts/test-synth.js
+  263:43  warning  The value assigned to 'offset' is not used in subsequent statements  no-useless-assignment
+
+/Users/dudujarra/Documents/ELIFOOT/scripts/verify-playstyles.js
+  2:10  warning  'rng' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/AutoPlayView.jsx
+  9:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/ChronicleSeasonEndModal.jsx
+   10:34  warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                        no-unused-vars
+  146:13  warning  The value assigned to 'highlightY' is not used in subsequent statements                                                                                                                                                                                                                                                                                                                                                                                                                         no-useless-assignment
+  172:9   warning  Error: This value cannot be modified
+
+Modifying a value previously passed as an argument to a hook is not allowed. Consider moving the modification before calling the hook.
+
+  170 |     const close = useCallback(() => {
+  171 |         if (!engine) return;
+> 172 |         engine.pendingChronicleSeason = null;
+      |         ^^^^^^ `engine` cannot be modified
+  173 |         if (typeof forceUpdate === 'function') forceUpdate();
+  174 |     }, [engine, forceUpdate]);
+  175 |  react-hooks/immutability
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/DashboardView.jsx
+   3:10  warning  'AnimatedStat' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+   4:10  warning  'Help' is defined but never used. Allowed unused vars must match /^_/u          no-unused-vars
+  20:46  warning  'TrendUp' is defined but never used. Allowed unused vars must match /^_/u       no-unused-vars
+  20:55  warning  'TrendDown' is defined but never used. Allowed unused vars must match /^_/u     no-unused-vars
+  20:66  warning  'Heartbeat' is defined but never used. Allowed unused vars must match /^_/u     no-unused-vars
+  21:14  warning  'Lightning' is defined but never used. Allowed unused vars must match /^_/u     no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/LiveSquadEditModal.jsx
+  57:84  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/MatchHighlightModal.jsx
+   9:34  warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               no-unused-vars
+  31:9   warning  The value assigned to 'type' is not used in subsequent statements                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      no-useless-assignment
+  72:48  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                no-restricted-syntax
+  74:22  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  72 |             <div className="ef-highlight-card" style={{ '--highlight-color': color }}>
+  73 |                 <div className="ef-highlight-icon-row">
+> 74 |                     <Icon size={64} color={color} weight="fill" />
+     |                      ^^^^ This component is created during render
+  75 |                 </div>
+  76 |                 <div className="ef-highlight-minute">
+  77 |                     MINUTO {context.minute}
+
+  60 |     if (!context) return null;
+  61 |
+> 62 |     const Icon = getHighlightIcon(context.type);
+     |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+  63 |     const color = getHighlightColor(context.type);
+  64 |
+  65 |     return (  react-hooks/static-components
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/MidMatchCardModal.jsx
+  58:47  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/MonitorView.jsx
+  127:22  warning  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  125 |     // Telemetry derived from real state — NOT mocked.
+  126 |     void tick; // re-render every second
+> 127 |     const uptimeMs = Date.now() - sessionStart;
+      |                      ^^^^^^^^^^ Cannot call impure function
+  128 |     const uptimeStr = formatUptime(uptimeMs);
+  129 |
+  130 |     const critCount = useMemo(() => {                              react-hooks/purity
+  144:21  warning  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+  142 |     const loadBars = useMemo(() => {
+  143 |         const buckets = new Array(18).fill(0);
+> 144 |         const now = Date.now();
+      |                     ^^^^^^^^^^ Cannot call impure function
+  145 |         const stepMs = 5_000; // 5s buckets => 90s window
+  146 |         for (const e of allEntries) {
+  147 |             const ageMs = now - (e.ts || 0);  react-hooks/purity
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/PlayerDashboardView.jsx
+   26:10  warning  'EfClubBadge' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           no-unused-vars
+   36:52  warning  'ShoppingCart' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          no-unused-vars
+  131:23  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  129 |     const handleOffPitchChoice = (option) => {
+  130 |         const eff = option.effect;
+> 131 |         if (eff.boss) player.relationships.boss = Math.max(0, Math.min(100, player.relationships.boss + eff.boss));
+      |                       ^^^^^^^^^^^^^^^^^^^^ `player` cannot be modified
+  132 |         if (eff.fans) player.relationships.fans = Math.max(0, Math.min(100, player.relationships.fans + eff.fans));
+  133 |         if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+  134 |         if (eff.sponsors) player.relationships.sponsors = Math.max(0, Math.min(100, player.relationships.sponsors + eff.sponsors));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-hooks/immutability
+  135:24  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  133 |         if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+  134 |         if (eff.sponsors) player.relationships.sponsors = Math.max(0, Math.min(100, player.relationships.sponsors + eff.sponsors));
+> 135 |         if (eff.money) player.money += eff.money;
+      |                        ^^^^^^ `player` cannot be modified
+  136 |         if (eff.energy) player.energy = Math.max(0, Math.min(100, player.energy + eff.energy));
+  137 |         if (eff.actionSlots) player.actionSlots = Math.max(0, player.actionSlots + eff.actionSlots);
+  138 |         if (eff.wage_multiplier) player.wage = Math.floor(player.wage * eff.wage_multiplier);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/immutability
+  312:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  310 |                                     <EfPanel padding="md">
+  311 |                                         <div className="ef-player-dashboard__panel-title ef-sans ef-text-accent"><Handshake weight="fill" /> LOCKER ROOM STANDING</div>
+> 312 |                                         <RelBar label="Treinador" value={player.relationships.boss} type="boss" icon={<User weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  313 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+  314 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+  315 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+
+  156 |
+  157 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 158 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 159 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 160 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 178 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 179 |     };
+      | ^^^^^^ The component is created during render here
+  180 |
+  181 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  182 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;  react-hooks/static-components
+  313:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  311 |                                         <div className="ef-player-dashboard__panel-title ef-sans ef-text-accent"><Handshake weight="fill" /> LOCKER ROOM STANDING</div>
+  312 |                                         <RelBar label="Treinador" value={player.relationships.boss} type="boss" icon={<User weight="fill" />} />
+> 313 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  314 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+  315 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+  316 |                                     </EfPanel>
+
+  156 |
+  157 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 158 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 159 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 160 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 178 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 179 |     };
+      | ^^^^^^ The component is created during render here
+  180 |
+  181 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  182 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;              react-hooks/static-components
+  314:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  312 |                                         <RelBar label="Treinador" value={player.relationships.boss} type="boss" icon={<User weight="fill" />} />
+  313 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+> 314 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  315 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+  316 |                                     </EfPanel>
+  317 |
+
+  156 |
+  157 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 158 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 159 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 160 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 178 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 179 |     };
+      | ^^^^^^ The component is created during render here
+  180 |
+  181 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  182 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;                                                                                                                                                                                      react-hooks/static-components
+  315:42  warning  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+  313 |                                         <RelBar label="Torcida" value={player.relationships.fans} type="fans" icon={<HandsClapping weight="fill" />} />
+  314 |                                         <RelBar label="Companheiros" value={player.relationships.teammates} type="teammates" icon={<User weight="fill" />} />
+> 315 |                                         <RelBar label="Patrocinadores" value={player.relationships.sponsors} type="sponsors" icon={<Coins weight="fill" />} />
+      |                                          ^^^^^^ This component is created during render
+  316 |                                     </EfPanel>
+  317 |
+  318 |                                     {offPitchResult && (
+
+  156 |
+  157 |     // Retro "loading-block" relationship bar — Stitch v1.1 aesthetic.
+> 158 |     const RelBar = ({ label, value, type, icon }) => {
+      |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 159 |         const fillMod = type === 'boss'
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 160 |             ? 'ef-player-dashboard__bar-fill--danger'
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 178 |         );
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 179 |     };
+      | ^^^^^^ The component is created during render here
+  180 |
+  181 |     const starStr = Array(player.starRating).fill(<Star weight="fill" color="var(--accent)" size={16} />).concat(Array(5 - player.starRating).fill(<Star color="var(--border-panel)" size={16} />));
+  182 |     const pers = PERSONALITIES[player.personality] || PERSONALITIES.maverick;                                                                                                                                                                                                                                                                              react-hooks/static-components
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/PlayerMatchView.jsx
+  115:27  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  113 |         if (activeEvent.isBench) {
+  114 |             const eff = option.effect;
+> 115 |             if (eff.boss) player.relationships.boss = Math.max(0, Math.min(100, player.relationships.boss + eff.boss));
+      |                           ^^^^^^^^^^^^^^^^^^^^ `player` cannot be modified
+  116 |             if (eff.fans) player.relationships.fans = Math.max(0, Math.min(100, player.relationships.fans + eff.fans));
+  117 |             if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+  118 |             if (eff.energy) player.energy = Math.max(0, Math.min(100, player.energy + eff.energy));  react-hooks/immutability
+  118:29  warning  Error: This value cannot be modified
+
+Modifying a value used previously in an effect function or as an effect dependency is not allowed. Consider moving the modification before calling useEffect().
+
+  116 |             if (eff.fans) player.relationships.fans = Math.max(0, Math.min(100, player.relationships.fans + eff.fans));
+  117 |             if (eff.teammates) player.relationships.teammates = Math.max(0, Math.min(100, player.relationships.teammates + eff.teammates));
+> 118 |             if (eff.energy) player.energy = Math.max(0, Math.min(100, player.energy + eff.energy));
+      |                             ^^^^^^ `player` cannot be modified
+  119 |             setEventResult(option.resultText);
+  120 |         } else {
+  121 |             const energyFactor = Math.max(0.3, player.energy / 100);                                                                           react-hooks/immutability
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/PressView.jsx
+  69:13  warning  Error: This value cannot be modified
+
+Modifying a value returned from 'useState()', which should not be modified directly. Use the setter function to update instead.
+
+  67 |         }
+  68 |         if (option.effect.boardConfidence && engine.board) {
+> 69 |             engine.board.confidence = Math.max(0, Math.min(100, engine.board.confidence + option.effect.boardConfidence));
+     |             ^^^^^^^^^^^^ `engine` cannot be modified
+  70 |         }
+  71 |         setAnswered(option);
+  72 |         forceUpdate();  react-hooks/immutability
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/SeasonalEventModal.jsx
+  10:34  warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/SquadView.jsx
+  447:49  warning  'i' is defined but never used. Allowed unused args must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/TutorialView.jsx
+  51:25  warning  'getDashboardView' is assigned a value but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/dashboard/DashboardAlerts.jsx
+  1:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/dashboard/DashboardHeader.jsx
+  1:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/dashboard/DashboardHeroMatch.jsx
+  1:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/dashboard/DashboardMatchInfo.jsx
+  1:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/dashboard/PlayerDashboardAlerts.jsx
+  1:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/dashboard/PlayerDashboardStatusBar.jsx
+   1:8   warning  'React' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                  no-unused-vars
+   2:10  warning  'SoccerBall' is defined but never used. Allowed unused vars must match /^_/u                                                                                                             no-unused-vars
+  17:71  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/learning/BrainDashboard.jsx
+   99:41  warning  Error: Cannot reassign variable after render completes
+
+Reassigning `total` after render has completed can cause inconsistent behavior on subsequent renders. Consider using state instead.
+
+   97 |     const cumulativeReward = useMemo(() => {
+   98 |         let total = 0;
+>  99 |         return rewardHistory.map(r => { total += r.reward; return total; });
+      |                                         ^^^^^ Cannot reassign `total` after render completes
+  100 |     }, [rewardHistory]);
+  101 |
+  102 |     const allQValues = stateKeys.flatMap(s => Object.values(qTable[s] || {}));  react-hooks/immutability
+  147:78  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  196:66  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  206:66  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  221:84  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  224:49  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  249:45  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  271:49  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  295:41  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  312:43  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  316:77  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+  340:50  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment                                                                                                                                                                                                                                                                                                                                                                                                                     no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/src/components/learning/CareerInfoPanel.jsx
+  121:59  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  125:59  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  133:58  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  139:61  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  191:41  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  195:41  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  197:41  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  215:46  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  222:57  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  238:41  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  245:53  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+  274:94  warning  Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment  no-restricted-syntax
+
+/Users/dudujarra/Documents/ELIFOOT/src/services/AutoPlayLab/presets.js
+  8:25  warning  'diffBatches' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/src/services/season/processMetaProgression.js
+  27:54  warning  'pos' is defined but never used. Allowed unused args must match /^_/u  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/tools/baseline-stats.js
+  53:19  warning  'total' is assigned a value but never used. Allowed unused vars must match /^_/u  no-unused-vars
+  62:18  warning  'e' is defined but never used                                                     no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/tools/squad-scraper/src/discover.js
+  65:18  warning  'error' is defined but never used  no-unused-vars
+
+/Users/dudujarra/Documents/ELIFOOT/tools/squad-scraper/src/scrape-leagues.js
+  103:18  warning  'error' is defined but never used                                                     no-unused-vars
+  104:13  warning  'failCount' is assigned a value but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+✖ 100 problems (0 errors, 100 warnings)
+

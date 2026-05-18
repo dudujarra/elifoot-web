@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfTooltip — Stitch component (refactor de Tooltip.jsx legacy)
  *
@@ -7,6 +6,7 @@
  */
 
 import { useState, useRef, useLayoutEffect } from 'react';
+import '../../styles/tooltip.css';
 
 export function EfTooltip({
     content,
@@ -65,37 +65,15 @@ export function EfTooltip({
             onMouseLeave={handleLeave}
             onFocus={handleEnter}
             onBlur={handleLeave}
-            style={{ position: 'relative', display: 'inline-block', cursor: 'help' }}
         >
             {children}
             {visible && (
                 <span
                     ref={bubbleRef}
                     role="tooltip"
-                    className={`ef-tooltip-bubble ef-tooltip-pos-${computedPos}`}
+                    className={`ef-tooltip-bubble ef-tooltip-pos-${computedPos} ef-dyn-borderTopColor`}
                     style={{
-                        position: 'absolute',
-                        zIndex: 10000,
-                        minWidth: '180px',
-                        maxWidth: '320px',
-                        padding: '8px 12px',
-                        background: 'var(--color-panel-tone)',
-                        color: 'var(--color-soft-text)',
-                        fontFamily: 'var(--font-display)',
-                        fontSize: '0.45rem',
-                        lineHeight: 1.6,
-                        border: '4px solid',
-                        borderColor: 'var(--border-panel) var(--bg-dark) var(--bg-dark) var(--border-panel)',
-                        boxShadow: '4px 8px 0 var(--color-shadow-deep)',
-                        borderTopWidth: '4px',
-                        borderTopColor: HEADER_COLOR[color] || HEADER_COLOR.info,
-                        pointerEvents: 'none',
-                        whiteSpace: 'normal',
-                        textAlign: 'left',
-                        animation: 'ef-tooltip-fade 100ms steps(2) forwards',
-                        ...(computedPos === 'top'
-                            ? { bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)' }
-                            : { top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)' })
+                        "--ef-dyn-borderTopColor": HEADER_COLOR[color] || HEADER_COLOR.info,
                     }}
                 >
                     {content}

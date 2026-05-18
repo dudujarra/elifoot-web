@@ -195,76 +195,8 @@ export class AutoPlayController {
             this._advanceWeek();
             this.stats.weeksPlayed++;
 
-            // §16.2: Auto-dismiss trophy ceremony (log it as success)
-            if (this.engine.trophyCeremony) {
-                this._logSuccess('TROPHY_CEREMONY', `🏆 Cerimônia: ${this.engine.trophyCeremony.trophy?.name || this.engine.trophyCeremony.trophy}`, {
-                    trophy: this.engine.trophyCeremony.trophy,
-                    season: this.engine.trophyCeremony.season
-                });
-                this.engine.trophyCeremony = null;
-            }
-
-            // §14.2: Check challenge mode win condition
-            try {
-                const challengeWin = checkChallengeWin(this.engine);
-                if (challengeWin) {
-                    this._logSuccess('CHALLENGE_WIN', `🎯 Desafio "${challengeWin.name}" completo!`, {
-                        mode: challengeWin.id, emoji: challengeWin.emoji
-                    });
-                }
-            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'challenge non-critical'); }
-
-            // §12.4 #6: Scarcity telemetry — log transfer window pressure
-            try {
-                const seasonWeek = ((this.engine.currentWeek - 1) % 38) + 1;
-                const team = this.engine.getTeam(this.engine.manager?.teamId);
-                if (seasonWeek >= 18 && seasonWeek <= 22 && team) {
-                    this._logDecision('SCARCITY_WINDOW', {
-                        week: seasonWeek, balance: team.balance,
-                        windowClosing: seasonWeek >= 21
-                    }, 0);
-                }
-                // §12.4 #8: Loss avoidance dread telemetry
-                if (team) {
-                    const standings = this.engine.getStandings(team.zone, team.division);
-                    const pos = standings?.findIndex(s => s.teamId === team.id);
-                    const total = standings?.length || 20;
-                    if (pos !== undefined && pos >= total - 4) {
-                        this._logDecision('DREAD_RELEGATION', {
-                            position: pos + 1, total, boardConf: this.engine.board?.confidence
-                        }, 0);
-                    }
-                }
-            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'scarcity non-critical'); }
-
-            // §17: Track session metrics
-            this._sessionMetrics.recordAction();
-
-            // §17: Auto-answer press conferences (random option)
-            try {
-                if (typeof this.engine.checkPressConference === 'function') {
-                    const question = this.engine.checkPressConference();
-                    if (question && question.options?.length > 0) {
-                        const pick = question.options[Math.floor(systemRng() * question.options.length)];
-                        const result = this.engine.answerPress(pick.id);
-                        this._logDecision('PRESS_CONFERENCE', {
-                            context: question.context,
-                            answered: pick.id,
-                            moraleDelta: result?.moraleDelta || 0
-                        }, 0);
-                    }
-                }
-            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'press non-critical'); }
-
-            // §15.4: PWA notification trigger on milestones (non-blocking)
-            try {
-                if (this.stats.weeksPlayed % 38 === 0) {
-                    // Season end — trigger notification if PWAService available
-                    if (typeof window !== 'undefined' && window.__pwaService) {
-                        window.__pwaService.notifySeasonEnd?.(this.engine.seasonNumber);
-                    }
-                }
-            } catch (err) { EngineLogger.capture(err, 'AutoPlayService.js', 'PWA non-critical'); }
+            // RFCT-018 Phase 3: delegate non-blocking random tick events
+            AutoPlaySimulator.processTickEvents(this);
 
             // === HUMAN-PARITY INTERACTIONS (RFCT-018: delegated to AutoPlayPacing) ===
             AutoPlayPacing.runAll(this);

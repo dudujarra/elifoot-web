@@ -13,6 +13,8 @@ import { EngineLogger } from '../engine/EngineLogger.js';
 
 import { encodeState } from './learning/AdaptiveBrain.js';
 import { computeTransferReward } from './learning/SmartMarketEngine.js';
+import { checkChallengeWin } from '../engine/ChallengeModes.js';
+import { rng as systemRng } from '../engine/rng.js';
 
 export class AutoPlaySimulator {
 
@@ -156,6 +158,84 @@ export class AutoPlaySimulator {
                 }
             });
         }
+    }
+
+    /**
+     * Process non-blocking weekly events that happen post-tick:
+     * Trophies, challenges, scarcity telemetry, session metrics, press conf, PWA.
+     * @param {AutoPlayController} ctx
+     */
+    static processTickEvents(ctx) {
+        // §16.2: Auto-dismiss trophy ceremony (log it as success)
+        if (ctx.engine.trophyCeremony) {
+            ctx._logSuccess('TROPHY_CEREMONY', `🏆 Cerimônia: ${ctx.engine.trophyCeremony.trophy?.name || ctx.engine.trophyCeremony.trophy}`, {
+                trophy: ctx.engine.trophyCeremony.trophy,
+                season: ctx.engine.trophyCeremony.season
+            });
+            ctx.engine.trophyCeremony = null;
+        }
+
+        // §14.2: Check challenge mode win condition
+        try {
+            const challengeWin = checkChallengeWin(ctx.engine);
+            if (challengeWin) {
+                ctx._logSuccess('CHALLENGE_WIN', `🎯 Desafio "${challengeWin.name}" completo!`, {
+                    mode: challengeWin.id, emoji: challengeWin.emoji
+                });
+            }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlaySimulator.js', 'challenge non-critical'); }
+
+        // §12.4 #6: Scarcity telemetry — log transfer window pressure
+        try {
+            const seasonWeek = ((ctx.engine.currentWeek - 1) % 38) + 1;
+            const team = ctx.engine.getTeam(ctx.engine.manager?.teamId);
+            if (seasonWeek >= 18 && seasonWeek <= 22 && team) {
+                ctx._logDecision('SCARCITY_WINDOW', {
+                    week: seasonWeek, balance: team.balance,
+                    windowClosing: seasonWeek >= 21
+                }, 0);
+            }
+            // §12.4 #8: Loss avoidance dread telemetry
+            if (team) {
+                const standings = ctx.engine.getStandings(team.zone, team.division);
+                const pos = standings?.findIndex(s => s.teamId === team.id);
+                const total = standings?.length || 20;
+                if (pos !== undefined && pos >= total - 4) {
+                    ctx._logDecision('DREAD_RELEGATION', {
+                        position: pos + 1, total, boardConf: ctx.engine.board?.confidence
+                    }, 0);
+                }
+            }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlaySimulator.js', 'scarcity non-critical'); }
+
+        // §17: Track session metrics
+        ctx._sessionMetrics.recordAction();
+
+        // §17: Auto-answer press conferences (random option)
+        try {
+            if (typeof ctx.engine.checkPressConference === 'function') {
+                const question = ctx.engine.checkPressConference();
+                if (question && question.options?.length > 0) {
+                    const pick = question.options[Math.floor(systemRng() * question.options.length)];
+                    const result = ctx.engine.answerPress(pick.id);
+                    ctx._logDecision('PRESS_CONFERENCE', {
+                        context: question.context,
+                        answered: pick.id,
+                        moraleDelta: result?.moraleDelta || 0
+                    }, 0);
+                }
+            }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlaySimulator.js', 'press non-critical'); }
+
+        // §15.4: PWA notification trigger on milestones (non-blocking)
+        try {
+            if (ctx.stats.weeksPlayed % 38 === 0) {
+                // Season end — trigger notification if PWAService available
+                if (typeof window !== 'undefined' && window.__pwaService) {
+                    window.__pwaService.notifySeasonEnd?.(ctx.engine.seasonNumber);
+                }
+            }
+        } catch (err) { EngineLogger.capture(err, 'AutoPlaySimulator.js', 'PWA non-critical'); }
     }
 
     /**

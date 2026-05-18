@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useState, useEffect, useRef } from 'react';
 import { getPreset, FORMATION_KEYS } from '../engine/FormationLayout';
 import { EfTooltip, EfButton } from './ui';
@@ -118,7 +117,6 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                     </EfButton>
                 )}
             </div>
-
             <div
                 ref={fieldRef}
                 className={`ef-form__field${draggedSlot !== null ? ' ef-form__field--dragging' : ''}`}
@@ -158,26 +156,26 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                             <g
                                 key={slotIdx}
                                 transform={`translate(${cx}, ${cy})`}
-                                style={{ cursor: editable ? 'grab' : 'default', transition: isDragging ? 'none' : 'transform 0.2s ease-out' }}
+                                style={{ "--ef-dyn-cursor": editable ? 'grab' : 'default', "--ef-dyn-transition": isDragging ? 'none' : 'transform 0.2s ease-out' }}
                                 onPointerDown={(e) => handlePointerDown(e, Number(slotIdx))}
-                            >
+                                className="ef-dyn-cursor ef-dyn-transition">
                                 <circle r={JERSEY_R} fill="var(--ef-form-shadow-deep)" cy={isDragging ? 8 : 4} cx={isDragging ? 4 : 2} />
-
-                                <circle r={JERSEY_R} fill={fillColor} stroke="var(--text-main)" strokeWidth="2" opacity={isDragging ? 0.8 : 1}
-                                        style={{ filter: isDragging ? 'brightness(1.2)' : 'none' }} />
-
+                                <circle
+                                    r={JERSEY_R}
+                                    fill={fillColor}
+                                    stroke="var(--text-main)"
+                                    strokeWidth="2"
+                                    opacity={isDragging ? 0.8 : 1}
+                                    style={{ "--ef-dyn-filter": isDragging ? 'brightness(1.2)' : 'none' }}
+                                    className="ef-dyn-filter" />
                                 <text y="4" textAnchor="middle" fill="var(--text-main)" fontSize="14" fontWeight="bold" fontFamily="var(--font-mono)">
                                     {player?.ovr || '?'}
                                 </text>
-
                                 <rect x="-30" y="24" width="60" height="14" rx="4" fill="var(--ef-form-field-lines)" />
-
                                 <text y="34" textAnchor="middle" fill="var(--text-main)" fontSize="9" fontWeight="600" fontFamily="var(--font-sans)">
                                     {player?.name?.split(' ')[0]?.slice(0, 8) || 'VAZIO'}
                                 </text>
-
                                 <rect x="-16" y="40" width="32" height="12" rx="2" fill="var(--bg-panel)" stroke="var(--ef-form-soft-border)" strokeWidth="1" />
-
                                 <text y="49" textAnchor="middle" fill="var(--ef-form-info)" fontSize="8" fontWeight="bold" fontFamily="var(--font-mono)">
                                     {pos.role}
                                 </text>
@@ -186,7 +184,6 @@ export function FormationBoard({ team, onSave, onChange, editable = true }) {
                     })}
                 </svg>
             </div>
-
             <div className="ef-form__hint">
                 {editable ? 'ARRASTE OS JOGADORES PARA AJUSTAR O POSICIONAMENTO EM CAMPO' : 'VISUALIZACAO DA FORMACAO TATICA'}
             </div>

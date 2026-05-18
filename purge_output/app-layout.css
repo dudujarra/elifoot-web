@@ -1,0 +1,74 @@
+/* ─── App Layout ─────────────────────────────────────────── */
+/* Extracted from inline styles in App.jsx and AppHeader.jsx */
+
+.app-shell {
+    display: flex;
+    min-height: 100dvh;
+    background-color: #000;
+}
+
+.app-main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.app-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-loading-fallback {
+    padding: 24px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+/* ─── AppHeader ──────────────────────────────────────────── */
+
+.app-header__logo-img {
+    height: 24px;
+    image-rendering: pixelated;
+}
+
+.app-header__controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.app-header__btn {
+    padding: 0.25rem 0.55rem;
+}
+
+.app-header__btn--loading {
+    opacity: 0.6;
+}
+
+.app-header__btn--active {
+    color: var(--primary);
+}
+
+/* ─── Toast system ───────────────────────────────────────── */
+
+.app-toast {
+    position: fixed;
+    top: 4rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 1000;
+    animation: slideUp 0.3s;
+    border: 2px solid var(--border-strong);
+    font-family: var(--font-display);
+}
+
+.app-toast--success {
+    background: var(--primary);
+    color: var(--bg-base);
+}

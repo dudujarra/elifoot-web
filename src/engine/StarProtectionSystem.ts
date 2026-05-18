@@ -49,7 +49,7 @@ export function protect({ managerId, playerId, playerName = 'Jogador', _playerOv
     if (_protected.has(managerId)) throw new Error('AlreadyProtecting');
     if (injuryWeeksLeft > 8) throw new Error('PlayerUnavailableLongTerm');
 
-    const state = {
+    const state: ProtectionState = {
         protectedPlayerId: playerId,
         protectedPlayerName: playerName,
         active: true,

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * AutoPlayStats — Statistics & Insights panels extracted from AutoPlayView
  */
@@ -10,7 +9,7 @@ function Stat({ label, value, color }) {
     return (
         <div className="ef-arcade-stat">
             <div className="ef-arcade-stat__label">{label}</div>
-            <div className="ef-arcade-stat__value" style={color ? { color } : undefined}>{value}</div>
+            <div className={`ef-arcade-stat__value ${color ? 'ef-dyn-color' : ''}`} style={color ? { '--ef-dyn-color': color } : undefined}>{value}</div>
         </div>
     );
 }

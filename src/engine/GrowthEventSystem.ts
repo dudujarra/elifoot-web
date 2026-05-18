@@ -1,0 +1,185 @@
+import { rng as systemRng } from './rng.js';
+import { GROWTH, OVR, AGE } from './GameConstants.js';
+import { Player } from "./types.js";
+
+/**
+ * GrowthEventSystem — SPEC-134: Progression Growth Events
+ *
+ * Injeta eventos de crescimento orgânico que movem o OVR do squad.
+ * Resolve Progression score=30 (growthEventCount=0, slope=0.08 em 203 seasons).
+ *
+ * Stateless: recebe squad, retorna eventos + mutações a aplicar.
+ */
+
+const OVR_FLOOR = OVR.FLOOR;
+const OVR_CAP   = OVR.CAP;
+
+export interface EvaluateGrowthOptions {
+    teamId?: number;
+    week?: number;
+    season?: number;
+    players: any[];
+    teamRecentResults?: string[];
+}
+
+export interface GrowthEvent {
+    type: string;
+    playerId: number | string;
+    playerName: string;
+    ovrDelta: number;
+    permanent: boolean;
+    duration?: number;
+    narrativeTag: string;
+    apply?: () => void;
+}
+
+export interface EvaluateGrowthResult {
+    growthEvents: GrowthEvent[];
+    newSquadOvrAvg: number;
+}
+
+/**
+ * Avalia squad e retorna growth events da semana.
+ */
+export function evaluateGrowth({ teamId: _teamId, week: _week, season: _season, players, teamRecentResults = [] }: EvaluateGrowthOptions): EvaluateGrowthResult {
+    const events: GrowthEvent[] = [];
+    const seenPlayers = new Set<string>();
+
+    const hotStreak = countTrailingWins(teamRecentResults) >= GROWTH.WINNING_STREAK_THRESHOLD;
+    const primeGames = (p: Player) => (p.gamesThisSeason || 0) >= GROWTH.PRIME_GAMES_THRESHOLD;
+
+    for (const player of players) {
+        if (!player || player._retired || player.injury) continue;
+
+        const age = player.age || 25;
+        const ovr = player.ovr || 50;
+        const pid = player.id;
+
+        // Youth Breakthrough — sub-21, chance semanal
+        if (age < AGE.YOUTH_MAX && !seenPlayers.has(`${pid}-youth`) && systemRng() < GROWTH.YOUTH_BREAKTHROUGH_CHANCE) {
+            const delta = 2 + Math.floor(systemRng() * 4); // +2 a +5
+            const finalOvr = clamp(ovr + delta);
+            events.push({
+                type: 'youth_breakthrough',
+                playerId: pid,
+                playerName: player.name,
+                ovrDelta: finalOvr - ovr,
+                permanent: true,
+                narrativeTag: 'CRAQUE_EMERGED',
+                apply: () => { player.ovr = finalOvr; applyAttrsBoost(player, delta); },
+            });
+            seenPlayers.add(`${pid}-youth`);
+        }
+
+        // Hot Streak — forma excelente temporal
+        if (hotStreak && !seenPlayers.has(`${pid}-hot`) && systemRng() < GROWTH.HOT_STREAK_CHANCE) {
+            events.push({
+                type: 'hot_streak',
+                playerId: pid,
+                playerName: player.name,
+                ovrDelta: 3,
+                permanent: false,
+                duration: 4,
+                narrativeTag: 'FORM_HOT_STREAK',
+                apply: () => { player._hotStreakBonus = 3; player._hotStreakWeeks = GROWTH.HOT_STREAK_DURATION; },
+            });
+            seenPlayers.add(`${pid}-hot`);
+        }
+
+        // Peak Season — prime years, bom volume de jogos
+        if (age >= AGE.PRIME_START && age <= AGE.PRIME_END && primeGames(player) && !seenPlayers.has(`${pid}-peak`) && systemRng() < GROWTH.PEAK_SEASON_CHANCE) {
+            const finalOvr = clamp(ovr + 1);
+            events.push({
+                type: 'peak_season',
+                playerId: pid,
+                playerName: player.name,
+                ovrDelta: finalOvr - ovr,
+                permanent: true,
+                narrativeTag: 'PEAK_SEASON',
+                apply: () => { player.ovr = finalOvr; },
+            });
+            seenPlayers.add(`${pid}-peak`);
+        }
+
+        // Decline — veteranos
+        if (age >= AGE.VETERAN_START && !seenPlayers.has(`${pid}-decline`) && systemRng() < (age - 30) * 0.03) {
+            const finalOvr = Math.max(OVR_FLOOR, ovr - 1);
+            events.push({
+                type: 'decline',
+                playerId: pid,
+                playerName: player.name,
+                ovrDelta: finalOvr - ovr,
+                permanent: true,
+                narrativeTag: 'AGING_SIGNAL',
+                apply: () => { player.ovr = finalOvr; },
+            });
+            seenPlayers.add(`${pid}-decline`);
+        }
+
+        // Training Breakthrough — jogadores com muitos treinos
+        const trainCount = player._recentTrainCount || 0;
+        if (trainCount >= 4 && !seenPlayers.has(`${pid}-train`) && systemRng() < GROWTH.TRAINING_BREAKTHROUGH_CHANCE) {
+            const finalOvr = clamp(ovr + 2);
+            events.push({
+                type: 'training_breakthrough',
+                playerId: pid,
+                playerName: player.name,
+                ovrDelta: finalOvr - ovr,
+                permanent: true,
+                narrativeTag: 'TRAINING_PEAK',
+                apply: () => { player.ovr = finalOvr; player._recentTrainCount = 0; },
+            });
+            seenPlayers.add(`${pid}-train`);
+        }
+    }
+
+    // Apply all events
+    events.forEach((e: GrowthEvent) => { if (e.apply) e.apply(); });
+
+    const activeOvrs = players.filter((p: Player) => !p._retired && !p.injury).map((p: Player) => p.ovr || 50);
+    const newSquadOvrAvg = activeOvrs.length > 0
+        ? Math.round(activeOvrs.reduce((s: number, v: number) => s + v, 0) / activeOvrs.length)
+        : 0;
+
+    // Clean apply refs from output
+    return {
+        growthEvents: events.map(({ apply: _apply, ...rest }: GrowthEvent) => rest),
+        newSquadOvrAvg,
+    };
+}
+
+// ─── helpers ────────────────────────────────────────────────
+
+function clamp(v: number): number {
+    return Math.max(OVR_FLOOR, Math.min(OVR_CAP, v));
+}
+
+function countTrailingWins(results: string[]): number {
+    let count = 0;
+    for (const r of results) {
+        if (r === 'W') count++;
+        else break;
+    }
+    return count;
+}
+
+function applyAttrsBoost(player: Player, amount: number): void {
+    if (player.attributes && player.attributes.technical) {
+        // Boost new schema (1-20 scale)
+        const scaleAmount = Math.max(1, Math.round(amount / 5));
+        const cats = ['technical', 'mental', 'physical'];
+        const cat = cats[Math.floor(systemRng() * cats.length)];
+        const keys = Object.keys(player.attributes[cat]);
+        const picks = keys.sort(() => systemRng() - 0.5).slice(0, 2);
+        picks.forEach((attr: string) => {
+            player.attributes[cat][attr] = Math.min(20, (player.attributes[cat][attr] || 10) + scaleAmount);
+        });
+    } else {
+        // Legacy 1-100 scale
+        const statKeys = ['attacking', 'technical', 'tactical', 'defending', 'creativity'];
+        const picks = statKeys.sort(() => systemRng() - 0.5).slice(0, 2);
+        picks.forEach((attr: string) => {
+            player[attr] = Math.min(99, ((player[attr] as number) || 50) + amount);
+        });
+    }
+}

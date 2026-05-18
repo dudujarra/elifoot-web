@@ -100,7 +100,7 @@ export function evaluate({
         proposalId: `prop-${managerId}-${week}-${season}`,
         fromClubId: fromClub.id,
         fromClubName: fromClub.name,
-        fromClubTier: fromClub.tier || targetTier,
+        fromClubTier: (fromClub.tier as ClubTier) || targetTier,
         contractObjective: targetTier === 'big' ? 'title' : targetTier === 'mid' ? 'top_4' : 'avoid_relegation',
         reputationBoost,
         exitFee,

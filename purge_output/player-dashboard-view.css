@@ -1,0 +1,780 @@
+/* PlayerDashboardView — comprehensive semantic CSS
+ * Stitch v1.1 alignment (AKITA-398): match docs/stitch-designs/v1.1-all/74-painel-do-jogador-ol-fut-dashboard.html
+ * Tokens-only (zero raw hex). Outfit + Inter + JetBrains Mono via tokens.
+ */
+
+/* ============================================================ */
+/* === STITCH HERO HEADER (Player Profile Card) === */
+/* ============================================================ */
+
+.ef-player-dashboard__hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 32px;
+  margin-bottom: 24px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-tertiary);
+  overflow: hidden;
+}
+
+.ef-player-dashboard__hero-watermark {
+  position: absolute;
+  top: -16px;
+  right: 16px;
+  font-family: var(--font-display);
+  font-size: 7rem;
+  line-height: 1;
+  color: var(--color-primary);
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+.ef-player-dashboard__portrait {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  background: var(--color-bg);
+  border: 1px solid var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.ef-player-dashboard__hero-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ef-player-dashboard__profile-tag {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 8px;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  
+}
+
+.ef-player-dashboard__player-name {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.ef-player-dashboard__player-stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.ef-player-dashboard__info-cells {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.ef-player-dashboard__info-cell {
+  border-left: 2px solid var(--color-primary);
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ef-player-dashboard__info-cell--trophy {
+  border-left-color: var(--accent);
+}
+
+.ef-player-dashboard__info-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  
+}
+
+.ef-player-dashboard__info-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+}
+
+.ef-player-dashboard__info-value--trophy {
+  color: var(--accent);
+}
+
+.ef-player-dashboard__hero-meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 200px;
+}
+
+/* === Legacy header (kept for backward compat — not used in Stitch hero) === */
+
+.ef-player-dashboard__player-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.ef-player-dashboard__money {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  font-family: var(--font-mono);
+}
+
+.ef-player-dashboard__action-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 200px;
+}
+
+.ef-player-dashboard__action-slots-label {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  justify-content: space-between;
+}
+
+.ef-player-dashboard__action-slots-bar {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+/* === ALERTS SECTION === */
+
+.ef-player-dashboard__alerts {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ef-player-dashboard__alert-panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-danger);
+  padding: 12px;
+}
+
+.ef-player-dashboard__alert-text {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--color-danger);
+}
+
+/* === LAYOUT GRID === */
+
+.ef-player-dashboard__container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.ef-player-dashboard__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ef-player-dashboard__nav-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ef-player-dashboard__advance-button {
+  margin-top: auto;
+}
+
+.ef-player-dashboard__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* === STATUS BAR === */
+
+.ef-player-dashboard__status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg-secondary);
+}
+
+.ef-player-dashboard__status-cells {
+  display: flex;
+  gap: 32px;
+}
+
+.ef-player-dashboard__overview-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ef-player-dashboard__cell-value {
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ef-player-dashboard__cell-value--critical {
+  color: var(--color-danger);
+}
+
+.ef-player-dashboard__cell-value--healthy {
+  color: var(--color-primary);
+}
+
+.ef-player-dashboard__cell-label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.ef-player-dashboard__status-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* === TAB CONTENT: OVERVIEW === */
+
+.ef-player-dashboard__overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.ef-player-dashboard__panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  color: var(--color-text-secondary);
+}
+
+.ef-player-dashboard__rel-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.ef-player-dashboard__rel-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.ef-player-dashboard__rel-value {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+}
+
+.ef-player-dashboard__bar {
+  height: 8px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.ef-player-dashboard__bar-fill {
+  height: 100%;
+  background: currentColor;
+}
+
+.ef-player-dashboard__bar-fill--danger {
+  background: var(--color-danger);
+}
+
+.ef-player-dashboard__bar-fill--accent {
+  background: var(--color-secondary);
+}
+
+.ef-player-dashboard__bar-fill--info {
+  background: #40BAF7;
+}
+
+/* === ATTRIBUTES SECTION === */
+
+/* === OFF-PITCH EVENT PANEL === */
+
+/* === TAB CONTENT: SKILLS === */
+
+.ef-player-dashboard__training-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* === TAB CONTENT: STORE === */
+
+.ef-player-dashboard__shop-card--disabled {
+  opacity: 0.5;
+}
+
+/* === TAB CONTENT: LIFESTYLE === */
+
+/* === BOTTOM NAVIGATION === */
+
+/* === MODALS & TOASTS === */
+
+/* === ERROR STATE === */
+
+.ef-player-dashboard__error {
+  padding: 24px;
+  color: var(--color-text-primary);
+}
+
+/* SPEC-184 — static patterns extracted from inline style */
+
+.ef-player-dashboard__rel-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ef-player-dashboard__nav-btn {
+  width: 100%;
+  justify-content: flex-start;
+  font-weight: 600;
+}
+
+.ef-player-dashboard__advance-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 1rem;
+  padding: 24px;
+  font-weight: bold;
+  gap: 8px;
+}
+
+.ef-player-dashboard__panel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.ef-player-dashboard__col-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ef-player-dashboard__skill-row-mb {
+  margin-bottom: 12px;
+}
+
+.ef-player-dashboard__skill-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.ef-player-dashboard__skill-xp {
+  font-size: 0.75rem;
+}
+
+.ef-player-dashboard__event-panel-inline {
+  border-color: var(--accent);
+  background: var(--color-yellow-warn-bg);
+}
+
+.ef-player-dashboard__event-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.ef-player-dashboard__event-body-text {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.ef-player-dashboard__training-btn {
+  flex-direction: column;
+  padding: 16px;
+  gap: 8px;
+}
+
+.ef-player-dashboard__subattr-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ef-player-dashboard__subattr-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.ef-player-dashboard__subattrs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.ef-player-dashboard__subattr-cat {
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 12px;
+}
+
+.ef-player-dashboard__subattr-cat-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  
+}
+
+.ef-player-dashboard__subattr-item-mb {
+  margin-bottom: 12px;
+}
+
+.ef-player-dashboard__subattr-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  margin-bottom: 6px;
+}
+
+.ef-player-dashboard__subattr-train-btn {
+  padding: 4px 8px;
+  font-size: 0.65rem;
+}
+
+.ef-player-dashboard__store-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.ef-player-dashboard__store-card-title {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ef-player-dashboard__store-card-desc {
+  font-size: 0.75rem;
+  margin-bottom: 16px;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.ef-player-dashboard__store-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+}
+
+.ef-player-dashboard__store-card-req {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ef-player-dashboard__store-card-btn {
+  width: 100%;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.ef-player-dashboard__lifestyle-status-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  font-size: 0.85rem;
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(12px);
+  padding: 12px;
+}
+
+.ef-player-dashboard__lifestyle-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ef-player-dashboard__lifestyle-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.ef-player-dashboard__lifestyle-card-title {
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ef-player-dashboard__lifestyle-cost {
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.ef-player-dashboard__bottom-nav-row {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.ef-player-dashboard__bottom-nav-btn {
+  justify-content: center;
+  padding: 24px;
+  font-weight: bold;
+  font-size: 1rem;
+  gap: 8px;
+}
+
+.ef-player-dashboard__modal-body {
+  margin-bottom: 24px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.ef-player-dashboard__modal-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ef-player-dashboard__modal-option-btn {
+  justify-content: flex-start;
+  padding: 16px;
+}
+
+.ef-player-dashboard__break-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.ef-player-dashboard__break-desc {
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.ef-player-dashboard__break-option {
+  justify-content: flex-start;
+}
+
+/* ============================================================ */
+/* === STITCH v1.1 (AKITA-398) — radar, career, retro bars === */
+/* ============================================================ */
+
+/* Overview grid swaps to two-col + full-width skill row */
+.ef-player-dashboard__overview-grid {
+  grid-template-columns: minmax(280px, 0.9fr) 1.1fr;
+}
+
+.ef-player-dashboard__skillxp-panel {
+  grid-column: 1 / -1;
+}
+
+.ef-player-dashboard__skillxp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 24px;
+}
+
+/* === Hexagon radar chart === */
+.ef-player-dashboard__radar-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.ef-player-dashboard__radar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-tertiary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.ef-player-dashboard__radar {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  margin: 24px auto 16px auto;
+}
+
+.ef-player-dashboard__radar-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.ef-player-dashboard__radar-ring {
+  fill: none;
+  stroke: var(--color-tertiary);
+  stroke-width: 0.4;
+  opacity: 0.45;
+}
+
+.ef-player-dashboard__radar-axis {
+  stroke: var(--color-tertiary);
+  stroke-width: 0.35;
+  opacity: 0.35;
+}
+
+.ef-player-dashboard__radar-data {
+  fill: var(--color-primary);
+  fill-opacity: 0.22;
+  stroke: var(--color-primary);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+.ef-player-dashboard__radar-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ef-player-dashboard__radar-label {
+  position: absolute;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+/* Six axes (clockwise from top): ATK / TEC / CRI / TAC / DEF / OVR */
+
+/* === Career performance table === */
+.ef-player-dashboard__career-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--color-tertiary);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.ef-player-dashboard__career-tablewrap {
+  overflow-x: auto;
+}
+
+.ef-player-dashboard__career-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ef-player-dashboard__career-table th,
+.ef-player-dashboard__career-table td {
+  padding: 10px 12px;
+  border: 1px solid var(--color-tertiary);
+  text-align: left;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.ef-player-dashboard__career-table th {
+  background: var(--color-bg);
+  font-weight: 700;
+  font-size: 0.7rem;
+  
+}
+
+.ef-player-dashboard__career-table tbody tr:hover td {
+  background: var(--color-bg);
+}
+
+/* === Retro loading-block relationship bar (Stitch effect) === */
+.ef-player-dashboard__bar--retro {
+  height: 18px;
+  padding: 2px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-text-secondary);
+  position: relative;
+}
+
+.ef-player-dashboard__bar--retro .ef-player-dashboard__bar-fill {
+  height: 100%;
+  position: relative;
+  display: flex;
+}
+
+.ef-player-dashboard__bar-blocks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 0;
+  opacity: 0.35;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 14px,
+    var(--color-bg) 14px,
+    var(--color-bg) 16px
+  );
+  pointer-events: none;
+}
+

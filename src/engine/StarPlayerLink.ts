@@ -26,7 +26,7 @@ export function electStarPlayer(engine: any, playerId: number | null | undefined
         return { success: false, msg: 'Time não encontrado' };
     }
 
-    const player = team.squad.find(p => p.id === playerId);
+    const player = team.squad.find((p: any) => p.id === playerId);
     if (!player) {
         return { success: false, msg: 'Jogador não está no seu plantel' };
     }
@@ -41,7 +41,7 @@ export function getStarPlayer(engine: any): any | null {
     }
     const team = engine.getTeam?.(engine.manager?.teamId);
     if (!team || !Array.isArray(team.squad)) return null;
-    return team.squad.find(p => p.id === engine.starPlayerId) || null;
+    return team.squad.find((p: any) => p.id === engine.starPlayerId) || null;
 }
 
 export interface StarPlayerStats {
@@ -90,7 +90,7 @@ export function applyToStarPlayer(engine: any, effect: StarPlayerEffect): StarPl
     if (!p || !effect || typeof effect !== 'object') {
         return { applied: false, changes: {} };
     }
-    const changes = {};
+    const changes: Record<string, { before: number; after: number }> = {};
     if (typeof effect.moralDelta === 'number') {
         const before = typeof p.moral === 'number' ? p.moral : 50;
         const after = Math.max(0, Math.min(100, before + effect.moralDelta));

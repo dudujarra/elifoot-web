@@ -7,7 +7,7 @@
  * effect aplicado em team, flag limpa.
  */
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useGame } from '../context/GameContext';
 import { CalendarBlank, X } from '@phosphor-icons/react';

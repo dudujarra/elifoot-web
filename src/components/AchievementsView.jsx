@@ -177,7 +177,6 @@ export function AchievementsView() {
                                         )}
                                     </div>
                                 </div>
-
                                 <div className="ef-ach__card-body">
                                     <h3 className={`ef-ach__card-name ef-ach__card-name--${rarity.key}`}>
                                         {ach.name}
@@ -186,7 +185,6 @@ export function AchievementsView() {
                                         {ach.desc}
                                     </p>
                                 </div>
-
                                 <div className="ef-ach__card-footer">
                                     <div className="ef-mono ef-ach__reward-row">
                                         <span className="ef-ach__reward-label">REWARD</span>
@@ -209,10 +207,7 @@ export function AchievementsView() {
                                             </div>
                                             <div className="ef-ach__progress-bar">
                                                 <div
-                                                    className={`ef-ach__progress-fill ef-ach__progress-fill--${rarity.key}`}
-                                                    /* eslint-disable-next-line no-restricted-syntax -- dynamic per-instance progress width */
-                                                    style={{ width: `${ach.progress}%` }}
-                                                />
+                                                    className={`ef-ach__progress-fill ef-ach__progress-fill--${rarity.key} w-${Math.round(ach.progress)}`} />
                                             </div>
                                         </div>
                                     )}

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- --chronicle-color CSS var set dynamically */
 /* eslint-disable react-refresh/only-export-components */
 /**
  * ChronicleSeasonEndModal — SPEC-B3
@@ -7,7 +6,7 @@
  * Render quando engine.pendingChronicleSeason e truthy.
  */
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useGame } from '../context/GameContext';
 import { Scroll, Download, Image as ImageIcon, X, Trophy, CloudRain } from '@phosphor-icons/react';

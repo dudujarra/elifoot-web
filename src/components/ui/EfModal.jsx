@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- maxWidth requires dynamic runtime style */
 /**
  * EfModal — Stitch component (AKITA-428: A11y upgrade)
  *
@@ -62,8 +61,8 @@ export function EfModal({
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="ef-modal-content"
-                style={{ maxWidth: SIZE_MAP[size] || SIZE_MAP.md }}
+                className="ef-modal-content ef-dyn-maxWidth"
+                style={{ "--ef-dyn-maxWidth": SIZE_MAP[size] || SIZE_MAP.md }}
             >
                 {/* Header */}
                 {title && (

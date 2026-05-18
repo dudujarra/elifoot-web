@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { CheckCircle, ChartBar, SoccerBall, Cardholder, FirstAid, MicrophoneStage, Shield } from '@phosphor-icons/react';
 import { EfClubBadge, EfBanner } from '../ui';
 import { TACTICS } from '../../engine/ManagerSystems';
@@ -113,12 +112,12 @@ export function MatchPostGame({
                                     <Shield aria-hidden="true" size={24} className="text-parchment" />
                                     <h3 className="font-label-caps text-parchment">STATUS DA DIRETORIA</h3>
                                 </div>
-                                <div className="p-3 border-2 pixel-bevel-inset flex justify-between items-center bg-abyss" style={{ borderColor: engine.board.getStatus().color }}>
+                                <div className="p-3 border-2 pixel-bevel-inset flex justify-between items-center bg-abyss ef-dyn-borderColor" style={{ "--ef-dyn-borderColor": engine.board.getStatus().color }}>
                                     <div className="flex flex-col">
                                         <span className="font-label-caps text-xs text-smoke">CONFIANÇA</span>
-                                        <span className="font-headline-sm" style={{ color: engine.board.getStatus().color }}>{engine.board.getStatus().label}</span>
+                                        <span className="font-headline-sm ef-dyn-color" style={{ "--ef-dyn-color": engine.board.getStatus().color }}>{engine.board.getStatus().label}</span>
                                     </div>
-                                    <div className="font-display-md" style={{ color: engine.board.getStatus().color }}>
+                                    <div className="font-display-md ef-dyn-color" style={{ "--ef-dyn-color": engine.board.getStatus().color }}>
                                         {engine.board.confidence}%
                                     </div>
                                 </div>
@@ -136,7 +135,6 @@ export function MatchPostGame({
                     </button>
                 </div>
             </div>
-
             {/* Decorative CRT Overlay */}
             <div className="fixed inset-0 pointer-events-none z-[100] scanline opacity-10"></div>
             <div className="fixed inset-0 pointer-events-none z-[101] shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]"></div>

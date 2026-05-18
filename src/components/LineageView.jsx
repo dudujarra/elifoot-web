@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles require inline style={{ }} */
 /* eslint-disable react-refresh/only-export-components */
 /**
  * LineageView — SPEC-166: Painel Linhagem & Legado
@@ -267,8 +266,10 @@ function HeritageTab({ players, hasHall }) {
                                         </div>
                                         <div className="ef-heritage-bar">
                                             <div
-                                                className="ef-heritage-bar__fill"
-                                                style={{ width: `${pct}%`, '--trait-color': traitMeta.color }}
+                                                className={`ef-heritage-bar__fill w-${Math.round(pct)}`}
+                                                style={{
+                                                    '--trait-color': traitMeta.color
+                                                }}
                                             />
                                         </div>
                                     </div>

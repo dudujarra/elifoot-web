@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * HexagonChart — SPEC-080
  *
@@ -63,7 +62,6 @@ export function HexagonChart({ player, size = 200, showLabels = true }) {
                     className="ef-hex__ring"
                 />
             ))}
-
             {chartAttrs.map((_, i) => {
                 const a = angle(i);
                 return (
@@ -77,22 +75,17 @@ export function HexagonChart({ player, size = 200, showLabels = true }) {
                     />
                 );
             })}
-
             <polygon
                 points={playerPoints}
                 className="ef-hex__player-polygon"
             />
-
             {chartAttrs.map((attr, i) => {
                 const value = Math.max(1, Math.min(100, attr.value)) / 100;
                 const a = angle(i);
                 const x = cx + radius * value * Math.cos(a);
                 const y = cy + radius * value * Math.sin(a);
-                return (
-                    <circle key={attr.key} cx={x} cy={y} r="4" className="ef-hex__vertex-dot" style={{ fill: attr.color }} />
-                );
+                return (<circle key={attr.key} cx={x} cy={y} r="4" className="ef-hex__vertex-dot ef-dyn-fill" style={{ "--ef-dyn-fill": attr.color }} />);
             })}
-
             {showLabels && chartAttrs.map((attr, i) => {
                 const a = angle(i);
                 const labelRadius = radius * 1.18;
@@ -107,8 +100,8 @@ export function HexagonChart({ player, size = 200, showLabels = true }) {
                             dominantBaseline="central"
                             fontSize="10"
                             fontWeight="700"
-                            style={{ fill: attr.color }}
-                        >
+                            style={{ "--ef-dyn-fill": attr.color }}
+                            className="ef-dyn-fill">
                             {attr.label}
                         </text>
                         <text

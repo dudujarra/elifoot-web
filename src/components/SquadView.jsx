@@ -1,19 +1,17 @@
-/* eslint-disable no-restricted-syntax -- remaining dynamic runtime styles (widths, conditional colors) */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '../styles/squad-view.css';
 import { useGame } from '../context/GameContext';
 import { ViewOnboarding } from './ViewOnboarding';
-import { electStarPlayer } from '../engine/StarPlayerLink';
-import { EfClubBadge } from './ui/EfClubBadge';
-import { EfPanel } from './ui/EfPanel';
-import { EfButton } from './ui/EfButton';
-import { HexagonChart } from './HexagonChart';
-import { PlayerAttributesGrid } from './ui/PlayerAttributesGrid';
-import { calculateRatingForPosition } from '../engine/Positions';
 import { injectSquadIntoTeam } from '../services/SquadDataService';
 import { getClubColors } from '../data/clubColors';
 
-import { Users, User, ChartBar, Star, Sparkle, MagnifyingGlass, CheckCircle, PaperPlaneRight, UserMinus, Heartbeat, ArrowCircleUp, ArrowCircleDown, MinusCircle, IdentificationCard, FirstAid } from '@phosphor-icons/react';
+import { SquadHeader } from './squad/SquadHeader';
+import { SquadToolbar } from './squad/SquadToolbar';
+import { SquadPlantel } from './squad/SquadPlantel';
+import { SquadSummary } from './squad/SquadSummary';
+import { SquadAnalysis } from './squad/SquadAnalysis';
+import { SquadContracts } from './squad/SquadContracts';
+import { SquadLoans } from './squad/SquadLoans';
 
 export function SquadView() {
     const { gameState, changeView, getEngine, forceUpdate } = useGame();
@@ -27,19 +25,15 @@ export function SquadView() {
     const [loadingReal, setLoadingReal] = useState(false);
     const [tab, setTab] = useState('plantel');
 
+    if (!team) return null;
+
     const handleLoadRealSquad = async () => {
-        if (!team) return;
         setLoadingReal(true);
         const result = await injectSquadIntoTeam(engine, team.id, team.name);
         setLoadingReal(false);
-        if (result.success) {
-            forceUpdate();
-        } else {
-            alert(`Squad real não disponível: ${result.msg || 'pre-bake pendente'}`);
-        }
+        if (result.success) forceUpdate();
+        else alert(`Squad real não disponível: ${result.msg || 'pre-bake pendente'}`);
     };
-
-    if (!team) return null;
 
     const posOrder = { GOL: 0, DEF: 1, MEI: 2, ATA: 3 };
     let filtered = [...team.squad];
@@ -58,428 +52,44 @@ export function SquadView() {
     };
     const sorted = filtered.sort(sorters[sortBy] || sorters.position);
 
-    const handleSort = (key) => setSortBy(key);
-
     const toggleTitular = (playerId) => {
         const p = team.squad.find(x => x.id === playerId);
         if (p) { p.isTitular = !p.isTitular; forceUpdate(); }
     };
 
     const handleLoan = (playerId) => {
-        const result = engine.loanPlayer(playerId);
-        if (result.success) forceUpdate();
+        if (engine.loanPlayer(playerId).success) forceUpdate();
     };
 
     const handleSell = (player) => {
-        const price = player.value || (player.ovr * 100000);
-        engine.sellPlayer(player.id, price);
+        engine.sellPlayer(player.id, player.value || (player.ovr * 100000));
         forceUpdate();
     };
 
     const back = gameState.mode === 'player' ? 'player_dashboard' : 'dashboard';
     const loanedOut = engine.loanedOut || [];
-
-    // SPEC-176/183: Stitch v1.1 condition bar (% + horizontal fill)
-    const renderConditionBar = (energy) => {
-        const pct = Math.max(0, Math.min(100, Math.round(energy)));
-        const tone = pct > 60 ? 'ok' : pct > 30 ? 'warn' : 'danger';
-        return (
-            <div className="ef-squad__cond">
-                <span className={`ef-squad__cond-pct ef-squad__cond-pct--${tone}`}>{pct}%</span>
-                <div className="ef-squad__cond-track">
-                    <div className={`ef-squad__cond-fill ef-squad__cond-fill--${tone}`} style={{ width: `${pct}%` }} />
-                </div>
-            </div>
-        );
-    };
-
-    const getMoralIcon = (m) => {
-        if (m > 70) return <ArrowCircleUp weight="fill" color="var(--primary)" />;
-        if (m > 40) return <MinusCircle weight="fill" color="var(--text-muted)" />;
-        return <ArrowCircleDown weight="fill" color="var(--danger)" />;
-    };
-
-    const getFormTrendIcon = (trend) => {
-        if (trend === 'up') return <ArrowCircleUp size={14} weight="fill" color="var(--primary)" />;
-        if (trend === 'down') return <ArrowCircleDown size={14} weight="fill" color="var(--danger)" />;
-        return null;
-    };
-
-    const getPosColor = (pos) => {
-        if (pos === 'GOL') return 'var(--accent)';
-        if (pos === 'DEF') return 'var(--info)';
-        if (pos === 'MEI') return 'var(--primary)';
-        if (pos === 'ATA') return 'var(--danger)';
-        return 'var(--text-muted)';
-    };
-
     const teamColors = getClubColors(team.name);
 
     return (
-        <div className="ef-view-shell ef-view-shell--fixed" style={{
+                <div className="ef-view-shell ef-view-shell--fixed" style={{
             '--team-primary': teamColors.primary,
             '--team-secondary': teamColors.secondary,
             '--team-accent': teamColors.accent
         }}>
             <ViewOnboarding viewId="squad" />
             <div className="ef-view-container ef-view-container--wide">
-
-                {/* === HEADER — Stitch v1.1 plantel hero (badge + capacity bar) === */}
-                <EfPanel variant="hero" padding="lg" className="ef-squad__header">
-                    <div className="ef-squad__identity">
-                        <EfClubBadge name={team.name} size="lg" />
-                        <div className="ef-squad__identity-col">
-                            <h2 className="ef-heading-xl ef-squad__team-name">
-                                {team.name?.toUpperCase()}
-                            </h2>
-                            <div className="ef-squad__capacity">
-                                <div className="ef-squad__capacity-track">
-                                    <div
-                                        className="ef-squad__capacity-fill"
-                                        style={{ width: `${Math.min(100, (team.squad.length / 30) * 100)}%` }}
-                                    />
-                                </div>
-                                <span className="ef-squad__capacity-label">
-                                    <Users weight="fill" /> {team.squad.length}/30 JOGADORES NO PLANTEL
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="ef-squad__header-right">
-                        <div className="ef-squad__action-block">
-                            <EfButton variant="secondary" size="md" onClick={() => changeView(back)} className="ef-squad__btn-bold">VOLTAR</EfButton>
-                            <EfButton variant="primary" size="md" title="Carrega o plantel real do clube via dataset pre-bake (substitui jogadores gerados)" onClick={handleLoadRealSquad} disabled={loadingReal} className="ef-squad__btn-bold">
-                                {loadingReal ? 'CARREGANDO...' : 'PLANTEL REAL'}
-                            </EfButton>
-                        </div>
-                        {team.manager && team.manager.name && (
-                            <div className="ef-tag-mono ef-tag-mono--info">
-                                <User weight="fill" /> TREINADOR: {team.manager.name.toUpperCase()}
-                            </div>
-                        )}
-                        {team.manager?.stats && (
-                            <div className="ef-squad__manager-stats">
-                                {team.manager.stats.wins || 0}V <span>{team.manager.stats.draws || 0}E</span> <span className="ef-text-danger">{team.manager.stats.losses || 0}D</span>
-                            </div>
-                        )}
-                    </div>
-                </EfPanel>
-
-                {/* Tabs & Filters Bento */}
-                <EfPanel padding="md" className="ef-squad__tab-toolbar">
-                    <div className="ef-squad__flex-gap">
-                        {[
-                            { id: 'plantel', label: 'PLANTEL', icon: <Users size={16} /> },
-                            { id: 'stats', label: 'ANÁLISE TÁTICA', icon: <ChartBar size={16} /> },
-                            { id: 'contratos', label: 'FINANÇAS', icon: <IdentificationCard size={16} /> }
-                        ].map(t => (
-                            <EfButton key={t.id} onClick={() => setTab(t.id)} variant={tab === t.id ? 'primary' : 'secondary'} size="md" className="ef-squad__tab-btn">
-                                {t.icon} {t.label}
-                            </EfButton>
-                        ))}
-                    </div>
-
-                    <div className="ef-squad__flex-gap">
-                        <div className="ef-search-wrap">
-                            <MagnifyingGlass size={16} className="ef-search-wrap__icon" />
-                            <input type="text" placeholder="Buscar jogador..." value={search} onChange={(e) => setSearch(e.target.value)} className="ef-input ef-input--search" />
-                        </div>
-                        <select value={filterPos} onChange={(e) => setFilterPos(e.target.value)} className="ef-select">
-                            <option value="all">Todas as posições</option>
-                            <option value="GOL">GOL</option>
-                            <option value="DEF">DEF</option>
-                            <option value="MEI">MEI</option>
-                            <option value="ATA">ATA</option>
-                        </select>
-                        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="ef-select">
-                            <option value="position">Ordenação: POS</option>
-                            <option value="ovr">Ordenação: OVR ↓</option>
-                            <option value="age">Ordenação: IDADE</option>
-                            <option value="energy">Ordenação: COND ↓</option>
-                        </select>
-                    </div>
-                </EfPanel>
-
-                {/* Main Content Area */}
+                <SquadHeader team={team} loadingReal={loadingReal} handleLoadRealSquad={handleLoadRealSquad} back={back} changeView={changeView} />
+                <SquadToolbar tab={tab} setTab={setTab} search={search} setSearch={setSearch} filterPos={filterPos} setFilterPos={setFilterPos} sortBy={sortBy} setSortBy={setSortBy} />
+                
                 {tab === 'plantel' && (
-                    <EfPanel padding="none" className="ef-squad__panel-table">
-                        <table className="ef-squad__table">
-                            <thead className="ef-squad__thead">
-                                <tr>
-                                    <th className="ef-squad__th ef-squad__th--narrow">ST</th>
-                                    <th onClick={() => handleSort('position')} className={`${sortBy === 'position' ? 'ef-text-primary' : 'ef-text-muted'} ef-squad__th ef-squad__th--pos`}>POS</th>
-                                    <th onClick={() => handleSort('name')} className={`${sortBy === 'name' ? 'ef-text-primary' : 'ef-text-muted'} ef-squad__th ef-squad__th--name ef-squad__th--sortable`}>JOGADOR</th>
-                                    <th onClick={() => handleSort('ovr')} className={`${sortBy === 'ovr' ? 'ef-text-primary' : 'ef-text-muted'} ef-squad__th ef-squad__th--pos`}>OVR</th>
-                                    <th onClick={() => handleSort('energy')} className={`${sortBy === 'energy' ? 'ef-text-primary' : 'ef-text-muted'} ef-squad__th ef-squad__th--energy ef-squad__th--sortable`}>COND</th>
-                                    <th onClick={() => handleSort('moral')} className={`${sortBy === 'moral' ? 'ef-text-primary' : 'ef-text-muted'} ef-squad__th ef-squad__th--mor ef-squad__th--sortable`}>MOR</th>
-                                    <th className="ef-squad__th ef-squad__th--action">AÇÃO</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sorted.map((p) => {
-                                    const isSelected = p.isTitular;
-                                    const rowCls = [
-                                        'ef-squad__row',
-                                        isSelected ? 'ef-squad__row--selected' : '',
-                                        p.injury ? 'ef-squad__row--injured' : ''
-                                    ].filter(Boolean).join(' ');
-                                    return (
-                                        <React.Fragment key={p.id}>
-                                            <tr
-                                                className={rowCls}
-                                                onClick={() => setExpandedId(expandedId === p.id ? null : p.id)}
-                                            >
-                                                <td className="ef-squad__td">
-                                                    {p.injury ? (
-                                                        <FirstAid weight="fill" size={16} className="ef-squad__status-medical" />
-                                                    ) : p.suspension ? (
-                                                        <div className="ef-squad__status-susp">SUSP</div>
-                                                    ) : (
-                                                        <div
-                                                            onClick={(e) => { e.stopPropagation(); toggleTitular(p.id); }}
-                                                            className={`ef-st-toggle${isSelected ? ' ef-st-toggle--active' : ''}`}
-                                                            title={'Alternar Titular/Reserva (titular ganha XP em jogo; reserva acumula desmotivação se não for usado)'}
-                                                        >
-                                                            {isSelected
-                                                                ? <CheckCircle weight="bold" color="var(--primary)" size={16} />
-                                                                : <span className="ef-squad__status-dot" aria-hidden="true" />}
-                                                        </div>
-                                                    )}
-                                                </td>
-                                                <td className="ef-squad__td">
-                                                    <span className={`ef-squad__pos-badge ef-squad__pos-badge--${(p.position || '').toLowerCase()}`}>
-                                                        {p.naturalPosition || p.position}
-                                                    </span>
-                                                </td>
-                                                <td className="ef-squad__name-cell">
-                                                    <div className="ef-squad__name-col">
-                                                        <div className="ef-squad__name-row">
-                                                            {p.isSuper && <Star weight="fill" color="var(--accent)" size={14} />}
-                                                            {p.isWonderkid && <Sparkle weight="fill" color="var(--color-purple-wonder)" size={14} />}
-                                                            {p.nickname ? `"${p.nickname}" ${p.name.split(' ').pop()}` : p.name}
-                                                            {getFormTrendIcon(p.form?.trend)}
-                                                        </div>
-                                                        {p.injury ? (
-                                                            <div className="ef-squad__sub-label ef-squad__sub-label--danger">
-                                                                LESIONADO{p.injury?.weeksRemaining ? ` (${p.injury.weeksRemaining} SEM)` : ''}
-                                                            </div>
-                                                        ) : p.suspension ? (
-                                                            <div className="ef-squad__sub-label ef-squad__sub-label--danger">
-                                                                SUSPENSO ({p.suspension} JOG)
-                                                            </div>
-                                                        ) : (
-                                                            <div className="ef-squad__sub-label">
-                                                                {p.age} ANOS{p.specialty ? ` • ${p.specialty}` : ''}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="ef-squad__ovr-cell">
-                                                    {p.ovr}
-                                                </td>
-                                                <td className="ef-squad__td ef-squad__td--cond">
-                                                    {renderConditionBar(p.energy)}
-                                                </td>
-                                                <td className="ef-squad__td">
-                                                    <div className="ef-squad__mor">
-                                                        {getMoralIcon(p.moral || 50)}
-                                                        <span className="ef-mono ef-squad__mor-num">{p.moral || 50}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="ef-squad__td">
-                                                    <div className="ef-squad__flex-center-gap">
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); if (!p.injury && !p.suspension) toggleTitular(p.id); }}
-                                                            disabled={!!p.injury || !!p.suspension}
-                                                            title={p.injury ? 'Lesionado — fora da escalação até recuperar' : p.suspension ? 'Suspenso — fora da escalação' : (isSelected ? 'Mover para reservas' : 'Escalar como titular')}
-                                                            className={`ef-squad__action-pill${(p.injury || p.suspension) ? ' ef-squad__action-pill--blocked' : ''}${isSelected ? ' ef-squad__action-pill--active' : ''}`}
-                                                        >
-                                                            {(p.injury || p.suspension) ? 'BLOQ.' : (isSelected ? 'TIT.' : 'ESCALAR')}
-                                                        </button>
-                                                        {!p.isTitular && !p.injury && p.age <= 23 && (
-                                                            <button title="Emprestar (jovem ganha minutos em outro clube; volta com XP)" onClick={(e) => { e.stopPropagation(); handleLoan(p.id); }} className="ef-icon-btn ef-icon-btn--info">
-                                                                <PaperPlaneRight size={16} weight="bold" />
-                                                            </button>
-                                                        )}
-                                                        {!p.isTitular && (
-                                                            <button title="Vender jogador direto (sem negociação, valor de mercado fixo)" onClick={(e) => { e.stopPropagation(); handleSell(p); }} className="ef-icon-btn ef-icon-btn--danger">
-                                                                <UserMinus size={16} weight="bold" />
-                                                            </button>
-                                                        )}
-                                                        {/* SPEC-C2.2: eleger estrela */}
-                                                        <button
-                                                            title={engine.starPlayerId === p.id ? 'Estrela do clube' : 'Eleger como estrela'}
-                                                            onClick={(e) => { e.stopPropagation(); electStarPlayer(engine, engine.starPlayerId === p.id ? null : p.id); forceUpdate(); }}
-                                                            className={engine.starPlayerId === p.id ? 'ef-icon-btn ef-icon-btn--accent' : 'ef-icon-btn'}
-                                                        >
-                                                            <Star size={16} weight={engine.starPlayerId === p.id ? 'fill' : 'regular'} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            {expandedId === p.id && (
-                                                <tr key={`${p.id}-details`} className="ef-squad__details-row">
-                                                    <td colSpan="7" className="ef-squad__details-cell">
-                                                        <div className="ef-squad__details-flex">
-                                                            <div className="ef-squad__details-box">
-                                                                <HexagonChart player={p} size={180} />
-                                                            </div>
-                                                            <div className="ef-squad__details-col">
-                                                                <div className="ef-sans ef-text-main ef-squad__detail-name">
-                                                                    {p.name}
-                                                                </div>
-                                                                <div className="ef-mono ef-text-muted ef-squad__detail-meta">
-                                                                    {p.personality && (
-                                                                        <div>
-                                                                            <Heartbeat weight="fill" /> {p.personality} • {p.playstyle || 'Caneleiro'}
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                <div className="ef-mono ef-squad__detail-stats-row">
-                                                                    <div className="ef-squad__detail-stat ef-squad__detail-stat--primary">
-                                                                        <div className="ef-text-muted ef-squad__detail-stat-label">OVR / POT</div>
-                                                                        <div className="ef-text-main ef-squad__detail-stat-value">{p.ovr} <span className="ef-squad__detail-stat-sep">/</span> <span className={p.potential > p.ovr + 5 ? 'ef-text-primary' : 'ef-text-muted'}>{p.potential || p.ovr}</span></div>
-                                                                    </div>
-                                                                    <div className="ef-squad__detail-stat ef-squad__detail-stat--accent">
-                                                                        <div className="ef-text-muted ef-squad__detail-stat-label">VALOR DE MERCADO</div>
-                                                                        <div className="ef-text-accent ef-squad__detail-stat-value">R$ {((p.marketValue || p.value) / 1e6).toFixed(1)}M</div>
-                                                                    </div>
-                                                                    <div className="ef-squad__detail-stat ef-squad__detail-stat--info">
-                                                                        <div className="ef-text-muted ef-squad__detail-stat-label">RATING (POS)</div>
-                                                                        <div className="ef-text-info ef-squad__detail-stat-value">{(p.attributes || p.attacking) ? calculateRatingForPosition(p, p.naturalPosition || 'MEC') : p.ovr}</div>
-                                                                    </div>
-                                                                </div>
-                                                                {p.personality && (
-                                                                    <div className="ef-sans ef-squad__badge-wrap">
-                                                                        <Heartbeat weight="fill" /> PERFIL: {p.personality}
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        {/* NOVO: Componente com os 46 atributos táticos detalhados */}
-                                                        <PlayerAttributesGrid player={p} />
-                                                    </td>
-                                                </tr>
-                                            )}
-                                        </React.Fragment>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </EfPanel>
+                    <>
+                        <SquadPlantel sorted={sorted} sortBy={sortBy} handleSort={setSortBy} expandedId={expandedId} setExpandedId={setExpandedId} toggleTitular={toggleTitular} handleLoan={handleLoan} handleSell={handleSell} engine={engine} forceUpdate={forceUpdate} />
+                        <SquadSummary sorted={sorted} />
+                    </>
                 )}
-
-                {/* === FOOTER STATS — Stitch v1.1 plantel summary === */}
-                {tab === 'plantel' && (() => {
-                    const count = sorted.length || 1;
-                    const sumOvr = sorted.reduce((acc, p) => acc + (p.ovr || 0), 0);
-                    const sumEnergy = sorted.reduce((acc, p) => acc + (p.energy || 0), 0);
-                    const sumMoral = sorted.reduce((acc, p) => acc + (p.moral || 50), 0);
-                    const avgOvr = (sumOvr / count).toFixed(1);
-                    const avgEnergy = Math.round(sumEnergy / count);
-                    const avgMoral = Math.round(sumMoral / count);
-                    const moralLabel = avgMoral > 70 ? 'FORTE' : avgMoral > 40 ? 'NEUTRA' : 'FRACA';
-                    const MoralIcon = avgMoral > 70 ? ArrowCircleUp : avgMoral > 40 ? MinusCircle : ArrowCircleDown;
-                    const moralCls = avgMoral > 70 ? 'ef-text-primary' : avgMoral > 40 ? 'ef-text-muted' : 'ef-text-danger';
-                    return (
-                        <EfPanel padding="md" className="ef-squad__summary">
-                            <div className="ef-squad__summary-cell">
-                                <span className="ef-squad__summary-label">MÉDIA OVR</span>
-                                <span className="ef-squad__summary-value ef-text-accent">{avgOvr}</span>
-                            </div>
-                            <div className="ef-squad__summary-cell">
-                                <span className="ef-squad__summary-label">COND. MÉDIA</span>
-                                <div className="ef-squad__summary-cond">
-                                    <span className="ef-squad__summary-value ef-text-primary">{avgEnergy}%</span>
-                                    <div className="ef-squad__summary-bar">
-                                        <div className="ef-squad__summary-bar-fill" style={{ width: `${avgEnergy}%` }} />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="ef-squad__summary-cell">
-                                <span className="ef-squad__summary-label">MORAL EQUIPE</span>
-                                <div className={`ef-squad__summary-moral ${moralCls}`}>
-                                    <MoralIcon weight="fill" size={20} />
-                                    <span className="ef-squad__summary-value">{moralLabel}</span>
-                                </div>
-                            </div>
-                        </EfPanel>
-                    );
-                })()}
-
-                {tab === 'stats' && (
-                    <EfPanel padding="md">
-                        <div className="ef-squad__section-header-mb">
-                            <ChartBar size={24} color="var(--primary)" weight="fill" />
-                            <h3>ANÁLISE TITULARES (TOP 11)</h3>
-                        </div>
-                        <div className="ef-squad__grid-md">
-                            {sorted.filter(p => p.isTitular).slice(0, 11).map(p => (
-                                <div key={p.id} className="ef-squad__analysis-card">
-                                    <div className="ef-sans ef-text-main ef-squad__analysis-name">{p.name}</div>
-                                    <div className="ef-mono ef-squad__analysis-pos" style={{ color: getPosColor(p.position) }}>{p.naturalPosition || p.position}</div>
-                                    <HexagonChart player={p} size={160} />
-                                </div>
-                            ))}
-                        </div>
-                    </EfPanel>
-                )}
-
-                {tab === 'contratos' && (
-                    <EfPanel padding="none" className="ef-squad__panel-table">
-                        <div className="ef-section-header ef-squad__contract-header">
-                            <IdentificationCard size={24} color="var(--accent)" weight="fill" />
-                            <h3>GESTÃO DE CONTRATOS</h3>
-                        </div>
-                        <table className="ef-squad__table">
-                            <thead className="ef-squad__thead">
-                                <tr>
-                                    <th className="ef-text-muted ef-squad__contract-th">JOGADOR</th>
-                                    <th className="ef-text-muted ef-squad__contract-th ef-squad__contract-th--center">POS</th>
-                                    <th className="ef-text-muted ef-squad__contract-th ef-squad__contract-th--center">IDADE</th>
-                                    <th className="ef-squad__th ef-squad__th--wage-right">WAGE/SEM</th>
-                                    <th className="ef-squad__th ef-squad__th--wage-right">RESTANTE</th>
-                                    <th className="ef-squad__th ef-squad__th--wage-right">CLÁUSULA</th>
-                                    <th className="ef-squad__th ef-squad__th--wage-right">VALOR</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sorted.map((p, i) => (
-                                    <tr key={p.id} className="ef-squad__contract-row">
-                                        <td className="ef-text-main ef-squad__contract-td ef-squad__contract-td--name">{p.name}</td>
-                                        <td className="ef-mono ef-squad__contract-td ef-squad__contract-td--pos" style={{ color: getPosColor(p.position) }}>{p.naturalPosition || p.position}</td>
-                                        <td className="ef-mono ef-text-muted ef-squad__contract-td ef-squad__contract-td--center">{p.age}</td>
-                                        <td className="ef-mono ef-text-danger ef-squad__contract-td ef-squad__contract-td--right">R$ {(p.contract?.weeklyWage || 0).toLocaleString('pt-BR')}</td>
-                                        <td className="ef-mono ef-text-muted ef-squad__contract-td ef-squad__contract-td--right">{p.contract?.weeksRemaining || p.contract?.weeksLeft || '-'} sem</td>
-                                        <td className="ef-mono ef-text-info ef-squad__contract-td ef-squad__contract-td--right">{p.contract?.releaseClause ? `R$ ${(p.contract.releaseClause / 1e6).toFixed(1)}M` : '-'}</td>
-                                        <td className="ef-mono ef-text-accent ef-squad__contract-td ef-squad__contract-td--right">{p.marketValue ? `R$ ${(p.marketValue / 1e6).toFixed(1)}M` : '-'}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </EfPanel>
-                )}
-
-                {loanedOut.length > 0 && (
-                    <EfPanel padding="md" className="ef-squad__warning-panel">
-                        <div className="ef-squad__h3-accent">
-                            <PaperPlaneRight size={24} color="var(--accent)" weight="fill" />
-                            <h3 className="ef-squad__h3-accent">JOGADORES EMPRESTADOS ({loanedOut.length})</h3>
-                        </div>
-                        <div className="ef-squad__grid-lg">
-                            {loanedOut.map((l, i) => (
-                                <div key={i} className="ef-squad__loan-card">
-                                    <div className="ef-sans ef-text-main ef-squad__loan-name">
-                                        {l.playerName} <span className="ef-text-muted ef-squad__loan-dest">→ {l.destination}</span>
-                                    </div>
-                                    <div className="ef-mono ef-text-accent ef-squad__loan-timer">
-                                        {l.weeksLeft}/{l.totalWeeks} sem
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </EfPanel>
-                )}
+                {tab === 'stats' && <SquadAnalysis sorted={sorted} />}
+                {tab === 'contratos' && <SquadContracts sorted={sorted} />}
+                <SquadLoans loanedOut={loanedOut} />
             </div>
         </div>
     );

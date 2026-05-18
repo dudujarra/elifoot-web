@@ -10,13 +10,14 @@ import { generateDetailedAttributes } from './PlayerAttributes.js';
 //   - realPlayers_SAM.json (~144KB raw)
 //   - realPlayers_pool.json (~819KB raw, name pool + procedural fallback)
 // Parallel load via Promise.all keeps init time identical (HTTP/2 multiplexing).
-const [braMod, eurMod, samMod, poolMod] = await Promise.all([
+const [braMod, eurMod, samMod, pool1Mod, pool2Mod] = await Promise.all([
     import('../data/realPlayers_BRA.json'),
     import('../data/realPlayers_EUR.json'),
     import('../data/realPlayers_SAM.json'),
-    import('../data/realPlayers_pool.json'),
+    import('../data/realPlayers_pool_1.json'),
+    import('../data/realPlayers_pool_2.json'),
 ]);
-const realPlayers = [...braMod.default, ...eurMod.default, ...samMod.default, ...poolMod.default];
+const realPlayers = [...braMod.default, ...eurMod.default, ...samMod.default, ...pool1Mod.default, ...pool2Mod.default];
 
 // SPEC-169 (Bloco 3.3): índices construídos lazy.
 // Antes esses dois forEachs rodavam no module-eval (~11k iterações × 2),

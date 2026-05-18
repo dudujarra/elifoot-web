@@ -118,8 +118,7 @@ export function DashboardView() {
     const teamColors = getClubColors(team.name);
 
     return (
-        /* eslint-disable-next-line no-restricted-syntax -- dynamic team colors */
-        <div className="ef-dashboard-container" style={{
+                <div className="ef-dashboard-container" style={{
             '--team-primary': teamColors.primary,
             '--team-secondary': teamColors.secondary,
             '--team-accent': teamColors.accent

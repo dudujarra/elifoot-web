@@ -47,10 +47,6 @@ for (let i = 0; i < N; i++) {
             engine.doTraining('fitness');
             engine.advanceWeek();
             // Detectar resultado da semana via managerStats delta
-            const wins = engine.managerStats?.wins || 0;
-            const draws = engine.managerStats?.draws || 0;
-            const losses = engine.managerStats?.losses || 0;
-            const total = wins + draws + losses;
             // streak tracking via rollingForm length grows
             const form = engine.managerStats?.rollingForm || [];
             const last = form[form.length - 1];
@@ -59,7 +55,7 @@ for (let i = 0; i < N; i++) {
             else if (last === 'D') { currentWinStreak = 0; currentLossStreak = 0; }
             if (currentWinStreak > seasonWinStreakMax) seasonWinStreakMax = currentWinStreak;
             if (currentLossStreak > seasonLossStreakMax) seasonLossStreakMax = currentLossStreak;
-        } catch (e) {
+        } catch {
             // tournaments may not be initialized; skip
             break;
         }

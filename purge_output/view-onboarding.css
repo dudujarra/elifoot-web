@@ -1,0 +1,72 @@
+/* ViewOnboarding — tooltip overlay (AKITA-425) */
+
+.ef-onboarding {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 300px;
+  max-width: calc(100vw - 48px);
+  background-color: var(--color-bg-deep);
+  border: 2px solid var(--info);
+  padding: 14px;
+  z-index: 200;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+
+.ef-onboarding__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ef-onboarding__title {
+  flex: 1;
+  font-size: 0.7rem;
+  color: var(--info);
+  font-family: var(--font-sans);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.ef-onboarding__close {
+  background: transparent;
+  border: 1px solid var(--color-soft-border);
+  color: var(--text-main);
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.ef-onboarding__body {
+  margin: 0 0 10px 0;
+  font-size: 0.8rem;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.4;
+}
+
+.ef-onboarding__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ef-onboarding__step-counter {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.ef-onboarding__next-btn {
+  background: var(--info);
+  color: var(--color-bg-deep);
+  border: none;
+  padding: 5px 12px;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

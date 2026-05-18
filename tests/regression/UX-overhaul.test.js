@@ -49,7 +49,7 @@ describe('UX overhaul P0-P2: regressions', () => {
     });
 
     test('P1-7: Tooltips em stats (Help component v1.0)', () => {
-        const file = path.join(projectRoot, 'src/components/DashboardView.jsx');
+        const file = path.join(projectRoot, 'src/components/dashboard/DashboardMatchInfo.jsx');
         const c = fs.readFileSync(file, 'utf-8');
         // v1.0 Sprint 1: <Help id="sector.gol|def|mei|ata|moral_avg" /> + stat.energia
         const helpCount = (c.match(/<Help id="sector\.\w+|<Help id="stat\.\w+/g) || []).length;
@@ -64,7 +64,7 @@ describe('UX overhaul P0-P2: regressions', () => {
     });
 
     test('P1-9: Search box SquadView + MarketView', () => {
-        const sFile = fs.readFileSync(path.join(projectRoot, 'src/components/SquadView.jsx'), 'utf-8');
+        const sFile = fs.readFileSync(path.join(projectRoot, 'src/components/squad/SquadToolbar.jsx'), 'utf-8');
         const mFile = fs.readFileSync(path.join(projectRoot, 'src/components/MarketView.jsx'), 'utf-8');
         expect(sFile).toMatch(/Buscar jogador/i);
         expect(mFile).toMatch(/marketSearch/);

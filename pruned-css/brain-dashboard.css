@@ -1,0 +1,260 @@
+/* BrainDashboard.css — ML Dashboard visual styles */
+
+/* ── Layout ─────────────────────────────────────────────── */
+.bd-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.bd-header h3 {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.bd-header-meta {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-left: 8px;
+}
+
+.bd-toggle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.bd-body {
+    margin-top: 0.75rem;
+}
+
+/* ── Grid Rows ──────────────────────────────────────────── */
+.bd-row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.bd-row-4col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    font-size: 0.72rem;
+}
+
+.bd-convergence-bars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+/* ── Cards ──────────────────────────────────────────────── */
+.bd-card {
+    padding: 8px 10px;
+    background: var(--bg-dark);
+    border: 1px solid var(--bg-dark);
+}
+
+.bd-card--mb {
+    margin-bottom: 10px;
+}
+
+.bd-card-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Traits ─────────────────────────────────────────────── */
+.bd-traits {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bd-trait-row {
+    font-size: 0.7rem;
+}
+
+.bd-trait-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bd-trait-name {
+    text-transform: capitalize;
+}
+
+.bd-trait-value {
+    font-weight: 700;
+    color: var(--color-success-mid);
+}
+
+/* ── Bars ───────────────────────────────────────────────── */
+.bd-bar-bg {
+    background: var(--color-bg-deep);
+    height: 6px;
+    overflow: hidden;
+}
+
+.bd-bar-fill {
+    height: 6px;
+    transition: width 0.3s ease;
+}
+
+.bd-bar-bg--tall {
+    height: 14px;
+}
+
+.bd-bar-fill--tall {
+    height: 14px;
+    display: flex;
+    align-items: center;
+    padding-left: 4px;
+    font-size: 0.6rem;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+/* ── Learning Stats Grid ────────────────────────────────── */
+.bd-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    font-size: 0.72rem;
+}
+
+/* ── MiniStat ───────────────────────────────────────────── */
+.bd-mini-stat {
+    text-align: center;
+    padding: 4px;
+}
+
+.bd-mini-stat__label {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.bd-mini-stat__value {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-soft-text);
+}
+
+/* ── Convergence ────────────────────────────────────────── */
+.bd-decay-block {
+    font-size: 0.68rem;
+}
+
+.bd-decay-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+
+.bd-alpha-value {
+    color: var(--color-learning-teal);
+    font-weight: 700;
+}
+
+.bd-epsilon-value {
+    color: var(--color-learning-pink);
+    font-weight: 700;
+}
+
+/* ── Action Distribution ────────────────────────────────── */
+.bd-actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.bd-action-row {
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bd-action-label {
+    min-width: 110px;
+    color: var(--text-muted);
+    text-align: right;
+}
+
+.bd-action-count {
+    min-width: 32px;
+    font-weight: 700;
+    text-align: right;
+}
+
+/* ── Q-Value Ranking ────────────────────────────────────── */
+.bd-q-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    padding: 2px 0;
+    border-bottom: 1px solid var(--color-bg-deep);
+}
+
+/* ── Reward Sparkline ───────────────────────────────────── */
+.bd-sparkline {
+    display: flex;
+    align-items: flex-end;
+    height: 60px;
+    gap: 1px;
+}
+
+.bd-spark-bar {
+    flex: 1;
+    min-height: 2px;
+}
+
+/* ── State Exploration ──────────────────────────────────── */
+.bd-states-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.bd-state-chip {
+    padding: 3px 6px;
+    font-size: 0.6rem;
+    font-family: var(--font-mono);
+    background: var(--color-learning-blue);
+    border: 1px solid var(--color-learning-blue-dark);
+}
+
+/* ── Memory Timeline ────────────────────────────────────── */
+.bd-memory-scroll {
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.bd-memory-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 0.68rem;
+    border-bottom: 1px solid var(--color-bg-deep);
+}
+
+.bd-memory-action {
+    flex: 1;
+}
+
+.bd-reward-badge {
+    min-width: 35px;
+    text-align: right;
+    font-weight: 700;
+}

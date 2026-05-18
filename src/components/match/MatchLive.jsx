@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { useRef, useEffect } from 'react';
 import { SoccerBall, ArrowsLeftRight, FirstAid, Play, Pause, FastForward, Strategy, CheckCircle } from '@phosphor-icons/react';
 import { MatchScoreboard } from './MatchScoreboard';
@@ -35,7 +34,6 @@ export function MatchLive({
                 half={half} 
                 runningScore={runningScore} 
             />
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
                 <section className="md:col-span-2">
                     <div className="bg-forest-dark pixel-bevel border-2 border-outline-variant relative overflow-hidden h-[400px]">
@@ -99,7 +97,6 @@ export function MatchLive({
                     </div>
                 </section>
             </div>
-
             <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <button type="button"
                     onClick={() => { const next = !paused; setPaused(next); pausedRef.current = next; if (next) setLiveModalOpen(true); }}
@@ -140,7 +137,6 @@ export function MatchLive({
                     </button>
                 </div>
             </section>
-
             <div className="flex justify-center mt-4 pb-8">
                 {half === '1º TEMPO' ? (
                     <button type="button" disabled={isPlaying} onClick={() => setPhase('halftime')} className="bg-primary-container text-abyss border-2 border-on-primary p-4 px-8 min-h-[64px] flex items-center justify-center gap-2 pixel-bevel hover:brightness-110 transition duration-200 ease-out active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
@@ -158,7 +154,6 @@ export function MatchLive({
                     </button>
                 )}
             </div>
-
             {liveModalOpen && (
                 <LiveSquadEditModal
                     team={team}
@@ -172,7 +167,6 @@ export function MatchLive({
                     onClose={() => { setLiveModalOpen(false); setPaused(false); pausedRef.current = false; }}
                 />
             )}
-
             {activeMidMatchCard && (
                 <MidMatchCardModal
                     card={activeMidMatchCard}
@@ -184,8 +178,9 @@ export function MatchLive({
                     }}
                 />
             )}
-
-            <div style={{ position: 'fixed', bottom: '80px', left: '50%', transform: 'translateX(-50%)', zIndex: 1000, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div
+                style={{ "--ef-dyn-position": 'fixed', "--ef-dyn-bottom": '80px', "--ef-dyn-left": '50%', "--ef-dyn-transform": 'translateX(-50%)', "--ef-dyn-zIndex": 1000, "--ef-dyn-display": 'flex', "--ef-dyn-flexDirection": 'column', "--ef-dyn-gap": '8px' }}
+                className="ef-dyn-position ef-dyn-bottom ef-dyn-left ef-dyn-transform ef-dyn-zIndex ef-dyn-display ef-dyn-flexDirection ef-dyn-gap">
                 {starImpacts.map(entry => (
                     <StarImpactToast
                         key={entry.id}
@@ -193,7 +188,6 @@ export function MatchLive({
                     />
                 ))}
             </div>
-
             {/* Decorative CRT Overlay */}
             <div className="fixed inset-0 pointer-events-none z-[100] scanline opacity-10"></div>
             <div className="fixed inset-0 pointer-events-none z-[101] shadow-[inset_0_0_100px_rgba(0,0,0,0.5)]"></div>

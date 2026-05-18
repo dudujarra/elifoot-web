@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * Sidebar — SPEC-099 Persistent Nav
  *
@@ -84,7 +83,12 @@ export function Sidebar() {
             <div className="ef-sidebar__inner">
                 {/* Mode label */}
                 <div className="ef-sidebar__mode">
-                    <ModeIcon size={12} weight="fill" style={{ verticalAlign: 'middle', marginRight: '4px' }} aria-hidden />
+                    <ModeIcon
+                        size={12}
+                        weight="fill"
+                        style={{ "--ef-dyn-verticalAlign": 'middle', "--ef-dyn-marginRight": '4px' }}
+                        aria-hidden
+                        className="ef-dyn-verticalAlign ef-dyn-marginRight" />
                     {modeLabel}
                 </div>
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * AppHeader.jsx — Top bar extracted from App.jsx
  * Contains: save, sound, LLM toggle, monitor, reset buttons.
@@ -23,6 +22,7 @@ export function AppHeader() {
     const [llmLoading, setLlmLoading] = useState(false);
     const [llmToast, setLlmToast] = useState(null);
 
+    /* eslint-disable react-hooks/set-state-in-effect */
     useEffect(() => {
         try {
             const engine = getEngine?.();
@@ -30,6 +30,7 @@ export function AppHeader() {
             setLlmEnabled(!!engine.llmNarrative.isLLMEnabled?.());
         } catch { /* engine not ready yet */ }
     }, [gameState.started, gameState.view, getEngine]);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     const engine = getEngine();
 
@@ -131,8 +132,8 @@ export function AppHeader() {
                 </div>
             )}
             {llmToast && (
-                <div className={`app-toast app-toast--${llmToast.kind}`} role="status"
-                     style={savedToast ? { top: '7rem' } : undefined}>
+                <div style={savedToast ? { '--ef-dyn-top': '7rem' } : undefined}
+                     className={`app-toast app-toast--${llmToast.kind} ${savedToast ? 'ef-dyn-top' : ''}`} role="status">
                     {llmToast.text}
                 </div>
             )}

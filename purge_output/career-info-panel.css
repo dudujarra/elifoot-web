@@ -1,0 +1,205 @@
+/* CareerInfoPanel.css — Career overview panel styles */
+
+/* ── Panel root ─────────────────────────────────────────── */
+.cip-root {
+    margin-top: 0.5rem;
+    background: var(--color-forest-pulse);
+    border: 1px solid var(--accent);
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.cip-header {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cip-header-meta {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+/* ── Team info bar ──────────────────────────────────────── */
+.cip-team-bar {
+    margin-top: 8px;
+    padding: 8px;
+    background: var(--color-shadow-deep);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.cip-team-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.cip-division {
+    font-weight: 700;
+}
+
+.cip-position {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.cip-squad-info {
+    font-weight: 700;
+}
+
+.cip-balance {
+    font-weight: 700;
+}
+
+.cip-reputation {
+    font-weight: 700;
+}
+
+/* ── Identity panel ─────────────────────────────────────── */
+.cip-identity {
+    margin-top: 8px;
+    padding: 8px;
+    background: var(--color-shadow-deep);
+    border-left: 3px solid var(--accent);
+}
+
+.cip-identity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    font-size: 0.75rem;
+}
+
+.cip-identity-style {
+    color: var(--accent);
+}
+
+.cip-identity-highlight {
+    font-style: italic;
+}
+
+/* ── Titles + Insights row ──────────────────────────────── */
+.cip-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.cip-col {
+    flex: 1;
+    min-width: 180px;
+}
+
+.cip-empty-text {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.cip-title-item {
+    font-size: 0.7rem;
+}
+
+.cip-insights-grid {
+    font-size: 0.7rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+}
+
+/* ── Top scorers ────────────────────────────────────────── */
+.cip-scorers {
+    margin-top: 8px;
+}
+
+.cip-scorers-list {
+    background: var(--color-shadow-deep);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cip-highlight-card {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 8px;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-forest-pulse);
+}
+
+.cip-hexagon-wrap {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.cip-highlight-label {
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.cip-highlight-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-main);
+}
+
+.cip-highlight-pos {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.cip-highlight-stats {
+    font-size: 0.8rem;
+}
+
+.cip-attrs-divider {
+    margin-top: 4px;
+    border-top: 1px solid var(--color-bg-deep);
+    padding-top: 8px;
+}
+
+.cip-scorer-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    padding: 4px;
+}
+
+/* ── Seasons timeline ───────────────────────────────────── */
+.cip-seasons {
+    margin-top: 8px;
+}
+
+.cip-seasons-wrap {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    background: var(--color-shadow-deep);
+    padding: 4px;
+}
+
+.cip-season-chip {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    font-family: var(--font-mono);
+}
+
+.cip-season-chip--highlight {
+    background: var(--color-forest-pulse);
+    border: 1px solid var(--accent);
+}
+
+.cip-season-chip--normal {
+    background: transparent;
+    border: 1px solid var(--color-bg-deep);
+}

@@ -54,7 +54,7 @@ function PlayerCard({ player, onClick, actionLabel, actionVariant = 'primary', s
                         <span className={`ef-livesq__stat ef-livesq__energy--${eMod}`}>
                             <Lightning size={12} weight="fill" /> {player.energy}%
                         </span>
-                        {/* eslint-disable-next-line no-restricted-syntax -- dynamic color per instance */}
+                        {}
                         <span className="ef-livesq__stat ef-livesq__stat--dynamic" style={{ '--stat-color': moral.color }}>
                             <Heart size={12} weight="fill" /> {moral.text}
                         </span>

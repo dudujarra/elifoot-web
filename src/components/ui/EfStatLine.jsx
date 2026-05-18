@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfStatLine — inline stat com label + value + optional bar.
  *

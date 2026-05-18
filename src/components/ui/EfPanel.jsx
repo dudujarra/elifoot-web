@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 /**
  * EfPanel — SNES 16-bit Brutalist Arcade Container
  *

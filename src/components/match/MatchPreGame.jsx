@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax -- dynamic runtime styles */
 import { UserList, Strategy, CheckCircle, ListNumbers, ArrowsLeftRight, Warning, SkipForward, ArrowLeft, Megaphone, Shield, SoccerBall } from '@phosphor-icons/react';
 import { getFormEmoji } from '../../engine/systems/FormSystem.js';
 import { TACTICS, FORMATIONS, TEAM_TALKS } from '../../engine/ManagerSystems';
@@ -106,7 +105,7 @@ export function MatchPreGame({
                                         </div>
                                         <div className="text-right tabular-nums">
                                             <div className="font-data-mono text-primary-container">{p.ovr} OVR</div>
-                                            <div className="font-data-mono text-[10px]" style={{ color: getEnergyColor(p.energy) }}>COND: {p.energy}%</div>
+                                            <div className="font-data-mono text-[10px] ef-dyn-color" style={{ "--ef-dyn-color": getEnergyColor(p.energy) }}>COND: {p.energy}%</div>
                                         </div>
                                     </div>
                                 ))}
@@ -135,7 +134,9 @@ export function MatchPreGame({
                                                             <div>
                                                                 <div className="font-sans text-sm">{p.name} {p._isCaptain && '[C]'} {getFormEmoji(p.form?.trend)}</div>
                                                                 <div className="font-data-mono text-[10px] text-smoke">
-                                                                    OVR: <span className="text-parchment">{p.ovr}</span> | <span style={{ color: getEnergyColor(p.energy) }}>COND: {p.energy}%</span> | MORAL: {p.moral || 50}%
+                                                                    OVR: <span className="text-parchment">{p.ovr}</span> | <span
+                                                                    style={{ "--ef-dyn-color": getEnergyColor(p.energy) }}
+                                                                    className="ef-dyn-color">COND: {p.energy}%</span> | MORAL: {p.moral || 50}%
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -146,7 +147,6 @@ export function MatchPreGame({
                                                 ))}
                                             </div>
                                         )}
-
                                         {benchPlayers.length < 5 && availableForBench.length > 0 && (
                                             <>
                                                 <div className="font-label-caps text-xs text-smoke mb-2">ADICIONAR AO BANCO:</div>
@@ -158,7 +158,9 @@ export function MatchPreGame({
                                                                 <div>
                                                                     <div className="font-sans text-sm">{p.name} {getFormEmoji(p.form?.trend)}</div>
                                                                     <div className="font-data-mono text-[10px] text-smoke">
-                                                                        OVR: <span className="text-parchment">{p.ovr}</span> | <span style={{ color: getEnergyColor(p.energy) }}>COND: {p.energy}%</span>
+                                                                        OVR: <span className="text-parchment">{p.ovr}</span> | <span
+                                                                        style={{ "--ef-dyn-color": getEnergyColor(p.energy) }}
+                                                                        className="ef-dyn-color">COND: {p.energy}%</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -170,7 +172,6 @@ export function MatchPreGame({
                                                 </div>
                                             </>
                                         )}
-
                                         {benchList.length === 0 && (
                                             <div className="bg-abyss p-4 text-center font-label-caps text-smoke border border-outline-variant">
                                                 Nenhum jogador selecionado para o banco.

@@ -11,7 +11,7 @@ import {
 } from '@phosphor-icons/react';
 import { SAVE_KEY } from '../../engine/constants.js';
 
-export default function AutoPlayControls({
+export function AutoPlayControls({
     controllerRef, stats, forceUpdate, llmStatus, setLlmStatus
 }) {
     const handleStart = () => controllerRef.current?.start();

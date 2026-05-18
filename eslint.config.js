@@ -30,8 +30,8 @@ export default defineConfig([
       // Warning level — débito existente grande. Reviewer detecta novos warnings.
       // Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */
       'no-restricted-syntax': ['warn', {
-        selector: "JSXAttribute[name.name='style']",
-        message: 'Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Exceção dynamic per-instance: /* eslint-disable-next-line no-restricted-syntax */ + comment.',
+        selector: "JSXAttribute[name.name='style'] ObjectExpression > Property[key.name!=/^--/][key.value!=/^--/]",
+        message: 'Mandamento Brutal #4 (SPEC-178): inline style proibido. Use CSS class de luxury-arcade.css. Variáveis CSS limpas (--var) são permitidas inline.',
       }],
     },
   },

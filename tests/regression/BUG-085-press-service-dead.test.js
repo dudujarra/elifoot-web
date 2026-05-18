@@ -21,7 +21,7 @@ import { PressService } from '../../src/services/PressService.js';
 
 const ENGINE_SRC = readFileSync(resolve('src/engine/engine.js'), 'utf-8');
 const DASHBOARD_SRC = readFileSync(resolve('src/components/DashboardView.jsx'), 'utf-8');
-const AUTOPLAY_SRC = readFileSync(resolve('src/services/AutoPlayService.js'), 'utf-8');
+const SIMULATOR_SRC = readFileSync(resolve('src/services/AutoPlaySimulator.js'), 'utf-8');
 const PACING_SRC = readFileSync(resolve('src/services/AutoPlayPacing.js'), 'utf-8');
 
 describe('BUG-085 — PressService is alive (audit confirmed not dead)', () => {
@@ -56,9 +56,9 @@ describe('BUG-085 — PressService is alive (audit confirmed not dead)', () => {
         expect(MODALS_SRC).toContain('engine.answerPress(');
     });
 
-    test('AutoPlayService consumes engine.checkPressConference + engine.answerPress (headless flow)', () => {
-        expect(AUTOPLAY_SRC).toContain('engine.checkPressConference');
-        expect(AUTOPLAY_SRC).toContain('engine.answerPress');
+    test('AutoPlaySimulator consumes engine.checkPressConference + engine.answerPress (headless flow)', () => {
+        expect(SIMULATOR_SRC).toContain('engine.checkPressConference');
+        expect(SIMULATOR_SRC).toContain('engine.answerPress');
     });
 
     test('AutoPlayPacing consumes engine.renewContract + engine.respondCoachProposal', () => {

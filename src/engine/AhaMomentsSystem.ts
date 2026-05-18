@@ -99,7 +99,7 @@ function loadSeenIds(): Set<string> {
         if (!Array.isArray(arr)) return new Set();
         return new Set(arr);
     } catch (err) {
-        EngineLogger.capture(err, 'AhaMomentsSystem.loadSeenIds');
+        EngineLogger.capture(err as Error, 'AhaMomentsSystem.loadSeenIds');
         return new Set();
     }
 }
@@ -108,7 +108,7 @@ function persistSeenIds(set: Set<string>): void {
     if (typeof localStorage === 'undefined') return;
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
-    } catch (err) { EngineLogger.capture(err, 'AhaMomentsSystem.persistSeenIds'); }
+    } catch (err) { EngineLogger.capture(err as Error, 'AhaMomentsSystem.persistSeenIds'); }
 }
 
 export interface AhaMomentTriggered {
@@ -130,7 +130,7 @@ export function evaluateAhaMoments(context: AhaContext = {}): AhaMomentTriggered
                     body: template.body,
                 });
             }
-        } catch (err) { EngineLogger.capture(err, 'AhaMomentsSystem.trigger'); }
+        } catch (err) { EngineLogger.capture(err as Error, 'AhaMomentsSystem.trigger'); }
     }
     return triggered;
 }
@@ -143,7 +143,7 @@ export function markAhaSeen(ahaId: string): void {
 
 export function resetAhaSeen(): void {
     if (typeof localStorage === 'undefined') return;
-    try { localStorage.removeItem(STORAGE_KEY); } catch (err) { EngineLogger.capture(err, 'AhaMomentsSystem.resetAhaSeen'); }
+    try { localStorage.removeItem(STORAGE_KEY); } catch (err) { EngineLogger.capture(err as Error, 'AhaMomentsSystem.resetAhaSeen'); }
 }
 
 export { AHA_TEMPLATES, STORAGE_KEY };

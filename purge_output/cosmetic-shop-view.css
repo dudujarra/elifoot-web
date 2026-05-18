@@ -1,0 +1,314 @@
+/* CosmeticShopView — Stitch v1.1 port (AKITA-395)
+ * Match: docs/stitch-designs/v1.1-all/07-ol-fut-cosmeticshop.html + 68-ol-fut-loja-cosm-tica.html
+ * Tokens-only (zero raw hex). Outfit + Inter + JetBrains Mono.
+ * SPEC-101 — preserves all CosmeticShopService logic untouched.
+ */
+
+.ef-cosmetic-shop {
+  /* scoped accents that compose semantic tokens */
+  --ef-cs-card-border: var(--color-tertiary);
+  --ef-cs-card-bg: var(--color-bg-secondary);
+  --ef-cs-icon-bg: var(--color-bg-tertiary);
+}
+
+/* === HEADER SECTION === */
+
+.ef-cosmetic-shop__header-panel {
+  border-bottom: var(--primitive-border-thin) solid var(--color-tertiary);
+}
+
+.ef-cosmetic-shop__header-icon {
+  color: var(--color-secondary);
+}
+
+/* === BANNER SECTION (Stitch v1.1 "drop" banner) === */
+
+.ef-cosmetic-shop__banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border: var(--primitive-border-thick) solid var(--color-tertiary);
+  background: var(--color-bg-tertiary);
+  text-align: center;
+  overflow: hidden;
+}
+
+.ef-cosmetic-shop__banner-title {
+  font-family: var(--font-display);
+  font-size: var(--primitive-font-size-h1-desktop);
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+  
+  margin: 0;
+}
+
+.ef-cosmetic-shop__banner-sub {
+  font-family: var(--font-mono);
+  font-size: var(--primitive-font-size-caption-desktop);
+  color: var(--color-text-primary);
+  letter-spacing: 0.16em;
+  
+}
+
+.ef-cosmetic-shop__banner-pill {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-family: var(--font-display);
+  font-size: var(--primitive-font-size-badge-desktop);
+  letter-spacing: 0.1em;
+  
+}
+
+/* === POINTS DISPLAY SECTION === */
+
+.ef-cosmetic-shop__points-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  border: var(--primitive-border-thin) solid var(--color-secondary);
+  background-color: var(--color-bg-secondary);
+}
+
+.ef-cosmetic-shop__points-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ef-cosmetic-shop__points-icon-box {
+  width: 64px;
+  height: 64px;
+  background-color: var(--color-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ef-cosmetic-shop__points-icon-box-svg {
+  color: var(--color-bg);
+}
+
+.ef-cosmetic-shop__points-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ef-cosmetic-shop__points-label {
+  font-size: var(--primitive-font-size-caption-desktop);
+  font-family: var(--font-mono);
+  color: var(--color-secondary);
+  letter-spacing: 0.1em;
+  
+}
+
+.ef-cosmetic-shop__points-value {
+  font-family: var(--font-display);
+  font-size: var(--primitive-font-size-h1-desktop);
+  color: var(--color-text-primary);
+  letter-spacing: 0.04em;
+}
+
+.ef-cosmetic-shop__points-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ef-cosmetic-shop__progress-label {
+  font-family: var(--font-mono);
+  font-size: var(--primitive-font-size-caption-desktop);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.1em;
+  
+}
+
+.ef-cosmetic-shop__progress-value {
+  font-family: var(--font-display);
+  font-size: var(--primitive-font-size-h3-desktop);
+  color: var(--color-secondary);
+  letter-spacing: 0.04em;
+}
+
+.ef-cosmetic-shop__progress-separator {
+  color: var(--color-text-secondary);
+  margin: 0 4px;
+}
+
+/* === CATEGORIES & CARDS SECTION === */
+
+.ef-cosmetic-shop__category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-size: var(--primitive-font-size-h3-desktop);
+  color: var(--color-primary);
+  letter-spacing: 0.08em;
+  
+}
+
+.ef-cosmetic-shop__category-icon {
+  color: var(--color-primary);
+}
+
+.ef-cosmetic-shop__cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.ef-cosmetic-shop__card {
+  position: relative;
+  background: var(--ef-cs-card-bg);
+  border: var(--primitive-border-thick) solid var(--ef-cs-card-border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ef-cosmetic-shop__card:hover {
+  border-color: var(--color-primary);
+}
+
+.ef-cosmetic-shop__card--owned {
+  border-color: var(--color-secondary);
+}
+
+.ef-cosmetic-shop__card--equipped {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.22);
+}
+
+.ef-cosmetic-shop__card-equipped-banner {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: var(--color-secondary);
+  color: var(--color-bg);
+  border: var(--primitive-border-thin) solid var(--color-tertiary);
+  font-family: var(--font-display);
+  font-size: var(--primitive-font-size-badge-desktop);
+  letter-spacing: 0.1em;
+  
+  z-index: 2;
+}
+
+.ef-cosmetic-shop__card-icon {
+  aspect-ratio: 1 / 1;
+  background: var(--ef-cs-icon-bg);
+  border: var(--primitive-border-thin) solid var(--color-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+.ef-cosmetic-shop__card-name {
+  font-family: var(--font-display);
+  font-size: var(--primitive-font-size-h3-mobile);
+  color: var(--color-text-primary);
+  letter-spacing: 0.06em;
+  
+  text-align: center;
+}
+
+.ef-cosmetic-shop__card-desc {
+  font-family: var(--font-mono);
+  font-size: var(--primitive-font-size-caption-desktop);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.ef-cosmetic-shop__card-price {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 10px;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: var(--primitive-font-size-body-desktop);
+  font-weight: 700;
+  color: var(--color-secondary);
+  border: var(--primitive-border-hairline) solid var(--color-secondary);
+  background: var(--color-bg-tertiary);
+}
+
+.ef-cosmetic-shop__card-actions {
+  margin-top: auto;
+}
+
+.ef-cosmetic-shop__card-button {
+  width: 100%;
+  justify-content: center;
+}
+
+/* === FOOTER INFO STRIP === */
+
+.ef-cosmetic-shop__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  align-items: center;
+  padding: 12px 16px;
+  border: var(--primitive-border-thin) solid var(--color-tertiary);
+  background: var(--color-bg-tertiary);
+  margin-top: 8px;
+}
+
+.ef-cosmetic-shop__footer-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--primitive-font-size-caption-desktop);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.06em;
+  
+}
+
+.ef-cosmetic-shop__footer-dot {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+}
+
+.ef-cosmetic-shop__footer-dot--primary { background: var(--color-primary); }
+.ef-cosmetic-shop__footer-dot--secondary { background: var(--color-secondary); }
+
+.ef-cosmetic-shop__footer-divider {
+  width: 2px;
+  height: 24px;
+  background: var(--color-tertiary);
+}
+
+/* === RESPONSIVE === */
+
+@media (max-width: 640px) {
+  .ef-cosmetic-shop__points-panel { flex-direction: column; align-items: flex-start; }
+  .ef-cosmetic-shop__points-right { text-align: left; }
+  .ef-cosmetic-shop__card-equipped-banner { top: -8px; right: -8px; }
+}

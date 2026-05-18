@@ -48,7 +48,7 @@ const STEPS = [
 const STORAGE_KEY = 'olefut_tutorial_done';
 
 export function TutorialView() {
-    const { changeView, getDashboardView } = useGame();
+    const { changeView } = useGame();
     const [step, setStep] = useState(0);
 
     const FUNNEL_KEY = 'olefut_tutorial_funnel';
