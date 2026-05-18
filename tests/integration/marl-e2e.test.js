@@ -16,7 +16,9 @@ import { Engine } from '../../src/engine/engine.js';
 import { createEngine } from '../../src/engine/engineFactory.js';
 
 // MARL modules
-import { AdaptiveBrain, encodeState, computeReward } from '../../src/services/learning/AdaptiveBrain.js';
+import { AdaptiveBrain } from '../../src/services/learning/AdaptiveBrain.js';
+import { encodeState } from '../../src/services/learning/BrainDecisions.js';
+import { computeReward } from '../../src/services/learning/BrainReward.js';
 import { EmotionalEngine } from '../../src/services/learning/EmotionalEngine.js';
 import { generatePersonality, suggestArchetypeForClub, ARCHETYPES, checkIsTilted } from '../../src/services/learning/Archetypes.js';
 import { applySunkCost, applyEndowment, applyHerdBehavior, applyScarcityPanic, applyRecencyBias, applyStatusQuoBias, applyBuyBiases, applySellBiases } from '../../src/services/learning/CognitiveBiases.js';

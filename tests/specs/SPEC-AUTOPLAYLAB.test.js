@@ -7,7 +7,7 @@ import { captureSnapshot } from '../../src/services/AutoPlayLab/SnapshotAPI.js';
 import { runBatch, seedRange, randomSeeds } from '../../src/services/AutoPlayLab/BatchRunner.js';
 import { aggregateStat, diffBatches, histogram, extractCrashes, groupCrashesByStack } from '../../src/services/AutoPlayLab/DiffEngine.js';
 import { toCSV, toJSON, timestampedFilename } from '../../src/services/AutoPlayLab/Exporter.js';
-import { PRESETS, PRESET_CATEGORIES } from '../../src/services/AutoPlayLab/presets.js';
+import { PRESETS, PRESET_CATEGORIES } from '../../src/services/AutoPlayLab/index.js';
 
 describe('AutoPlayLab platform', () => {
 

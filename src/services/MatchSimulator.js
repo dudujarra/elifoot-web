@@ -23,7 +23,7 @@ import { MatchNarrator } from './MatchNarrator.js';
 import { getDifficulty } from '../engine/systems/DifficultyModes.js';
 import { getAtmosphere } from '../engine/BrazilianAtmosphere.js';
 import { getClubVoice } from '../engine/ClubVoiceSystem.js';
-import { getTraitMatchModifier, getGoalConversionBonus, getDefenseSectorBonus, getSetPieceBonus, getPenaltySaveBonus, getPenaltyConversionBonus } from '../engine/PlayerTraits';
+import { getTraitMatchModifier, getGoalConversionBonus, getDefenseSectorBonus, getSetPieceBonus } from '../engine/PlayerTraits';
 
 import { rng as systemRng } from '../engine/rng.js';
 import { EngineLogger } from '../engine/EngineLogger.js';
@@ -34,6 +34,8 @@ import { DeepTacticalEngine } from '../engine/tactical/DeepTacticalEngine.js';
 import { MatchEffectsPipeline } from '../engine/systems/MatchEffectsPipeline.js';
 import { shouldTriggerMidMatch, getMidMatchCardDerbyAware } from '../engine/MidMatchManagerDeck.js';
 import { resolveMOTM, applyEnergyDrain, recordCareerStats, applyLeaderBoost, settleBicho, feedNpcResults, emitMatchEnd } from './MatchPostMatch.js';
+import { calculateSaveChance, resolvePenalties } from './MatchGoalkeeperSystem.js';
+import { applyMatchInjury } from './MatchInjurySystem.js';
 
 // ============================================================
 // TUNING CONSTANTS — Named for clarity and centralized balancing
@@ -74,8 +76,6 @@ const VAR_PENALTY_CONV = 0.70;
 const MORAL_FACTOR_OFFSET = 0.8;
 /** @constant {number} Moral factor divisor (max moral=100 → factor=1.2) */
 const MORAL_FACTOR_DIV = 250;
-/** @constant {number} Keeper save chance multiplier */
-const KEEPER_SAVE_MULT = 0.8;
 /** @constant {number} PRD pity bonus per consecutive miss */
 const PITY_BONUS_PER_MISS = 0.10;
 /** @constant {number} PRD pity bonus cap */
@@ -102,10 +102,6 @@ const PERF_INJURY = -2;
 const AGGRESSIVE_STYLES = ['Caneleiro', 'Gladiador', 'Sanguíneo', 'Provocador', 'Raçudo', 'Catimbeiro', 'Cai-Cai'];
 /** @constant {string[]} Fair-play playstyles (reduced card risk) */
 const FAIRPLAY_STYLES = ['Fairplay', 'Elegante', 'Maestro Frio', 'Discreto'];
-/** @constant {number} Injury duration minimum weeks */
-const INJURY_MIN_WEEKS = 2;
-/** @constant {number} Injury duration random range (added to min) */
-const INJURY_RANGE_WEEKS = 4;
 /** @constant {number} Surprise event: own goal probability threshold */
 const SURPRISE_OWN_GOAL_THRESH = 0.30;
 /** @constant {number} Surprise event: VAR probability threshold */
@@ -368,8 +364,6 @@ export class MatchSimulator {
                     ? (isHomeAttacking ? homeScorerPoolSetPiece : awayScorerPoolSetPiece)
                     : attackers;
                 const scorer = pickRandom(scorerPool);
-                const gkPool = (defTeam.squad || []).filter(p => p.isTitular && p.position === 'GOL' && !p.injury);
-                const keeper = pickRandom(gkPool);
 
                 const formMod = scorer ? getFormModifier(scorer.form?.trend) : 1.0;
                 const traitMod = scorer ? getTraitMatchModifier(scorer, minute, isManagerHome ? homeTactic : awayTactic, false) : 1.0;
@@ -380,9 +374,6 @@ export class MatchSimulator {
                 const isDerby = engine.matchCondition && engine.matchCondition.id === 'derby';
                 const scorerTransientFatigue = spatialEngine.getTransientFatigueModifier(scorer, minute);
                 const scorerCognitiveMod = spatialEngine.getCognitiveModifier(scorer, minute, isDerby);
-                
-                const keeperTransientFatigue = spatialEngine.getTransientFatigueModifier(keeper, minute);
-                const keeperCognitiveMod = spatialEngine.getCognitiveModifier(keeper, minute, isDerby);
 
                 // Adjust shotPower threshold so average conversion = CONVERSION_RATE
                 // §2: PRD pity bonus — +10% per consecutive miss (caps at +50%)
@@ -404,8 +395,7 @@ export class MatchSimulator {
                 const tacticalMod = (tacticalBaseXG / TACTICAL_XG_BASELINE); // Ratio of actual xG vs baseline
                 const shotPower = atkSectors.attack * cond.ataModifier * systemRng() * finalScorerMod * (1 + pityBonus) * tacticalMod;
                 
-                const finalKeeperMod = keeperTransientFatigue * keeperCognitiveMod;
-                const saveChance = defSectors.goalkeeper * systemRng() * KEEPER_SAVE_MULT * finalKeeperMod; 
+                const { saveChance } = calculateSaveChance(defTeam, defSectors, minute, systemRng, spatialEngine, isDerby);
 
                 const scorerName = scorer ? scorer.name : attTeam.name;
                 const isGoal = shotPower > saveChance;
@@ -536,13 +526,8 @@ export class MatchSimulator {
                 } else if (eventRoll < SURPRISE_INJURY_THRESH) {
                     // KEY PLAYER INJURY mid-match (~25% of surprise events)
                     const injTeam = systemRng() > 0.5 ? homeTeam : awayTeam;
-                    const candidates = (injTeam.squad || []).filter(p => p.isTitular && !p.injury);
-                    const injured = pickRandom(candidates);
-                    if (injured) {
-                        injured.injury = { name: 'Lesao muscular', weeksLeft: INJURY_MIN_WEEKS + Math.floor(systemRng() * INJURY_RANGE_WEEKS), emoji: '🤕' };
-                        if (isManagerMatch) rawEvents.push({ minute, type: 'injury', injuredName: injured.name, injTeamName: injTeam.name });
-                        performanceMap[injured.id] = (performanceMap[injured.id] || 0) + PERF_INJURY;
-                    }
+                    applyMatchInjury(injTeam, systemRng, minute, isManagerMatch, rawEvents, performanceMap, PERF_INJURY);
+
 
                 } else {
                     // RED CARD (~20% of surprise events)
@@ -573,30 +558,11 @@ export class MatchSimulator {
         if (isCup && homeGoals === awayGoals) {
             if (isManagerMatch) rawEvents.push({ minute: MATCH_MINUTES, type: 'penalties_tie' });
 
-            // SPEC-144: penalty_stopper e penalty_king afetam resultado
-            const homeGol = (homeTeam.squad || []).find(p => p.position === 'GOL' && p.isTitular);
-            const awayGol = (awayTeam.squad || []).find(p => p.position === 'GOL' && p.isTitular);
-            const homeTaker = pickRandom(homeAttackers) || null;
-            const awayTaker = pickRandom(awayAttackers) || null;
-
-            // Base 50/50 ajustado por traits
-            const homeSaveBonus  = getPenaltySaveBonus(homeGol);           // home GOL defende tiro away
-            const awaySaveBonus  = getPenaltySaveBonus(awayGol);           // away GOL defende tiro home
-            const homeKingBonus  = getPenaltyConversionBonus(homeTaker);   // home taker converte
-            const awayKingBonus  = getPenaltyConversionBonus(awayTaker);   // away taker converte
-
-            // Probabilidade de home vencer: normalizada entre traits
-            const homeWinProb = (homeKingBonus / awaySaveBonus) /
-                ((homeKingBonus / awaySaveBonus) + (awayKingBonus / homeSaveBonus));
-
-            if (systemRng() < homeWinProb) {
+            const homeWins = resolvePenalties(homeTeam, awayTeam, homeAttackers, awayAttackers, systemRng, isManagerMatch, rawEvents);
+            if (homeWins) {
                 homeGoals++;
-                const note = homeGol?.traits?.includes('penalty_stopper') ? ' (Pegador de Pênalti!)' : '';
-                if (isManagerMatch) rawEvents.push({ minute: 91, type: 'penalties_win', teamName: homeTeam.name, note });
             } else {
                 awayGoals++;
-                const note = awayGol?.traits?.includes('penalty_stopper') ? ' (Pegador de Pênalti!)' : '';
-                if (isManagerMatch) rawEvents.push({ minute: 91, type: 'penalties_win', teamName: awayTeam.name, note });
             }
         }
 

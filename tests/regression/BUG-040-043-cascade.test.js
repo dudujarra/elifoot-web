@@ -4,7 +4,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { Engine } from '../../src/engine/engine.js';
 import { createEngine } from '../../src/engine/engineFactory.js';
-import { encodeState } from '../../src/services/learning/AdaptiveBrain.js';
+import { encodeState } from '../../src/services/learning/BrainDecisions.js';
 
 describe('BUG-043 — startNewSeason increments seasonNumber', () => {
     test('seasonNumber++ on rollover', () => {
