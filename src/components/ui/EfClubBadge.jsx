@@ -2,7 +2,7 @@
  * EfClubBadge v3 — pixel-art sprite-based club shield (SPEC-060).
  *
  * Usa spritesheets PNG geradas via Stitch (Gemini 3 Flash):
- *   /sprites/clubs/spritesheet-serie-{a,b,c,d}.png
+ *   /sprites/clubs/spritesheet-serie-{a,b,c,d}.webp
  *   Cada sheet 5 cols × 4 rows = 20 badges
  *   80 clubes total Série A/B/C/D
  *

@@ -5,7 +5,7 @@
  * primary/secondary/accent + nickname + initials + sprite coords.
  *
  * Sprite atlas:
- *   /sprites/clubs/spritesheet-serie-{a,b,c,d}.png
+ *   /sprites/clubs/spritesheet-serie-{a,b,c,d}.webp
  *   Sheets a/b: 5 cols × 4 rows = 20 badges
  *   Sheets c/d: 5 cols × 5 rows = 24 badges em uso (1 slot vazio em row 4)
  *     — expansão MG/RS pós-AKITA (SPEC-168): row 4 contém os 4 novos clubes
@@ -22,21 +22,21 @@ export const SPRITE_GRID = { cols: 5, rows: 4 };
 // Sprite atlas configs: each sheet has url + cols + rows
 export const SPRITE_SHEETS = {
     // Brasil 5x4 = 20 each (80 total)
-    a:   { url: '/olefut/sprites/clubs/spritesheet-serie-a.png',  cols: 5, rows: 4 },
-    b:   { url: '/olefut/sprites/clubs/spritesheet-serie-b.png',  cols: 5, rows: 4 },
-    c:   { url: '/olefut/sprites/clubs/spritesheet-serie-c.png',  cols: 5, rows: 5 },
-    d:   { url: '/olefut/sprites/clubs/spritesheet-serie-d.png',  cols: 5, rows: 5 },
+    a:   { url: '/olefut/sprites/clubs/spritesheet-serie-a.webp',  cols: 5, rows: 4 },
+    b:   { url: '/olefut/sprites/clubs/spritesheet-serie-b.webp',  cols: 5, rows: 4 },
+    c:   { url: '/olefut/sprites/clubs/spritesheet-serie-c.webp',  cols: 5, rows: 5 },
+    d:   { url: '/olefut/sprites/clubs/spritesheet-serie-d.webp',  cols: 5, rows: 5 },
     // Europe 5x2 = 10 each (50 total)
-    eng: { url: '/olefut/sprites/clubs/spritesheet-eng.png',      cols: 5, rows: 3 },
-    esp: { url: '/olefut/sprites/clubs/spritesheet-esp.png',      cols: 5, rows: 3 },
-    ita: { url: '/olefut/sprites/clubs/spritesheet-ita.png',      cols: 5, rows: 3 },
-    ger: { url: '/olefut/sprites/clubs/spritesheet-ger.png',      cols: 5, rows: 3 },
-    fra: { url: '/olefut/sprites/clubs/spritesheet-fra.png',      cols: 5, rows: 3 },
+    eng: { url: '/olefut/sprites/clubs/spritesheet-eng.webp',      cols: 5, rows: 3 },
+    esp: { url: '/olefut/sprites/clubs/spritesheet-esp.webp',      cols: 5, rows: 3 },
+    ita: { url: '/olefut/sprites/clubs/spritesheet-ita.webp',      cols: 5, rows: 3 },
+    ger: { url: '/olefut/sprites/clubs/spritesheet-ger.webp',      cols: 5, rows: 3 },
+    fra: { url: '/olefut/sprites/clubs/spritesheet-fra.webp',      cols: 5, rows: 3 },
     // South America 5x3 = 15 cells, 10 used (Stitch padded extras)
-    arg: { url: '/olefut/sprites/clubs/spritesheet-arg.png',      cols: 5, rows: 3 },
-    uru: { url: '/olefut/sprites/clubs/spritesheet-uru.png',      cols: 5, rows: 3 },
-    chi: { url: '/olefut/sprites/clubs/spritesheet-chi.png',      cols: 5, rows: 3 },
-    col: { url: '/olefut/sprites/clubs/spritesheet-col.png',      cols: 5, rows: 3 }
+    arg: { url: '/olefut/sprites/clubs/spritesheet-arg.webp',      cols: 5, rows: 3 },
+    uru: { url: '/olefut/sprites/clubs/spritesheet-uru.webp',      cols: 5, rows: 3 },
+    chi: { url: '/olefut/sprites/clubs/spritesheet-chi.webp',      cols: 5, rows: 3 },
+    col: { url: '/olefut/sprites/clubs/spritesheet-col.webp',      cols: 5, rows: 3 }
 };
 
 /**

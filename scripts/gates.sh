@@ -4,15 +4,15 @@
 # antes de declarar trabalho completo ou fazer commit.
 #
 # Exit codes:
-#   0 = tudo verde, pode commitar
-#   1 = falha em algum gate, NÃO comite
+#   0 = LIBERADO (pode commitar)
+#   1 = BLOQUEADO (corrija antes)
 #
 # Uso:
 #   ./scripts/gates.sh           # roda tudo (tsc + lint + test)
 #   ./scripts/gates.sh --quick   # roda só tsc + lint (sem testes)
 #   ./scripts/gates.sh --full    # roda tsc + lint + test + build
 
-set -euo pipefail
+set -uo pipefail
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -25,13 +25,12 @@ PASS=0
 FAIL=0
 WARN=0
 RESULTS=()
-
 MODE="${1:-default}"
 
 header() {
   echo ""
   echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-  echo -e "${BOLD}  🚧 GATES.SH — Portão Obrigatório de Qualidade${NC}"
+  echo -e "${BOLD}  GATES.SH — Portao Obrigatorio de Qualidade${NC}"
   echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
   echo ""
 }
@@ -61,7 +60,6 @@ run_gate() {
       RESULTS+=("WARN: $name")
     fi
   fi
-
   rm -f /tmp/gate-output-$$.txt
 }
 
@@ -74,11 +72,11 @@ summary() {
 
   for r in "${RESULTS[@]}"; do
     if [[ "$r" == PASS* ]]; then
-      echo -e "  ${GREEN}✓${NC} ${r#PASS: }"
+      echo -e "  ${GREEN}ok${NC} ${r#PASS: }"
     elif [[ "$r" == FAIL* ]]; then
-      echo -e "  ${RED}✗${NC} ${r#FAIL: }"
+      echo -e "  ${RED}FAIL${NC} ${r#FAIL: }"
     else
-      echo -e "  ${YELLOW}⚠${NC} ${r#WARN: }"
+      echo -e "  ${YELLOW}WARN${NC} ${r#WARN: }"
     fi
   done
 
@@ -87,43 +85,39 @@ summary() {
   echo ""
 
   if [ $FAIL -gt 0 ]; then
-    echo -e "${RED}${BOLD}  ╔══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${RED}${BOLD}  ║  BLOQUEADO — NÃO COMITE. Corrija os erros acima primeiro.  ║${NC}"
-    echo -e "${RED}${BOLD}  ╚══════════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${RED}${BOLD}  BLOQUEADO — NAO COMITE. Corrija os erros acima primeiro.${NC}"
     echo ""
     exit 1
   else
-    echo -e "${GREEN}${BOLD}  ╔══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}${BOLD}  ║  LIBERADO — todos os gates passaram. Pode commitar.     ║${NC}"
-    echo -e "${GREEN}${BOLD}  ╚══════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${GREEN}${BOLD}  LIBERADO — todos os gates passaram. Pode commitar.${NC}"
     echo ""
     exit 0
   fi
 }
 
-# ─── MAIN ───────────────────────────────────────────────────────────────────────
+# ─── MAIN ───
 
 header
 
-# Gate 1: TypeScript (OBRIGATÓRIO)
+# Gate 1: TypeScript (OBRIGATORIO)
 run_gate "TypeScript (tsc --noEmit)" "npx tsc --noEmit" true
 
-# Gate 2: ESLint errors only (OBRIGATÓRIO)
-# Conta só errors, não warnings. Warnings são non-blocking.
-run_gate "ESLint (0 errors)" "npx eslint . --quiet 2>&1 | tail -1 | grep -qv 'error'" true
+# Gate 2: ESLint errors only (OBRIGATORIO)
+# --quiet mostra so errors. Output vazio = 0 errors = passa.
+run_gate "ESLint (0 errors)" "npx eslint . --quiet" true
 
-# Gate 3: ESLint warnings (AVISO — não bloqueia)
+# Gate 3: ESLint warnings count (AVISO — nao bloqueia)
 run_gate "ESLint warnings < 50" \
-  "WARN_COUNT=\$(npx eslint . 2>&1 | grep -oP '\\d+ warning' | grep -oP '\\d+' || echo 0); [ \"\$WARN_COUNT\" -lt 50 ]" \
+  "test \$(npx eslint . 2>&1 | grep -c 'warning' || echo 0) -lt 50" \
   false
 
 if [ "$MODE" != "--quick" ]; then
-  # Gate 4: Testes (OBRIGATÓRIO)
+  # Gate 4: Testes (OBRIGATORIO)
   run_gate "Vitest (npm test -- --run)" "npm test -- --run" true
 fi
 
 if [ "$MODE" = "--full" ]; then
-  # Gate 5: Build (OBRIGATÓRIO no modo full)
+  # Gate 5: Build (OBRIGATORIO no modo full)
   run_gate "Build (npm run build)" "npm run build" true
 fi
 

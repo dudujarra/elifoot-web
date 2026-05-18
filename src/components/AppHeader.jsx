@@ -87,7 +87,7 @@ export function AppHeader() {
     return (
         <header className="top-bar glass-panel">
             <div className="logo">
-                <img src="/assets/images/olefut_logo_celeste.png" alt="OléFUT" className="app-header__logo-img" />
+                <img src="/assets/images/olefut_logo_celeste.webp" alt="OléFUT" className="app-header__logo-img" />
             </div>
             <div className="user-info app-header__controls">
                 <span className="manager-name">{gameState.manager}</span>

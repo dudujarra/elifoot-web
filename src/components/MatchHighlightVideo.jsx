@@ -30,15 +30,15 @@ export default function MatchHighlightVideo({ event, isHomeAttacking = true }) {
         if (text.includes('gol') || text.includes('golaço')) {
             isGoal = true;
             // Depending on who attacks, show the respective celebration
-            imgSrc = isHomeAttacking ? '/assets/sprites/isssd_red_goal.png' : '/assets/sprites/isssd_blue_goal.png';
+            imgSrc = isHomeAttacking ? '/assets/sprites/isssd_red_goal.webp' : '/assets/sprites/isssd_blue_goal.webp';
         } else if (text.includes('falta') || text.includes('cartão') || text.includes('lesão')) {
-            imgSrc = '/assets/sprites/isssd_foul.png';
+            imgSrc = '/assets/sprites/isssd_foul.webp';
         } else if (text.includes('juiz') || text.includes('árbitro') || text.includes('apita')) {
-            imgSrc = '/assets/sprites/isssd_dog_referee.png';
+            imgSrc = '/assets/sprites/isssd_dog_referee.webp';
         } else if (text.includes('chute') || text.includes('defesa') || text.includes('espalma') || text.includes('perigo')) {
             // General action scenes could just reuse the foul scene or a generic stadium scene. 
             // For now, let's show the referee dog looking concerned or just a tackle.
-            imgSrc = '/assets/sprites/isssd_foul.png'; 
+            imgSrc = '/assets/sprites/isssd_foul.webp'; 
         }
 
         if (imgSrc) {

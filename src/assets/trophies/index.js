@@ -3,15 +3,15 @@
  * 9 hierarchical trophies for the Luxury Arcade 16-bit aesthetic
  */
 
-import serie_a from './serie_a.png';
-import serie_b from './serie_b.png';
-import serie_c from './serie_c.png';
-import serie_d from './serie_d.png';
-import cup from './cup.png';
-import continental from './continental.png';
-import supercopa from './supercopa.png';
-import golden_boot from './golden_boot.png';
-import best_manager from './best_manager.png';
+import serie_a from './serie_a.webp';
+import serie_b from './serie_b.webp';
+import serie_c from './serie_c.webp';
+import serie_d from './serie_d.webp';
+import cup from './cup.webp';
+import continental from './continental.webp';
+import supercopa from './supercopa.webp';
+import golden_boot from './golden_boot.webp';
+import best_manager from './best_manager.webp';
 
 export const TROPHIES = {
     'Série A': serie_a,

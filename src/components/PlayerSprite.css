@@ -2,7 +2,7 @@
     display: inline-block;
     width: 64px;
     height: 64px;
-    background-image: url('/assets/sprites/olefut_spritesheet.png'); /* The user's image goes here */
+    background-image: url('/assets/sprites/olefut_spritesheet.webp'); /* The user's image goes here */
     background-repeat: no-repeat;
     background-size: auto; /* Adjust this later based on actual image dimensions */
     animation: ef-play-sprite 0.8s steps(6) infinite;

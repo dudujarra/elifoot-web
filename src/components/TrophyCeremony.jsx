@@ -5,15 +5,15 @@ import {
     Trophy, Medal, SoccerBall, HandsClapping, ArrowRight, MedalMilitary, Cpu
 } from '@phosphor-icons/react';
 
-import imgWorldCup from '../assets/trophies/continental.png'; // world cup uses continental as placeholder until dedicated asset
-import imgContinentalCup from '../assets/trophies/continental.png';
-import imgSerieA from '../assets/trophies/serie_a.png';
-import imgGoldCup from '../assets/trophies/cup.png';
-import imgSilverCup from '../assets/trophies/serie_b.png';
-import imgShield from '../assets/trophies/supercopa.png';
-import imgScorer from '../assets/trophies/golden_boot.png';
-import imgAssist from '../assets/trophies/golden_boot.png'; // shares golden_boot until dedicated assist asset
-import imgManager from '../assets/trophies/best_manager.png';
+import imgWorldCup from '../assets/trophies/continental.webp'; // world cup uses continental as placeholder until dedicated asset
+import imgContinentalCup from '../assets/trophies/continental.webp';
+import imgSerieA from '../assets/trophies/serie_a.webp';
+import imgGoldCup from '../assets/trophies/cup.webp';
+import imgSilverCup from '../assets/trophies/serie_b.webp';
+import imgShield from '../assets/trophies/supercopa.webp';
+import imgScorer from '../assets/trophies/golden_boot.webp';
+import imgAssist from '../assets/trophies/golden_boot.webp'; // shares golden_boot until dedicated assist asset
+import imgManager from '../assets/trophies/best_manager.webp';
 
 /**
  * §16.2: TrophyCeremony — Full-screen overlay for season-ending celebrations.

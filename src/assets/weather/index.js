@@ -3,10 +3,10 @@
  * 4 tileable weather overlays for match atmosphere
  */
 
-import rain from './rain.png';
-import snow from './snow.png';
-import fog from './fog.png';
-import heat from './heat.png';
+import rain from './rain.webp';
+import snow from './snow.webp';
+import fog from './fog.webp';
+import heat from './heat.webp';
 
 export const WEATHER_OVERLAYS = {
     'rain': rain,

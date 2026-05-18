@@ -13,25 +13,25 @@
 /* ========== KEYFRAMES sprite-frame ========== */
 
 @keyframes ef-goal-burst {
-    /* 6 frames horizontal, goal-burst-6frames.png */
+    /* 6 frames horizontal, goal-burst-6frames.webp */
     from { background-position: 0 0; }
     to   { background-position: -576px 0; } /* 6 × 96px = 576px */
 }
 
 @keyframes ef-trophy-unlock {
-    /* 6 frames horizontal, trophy-unlock-6frames.png */
+    /* 6 frames horizontal, trophy-unlock-6frames.webp */
     from { background-position: 0 0; }
     to   { background-position: -576px 0; } /* 6 × 96px = 576px */
 }
 
 @keyframes ef-crowd-wave {
-    /* 4 frames vertical, crowd-wave-4frames.png */
+    /* 4 frames vertical, crowd-wave-4frames.webp */
     from { background-position: 0 0; }
     to   { background-position: 0 -320px; } /* 4 × 80px = 320px */
 }
 
 @keyframes ef-crowd-flag-wave {
-    /* 4 frames horizontal, crowd-flag-wave-4frames.png */
+    /* 4 frames horizontal, crowd-flag-wave-4frames.webp */
     from { background-position: 0 0; }
     to   { background-position: -512px 0; } /* 4 × 128px */
 }
@@ -94,7 +94,7 @@
 .ef-anim-goal-burst {
     width: 96px;
     height: 96px;
-    background-image: url('/olefut/sprites/animations/goal-burst-6frames.png');
+    background-image: url('/olefut/sprites/animations/goal-burst-6frames.webp');
     background-repeat: no-repeat;
     
     animation: ef-goal-burst 1200ms steps(6) forwards;
@@ -105,7 +105,7 @@
     vertical-align: middle;
     width: 16px;
     height: 16px;
-    background-image: url('/olefut/sprites/animations/spinner-8frames.png');
+    background-image: url('/olefut/sprites/animations/spinner-8frames.webp');
     background-repeat: no-repeat;
     background-size: 128px 16px; /* 8 frames × 16px scaled */
     
@@ -117,7 +117,7 @@
     to   { background-position: -128px 0; }
 }
 
-/* ========== EVENT SPRITES (match-events.png 4×3) ========== */
+/* ========== EVENT SPRITES (match-events.webp 4×3) ========== */
 
 /* Animated entry */
 
@@ -159,16 +159,16 @@ button:not(.no-anim):not([disabled]):active {
 
 /* Stat counter pulse on update */
 
-/* ========== POSITION ICONS (position-icons.png 4×2) ========== */
+/* ========== POSITION ICONS (position-icons.webp 4×2) ========== */
 
-/* ========== TROPHY ICONS (trophy-set.png 4×2) ========== */       /* Gold cup tier 1 */   /* Silver cup tier 2 */   /* Bronze cup tier 3 */  /* Copper cup tier 4 */
+/* ========== TROPHY ICONS (trophy-set.webp 4×2) ========== */       /* Gold cup tier 1 */   /* Silver cup tier 2 */   /* Bronze cup tier 3 */  /* Copper cup tier 4 */
 
-/* ========== SCORE DIGITS LED (score-digits.png 5×2) ========== */
+/* ========== SCORE DIGITS LED (score-digits.webp 5×2) ========== */
 
 .ef-anim-trophy-unlock {
     width: 96px;
     height: 128px;
-    background-image: url('/olefut/sprites/animations/trophy-unlock-6frames.png');
+    background-image: url('/olefut/sprites/animations/trophy-unlock-6frames.webp');
     background-repeat: no-repeat;
     
     animation: ef-trophy-unlock 1500ms steps(6) forwards;
@@ -177,7 +177,7 @@ button:not(.no-anim):not([disabled]):active {
 .ef-anim-crowd-wave {
     width: 256px;
     height: 80px;
-    background-image: url('/olefut/sprites/animations/crowd-wave-4frames.png');
+    background-image: url('/olefut/sprites/animations/crowd-wave-4frames.webp');
     background-repeat: no-repeat;
     
     animation: ef-crowd-wave 1000ms steps(4) infinite;
@@ -186,7 +186,7 @@ button:not(.no-anim):not([disabled]):active {
 .ef-anim-crowd-flag-wave {
     width: 128px;
     height: 96px;
-    background-image: url('/olefut/sprites/animations/crowd-flag-wave-4frames.png');
+    background-image: url('/olefut/sprites/animations/crowd-flag-wave-4frames.webp');
     background-size: 512px 96px;
     background-repeat: no-repeat;
     
@@ -217,7 +217,7 @@ button:not(.no-anim):not([disabled]):active {
 /* ========== ATMOSPHERIC ART (full-image backgrounds) ========== */
 
 .ef-art-champion-celebration {
-    background-image: url('/olefut/sprites/banners/champion-celebration.png');
+    background-image: url('/olefut/sprites/banners/champion-celebration.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

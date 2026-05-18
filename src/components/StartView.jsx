@@ -94,7 +94,7 @@ export function StartView() {
 
                     <div className="ef-start-logo-wrap">
                         <img
-                            src="/assets/images/olefut_logo_celeste.png"
+                            src="/assets/images/olefut_logo_celeste.webp"
                             alt="OléFUT Logo"
                             className="ef-start-logo"
                         />
