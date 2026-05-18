@@ -4,6 +4,20 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [fix] AKITA-414 — Restore FormSystem + TacticCounters barrel via PlayerDevelopment (2026-05-18)
+
+PR-R1 of FASE 1 TESTS RED→GREEN cleanup. After AKITA-411 extracted `initForm`/`updateForm`/`getFormModifier` to `src/engine/systems/FormSystem.js` and `TACTIC_COUNTERS` to `src/engine/tactical/TacticCounters.js`, two harness files in `tests/specs/` kept importing from the legacy `src/engine/PlayerDevelopment.js` path. Re-export added as a 2-line barrel — zero runtime change, zero duplication.
+
+**Impact:**
+- 15/15 target tests green (`tests/specs/audit-phase2-guards.test.js` + `tests/specs/SPEC-003-player-development.test.js`).
+- Full suite: 21 fails → 12 fails (9 unrelated remain — addressed in PR-R2..R4).
+- Lint 0 errors; build clean (initial chunk 298KB).
+- Spec: [`specs/refactor/SPEC-185-formsystem-exports.md`](specs/refactor/SPEC-185-formsystem-exports.md).
+- Regression coverage: existing `audit-phase2-guards.test.js` (4 tests BUG-F2-01) + `SPEC-003-player-development.test.js` (5 tests).
+
+**Notes:**
+- `tests/integration/build-budget.test.js` total-cap test fails pre-existing (3.34MB vs 3.337MB, +2KB drift unrelated to this PR — tracked under MEMORY F5 stale-dist gate / SPEC-185 closeout backlog).
+
 ### [test] AKITA-411 — Unit tests for top 10 critical backend modules (2026-05-16)
 
 Comprehensive unit test coverage for the 10 most critical, previously untested backend modules.
