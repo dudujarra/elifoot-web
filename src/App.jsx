@@ -5,6 +5,7 @@ import { useGame } from './context/GameContext';
 // separados via lazy() para reduzir o bundle inicial (AKITA-105 V2).
 import { StartView } from './components/StartView';
 import { DashboardView } from './components/DashboardView';
+import { LandingIntro } from './components/LandingIntro';
 import { Sidebar } from './components/Sidebar';
 import { FloatingBugButton } from './components/FloatingBugButton';
 import { ChronicleSeasonEndModal } from './components/ChronicleSeasonEndModal';
@@ -48,6 +49,13 @@ MonitorService.getInstance().install();
 
 function App() {
     const { gameState, getEngine, saveGame, resetGame, changeView } = useGame();
+    // SPEC-190: first-time visitor intro. Hide once user clicks any CTA or has
+    // already started a game (returning player who skipped the flag check).
+    const [showIntro, setShowIntro] = useState(() => {
+        try {
+            return localStorage.getItem('olefut_seen_intro') !== '1';
+        } catch { return false; }
+    });
     const [soundOn, setSoundOn] = useState(isSoundEnabled());
     const [savedToast, setSavedToast] = useState(false);
     // SPEC-174: LLM toggle reflects the engine's LLMNarrativeService flag.
@@ -152,6 +160,12 @@ function App() {
             if (resetGame) resetGame();
         }
     };
+
+    // SPEC-190: render landing intro instead of game UI for first-time visitors
+    // (only when no game is in progress — returning players bypass this entirely).
+    if (showIntro && !gameState.started) {
+        return <LandingIntro onEnter={() => setShowIntro(false)} />;
+    }
 
     return (
         <div style={{ display: 'flex', minHeight: '100dvh', backgroundColor: '#000' }}>
