@@ -53,7 +53,7 @@ async function main() {
     fs.writeFileSync(outPath, JSON.stringify(allPlayers, null, 2));
     
     console.log(chalk.magenta(`\n💾 Arquivo salvo em: ./out/realPlayers_BR.json`));
-    console.log(chalk.gray(`Para importar no jogo, basta juntar esse JSON com o src/data/realPlayers.json`));
+    console.log(chalk.gray(`Para importar no jogo, mesclar com src/data/realPlayers_BRA.json (clubes brasileiros) — SPEC-177`));
 }
 
 main().catch(err => {

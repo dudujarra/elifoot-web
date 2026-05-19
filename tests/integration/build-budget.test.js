@@ -19,8 +19,9 @@ const TOTAL_LIMIT = 3_600_000; // SPEC-186 / AKITA-415: bumped from 3.5MB to 3.6
 // Baseline measured 2026-05-18 = 3.502MB (2KB over previous cap, pre-existing creep
 // confirmed by build on clean main). Adds ~100KB headroom while sub-3.6MB ceiling holds.
 // Original 3.5MB precedent: AKITA-412. Follow-up audit: SPEC-186 §F5 backlog (realPlayers sub-split).
-// Data-only chunks are excluded from per-chunk code size checks (they are JSON, not code)
-const DATA_CHUNKS = /^(player-data|realPlayers_)/;
+// Data-only chunks are excluded from per-chunk code size checks (they are JSON, not code).
+// SPEC-192: legacy `player-data` chunk removed (orphan realPlayers.json deleted).
+const DATA_CHUNKS = /^realPlayers_/;
 
 const distExists = existsSync(DIST);
 
