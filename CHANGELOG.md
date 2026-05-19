@@ -4,6 +4,32 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [fix] AKITA-423 — RNG seed determinism in test environment (SPEC-187) (2026-05-19)
+
+Fix issue [#188](https://github.com/dudujarra/olefut/issues/188) (BUG-FLAKE-01). `src/engine/rng.js:49` definia `_globalSeed = Date.now() | 0` no module load — não-determinístico. `tests/integration/seasonhistory-data.test.js > each entry has position > 0` falhava intermitentemente em pre-push gate. Bloqueou push do AKITA-415 (PR #187) e AKITA-422 (PR #191).
+
+**Defense in depth — 2 camadas:**
+
+- **Layer 1 (universal)** — `src/engine/rng.js`: novo `_pickDefaultSeed()` retorna `0xC0FFEE` se `process.env.VITEST === 'true'`, senão `Date.now() | 0`. Guard `typeof process !== 'undefined'` torna browser-safe.
+- **Layer 2 (targeted)** — `tests/integration/seasonhistory-data.test.js > beforeAll`: chama `setGlobalSeed(42)` antes de `createEngine()`. Explícito + auditável.
+
+**Changes:**
+- `src/engine/rng.js`: `_pickDefaultSeed()` + comment SPEC-187
+- `tests/integration/seasonhistory-data.test.js`: import `setGlobalSeed` + chamada em beforeAll
+- `tests/integration/spec-187-rng-determinism.test.js`: NEW 6-test harness
+
+**Impact:**
+- Repro loop 10×: era ~10-20% flake → **10/10 passed** post-fix
+- Test suite: 1833 → **1839 passed** (+6 SPEC-187)
+- Lint: 0 errors; build: clean 1.63s
+- Bundle: zero impacto (typeof guard, código não vai pra browser)
+- Spec: [`specs/infra/SPEC-187-rng-seed-determinism-tests.md`](specs/infra/SPEC-187-rng-seed-determinism-tests.md)
+- Branch: `fix/akita-423-rng-determinism`
+
+**Akita compliance:** Mandamento #6 — bug = ticket + fix + regression test (3 artefatos pareados).
+
+---
+
 ### [fix] AKITA-415 — Trunk rebaseline: post AKITA-404/411 test harness recovery (2026-05-18)
 
 SPEC-186 umbrella PR. Restaura trunk verde após refactors AKITA-404 (god-object decap) + AKITA-411 (top-10 unit tests) deixaram 12 testes vermelhos por harness desalinhado dos novos paths/contratos.
