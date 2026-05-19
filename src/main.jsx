@@ -5,6 +5,10 @@ import './index.css'
 import './styles/accessibility.css'
 import { GameProvider } from './context/GameContext.jsx'
 import { registerServiceWorker } from './services/PWAService.js'
+import { initAnalytics } from './utils/analytics.js'
+
+// SPEC-189: GoatCounter analytics (env-gated, no-op without VITE_GOATCOUNTER_CODE)
+initAnalytics();
 
 // AKITA-317: one-shot rebrand storage migration (elifoot_* → olefut_*).
 // Idempotent via __olefut_migrated_v1 sentinel. Preserva saves de usuários

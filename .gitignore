@@ -2,6 +2,12 @@ node_modules
 dist
 .DS_Store
 
+# SPEC-189: local env files with secrets (only .env.example committed)
+.env
+.env.local
+.env.production
+.env.*.local
+
 # RFCT-002: baseline fixture gerado em test runtime (11MB, regenerável)
 tests/__fixtures__/save-baseline-v2.json
 

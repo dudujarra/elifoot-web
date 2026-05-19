@@ -4,6 +4,45 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [feat] AKITA-424 — GoatCounter analytics, privacy-respecting (SPEC-189) (2026-05-19)
+
+Bloco 3.4 Fase D part 2. Sem dados de uso, launch é cego. Adicionar analytics minimal viable.
+
+**Por que GoatCounter:**
+- ✅ Privacy-first: zero cookies, hash IP, GDPR-friendly out-of-box
+- ✅ Free tier 100k pageviews/mo
+- ✅ 1 script tag, zero config além do site code
+- ✅ Open-source
+- ❌ Google Analytics: violates privacy-first mandate (cookies + PII)
+- ❌ Plausible: paid only ($9/mo mínimo)
+
+**Implementação env-gated:** script só injeta runtime se `VITE_GOATCOUNTER_CODE` env var setado. Sem env = no-op total (zero script, zero requests externos).
+
+**Changes:**
+- `src/utils/analytics.js`: NEW, `initAnalytics()` + `trackEvent()` + `isAnalyticsEnabled()`. Defensive guards (typeof document, env unset, already-initialized).
+- `src/main.jsx`: import + call `initAnalytics()` no boot
+- `.env.example`: NEW, documenta `VITE_GOATCOUNTER_CODE` + signup instructions
+- `.gitignore`: ignora `.env`, `.env.local`, `.env.production`, `.env.*.local` (só `.env.example` commitado)
+- `README.md`: section "Analytics setup (optional)" com signup walkthrough
+- `tests/integration/spec-189-analytics.test.js`: NEW 8-test harness (exports, env-gated no-op, https-only, main.jsx integration, .env.example, README)
+
+**Impact:**
+- Test suite: 1833 → **1841 passed** (+8 SPEC-189)
+- Lint: 0 errors; build: clean 1.67s
+- Bundle: zero impacto sem env var; script tag async runtime (não bloqueia FCP) com env
+- Spec: [`specs/infra/SPEC-189-analytics-goatcounter.md`](specs/infra/SPEC-189-analytics-goatcounter.md)
+- Branch: `fix/akita-424-analytics`
+
+**Pós-merge ação Dudu:**
+1. Signup goatcounter.com → handle `olefut`
+2. Set GitHub Actions secret `VITE_GOATCOUNTER_CODE=olefut`
+3. Trigger deploy via push main
+4. Verify métricas em `https://olefut.goatcounter.com`
+
+**Akita compliance:** Mandamento brutal #5 (lint + tests + build + CHANGELOG + SPEC linkada). Privacy-first sem violar Mandamento #7 (sem API paga, sem PII).
+
+---
+
 ### [fix] AKITA-415 — Trunk rebaseline: post AKITA-404/411 test harness recovery (2026-05-18)
 
 SPEC-186 umbrella PR. Restaura trunk verde após refactors AKITA-404 (god-object decap) + AKITA-411 (top-10 unit tests) deixaram 12 testes vermelhos por harness desalinhado dos novos paths/contratos.
