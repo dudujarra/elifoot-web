@@ -95,6 +95,26 @@ npm run preview
 
 ---
 
+## 📊 Analytics setup (optional)
+
+OléFUT integra **[GoatCounter](https://www.goatcounter.com/)** — analytics privacy-respecting (no cookies, no PII, IP hash, GDPR-friendly). Free tier 100k pageviews/mo.
+
+**Setup**:
+1. Signup grátis em https://www.goatcounter.com/signup (~2min)
+2. Escolha handle (ex: `olefut` → métricas ficam em `olefut.goatcounter.com`)
+3. Crie `.env.production` (ou GitHub Actions secret):
+   ```bash
+   VITE_GOATCOUNTER_CODE=olefut
+   ```
+4. `npm run build` → script tag injetado runtime
+5. Deploy → métricas em `https://olefut.goatcounter.com`
+
+**Sem env var**: script não injetado, zero impacto bundle, zero requests externos. Production builds sem analytics permanecem válidos.
+
+Spec: [`specs/infra/SPEC-189-analytics-goatcounter.md`](specs/infra/SPEC-189-analytics-goatcounter.md)
+
+---
+
 ## 🧪 Testing
 
 ```bash
