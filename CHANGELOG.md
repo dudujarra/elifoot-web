@@ -4,6 +4,39 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [feat] AKITA-420 — Soft launch Fase D part 1: social discoverability (2026-05-19)
+
+SPEC-188 Caminho A — minimal-risk soft launch artifacts. Site já live em https://dudujarra.github.io/olefut/; este PR adiciona discoverability social + crawler metadata.
+
+**Mudanças:**
+- `index.html`: adicionadas tags Open Graph (`og:type`, `og:url`, `og:title`, `og:description`, `og:image`, `og:image:width`, `og:image:height`, `og:locale`, `og:site_name`) + Twitter Card (`twitter:card=summary_large_image`, `twitter:url`, `twitter:title`, `twitter:description`, `twitter:image`).
+- `public/robots.txt`: novo, permite tudo + aponta sitemap.
+- `public/sitemap.xml`: novo, único URL (root).
+- `public/og-image.png`: novo, 1200×630, derivado do logo OléFUT padded em fundo verde estádio `#2D5A27` (theme-color). 402KB (under 500KB cap).
+- `tests/integration/soft-launch-meta.test.js`: harness 8 tests cobrindo dist OG tags, Twitter tags, robots.txt, sitemap.xml, og-image PNG dimensions (parse IHDR), título ≤60 chars, descrição ≤160 chars, URLs absolutas.
+
+**Impacto:**
+- Test suite: 1833 → **1841 passed** (+8 SPEC-188 harness).
+- Lint 0 errors; build clean 1.61s, initial chunk 298KB (sem regressão).
+- Spec: [`specs/infra/SPEC-188-soft-launch-fase-d.md`](specs/infra/SPEC-188-soft-launch-fase-d.md).
+- Branch: `fix/akita-420-soft-launch-fase-d`.
+
+**Smoke test manual (post-deploy)**:
+- [ ] Twitter Card Validator: https://cards-dev.twitter.com/validator
+- [ ] Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
+- [ ] LinkedIn Post Inspector: https://www.linkedin.com/post-inspector/
+- [ ] Discord/WhatsApp paste preview
+- [ ] Chrome/Safari/Firefox desktop + iOS/Android mobile smoke
+- [ ] Google Search Console: submit sitemap.xml
+
+**Out of scope (specs separadas):**
+- Analytics (plausible/umami/gtag) → SPEC-189.
+- Landing page pré-jogo → SPEC-190.
+- ProductHunt/Reddit launch kit → SPEC-191.
+- Custom domain → decisão Dudu (compra DNS).
+
+---
+
 ### [fix] AKITA-415 — Trunk rebaseline: post AKITA-404/411 test harness recovery (2026-05-18)
 
 SPEC-186 umbrella PR. Restaura trunk verde após refactors AKITA-404 (god-object decap) + AKITA-411 (top-10 unit tests) deixaram 12 testes vermelhos por harness desalinhado dos novos paths/contratos.
