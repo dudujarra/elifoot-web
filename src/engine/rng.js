@@ -46,7 +46,16 @@ function mulberry32(seed) {
 // GLOBAL RNG INSTANCE
 // ============================================================
 
-let _globalSeed = Date.now() | 0;
+// SPEC-187: deterministic seed under Vitest (process.env.VITEST === 'true').
+// Browsers don't define `process`, so the typeof guard makes this prod-safe.
+function _pickDefaultSeed() {
+    if (typeof process !== 'undefined' && process.env && process.env.VITEST === 'true') {
+        return 0xC0FFEE; // 12648430 — deterministic for test runs
+    }
+    return Date.now() | 0;
+}
+
+let _globalSeed = _pickDefaultSeed();
 let _globalRng = mulberry32(_globalSeed);
 
 /**

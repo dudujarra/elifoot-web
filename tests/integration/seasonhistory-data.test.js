@@ -10,6 +10,7 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { Engine } from '../../src/engine/engine.js';
 import { createEngine } from '../../src/engine/engineFactory.js';
 import { AutoPlayController } from '../../src/services/AutoPlayService.js';
+import { setGlobalSeed } from '../../src/engine/rng.js';
 
 // Mock localStorage for Node
 if (typeof globalThis.localStorage === 'undefined') {
@@ -25,6 +26,8 @@ describe('SeasonHistory Strategic Data', () => {
     let autoplay;
 
     beforeAll(() => {
+        // SPEC-187: pin seed for deterministic 114-week sim (fixes issue #188 flake)
+        setGlobalSeed(42);
         const engine = createEngine();
         engine.initGame('HistoryBot', 1);
         autoplay = new AutoPlayController(engine);
