@@ -1,0 +1,174 @@
+/* SPEC-190: Landing intro screen styles
+ * Mobile-first, uses brand tokens (Pixelify + stadium-green), zero inline styles.
+ * Tokens: --bg-stadium #2D5A27, --text-cream, --font-display, --font-body.
+ * Falls back to literal values for compatibility with components that haven't
+ * migrated to tokens yet.
+ */
+
+.landing-intro {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: linear-gradient(180deg, #1a3a18 0%, #2D5A27 100%);
+    color: #f4f1e8;
+    font-family: 'Pixelify Sans', system-ui, sans-serif;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.landing-hero {
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+}
+
+.landing-logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+}
+
+.landing-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 2rem;
+    margin: 0 0 1rem 0;
+    letter-spacing: 0.05em;
+    text-shadow: 3px 3px 0 #000;
+}
+
+.landing-tagline {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.95;
+}
+
+.landing-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+.landing-feature {
+    background: rgba(0, 0, 0, 0.35);
+    border: 2px solid rgba(244, 241, 232, 0.2);
+    padding: 1rem 1.25rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.landing-feature strong {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.9rem;
+    color: #ffd700;
+}
+
+.landing-feature span {
+    font-size: 1rem;
+    opacity: 0.85;
+}
+
+.landing-cta-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.landing-cta-primary {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    background: #ffd700;
+    color: #1a3a18;
+    border: 3px solid #1a3a18;
+    border-radius: 4px;
+    cursor: pointer;
+    text-shadow: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 4px 4px 0 #000;
+}
+
+.landing-cta-primary:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.landing-cta-primary:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+}
+
+.landing-cta-skip {
+    font-family: 'Pixelify Sans', system-ui, sans-serif;
+    font-size: 0.95rem;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    color: #f4f1e8;
+    border: 2px solid rgba(244, 241, 232, 0.4);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.landing-cta-skip:hover {
+    border-color: #f4f1e8;
+    background: rgba(244, 241, 232, 0.1);
+}
+
+.landing-footer {
+    margin-top: 1rem;
+}
+
+.landing-github {
+    color: rgba(244, 241, 232, 0.6);
+    font-size: 0.85rem;
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.landing-github:hover {
+    color: #f4f1e8;
+    text-decoration: underline;
+}
+
+/* Tablet+ */
+@media (min-width: 768px) {
+    .landing-features {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .landing-title {
+        font-size: 3rem;
+    }
+
+    .landing-logo {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+/* Tiny mobile */
+@media (max-width: 480px) {
+    .landing-title {
+        font-size: 1.5rem;
+    }
+
+    .landing-tagline {
+        font-size: 1rem;
+    }
+
+    .landing-cta-primary {
+        font-size: 0.85rem;
+        padding: 0.85rem 1.5rem;
+    }
+}

@@ -4,6 +4,37 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [feat] AKITA-425 — Landing intro screen for first-time visitors (SPEC-190) (2026-05-19)
+
+Bloco 3.4 Fase D part 3. Site abria direto no StartView, sem contexto para visitante novo. Adicionado componente `LandingIntro` que renderiza ANTES do StartView quando localStorage flag `olefut_seen_intro` ausente. Click em qualquer CTA = set flag + render game UI.
+
+**Why component (not separate route):**
+- Single SPA, zero rotas novas, zero deploy mudança
+- localStorage flag persiste → returning users bypass intro
+- Skippable em 1 click
+
+**Changes:**
+- `src/components/LandingIntro.jsx`: NEW componente (logo + tagline + 3 features + 2 CTAs + GitHub link)
+- `src/components/LandingIntro.css`: NEW estilo mobile-first (Pixelify + Press Start 2P + verde estádio gradient)
+- `src/App.jsx`: import `LandingIntro` + gate `showIntro && !gameState.started` antes do main return
+- `tests/integration/spec-190-landing-intro.test.js`: NEW 8-test harness (export, CSS classes, render content, localStorage flag, no inline styles, App.jsx integration, gate respects gameState.started, mobile breakpoints)
+
+**Impact:**
+- Test suite: 1833 → 1841 passed (+8 SPEC-190)
+- Lint: 0 errors; build: clean 3.69s
+- Mobile responsive: 480px / 768px breakpoints
+- Zero inline styles (Mandamento brutal #4)
+- Returning users: bypass intro instantly via flag
+- Spec: [`specs/ui/SPEC-190-landing-intro-screen.md`](specs/ui/SPEC-190-landing-intro-screen.md)
+- Branch: `fix/akita-425-landing-intro`
+
+**Akita compliance:**
+- Mandamento brutal #3: zero emoji em código novo (HTML entities `&middot;` apenas)
+- Mandamento brutal #4: zero inline style (CSS classes apenas)
+- Mandamento brutal #5: lint + tests + build + CHANGELOG + SPEC linkada
+
+---
+
 ### [fix] AKITA-415 — Trunk rebaseline: post AKITA-404/411 test harness recovery (2026-05-18)
 
 SPEC-186 umbrella PR. Restaura trunk verde após refactors AKITA-404 (god-object decap) + AKITA-411 (top-10 unit tests) deixaram 12 testes vermelhos por harness desalinhado dos novos paths/contratos.
