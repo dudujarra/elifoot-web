@@ -35,6 +35,11 @@ describe('AutoPlay Full Feature Audit — 5 Season Smoke', () => {
     const SEASONS = 5;
     const WEEKS = SEASONS * 38 + 10; // safety margin
 
+    // AKITA-425: beforeAll runs 5-season smoke (~10s wall clock with default
+    // non-deterministic seed). Vitest default hook timeout is 10000ms — exact
+    // boundary, race-prone. Bump to 60000ms (60s) for headroom. Discovered as
+    // pre-push hook blocker during AKITA-425 push. Parallel category to SPEC-187
+    // RNG determinism — slow seed path can push runtime past 10s.
     beforeAll(() => {
         engine = createEngine();
         engine.initGame('AuditBot', 1, 'manager', 'livre');
@@ -42,7 +47,7 @@ describe('AutoPlay Full Feature Audit — 5 Season Smoke', () => {
 
         // Enable running flag then call _tick directly (mirrors production path)
         bot.running = true;
-        
+
         for (let w = 0; w < WEEKS && bot.stats.seasonsPlayed < SEASONS; w++) {
             try {
                 bot._tick();
@@ -54,7 +59,7 @@ describe('AutoPlay Full Feature Audit — 5 Season Smoke', () => {
         
         bot.running = false;
         stats = bot.getStats();
-    });
+    }, 60000);
 
     // ═══════════════════════════════════════════════════════════
     // 1. ML / BRAIN
