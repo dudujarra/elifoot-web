@@ -4,7 +4,7 @@
 > Toda decisão arquitetural, comando, fluxo, dependência mora aqui.
 > README humano-amigável aponta pra cá.
 
-**Última atualização**: 2026-05-18 (post AKITA-411)
+**Última atualização**: 2026-05-19 (post AKITA-411)
 **Owner**: Dudu (Eduardo Jarra) — dudujarra@corapost.com
 **Repo público**: https://github.com/dudujarra/olefut
 **Demo**: https://dudujarra.github.io/olefut/
@@ -261,7 +261,7 @@ PR linkado a SPEC-XXX / BUG-XXX → CI verde → merge
 | Test files | 154 | `find tests -name "*.test.js"` |
 | Specs totais | **147** | `find specs -name "SPEC-*.md"` |
 | Bugs com regression test | 17 arquivos em `tests/regression/` | — |
-| AKITA commits | **351** | `git log --grep AKITA` |
+| AKITA commits | **356** | `git log --grep AKITA` |
 | Clubes | 170 (BR + EU + SA) | `src/engine/db/` |
 | Backend total | **~30.924 linhas** (engine/ + services/) | `wc -l` |
 | Maior arquivo backend | 643L (AutoPlayDecisions) | engine.js saiu do top 6 |
