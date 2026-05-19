@@ -4,6 +4,29 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [chore] AKITA-422 — Delete orphan `realPlayers.json` (SPEC-192) (2026-05-19)
+
+Cleanup post SPEC-177. Monolithic `src/data/realPlayers.json` (2.0MB) kept as defensive fallback after regional split, but audit confirmed zero LIVE references in `src/` or `tests/`. Deleted + removed dead vite fallback + updated scraper instruction + simplified test regex.
+
+**Changes:**
+- `src/data/realPlayers.json` — **DELETE** (orphan 2.0MB)
+- `vite.config.js` — removed legacy `if (id.includes('realPlayers.json')) return 'player-data';` fallback (dead code post-orphan delete)
+- `tools/squad-scraper/src/index.js` — updated user instruction to reference `realPlayers_BRA.json` instead of monolithic file
+- `tests/integration/build-budget.test.js` — DATA_CHUNKS regex simplified `^(player-data|realPlayers_)` → `^realPlayers_` (no `player-data` chunk possible after orphan delete)
+- `tests/integration/spec-192-no-orphan-realplayers.test.js` — NEW 4-test harness
+
+**Impact:**
+- Repo size: −2.0MB
+- Bundle output: unchanged (orphan never entered any chunk — pre-SPEC-177 references already migrated to regional imports)
+- Test suite: 1833 → **1837 passed** (+4 SPEC-192)
+- Lint: 0 errors; build: clean 1.15s
+- Spec: [`specs/refactor/SPEC-192-orphan-realplayers-cleanup.md`](specs/refactor/SPEC-192-orphan-realplayers-cleanup.md)
+- Branch: `fix/akita-422-orphan-realplayers-cleanup`
+
+**Akita compliance:** Mandamento brutal #10 (sem código fantasma) — orphan eliminado.
+
+---
+
 ### [fix] AKITA-415 — Trunk rebaseline: post AKITA-404/411 test harness recovery (2026-05-18)
 
 SPEC-186 umbrella PR. Restaura trunk verde após refactors AKITA-404 (god-object decap) + AKITA-411 (top-10 unit tests) deixaram 12 testes vermelhos por harness desalinhado dos novos paths/contratos.

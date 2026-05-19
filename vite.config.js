@@ -23,9 +23,7 @@ export default defineConfig({
           if (id.includes('realPlayers_EUR.json')) return 'realPlayers_EUR';
           if (id.includes('realPlayers_SAM.json')) return 'realPlayers_SAM';
           if (id.includes('realPlayers_pool.json')) return 'realPlayers_pool';
-          // SPEC-159 legacy fallback (kept in case any code still references the
-          // monolithic JSON — it shouldn't, but we play defense).
-          if (id.includes('realPlayers.json')) return 'player-data';
+          // SPEC-192: legacy realPlayers.json deleted (orphan post SPEC-177).
           // ML/learning subsystem — heavy, split into its own chunk
           if (id.includes('/services/learning/')) return 'ml-brain';
         },
