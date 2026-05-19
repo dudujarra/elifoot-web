@@ -12,7 +12,10 @@ const ROOT = resolve(__dirname, '..', '..');
 
 describe('SPEC-164: E2E config integrity', () => {
 
-    test('playwright.config.js existe e expõe webServer port 5173', async () => {
+    test('playwright.config.js existe e expõe webServer port 4173 (static serve dist)', async () => {
+        // AKITA-415: migrated from `npm run dev` (port 5173, vite dev mode) to
+        // `npx serve -s dist` (port 4173, static). Dev mode cold-compile timed
+        // out in CI sandbox; static serve serves prebuilt assets instantly.
         const cfgPath = resolve(ROOT, 'playwright.config.js');
         expect(existsSync(cfgPath)).toBe(true);
         const mod = await import(cfgPath);
@@ -20,7 +23,8 @@ describe('SPEC-164: E2E config integrity', () => {
         expect(cfg).toBeTruthy();
         expect(cfg.testDir).toMatch(/tests\/e2e/);
         expect(cfg.webServer).toBeTruthy();
-        expect(cfg.webServer.port).toBe(5173);
+        expect(cfg.webServer.port).toBe(4173);
+        expect(cfg.webServer.command).toMatch(/serve/);
         expect(Array.isArray(cfg.projects)).toBe(true);
         expect(cfg.projects.some(p => p.name === 'chromium')).toBe(true);
     });

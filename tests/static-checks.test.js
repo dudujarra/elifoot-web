@@ -10,38 +10,39 @@ import { resolve } from 'path';
 
 const readSrc = (path) => readFileSync(resolve(import.meta.dirname, '..', 'src', path), 'utf-8');
 
-describe('BUG-003: SpeedRef pattern in MatchView', () => {
-    const matchView = readSrc('components/MatchView.jsx');
+describe('BUG-003: SpeedRef pattern in match ticker hook', () => {
+    // SPEC-186: post-AKITA-411, ticker logic extracted to match/useMatchEngine.js.
+    // tickerStateRef assertion dropped — refactor consolidated state into hook closure,
+    // restart-via-ref no longer needed (hook re-mount handles it).
+    const useMatchEngine = readSrc('components/match/useMatchEngine.js');
 
     it('deve usar speedRef ao invés de speed no setInterval', () => {
-        expect(matchView).toContain('speedRef.current');
+        expect(useMatchEngine).toContain('speedRef.current');
     });
 
     it('deve sincronizar speedRef quando speed muda', () => {
-        expect(matchView).toContain('speedRef.current = speed');
-    });
-
-    it('deve ter tickerStateRef para restart', () => {
-        expect(matchView).toContain('tickerStateRef');
+        expect(useMatchEngine).toContain('speedRef.current = speed');
     });
 });
 
 describe('BUG-004: Reset preStep/talkDone no fulltime', () => {
-    const matchView = readSrc('components/MatchView.jsx');
+    // SPEC-186: post-AKITA-411, post-match reset logic moved to match/MatchPostGame.jsx.
+    const matchPostGame = readSrc('components/match/MatchPostGame.jsx');
 
     it('botão dashboard deve resetar preStep', () => {
-        expect(matchView).toContain('setPreStep(1)');
+        expect(matchPostGame).toContain('setPreStep(1)');
     });
 
     it('botão dashboard deve resetar talkDone', () => {
-        expect(matchView).toContain('setTalkDone(false)');
+        expect(matchPostGame).toContain('setTalkDone(false)');
     });
 
-    it('reset deve estar na mesma linha do changeView(getDashboardView())', () => {
-        // Find the fulltime reset line (BUG-022: mode-aware nav)
-        const lines = matchView.split('\n');
-        const resetLine = lines.find(l => l.includes('changeView(getDashboardView())') && l.includes('setPreStep'));
-        expect(resetLine).toBeDefined();
+    it('reset deve ocorrer no fluxo de changeView para dashboard', () => {
+        // BUG-022 mode-aware nav: post-match button leads back to dashboard with reset state.
+        // Assert both reset calls + changeView coexist in the post-game component.
+        expect(matchPostGame).toContain('setPreStep(1)');
+        expect(matchPostGame).toContain('setTalkDone(false)');
+        expect(matchPostGame).toContain('changeView');
     });
 });
 
@@ -115,13 +116,20 @@ describe('BUG-008: SquadView handleSell via engine', () => {
 });
 
 describe('BUG-009: skipToEnd não duplica eventos', () => {
-    const matchView = readSrc('components/MatchView.jsx');
+    // SPEC-186: post-AKITA-411, skipToEnd lives in match/useMatchEngine.js.
+    // Impl changed: full-replace with filtered list (events ≤ endMin) instead of merge.
+    // Dedup guaranteed by single-source filter — no accumulation across skips.
+    const useMatchEngine = readSrc('components/match/useMatchEngine.js');
 
-    it('skipToEnd deve fazer merge ao invés de sobrescrever', () => {
-        expect(matchView).toContain('existingMinutes');
+    it('skipToEnd deve filtrar eventos até endMin', () => {
+        expect(useMatchEngine).toMatch(/skipToEnd\s*=/);
+        expect(useMatchEngine).toContain('e.minute <= endMin');
     });
 
-    it('skipToEnd deve filtrar por startMin', () => {
-        expect(matchView).toContain('e.minute >= startMin');
+    it('skipToEnd deve substituir displayedEvents (não acumular)', () => {
+        // Look for the assignment pattern within the skipToEnd block:
+        // setDisplayedEvents(eventsToShow) — full replace, not [...prev, ...]
+        const skipBlock = useMatchEngine.slice(useMatchEngine.indexOf('skipToEnd'));
+        expect(skipBlock).toMatch(/setDisplayedEvents\(eventsToShow\)/);
     });
 });

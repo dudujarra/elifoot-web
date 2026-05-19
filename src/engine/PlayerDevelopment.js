@@ -14,6 +14,14 @@ import { rng } from './rng';
 import { calcMarketValue } from './MarketPricer.js';
 import { ATTRIBUTE_CATEGORIES, generateDetailedAttributes, calculateOvrFromAttributes } from './PlayerAttributes.js';
 
+// SPEC-185 / AKITA-414: barrel re-exports — symbols extracted post-AKITA-411
+// kept import path stable for SPEC-003 harness + BUG-F2-01 regression tests.
+// AKITA-415 expanded barrel for TACTIC_NARRATION (extracted to NarrativeSystem.js)
+// used by UX-overhaul regression P1-5.
+export { initForm, updateForm, getFormModifier } from './systems/FormSystem.js';
+export { TACTIC_COUNTERS } from './tactical/TacticCounters.js';
+export { TACTIC_NARRATION } from './systems/NarrativeSystem.js';
+
 /**
  * SCHEMA-UNIFIED: Guard — garante que player tem os 5 atributos root-level.
  * Migrado de player.attributes.{FIS,DEF,CRI,FIN,REF} para player.{attacking,technical,tactical,defending,creativity}

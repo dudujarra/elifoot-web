@@ -1,5 +1,6 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+/* Google Fonts loaded via <link> in index.html (avoids dev-mode postcss
+   ordering warning + duplicate fetch). Tag includes preconnect for perf. */
 @import './styles/isssd-premium.css';
 @import './styles/animations.css';
 @import './styles/ef-helpers.css';

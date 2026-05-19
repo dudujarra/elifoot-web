@@ -44,6 +44,14 @@ function isWhitelisted(msg) {
 
 export const test = base.extend({
     page: async ({ page }, use, testInfo) => {
+        // AKITA-415: page.goto default waitUntil='load' hangs in CI on slow/blocked
+        // external font fetch (fonts.googleapis.com). Override goto to use
+        // 'domcontentloaded' — explicit waitForSelector calls in tests handle
+        // visible content readiness.
+        const originalGoto = page.goto.bind(page);
+        page.goto = (url, options = {}) =>
+            originalGoto(url, { waitUntil: 'domcontentloaded', ...options });
+
         /** @type {string[]} */
         const pageErrors = [];
         /** @type {string[]} */

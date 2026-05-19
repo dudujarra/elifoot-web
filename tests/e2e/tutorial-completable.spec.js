@@ -38,8 +38,8 @@ test.describe('SPEC-164 §5: Tutorial Completable', () => {
             );
         }
 
-        // No último step o botão muda para "INICIAR CARREIRA"
-        const finishBtn = page.getByRole('button', { name: /iniciar carreira/i });
+        // No último step o botão muda para "JOGAR" (TutorialView.jsx#156, post-rebrand copy).
+        const finishBtn = page.getByRole('button', { name: /jogar/i });
         await expect(finishBtn).toBeVisible();
         await finishBtn.click();
 
