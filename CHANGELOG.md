@@ -4,6 +4,42 @@ Todas mudanças notáveis seguem [Keep a Changelog](https://keepachangelog.com/e
 
 ## [Unreleased]
 
+### [docs] AKITA-427 — Playtest 5 BR preparation kit (SPEC-193 / Bloco 3.2) (2026-05-19)
+
+Mandamento brutal #7: Bloco 3 não termina sem 5 humanos brasileiros. Este PR entrega o **material** para Dudu executar o playtest. Execução = humana (manual), material = code/docs gated por harness.
+
+**`docs/playtest/` (5 docs):**
+- `RECRUITMENT.md` — **existente, lightly extended** com labels Perfil A-E para padronização cross-doc
+- `ROTEIRO.md`: NEW — script 7 blocos (Pré-sessão + Bloco 1-6 + Wrap) com timings 00:00-02:00, talking points, bandeiras vermelhas, anti-patterns
+- `BUG-REPORT-FORM.md`: NEW — template padronizado P0/P1/P2 severidade + reprodução + repro count + console + screenshot + métricas timing + NPS + brand reception
+- `RESULTS-TEMPLATE.md`: NEW — consolidação 5 sessões: sumário exec + sessões individuais + bugs deduplicados + triagem P0 + métricas agregadas + NPS + brand reception + decisão GO/NO-GO
+- `PLAYTEST-CHECKLIST.md`: NEW — gate B3.2 com 10 itens 6.1-6.10 (plano Dudu) + status tracking + evidência required
+
+**Harness:**
+- `tests/integration/spec-193-playtest-kit.test.js`: NEW 13 testes (existência arquivos, perfis A-E, blocos roteiro com timings, BUG-FORM fields, RESULTS GO/NO-GO, CHECKLIST 10 itens, https-only, live URL cross-doc)
+
+**Impact:**
+- Test suite: 1833 → **1846 passed** (+13 SPEC-193)
+- Lint: 0 errors; build: clean 2.83s
+- Spec: [`specs/infra/SPEC-193-playtest-5br-prep.md`](specs/infra/SPEC-193-playtest-5br-prep.md)
+- Branch: `fix/akita-427-playtest-5br-prep`
+
+**Pós-merge ação Dudu (B3.2 execution D+1..D+14):**
+- 6.1: postar tweet ([RECRUITMENT.md](docs/playtest/RECRUITMENT.md) tem texto)
+- 6.2: postar Discord/Reddit (texto pronto)
+- 6.3: filtrar 5 candidatos (Perfis A-E)
+- 6.4: agendar 5 calls 2h
+- 6.5: criar tag `v1.0-playtest-rc1` após PRs #190-#194 merge
+- 6.6: ✅ done (ROTEIRO.md)
+- 6.7: executar 5 sessões (gravadas, consent)
+- 6.8: consolidar RESULTS usando RESULTS-TEMPLATE
+- 6.9: triagem P0/P1/P2
+- 6.10: GitHub issues para cada P0
+
+**Akita compliance:** Mandamento brutal #7 (playtest 5 BR obrigatório) preparado. Mandamento brutal #5 (lint + tests + build + CHANGELOG + SPEC linkada).
+
+---
+
 ### [fix] AKITA-415 — Trunk rebaseline: post AKITA-404/411 test harness recovery (2026-05-18)
 
 SPEC-186 umbrella PR. Restaura trunk verde após refactors AKITA-404 (god-object decap) + AKITA-411 (top-10 unit tests) deixaram 12 testes vermelhos por harness desalinhado dos novos paths/contratos.

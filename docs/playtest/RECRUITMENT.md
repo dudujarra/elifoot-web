@@ -7,15 +7,17 @@
 
 ---
 
-## Perfil ideal dos 5 testers
+## Perfis-alvo dos 5 testers (A-E)
 
-| # | Perfil | Por quê |
-|---|--------|---------|
-| 1 | **Fan futebol hardcore BR** (40+, jogou Elifoot/CM original) | Valida nostalgia + brand SNES |
-| 2 | **Gamer mobile casual** (25-35) | Testa onboarding rookie |
-| 3 | **Designer/dev** | Critica UI/UX + bugs |
-| 4 | **Não-jogador FM** (curioso) | Mede curva aprendizado |
-| 5 | **Streamer/conteúdo** | Feedback gravado + reach |
+| Label | Perfil | Por quê |
+|-------|--------|---------|
+| **Perfil A** | Fan futebol hardcore BR (40+, jogou Elifoot/CM original) | Valida nostalgia + brand SNES |
+| **Perfil B** | Gamer mobile casual (25-35) | Testa onboarding rookie |
+| **Perfil C** | Designer/dev | Critica UI/UX + bugs |
+| **Perfil D** | Não-jogador FM (curioso) | Mede curva aprendizado |
+| **Perfil E** | Streamer/conteúdo | Feedback gravado + reach |
+
+> Atualização SPEC-193 2026-05-19: labels A-E adicionadas para padronização cross-doc com BUG-REPORT-FORM.md, RESULTS-TEMPLATE.md, PLAYTEST-CHECKLIST.md.
 
 ---
 
