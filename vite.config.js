@@ -7,7 +7,9 @@ import { defaultExclude } from 'vitest/config'
 // base path for GitHub Pages: /olefut/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: process.env.NODE_ENV === 'production' ? '/olefut/' : '/',
+  // AKITA-415: E2E_BUILD=1 forces root base so playwright tests can use '/'
+  // even with a production build (preview server).
+  base: (process.env.NODE_ENV === 'production' && !process.env.E2E_BUILD) ? '/olefut/' : '/',
   build: {
     rollupOptions: {
       output: {
